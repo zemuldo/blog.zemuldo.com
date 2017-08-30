@@ -6,6 +6,6 @@ let path = require("path");
 let dir = path.join(__dirname, "build");
 
 const server = serve(dir, {
-  port: 4011,
+  port: 8080,
   ignore: ['node_modules']
 })
