@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import {Input, Menu } from 'semantic-ui-react'
-
-const items = [
-    { key: 'Home', active: true, name: 'Home' },
-    { key: 'About', name: 'About' },
-    { key: 'Contact', name: 'Contact' },
-]
+import {Loader, Input, Menu } from 'semantic-ui-react'
 
 class App extends Component {
     state = {}
@@ -17,10 +11,11 @@ class App extends Component {
 
         return (
             <Menu>
-              <Menu.Item header>Our Company</Menu.Item>
-              <Menu.Item name='aboutUs' active={activeItem === 'aboutUs'} onClick={this.handleItemClick} />
-              <Menu.Item name='jobs' active={activeItem === 'jobs'} onClick={this.handleItemClick} />
-              <Menu.Item name='locations' active={activeItem === 'locations'} onClick={this.handleItemClick} />
+              <Loader active inline='centered' />
+              <Menu.Item header>Home</Menu.Item>
+              <Menu.Item name='About' active={activeItem === 'about'} onClick={this.handleItemClick} />
+              <Menu.Item name='Contacts' active={activeItem === 'jobs'} onClick={this.handleItemClick} />
+              <Menu.Item name='Location' active={activeItem === 'locations'} onClick={this.handleItemClick} />
               <Menu.Item position='right'>
                 <Input className='icon' icon='search' placeholder='Search...' />
               </Menu.Item>
