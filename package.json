@@ -9,6 +9,7 @@
     "react-dom": "^15.5.4",
     "react-file-download": "^0.3.4",
     "react-tabs": "^1.1.0",
+    "semantic-ui-react": "^0.72.0",
     "serve": "^6.0.0"
   },
   "devDependencies": {
