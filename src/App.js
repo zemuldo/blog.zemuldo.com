@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
+import {Input, Menu } from 'semantic-ui-react'
+
+const items = [
+    { key: 'Home', active: true, name: 'Home' },
+    { key: 'About', name: 'About' },
+    { key: 'Contact', name: 'Contact' },
+]
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      sessionData: null,
-      user: null
-    };
-    this.handleSessionData = this.handleSessionData.bind(this);
-    this.handleUser = this.handleUser.bind(this);
-  };
-  //Sets sessionData
-  handleSessionData(value){
-    this.setState({ sessionData: value });
-  };
+    state = {}
 
-  //Sets user state
-  handleUser(value){
-    this.setState({ user: value });
-  };
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-  render() {
-    return (
-      <div>
-        Hello World
-      </div>
-    );
-  }
+    render() {
+        const { activeItem } = this.state
+
+        return (
+            <Menu>
+              <Menu.Item header>Our Company</Menu.Item>
+              <Menu.Item name='aboutUs' active={activeItem === 'aboutUs'} onClick={this.handleItemClick} />
+              <Menu.Item name='jobs' active={activeItem === 'jobs'} onClick={this.handleItemClick} />
+              <Menu.Item name='locations' active={activeItem === 'locations'} onClick={this.handleItemClick} />
+              <Menu.Item position='right'>
+                <Input className='icon' icon='search' placeholder='Search...' />
+              </Menu.Item>
+            </Menu>
+        )
+    }
 }
+
 
 export default App;
