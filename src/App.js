@@ -3,6 +3,7 @@ import {  Menu, Button,Icon, Grid, Segment, List, Header, Divider, Container, Im
 import Login from './login/loginForm'
 import TechSummary from './tech/techSummary'
 import BusinessSummary from './business/businessSummary'
+import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
 import 'semantic-ui-css/semantic.min.css';
 
@@ -44,10 +45,11 @@ class App extends Component {
                 <div>
                     {
                         (window.innerWidth<600) ?
-                            <Menu pointing size='small' color="green">
+                            <Menu pointing size='small' color="green" borderless>
                                 <Menu.Item  name='Zemuldo Tech Blog and Articles' active={activeItem === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
                                 <Menu.Item name='tech' active={activeItem === 'tech'} onClick={this.handleItemClick} />
                                 <Menu.Item name='business' active={activeItem === 'business'} onClick={this.handleItemClick} />
+                                <Menu.Item name='dev' active={activeItem === 'dev'} onClick={this.handleItemClick} />
                                 <Menu.Menu position='right'>
                                     <Dropdown item text='Social Sites'>
                                         <Dropdown.Menu>
@@ -73,10 +75,11 @@ class App extends Component {
                                     }
                                 </Menu.Item>
                             </Menu> :
-                                <Menu pointing size='small' color="green">
+                                <Menu pointing size='small' color="green" borderless>
                                     <Menu.Item  name='Zemuldo Tech Blog and Articles' active={activeItem === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
                                     <Menu.Item name='tech' active={activeItem === 'tech'} onClick={this.handleItemClick} />
                                     <Menu.Item name='business' active={activeItem === 'business'} onClick={this.handleItemClick} />
+                                    <Menu.Item name='dev' active={activeItem === 'dev'} onClick={this.handleItemClick} />
                                     <Menu.Menu position='right'>
                                         <Menu.Item>
                                             <a href="https://twitter.com/zemuldo" rel="noreferrer noopener" target="_blank">
@@ -115,39 +118,9 @@ class App extends Component {
                         (this.state.current === 'Zemuldo Tech Blog and Articles') ? <HomePage current={this.state.current} /> :
                         (this.state.current === 'tech') ? <TechSummary /> :
                         (this.state.current === 'business') ? <BusinessSummary current={this.state.current} /> :
+                        (this.state.current === 'dev') ? <DevArticles current={this.state.current} /> :
                         <HomePage />
                     }
-                </div>
-                <div>
-                    <Segment color='green' inverted vertical style={{ padding: '1em 0em' }}>
-                        <Container>
-                            <Grid divided inverted stackable>
-                                <Grid.Row>
-                                    <Grid.Column width={3}>
-                                        <Header inverted as='h4' content='About' />
-                                        <List link inverted>
-                                            <List.Item as='a'>Sitemap</List.Item>
-                                            <List.Item as='a'>Contact Us</List.Item>
-
-                                        </List>
-                                    </Grid.Column>
-                                    <Grid.Column width={3}>
-                                        <Header inverted as='h4' content='Services' />
-                                        <List link inverted>
-                                            <List.Item as='a'>Banana Pre-Order</List.Item>
-                                            <List.Item as='a'>DNA FAQ</List.Item>
-
-                                        </List>
-                                    </Grid.Column>
-                                    <Grid.Column width={7}>
-                                        <Header as='h4' inverted>Footer Header</Header>
-                                        <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                        </Container>
-                    </Segment>
-
                 </div>
             </div>
         )
