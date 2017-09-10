@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Input, Menu, Button,Icon, Grid, Segment, List, Header, Divider, Container, Image} from 'semantic-ui-react'
 import Login from './login/loginForm'
+import TechSummary from './tech/techSummary'
+import BusinessSummary from './business/businessSummary'
 import HomePage from './homePage/homePage'
 import 'semantic-ui-css/semantic.min.css';
 
@@ -16,7 +18,7 @@ class App extends Component {
         this.handleLoginButton = this.handleLoginButton.bind(this);
     };
     handleItemClick = (e, { name }) => {
-        this.setState({ activeItem: name , current:'Zemuldo Tech Blog and Articles',})
+        this.setState({ activeItem: name , current:name,})
     }
     handleLoginButton = ()=>{
         this.setState({ current: 'login' ,logged:true})
@@ -67,6 +69,8 @@ class App extends Component {
                     {
                         (this.state.current ==='login') ? <Login /> :
                         (this.state.current === 'Zemuldo Tech Blog and Articles') ? <HomePage /> :
+                        (this.state.current === 'tech') ? <TechSummary /> :
+                        (this.state.current === 'business') ? <BusinessSummary /> :
                         <HomePage />
                     }
                 </div>
