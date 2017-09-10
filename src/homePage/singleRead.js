@@ -7,22 +7,7 @@ class SingleRead extends Component {
     constructor(props){
         super(props);
         this.state = {
-            blog:[
-                {
-                    title:'What is BlockChain?',
-                    author:'Danstan',
-                    body:'[\n' +
-                    '            \'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum \',\n' +
-                    '            \'tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas \',\n' +
-                    '            \'semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien \',\n' +
-                    '            \'ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean \',\n' +
-                    '            \'fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. \',\n' +
-                    '            \'Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor \',\n' +
-                    '            \'neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, \',\n' +
-                    '            \'accumsan porttitor, facilisis luctus, metus\',\n' +
-                    '        ].join(\'\''
-                }
-            ],
+            blog:{},
             logged:false
         };
     };
