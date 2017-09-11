@@ -30,7 +30,14 @@ class App extends Component {
         window.removeEventListener('resize', this.resize)
     }
     handleItemClick = (e, { name }) => {
-        this.setState({ activeItem: name , current:name,})
+        if(name === 'Zemuldo Tech Blog and Articles'){
+            this.setState({blog:null})
+            this.setState({ current:name,})
+        }
+        else {
+            this.setState({ current:name,})
+        }
+
     }
     handleLoginButton = ()=>{
         this.setState({ current: 'login' ,logged:true})
@@ -39,17 +46,17 @@ class App extends Component {
         this.setState({ current: 'Zemuldo Tech Blog and Articles' ,logged:false})
     }
     render() {
-        const { activeItem } = this.state
+        const { current } = this.state
         return (
             <div>
                 <div>
                     {
                         (window.innerWidth<600) ?
                             <Menu pointing size='small' color="green" borderless>
-                                <Menu.Item  name='Zemuldo Tech Blog and Articles' active={activeItem === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
-                                <Menu.Item name='tech' active={activeItem === 'tech'} onClick={this.handleItemClick} />
-                                <Menu.Item name='business' active={activeItem === 'business'} onClick={this.handleItemClick} />
-                                <Menu.Item name='dev' active={activeItem === 'dev'} onClick={this.handleItemClick} />
+                                <Menu.Item  name='Zemuldo Tech Blog and Articles' active={current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
+                                <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleItemClick} />
+                                <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
+                                <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />
                                 <Menu.Menu position='right'>
                                     <Dropdown item text='Social Sites'>
                                         <Dropdown.Menu>
@@ -70,16 +77,16 @@ class App extends Component {
                                 </Menu.Menu>
                                 <Menu.Item>
                                     {
-                                        (!this.state.logged) ? <Button onClick={this.handleLoginButton} color='green' fluid size='large'>Login</Button>:
-                                            <Button onClick={this.handleLogoutinButton} color='green' fluid size='large'>Logout</Button>
+                                        (!this.state.logged) ? <Button onClick={() => { this.handleLoginButton() }} color='green' fluid size='large'>Login</Button>:
+                                            <Button onClick={() => { this.handleLogoutinButton() }} color='green' fluid size='large'>Logout</Button>
                                     }
                                 </Menu.Item>
                             </Menu> :
                                 <Menu pointing size='small' color="green" borderless>
-                                    <Menu.Item  name='Zemuldo Tech Blog and Articles' active={activeItem === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
-                                    <Menu.Item name='tech' active={activeItem === 'tech'} onClick={this.handleItemClick} />
-                                    <Menu.Item name='business' active={activeItem === 'business'} onClick={this.handleItemClick} />
-                                    <Menu.Item name='dev' active={activeItem === 'dev'} onClick={this.handleItemClick} />
+                                    <Menu.Item  name='Zemuldo Tech Blog and Articles' active={current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
+                                    <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleItemClick} />
+                                    <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
+                                    <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />
                                     <Menu.Menu position='right'>
                                         <Menu.Item>
                                             <a href="https://twitter.com/zemuldo" rel="noreferrer noopener" target="_blank">

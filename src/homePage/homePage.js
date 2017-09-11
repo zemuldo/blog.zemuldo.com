@@ -8,7 +8,7 @@ class HomePage extends Component {
         super(props);
         this.state = {
             blogs:this.handleData(),
-            blog:{},
+            blog:null,
             logged:false,
             isLoaded: false,
             blogIsLoading:false
@@ -54,7 +54,7 @@ class HomePage extends Component {
     handleData(){
         return Promise.all([axios.get('http://zemuldo.com:8090/all', {}),axios.get('http://zemuldo.com:8090/posts/business/How to keep your Customers', {})])
             .then(response => {
-                this.setState({blogs:response[0].data,blog:response[0].data[0]})
+                this.setState({blogs:response[0].data})
                 this.isLoading(true)
                 return response[0].data
             })
@@ -101,29 +101,58 @@ class HomePage extends Component {
                                     }
                                     <Grid.Column  width={10}>
                                         {
-                                            (this.state.blogIsLoading) ? <div style={{ position:'center', margin: '20em 3em 1em 0em'}}>
+                                            (this.state.blogIsLoading) ?
+                                                <div style={{ position:'center', margin: '20em 3em 1em 0em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
                                                 <div>
-                                                    <Container text style={{ marginTop: '2em' }}>
-                                                        <Header color='green' as='h1'>{
-                                                            this.state.blog.title
-                                                        }</Header>
-                                                        <p>
-                                                            Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                        </p>
-                                                        <hr color="green"/>
-                                                    </Container>
-                                                    <Container text >
-                                                        <p>
-                                                            {
-                                                                this.state.blog.body
-                                                            }
-                                                        </p>
-                                                    </Container>
-                                                    <Container style={{ margin: '3em 0em 0em 0em'}} >
+                                                    {
+                                                        (this.state.blog===null) ?
+                                                            <div>
+                                                                <Container text style={{ marginTop: '2em' }}>
+                                                                    <Header style={{alignment:'center'}} color='green' as='h1'>
+                                                                        Welcome To ZemuldO.COM
+                                                                    </Header>
+                                                                    <hr color="green"/>
+                                                                    <p>
+                                                                        We share content on trending technologies like Artificial Intelligence and BlockChain.
+                                                                        You are definitely in the right place. Here you acn get very good content on business, development
+                                                                        and technology.
+                                                                    </p>
+                                                                    <p>
+                                                                        We also offer Business and Tech Consultancy. If you are looking for ways to grow your business,
+                                                                        We are the choice you are looking for. Reach us for insights and growth.
+                                                                    </p>
+                                                                </Container>
+                                                                <Container text >
+                                                                    <p>
 
-                                                    </Container>
+                                                                    </p>
+                                                                </Container>
+
+                                                        </div>:
+                                                            <div>
+                                                                <Container text style={{ marginTop: '2em' }}>
+                                                                    <Header color='green' as='h1'>{
+                                                                        this.state.blog.title
+                                                                    }</Header>
+                                                                    <p>
+                                                                        Published on:  {this.state.blog.date}  By {this.state.blog.author}
+                                                                    </p>
+                                                                    <hr color="green"/>
+                                                                </Container>
+                                                                <Container text >
+                                                                    <p>
+                                                                        {
+                                                                            this.state.blog.body
+                                                                        }
+                                                                    </p>
+                                                                </Container>
+                                                                <Container style={{ margin: '3em 0em 0em 0em'}} >
+
+                                                                </Container>
+                                                            </div>
+                                                    }
                                                 </div>
                                         }
                                     </Grid.Column>
