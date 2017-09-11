@@ -44,8 +44,8 @@ class App extends Component {
 
     handleItemClick = (e, { name }) => {
         if(name === 'Zemuldo Tech Blog and Articles'){
-            this.setState({blog:null})
-            this.setState({ current:name,})
+            window.location = "/"
+
         }
         else {
             this.setState({ current:name,})
@@ -64,14 +64,14 @@ class App extends Component {
         return (
             <div>
                 <Helmet>
-                    <title>{'zemuld0-'+toTitleCase(this.state.current)}</title>
-                    <meta name="description" content="Helmet application" />
+                    <title>{'Zemuld0-'+toTitleCase(this.state.current)}</title>
+                    <meta name="owner" content="Zemuldo BlogSite" />
                 </Helmet>
                 <div>
                     {
                         (window.innerWidth<600) ?
                             <Menu pointing size='small' color="green" borderless>
-                                <Menu.Item  name='Zemuldo Tech Blog and Articles' active={current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleHomeClick} />
+                                <Menu.Item  name='Zemuldo Tech Blog and Articles' active={this.state.current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleHomeClick} />
                                 <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleItemClick} />
                                 <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
                                 <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />

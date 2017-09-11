@@ -26,7 +26,6 @@ class DeveloperArticles extends Component {
         return axios.get('http://zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
-                console.log(response)
                 this.setState({blog:response.data})
                 this.isLoading(true)
                 this.setState({blogIsLoading:false})

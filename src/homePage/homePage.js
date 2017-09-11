@@ -26,7 +26,6 @@ class HomePage extends Component {
         return axios.get('http://zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
-                console.log(response)
                 this.setState({blog:response.data})
                 this.isLoading(true)
                 this.setState({blogIsLoading:false})
@@ -81,7 +80,7 @@ class HomePage extends Component {
                                                     />
                                                     <Header color='green' as='h2'>Most Popular</Header>
                                                     <List>
-                                                        { _.times(this.state.blogs.length, i => <List.Item >
+                                                        { _.times(6, i => <List.Item >
                                                             <List.Icon name='leaf' />
                                                             <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
                                                             <List.Content>Author: {this.state.blogs[i].author}</List.Content>
