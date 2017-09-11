@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import {  Menu, Button,Icon, Grid, Segment, List, Header, Divider, Container, Image, Dropdown} from 'semantic-ui-react'
+import {Helmet} from "react-helmet";
 import Login from './login/loginForm'
 import TechSummary from './tech/techSummary'
 import BusinessSummary from './business/businessSummary'
 import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
 import 'semantic-ui-css/semantic.min.css';
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
 class App extends Component {
     constructor(props){
@@ -20,6 +26,7 @@ class App extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
+
     };
     resize = () => this.forceUpdate()
     componentDidMount() {
@@ -45,10 +52,15 @@ class App extends Component {
     handleLogoutinButton = ()=>{
         this.setState({ current: 'Zemuldo Tech Blog and Articles' ,logged:false})
     }
+
     render() {
         const { current } = this.state
         return (
             <div>
+                <Helmet>
+                    <title>{'zemuld0-'+toTitleCase(this.state.current)}</title>
+                    <meta name="description" content="Helmet application" />
+                </Helmet>
                 <div>
                     {
                         (window.innerWidth<600) ?
