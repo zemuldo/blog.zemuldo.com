@@ -74,16 +74,16 @@ class HomePage extends Component {
                                     {
                                         (window.innerWidth>800) ?
                                             <Grid.Column  width={4}>
-                                                <div style={{ float: 'left', margin: '2em 3em 3em 2em' , width:250}}>
+                                                <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                     <Input
                                                         icon={<Icon name='search' inverted circular link />}
                                                         placeholder='Search...'
                                                     />
-                                                    <Header color='green' as='h2'>Popular in Tech</Header>
+                                                    <Header color='green' as='h2'>Featured in Tech</Header>
                                                     <List>
                                                         { _.times(this.state.blogs.length, i => <List.Item >
                                                             <List.Icon name='leaf' />
-                                                            <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title : this.state.blogs[i].title}</Header></List.Content>
+                                                            <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
                                                             <List.Content>Author: {this.state.blogs[i].author}</List.Content>
                                                             <List.Content>Likes {i}</List.Content>
                                                             <Button ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
@@ -101,60 +101,85 @@ class HomePage extends Component {
                                     }
                                     <Grid.Column  width={10}>
                                         {
-                                            (this.state.blogIsLoading) ? <div style={{ position:'center', margin: '20em 3em 1em 0em'}}>
+                                            (this.state.blogIsLoading) ?
+                                                <div style={{ position:'center', margin: '20em 3em 1em 0em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
-                                                <div>
-                                                    <Container text style={{ marginTop: '2em' }}>
-                                                        <Header color='green' as='h1'>{
+                                                <div style={{margin: '2em 1em 3em 1em'}}>
+                                                    <Header style={{}} color='green' as='h1'>
+                                                        {
                                                             this.state.blog.title
-                                                        }</Header>
-                                                        <p>
-                                                            Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                        </p>
-                                                        <hr color="green"/>
-                                                    </Container>
-                                                    <Container text >
+                                                        }
+                                                    </Header>
+                                                    <p style={{}}>
+                                                        Share:
+                                                        <List size={4} icon='labeled' horizontal color='green'>
+                                                            <List.Header>
+                                                                <Icon name="share" color='orange'/>
+                                                                Share
+                                                            </List.Header>
+                                                            <List.Item>
+                                                                <Icon color='blue' name='twitter' />
+                                                            </List.Item>
+
+                                                            <List.Item >
+                                                                <Icon color='violet' name='facebook' />
+                                                            </List.Item>
+
+                                                            <List.Item>
+                                                                <Icon color='blue' name='linkedin' />
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                <Icon color='orange' name='google plus official' />
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                <Icon color='red' name='mail' />
+                                                            </List.Item>
+                                                        </List>
+                                                        <br/>
+                                                        Published on:  {this.state.blog.date}  By {this.state.blog.author}
+                                                    </p>
+                                                    <hr color="green"/>
+                                                    <div style={{margin: '0em 3em 0em 3em'}}>
                                                         <p>
                                                             {
                                                                 this.state.blog.body
                                                             }
                                                         </p>
-                                                    </Container>
-                                                    <Container style={{ margin: '3em 0em 0em 0em'}} >
-
-                                                    </Container>
+                                                    </div>
                                                 </div>
                                         }
                                     </Grid.Column>
                                     <Grid.Column  width={2}>
-                                        <div style={{margin: '8em 3em 1em 3em'}}>
-                                            <Menu icon='labeled' vertical color='green'>
-                                                <Menu.Header>
-                                                    <Menu.Item>
-                                                        <Icon name="share" color='orange'/>
-                                                        Share
-                                                    </Menu.Item>
-                                                </Menu.Header>
-                                                <Menu.Item>
-                                                    <Icon color='blue' name='twitter' />
-                                                </Menu.Item>
+                                        {
+                                            (this.state.blog===null) ? <div></div>:
+                                                <div style={{margin: '3em 3em 1em 3em'}}>
+                                                    <List size={4} icon='labeled' horizontal color='green'>
+                                                        <List.Header>
+                                                            <Icon name="share" color='orange'/>
+                                                            Share
+                                                        </List.Header>
+                                                        <List.Item>
+                                                            <Icon color='blue' name='twitter' />
+                                                        </List.Item>
 
-                                                <Menu.Item >
-                                                    <Icon color='violet' name='facebook' />
-                                                </Menu.Item>
+                                                        <List.Item >
+                                                            <Icon color='violet' name='facebook' />
+                                                        </List.Item>
 
-                                                <Menu.Item>
-                                                    <Icon color='blue' name='linkedin' />
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    <Icon color='orange' name='google plus official' />
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    <Icon color='red' name='mail' />
-                                                </Menu.Item>
-                                            </Menu>
-                                        </div>
+                                                        <List.Item>
+                                                            <Icon color='blue' name='linkedin' />
+                                                        </List.Item>
+                                                        <List.Item>
+                                                            <Icon color='orange' name='google plus official' />
+                                                        </List.Item>
+                                                        <List.Item>
+                                                            <Icon color='red' name='mail' />
+                                                        </List.Item>
+                                                    </List>
+                                                </div>
+                                        }
+
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>

@@ -74,7 +74,7 @@ class HomePage extends Component {
                                     {
                                         (window.innerWidth>800) ?
                                             <Grid.Column  width={4}>
-                                                <div style={{ float: 'left', margin: '2em 3em 3em 2em' , width:250}}>
+                                                <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                     <Input
                                                         icon={<Icon name='search' inverted circular link />}
                                                         placeholder='Search...'
@@ -105,15 +105,15 @@ class HomePage extends Component {
                                                 <div style={{ position:'center', margin: '20em 3em 1em 0em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
-                                                <div>
+                                                <div style={{margin: '2em 1em 3em 1em'}}>
                                                     {
                                                         (this.state.blog===null) ?
                                                             <div>
-                                                                <Container text style={{ marginTop: '2em' }}>
-                                                                    <Header style={{alignment:'center'}} color='green' as='h1'>
-                                                                        Welcome To ZemuldO.COM
-                                                                    </Header>
-                                                                    <hr color="green"/>
+                                                                <Header style={{textAlign :'center',alignment:'center'}} color='green' as='h1'>
+                                                                    Welcome To ZemuldO.COM
+                                                                </Header>
+                                                                <hr color="green"/>
+                                                                <div style={{margin: '0em 3em 0em 3em'}}>
                                                                     <p>
                                                                         We share content on trending technologies like Artificial Intelligence and BlockChain.
                                                                         You are definitely in the right place. Here you acn get very good content on business, development
@@ -123,34 +123,52 @@ class HomePage extends Component {
                                                                         We also offer Business and Tech Consultancy. If you are looking for ways to grow your business,
                                                                         We are the choice you are looking for. Reach us for insights and growth.
                                                                     </p>
-                                                                </Container>
-                                                                <Container text >
-                                                                    <p>
-
-                                                                    </p>
-                                                                </Container>
+                                                                </div>
 
                                                         </div>:
                                                             <div>
-                                                                <Container text style={{ marginTop: '2em' }}>
-                                                                    <Header color='green' as='h1'>{
-                                                                        this.state.blog.title
-                                                                    }</Header>
-                                                                    <p>
-                                                                        Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                                    </p>
-                                                                    <hr color="green"/>
-                                                                </Container>
-                                                                <Container text >
+                                                                <Header style={{}} color='green' as='h1'>
+                                                                    {
+                                                                    this.state.blog.title
+                                                                    }
+                                                                </Header>
+                                                                <p style={{}}>
+                                                                    Share:
+                                                                    <List size={4} icon='labeled' horizontal color='green'>
+                                                                        <List.Header>
+                                                                            <Icon name="share" color='orange'/>
+                                                                            Share
+                                                                        </List.Header>
+                                                                        <List.Item>
+                                                                            <Icon color='blue' name='twitter' />
+                                                                        </List.Item>
+
+                                                                        <List.Item >
+                                                                            <Icon color='violet' name='facebook' />
+                                                                        </List.Item>
+
+                                                                        <List.Item>
+                                                                            <Icon color='blue' name='linkedin' />
+                                                                        </List.Item>
+                                                                        <List.Item>
+                                                                            <Icon color='orange' name='google plus official' />
+                                                                        </List.Item>
+                                                                        <List.Item>
+                                                                            <Icon color='red' name='mail' />
+                                                                        </List.Item>
+                                                                    </List>
+                                                                    <br/>
+                                                                    Published on:  {this.state.blog.date}  By {this.state.blog.author}
+                                                                </p>
+                                                                <hr color="green"/>
+                                                                <div style={{margin: '0em 3em 0em 3em'}}>
                                                                     <p>
                                                                         {
                                                                             this.state.blog.body
                                                                         }
                                                                     </p>
-                                                                </Container>
-                                                                <Container style={{ margin: '3em 0em 0em 0em'}} >
+                                                                </div>
 
-                                                                </Container>
                                                             </div>
                                                     }
                                                 </div>
@@ -159,32 +177,30 @@ class HomePage extends Component {
                                     <Grid.Column  width={2}>
                                         {
                                             (this.state.blog===null) ? <div></div>:
-                                                <div style={{margin: '8em 3em 1em 3em'}}>
-                                                    <Menu icon='labeled' vertical color='green'>
-                                                        <Menu.Header>
-                                                            <Menu.Item>
-                                                                <Icon name="share" color='orange'/>
-                                                                Share
-                                                            </Menu.Item>
-                                                        </Menu.Header>
-                                                        <Menu.Item>
+                                                <div style={{margin: '3em 3em 1em 3em'}}>
+                                                    <List size={4} icon='labeled' horizontal color='green'>
+                                                        <List.Header>
+                                                            <Icon name="share" color='orange'/>
+                                                            Share
+                                                        </List.Header>
+                                                        <List.Item>
                                                             <Icon color='blue' name='twitter' />
-                                                        </Menu.Item>
+                                                        </List.Item>
 
-                                                        <Menu.Item >
+                                                        <List.Item >
                                                             <Icon color='violet' name='facebook' />
-                                                        </Menu.Item>
+                                                        </List.Item>
 
-                                                        <Menu.Item>
+                                                        <List.Item>
                                                             <Icon color='blue' name='linkedin' />
-                                                        </Menu.Item>
-                                                        <Menu.Item>
+                                                        </List.Item>
+                                                        <List.Item>
                                                             <Icon color='orange' name='google plus official' />
-                                                        </Menu.Item>
-                                                        <Menu.Item>
+                                                        </List.Item>
+                                                        <List.Item>
                                                             <Icon color='red' name='mail' />
-                                                        </Menu.Item>
-                                                    </Menu>
+                                                        </List.Item>
+                                                    </List>
                                                 </div>
                                         }
 

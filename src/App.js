@@ -26,6 +26,7 @@ class App extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
+        this.handleHomeClick = this.handleHomeClick.bind(this);
 
     };
     resize = () => this.forceUpdate()
@@ -36,6 +37,11 @@ class App extends Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     }
+    handleHomeClick = () => {
+        this.setState({blog:null})
+        this.setState({ current:'Zemuldo Tech Blog and Articles',})
+    }
+
     handleItemClick = (e, { name }) => {
         if(name === 'Zemuldo Tech Blog and Articles'){
             this.setState({blog:null})
@@ -65,7 +71,7 @@ class App extends Component {
                     {
                         (window.innerWidth<600) ?
                             <Menu pointing size='small' color="green" borderless>
-                                <Menu.Item  name='Zemuldo Tech Blog and Articles' active={current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleItemClick} />
+                                <Menu.Item  name='Zemuldo Tech Blog and Articles' active={current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleHomeClick} />
                                 <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleItemClick} />
                                 <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
                                 <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />
@@ -89,8 +95,9 @@ class App extends Component {
                                 </Menu.Menu>
                                 <Menu.Item>
                                     {
-                                        (!this.state.logged) ? <Button onClick={() => { this.handleLoginButton() }} color='green' fluid size='large'>Login</Button>:
-                                            <Button onClick={() => { this.handleLogoutinButton() }} color='green' fluid size='large'>Logout</Button>
+                                        (!this.state.logged) ?
+                                        <Button onClick={() => { this.handleLoginButton() }} color='green' fluid size='large'>Login</Button>:
+                                        <Button onClick={() => { this.handleLogoutinButton() }} color='green' fluid size='large'>Logout</Button>
                                     }
                                 </Menu.Item>
                             </Menu> :
