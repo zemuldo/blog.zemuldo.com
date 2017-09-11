@@ -8,6 +8,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-file-download": "^0.3.4",
+    "react-helmet": "^5.2.0",
     "react-tabs": "^1.1.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.72.0",
