@@ -157,33 +157,37 @@ class HomePage extends Component {
                                         }
                                     </Grid.Column>
                                     <Grid.Column  width={2}>
-                                        <div style={{margin: '8em 3em 1em 3em'}}>
-                                            <Menu icon='labeled' vertical color='green'>
-                                                <Menu.Header>
-                                                    <Menu.Item>
-                                                        <Icon name="share" color='orange'/>
-                                                        Share
-                                                    </Menu.Item>
-                                                </Menu.Header>
-                                                <Menu.Item>
-                                                    <Icon color='blue' name='twitter' />
-                                                </Menu.Item>
+                                        {
+                                            (this.state.blog===null) ? <div></div>:
+                                                <div style={{margin: '8em 3em 1em 3em'}}>
+                                                    <Menu icon='labeled' vertical color='green'>
+                                                        <Menu.Header>
+                                                            <Menu.Item>
+                                                                <Icon name="share" color='orange'/>
+                                                                Share
+                                                            </Menu.Item>
+                                                        </Menu.Header>
+                                                        <Menu.Item>
+                                                            <Icon color='blue' name='twitter' />
+                                                        </Menu.Item>
 
-                                                <Menu.Item >
-                                                    <Icon color='violet' name='facebook' />
-                                                </Menu.Item>
+                                                        <Menu.Item >
+                                                            <Icon color='violet' name='facebook' />
+                                                        </Menu.Item>
 
-                                                <Menu.Item>
-                                                    <Icon color='blue' name='linkedin' />
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    <Icon color='orange' name='google plus official' />
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    <Icon color='red' name='mail' />
-                                                </Menu.Item>
-                                            </Menu>
-                                        </div>
+                                                        <Menu.Item>
+                                                            <Icon color='blue' name='linkedin' />
+                                                        </Menu.Item>
+                                                        <Menu.Item>
+                                                            <Icon color='orange' name='google plus official' />
+                                                        </Menu.Item>
+                                                        <Menu.Item>
+                                                            <Icon color='red' name='mail' />
+                                                        </Menu.Item>
+                                                    </Menu>
+                                                </div>
+                                        }
+
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
