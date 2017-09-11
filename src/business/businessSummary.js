@@ -150,34 +150,7 @@ class HomePage extends Component {
                                         }
                                     </Grid.Column>
                                     <Grid.Column  width={2}>
-                                        {
-                                            (this.state.blog===null) ? <div></div>:
-                                                <div style={{margin: '3em 3em 1em 3em'}}>
-                                                    <List size={4} icon='labeled' horizontal color='green'>
-                                                        <List.Header>
-                                                            <Icon name="share" color='orange'/>
-                                                            Share
-                                                        </List.Header>
-                                                        <List.Item>
-                                                            <Icon color='blue' name='twitter' />
-                                                        </List.Item>
 
-                                                        <List.Item >
-                                                            <Icon color='violet' name='facebook' />
-                                                        </List.Item>
-
-                                                        <List.Item>
-                                                            <Icon color='blue' name='linkedin' />
-                                                        </List.Item>
-                                                        <List.Item>
-                                                            <Icon color='orange' name='google plus official' />
-                                                        </List.Item>
-                                                        <List.Item>
-                                                            <Icon color='red' name='mail' />
-                                                        </List.Item>
-                                                    </List>
-                                                </div>
-                                        }
 
                                     </Grid.Column>
                                 </Grid.Row>
