@@ -3,11 +3,12 @@ import React,{Component} from 'react'
 import { Container, Header, Icon,  List, Menu , Button , Popup , Grid,Dropdown ,Loader,Segment,Image,Input} from 'semantic-ui-react'
 import axios from 'axios';
 
+var data = [{name:'Jhon', age:28, city:'HO'},{name:'Onhj', age:82, city:'HN'},{name:'Nohj', age:41, city:'IT'}]
 class HomePage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            bodySize:this.setBodySize(),
+            bodySize:10,
             blogs:this.handleData(),
             blog:null,
             logged:false,
@@ -18,7 +19,6 @@ class HomePage extends Component {
         this.onReadMore = this.onReadMore.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
         this.setBodySize = this.setBodySize.bind(this);
@@ -26,11 +26,9 @@ class HomePage extends Component {
     };
     setBodySize(){
         if(window.innerWidth>600){
-            this.setState({bodySize:10})
             return 10
         }
         else {
-            this.setState({bodySize:12})
             return 12
         }
     }
@@ -90,12 +88,24 @@ class HomePage extends Component {
     handleFileChange(e) {
         //e.preventDefault();
         console.log(e.target.value)
-        return axios.get('http://zemuldo.com:8090/filter/'+e.target.value, {})
-            .then(response => {
-                this.setState({blogs:response[0].data})
-            })
-            .catch(exception => {
-            });
+        if(e.target.value===''){
+            return axios.get('http://zemuldo.com:8090/all', {})
+                .then(response => {
+                    this.setState({blogs:response.data})
+                    console.log(response.data)
+                })
+                .catch(exception => {
+                });
+        }
+        else {
+            return axios.get('http://zemuldo.com:8090/filter/'+e.target.value, {})
+                .then(response => {
+                    this.setState({blogs:response.data})
+                    console.log(response.data)
+                })
+                .catch(exception => {
+                });
+        }
     }
     render(){
         return(
@@ -116,14 +126,24 @@ class HomePage extends Component {
                                                     />
                                                     <Header color='green' as='h2'>Most Popular</Header>
                                                     <List>
-                                                        { _.times(6, i => <List.Item >
-                                                            <List.Icon name='leaf' />
-                                                            <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
-                                                            <List.Content>Author: {this.state.blogs[i].author}</List.Content>
-                                                            <List.Content>Likes {i}</List.Content>
-                                                            <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
-                                                            <hr/>
-                                                        </List.Item>)
+                                                        {
+                                                            (this.state.blogs[0]) ?
+                                                                <div>
+                                                                    {
+                                                                        this.state.blogs.map((x, i) =>
+                                                                            <List.Item key={this.state.blogs[i].title}>
+                                                                                <List.Icon name='leaf' />
+                                                                                <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
+                                                                                <List.Content>Author: {this.state.blogs[i].author}</List.Content>
+                                                                                <List.Content>Likes {i}</List.Content>
+                                                                                <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                                                                <hr/>
+                                                                            </List.Item>
+                                                                    )}
+                                                                </div>:
+                                                                <div>
+                                                                    No matching data
+                                                                </div>
                                                         }
                                                     </List>
                                                     <a onClick={this.goToHome}><Header color='orange' as='h4'>More</Header></a>
@@ -167,7 +187,7 @@ class HomePage extends Component {
                                                                 </Header>
                                                                 <p style={{}}>
                                                                     Share:
-                                                                    <List size={4} icon='labeled' horizontal color='green'>
+                                                                    <List size="tiny" icon='labeled' horizontal color='green'>
                                                                         <List.Header>
                                                                             <Icon name="share" color='orange'/>
                                                                             Share
