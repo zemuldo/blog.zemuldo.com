@@ -196,7 +196,7 @@ class HomePage extends Component {
                                         }
                                     </Grid.Column>
                                     {
-                                        (window.innerWidth>600) ?
+                                        (window.innerWidth>1030) ?
                                             <Grid.Column  width={2}>
 
 
