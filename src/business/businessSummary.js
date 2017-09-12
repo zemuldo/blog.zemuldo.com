@@ -85,7 +85,7 @@ class HomePage extends Component {
                                                             <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
                                                             <List.Content>Author: {this.state.blogs[i].author}</List.Content>
                                                             <List.Content>Likes {i}</List.Content>
-                                                            <Button ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                                            <Button size ="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
                                                             <hr/>
                                                         </List.Item>)
                                                         }
@@ -149,10 +149,14 @@ class HomePage extends Component {
                                                 </div>
                                         }
                                     </Grid.Column>
-                                    <Grid.Column  width={2}>
+                                    {
+                                        (window.innerWidth>800) ?
+                                            <Grid.Column  width={2}>
+                                            </Grid.Column>:
+                                            <div>
 
-
-                                    </Grid.Column>
+                                            </div>
+                                    }
                                 </Grid.Row>
                             </Grid>
                         </div>:

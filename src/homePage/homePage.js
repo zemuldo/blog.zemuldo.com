@@ -7,6 +7,7 @@ class HomePage extends Component {
     constructor(props){
         super(props);
         this.state = {
+            bodySize:this.setBodySize(),
             blogs:this.handleData(),
             blog:null,
             logged:false,
@@ -20,7 +21,18 @@ class HomePage extends Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
+        this.setBodySize = this.setBodySize.bind(this);
     };
+    setBodySize(){
+        if(window.innerWidth>600){
+            this.setState({bodySize:10})
+            return 10
+        }
+        else {
+            this.setState({bodySize:12})
+            return 12
+        }
+    }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
         return axios.get('http://zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
@@ -42,9 +54,21 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        if(window.innerWidth>600){
+            this.setState({bodySize:10})
+        }
+        else {
+            this.setState({bodySize:12})
+        }
         window.addEventListener('resize', this.resize)
     }
     componentWillUnmount() {
+        if(window.innerWidth>800){
+            this.setState({bodySize:10})
+        }
+        else {
+            this.setState({bodySize:12})
+        }
         window.removeEventListener('resize', this.resize)
     }
     isLoading(value){
@@ -68,10 +92,10 @@ class HomePage extends Component {
                 {
                     (this.state.isLoaded) ?
                         <div>
-                            <Grid columns={3} divided>
+                            <Grid columns={2} divided>
                                 <Grid.Row>
                                     {
-                                        (window.innerWidth>800) ?
+                                        (window.innerWidth>600) ?
                                             <Grid.Column  width={4}>
                                                 <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                     <Input
@@ -85,7 +109,7 @@ class HomePage extends Component {
                                                             <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
                                                             <List.Content>Author: {this.state.blogs[i].author}</List.Content>
                                                             <List.Content>Likes {i}</List.Content>
-                                                            <Button ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                                            <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
                                                             <hr/>
                                                         </List.Item>)
                                                         }
@@ -93,15 +117,13 @@ class HomePage extends Component {
                                                     <a onClick={this.goToHome}><Header color='orange' as='h4'>More</Header></a>
                                                 </div>
                                             </Grid.Column>:
-                                            <div>
-
-                                            </div>
+                                            <p>Hello</p>
 
                                     }
-                                    <Grid.Column  width={10}>
+                                    <Grid.Column  width={this.state.bodySize}>
                                         {
                                             (this.state.blogIsLoading) ?
-                                                <div style={{ position:'center', margin: '20em 3em 1em 0em'}}>
+                                                <div style={{ position:'center', margin: '20em 2em 2em 2em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
                                                 <div style={{margin: '2em 1em 3em 1em'}}>
@@ -173,10 +195,14 @@ class HomePage extends Component {
                                                 </div>
                                         }
                                     </Grid.Column>
-                                    <Grid.Column  width={2}>
-                                        
+                                    {
+                                        (window.innerWidth>600) ?
+                                            <Grid.Column  width={2}>
 
-                                    </Grid.Column>
+
+                                            </Grid.Column>:
+                                           <p>Hello</p>
+                                    }
                                 </Grid.Row>
                             </Grid>
                         </div>:
