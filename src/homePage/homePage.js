@@ -22,6 +22,7 @@ class HomePage extends Component {
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
         this.setBodySize = this.setBodySize.bind(this);
+        this.handleFileChange = this.handleFileChange.bind(this);
     };
     setBodySize(){
         if(window.innerWidth>600){
@@ -86,6 +87,16 @@ class HomePage extends Component {
                 return exception
             });
     };
+    handleFileChange(e) {
+        //e.preventDefault();
+        console.log(e.target.value)
+        return axios.get('http://zemuldo.com:8090/filter/'+e.target.value, {})
+            .then(response => {
+                this.setState({blogs:response[0].data})
+            })
+            .catch(exception => {
+            });
+    }
     render(){
         return(
             <div>
@@ -101,6 +112,7 @@ class HomePage extends Component {
                                                     <Input
                                                         icon={<Icon name='search' inverted circular link />}
                                                         placeholder='Search...'
+                                                        onChange={this.handleFileChange}
                                                     />
                                                     <Header color='green' as='h2'>Most Popular</Header>
                                                     <List>
