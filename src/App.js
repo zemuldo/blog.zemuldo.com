@@ -7,6 +7,7 @@ import BusinessSummary from './business/businessSummary'
 import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
 import 'semantic-ui-css/semantic.min.css';
+import axios from 'axios'
 
 function toTitleCase(str)
 {
@@ -19,7 +20,9 @@ class App extends Component {
         this.state = {
             activeItem: 'ZemuldO-Home',
             current:'ZemuldO-Home',
-            logged:false
+            logged:false,
+            iKnowYou:false,
+            visitorInfo:null
         };
         this.handleItemClick = this.handleItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -31,6 +34,23 @@ class App extends Component {
     };
     resize = () => this.forceUpdate()
     componentDidMount() {
+        if(!this.state.iKnowYou){
+            return axios.get('http://zemuldo.com:8090/getIp', {})
+                .then(response => {
+                    console.log(response.data)
+                    return axios.get('http://ip-api.com/json/'+response.data.ip, {})
+                })
+                .then(function (visitorData) {
+                    console.log(visitorData.data)
+                    return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                })
+                .then(function (final) {
+                    console.log(final.data)
+                })
+                .catch(exception => {
+                    console.log(exception)
+                });
+        }
         window.addEventListener('resize', this.resize)
     }
 
