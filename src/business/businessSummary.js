@@ -147,10 +147,10 @@ class HomePage extends Component {
                                     <Grid.Column  width={this.state.bodySize}>
                                         {
                                             (this.state.blogIsLoading) ?
-                                                <div style={{ position:'center', margin: '20em 2em 2em 2em'}}>
+                                                <div style={{ position:'center', margin: '20em 0em 2em 2em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
-                                                <div style={{margin: '2em 1em 3em 1em'}}>
+                                                <div style={{margin: '3em 0em 0em 1em'}}>
                                                     {
                                                         (this.state.blog===null) ?
                                                             <div>
@@ -158,7 +158,7 @@ class HomePage extends Component {
                                                                     Welcome To ZemuldO.COM
                                                                 </Header>
                                                                 <hr color="green"/>
-                                                                <div style={{margin: '0em 3em 0em 3em'}}>
+                                                                <div style={{margin: '0em 0em 0em 0em'}}>
                                                                     <p>
                                                                         We share content on trending technologies like Artificial Intelligence and BlockChain.
                                                                         You are definitely in the right place. Here you acn get very good content on business, development
@@ -179,6 +179,7 @@ class HomePage extends Component {
                                                                 </Header>
                                                                 <div style={{}}>
                                                                     Share:
+
                                                                     <List size="tiny" icon='labeled' horizontal color='green'>
                                                                         <List.Item>
                                                                             <Icon color='blue' name='twitter' />
@@ -202,7 +203,7 @@ class HomePage extends Component {
                                                                     Published on:  {this.state.blog.date}  By {this.state.blog.author}
                                                                 </div>
                                                                 <hr color="green"/>
-                                                                <div style={{margin: '0em 3em 0em 3em'}}>
+                                                                <div style={{margin: '0em 0em 0em 0em'}}>
                                                                     <p>
                                                                         {
                                                                             this.state.blog.body

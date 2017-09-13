@@ -171,7 +171,7 @@ class HomePage extends Component {
                                                 <div style={{ position:'center', margin: '20em 2em 2em 2em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
-                                                <div style={{margin: '2em 1em 3em 1em'}}>
+                                                <div style={{margin: '1em 1em 1em 1em'}}>
                                                     {
                                                         (this.state.blog===null) ?
                                                             <div>
