@@ -1,9 +1,8 @@
 import _ from 'lodash'
 import React,{Component} from 'react'
-import { Container, Header, Icon,  List, Menu , Button , Popup , Grid,Dropdown ,Loader,Segment,Image,Input} from 'semantic-ui-react'
+import { Header, Icon,  List , Button  , Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
 
-var data = [{name:'Jhon', age:28, city:'HO'},{name:'Onhj', age:82, city:'HN'},{name:'Nohj', age:41, city:'IT'}]
 class HomePage extends Component {
     constructor(props){
         super(props);
@@ -22,7 +21,7 @@ class HomePage extends Component {
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
         this.setBodySize = this.setBodySize.bind(this);
-        this.handleFileChange = this.handleFileChange.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
     };
     setBodySize(){
         if(window.innerWidth>600){
@@ -85,14 +84,12 @@ class HomePage extends Component {
                 return exception
             });
     };
-    handleFileChange(e) {
+    handleFilterChange(e) {
         //e.preventDefault();
-        console.log(e.target.value)
         if(e.target.value===''){
             return axios.get('http://zemuldo.com:8090/all', {})
                 .then(response => {
                     this.setState({blogs:response.data})
-                    console.log(response.data)
                 })
                 .catch(exception => {
                 });
@@ -101,7 +98,6 @@ class HomePage extends Component {
             return axios.get('http://zemuldo.com:8090/filter/'+e.target.value, {})
                 .then(response => {
                     this.setState({blogs:response.data})
-                    console.log(response.data)
                 })
                 .catch(exception => {
                 });
@@ -122,7 +118,7 @@ class HomePage extends Component {
                                                     <Input
                                                         icon={<Icon name='search' inverted circular link />}
                                                         placeholder='Search...'
-                                                        onChange={this.handleFileChange}
+                                                        onChange={this.handleFilterChange}
                                                     />
                                                     <Header color='green' as='h2'>Most Popular</Header>
                                                     <List>
@@ -130,16 +126,33 @@ class HomePage extends Component {
                                                             (this.state.blogs[0]) ?
                                                                 <div>
                                                                     {
-                                                                        this.state.blogs.map((x, i) =>
-                                                                            <List.Item key={this.state.blogs[i].title}>
-                                                                                <List.Icon name='leaf' />
-                                                                                <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
-                                                                                <List.Content>Author: {this.state.blogs[i].author}</List.Content>
-                                                                                <List.Content>Likes {i}</List.Content>
-                                                                                <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
-                                                                                <hr/>
-                                                                            </List.Item>
-                                                                    )}
+                                                                        (this.state.blogs.length>10) ?
+                                                                            <div>
+                                                                                { _.times(this.state.blogs.length, i =>
+                                                                                    <List.Item key={this.state.blogs[i].title} >
+                                                                                    <List.Icon name='leaf' />
+                                                                                    <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
+                                                                                    <List.Content>Author: {this.state.blogs[i].author}</List.Content>
+                                                                                    <List.Content>Likes {i}</List.Content>
+                                                                                    <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                                                                    <hr/>
+                                                                                </List.Item>)
+                                                                                }
+                                                                            </div>:
+                                                                            <div>
+                                                                                {
+                                                                                    this.state.blogs.map((x, i) =>
+                                                                                        <List.Item key={this.state.blogs[i].title}>
+                                                                                            <List.Icon name='leaf' />
+                                                                                            <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
+                                                                                            <List.Content>Author: {this.state.blogs[i].author}</List.Content>
+                                                                                            <List.Content>Likes {i}</List.Content>
+                                                                                            <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                                                                            <hr/>
+                                                                                        </List.Item>
+                                                                                    )}
+                                                                            </div>
+                                                                    }
                                                                 </div>:
                                                                 <div>
                                                                     No matching data
@@ -185,13 +198,9 @@ class HomePage extends Component {
                                                                     this.state.blog.title
                                                                     }
                                                                 </Header>
-                                                                <p style={{}}>
+                                                                <div style={{}}>
                                                                     Share:
                                                                     <List size="tiny" icon='labeled' horizontal color='green'>
-                                                                        <List.Header>
-                                                                            <Icon name="share" color='orange'/>
-                                                                            Share
-                                                                        </List.Header>
                                                                         <List.Item>
                                                                             <Icon color='blue' name='twitter' />
                                                                         </List.Item>
@@ -212,7 +221,7 @@ class HomePage extends Component {
                                                                     </List>
                                                                     <br/>
                                                                     Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                                </p>
+                                                                </div>
                                                                 <hr color="green"/>
                                                                 <div style={{margin: '0em 3em 0em 3em'}}>
                                                                     <p>

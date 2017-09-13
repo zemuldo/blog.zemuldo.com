@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Menu, Button,Icon, Grid, Segment, List, Header, Divider, Container, Image, Dropdown} from 'semantic-ui-react'
+import {  Menu, Button,Icon, Dropdown} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
 import Login from './login/loginForm'
 import TechSummary from './tech/techSummary'
