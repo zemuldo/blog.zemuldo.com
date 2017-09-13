@@ -147,7 +147,7 @@ class HomePage extends Component {
                                     <Grid.Column  width={this.state.bodySize}>
                                         {
                                             (this.state.blogIsLoading) ?
-                                                <div style={{ position:'center', margin: '20em 0em 2em 2em'}}>
+                                                <div style={{ position:'center', margin: '20em 2em 2em 2em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
                                                 <div style={{margin: '3em 0em 0em 1em'}}>
