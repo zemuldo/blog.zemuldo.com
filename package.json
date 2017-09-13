@@ -16,6 +16,7 @@
     "react-native-websocket": "^1.0.1",
     "react-tabs": "^1.1.0",
     "react-websocket": "^1.2.0",
+    "request-ip": "^2.0.2",
     "rxjs": "^5.4.3",
     "rxjs-websockets": "^2.0.0",
     "semantic-ui-css": "^2.2.12",
