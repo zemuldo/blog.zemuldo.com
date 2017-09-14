@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
+    "dotenv": "^4.0.0",
     "jsonwebtoken": "^7.4.1",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
+    "npm": "^5.4.1",
     "queueing-subject": "^0.1.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -21,8 +23,7 @@
     "rxjs-websockets": "^2.0.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.72.0",
-    "serve": "^6.0.0",
-    "websocket": "^1.0.24"
+    "serve": "^6.0.0"
   },
   "devDependencies": {
     "autoprefixer": "7.1.0",
