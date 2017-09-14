@@ -11,7 +11,8 @@ class HomePage extends Component {
             blog:null,
             logged:false,
             isLoaded: false,
-            blogIsLoading:false
+            blogIsLoading:false,
+            bodySize:12
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -21,6 +22,7 @@ class HomePage extends Component {
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
     };
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
@@ -41,8 +43,17 @@ class HomePage extends Component {
     goToHome(){
         this.setState({current:'ZemuldO-Home'})
     }
+    _handleChangeBodySize(size){
+        this.setState({bodySize:size})
+    }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        if(window.innerWidth<503){
+            this._handleChangeBodySize(16)
+        }
+        if(window.innerWidth>503){
+            this._handleChangeBodySize(12)
+        }
         this.handleData()
         window.addEventListener('resize', this.resize)
     }
@@ -152,13 +163,13 @@ class HomePage extends Component {
                                             <p>Hello</p>
 
                                     }
-                                    <Grid.Column  width={12}>
+                                    <Grid.Column  width={this.state.bodySize}>
                                         {
                                             (this.state.blogIsLoading) ?
-                                                <div style={{ position:'center', margin: '20em 2em 2em 2em'}}>
+                                                <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
-                                                <div style={{margin: '3em 0em 3em 0em'}}>
+                                                <div style={{margin: '3em 1em 3em 1em'}}>
                                                     {
                                                         (this.state.blog===null) ?
                                                             <div>
@@ -166,7 +177,7 @@ class HomePage extends Component {
                                                                     Welcome To ZemuldO.COM
                                                                 </Header>
                                                                 <hr color="green"/>
-                                                                <div style={{margin: '3em 0em 3em 0em'}}>
+                                                                <div style={{}}>
                                                                     <p>
                                                                         We share content on trending technologies like Artificial Intelligence and BlockChain.
                                                                         You are definitely in the right place. Here you acn get very good content on business, development
@@ -223,9 +234,6 @@ class HomePage extends Component {
                                                 </div>
                                         }
                                     </Grid.Column>
-                                    {
-
-                                    }
                                 </Grid.Row>
                             </Grid>
                         </div>:
