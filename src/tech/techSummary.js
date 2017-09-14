@@ -39,7 +39,7 @@ class HomePage extends Component {
             });
     }
     goToHome(){
-        this.setState({current:'Zemuldo Tech Blog and Articles'})
+        this.setState({current:'ZemuldO-Home'})
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
@@ -55,11 +55,17 @@ class HomePage extends Component {
     handleData(){
         return Promise.all([axios.get('http://zemuldo.com:8090/posts/dev', {}),axios.get('http://zemuldo.com:8090/posts/business/How to keep your Customers', {})])
             .then(response => {
-                this.setState({blogs:response[0].data,blog:response[0].data[0]})
+                if(response[0].data[0]){
+                    this.setState({blogs:response[0].data,blog:response[0].data[0]})
+                }
+                else {
+                    this.setState({blogs:[],blog:null})
+                }
                 this.isLoading(true)
                 return response[0].data
             })
             .catch(exception => {
+                this.setState({blogs:[],blog:null})
                 this.isLoading(true)
                 return exception
             });
@@ -72,6 +78,7 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                 })
                 .catch(exception => {
+                    this.setState({blogs:[]})
                 });
         }
         else {
@@ -80,6 +87,7 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                 })
                 .catch(exception => {
+                    this.setState({blogs:[]})
                 });
         }
     }

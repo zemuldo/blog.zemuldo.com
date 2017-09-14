@@ -85,13 +85,13 @@ class App extends Component {
             <div>
                 <Helmet>
                     <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
-                    <meta name="owner" content="Zemuldo Blog and Articles" />
+                    <meta name="owner" content="ZemuldO-Home" />
                 </Helmet>
                 <div>
                     {
                         (window.innerWidth<600) ?
                             <Menu pointing size='small' color="green" borderless>
-                                <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'Zemuldo Tech Blog and Articles'} onClick={this.handleHomeClick} />
+                                <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick} />
                                 <Dropdown item text='Categories'>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>

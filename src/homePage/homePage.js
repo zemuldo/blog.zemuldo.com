@@ -7,7 +7,6 @@ class HomePage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            bodySize:10,
             blogs:[],
             blog:null,
             logged:false,
@@ -18,72 +17,55 @@ class HomePage extends Component {
         this.onReadMore = this.onReadMore.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
+        this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
-        this.setBodySize = this.setBodySize.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
     };
-    setBodySize(){
-        if(window.innerWidth>600){
-            return 10
-        }
-        else {
-            return 12
-        }
-    }
     onReadMore(thisBlog){
-        this.setState({blogIsLoading:true});
+        this.setState({blogIsLoading:true})
         return axios.get('http://zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
-                console.log(response)
-                this.setState({blog:response.data});
-                this.isLoading(true);
-                this.setState({blogIsLoading:false});
-                window.scrollTo(0,0);
-                return response;
+                this.setState({blog:response.data})
+                this.isLoading(true)
+                this.setState({blogIsLoading:false})
+                window.scrollTo(0,0)
+                return response
             })
             .catch(exception => {
-                this.isLoading(true);
-                return exception;
+                this.isLoading(true)
+                return exception
             });
     }
     goToHome(){
-        this.setState({current:'Zemuldo Tech Blog and Articles'});
+        this.setState({current:'ZemuldO-Home'})
     }
-    resize = () => this.forceUpdate();
+    resize = () => this.forceUpdate()
     componentDidMount() {
         this.handleData()
-        if(window.innerWidth>600){
-            this.setState({bodySize:10});
-        }
-        else {
-            this.setState({bodySize:12});
-        }
-        window.addEventListener('resize', this.resize);
+        window.addEventListener('resize', this.resize)
     }
     componentWillUnmount() {
-
-        if(window.innerWidth>800){
-            this.setState({bodySize:10})
-        }
-        else {
-            this.setState({bodySize:12})
-        }
         window.removeEventListener('resize', this.resize)
     }
     isLoading(value){
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return axios.get('http://zemuldo.com:8090/all', {})
+        return Promise.all([axios.get('http://zemuldo.com:8090/all', {}),axios.get('http://zemuldo.com:8090/posts/business/How to keep your Customers', {})])
             .then(response => {
-                console.log(response)
-                this.setState({blogs:response.data})
+                if(response[0].data[0]){
+                    this.setState({blogs:response[0].data})
+                }
+                else{
+                    this.setState({blogs:[],blog:null})
+                }
                 this.isLoading(true)
                 return response[0].data
             })
             .catch(exception => {
+                this.setState({blogs:[],blog:null})
                 this.isLoading(true)
                 return exception
             });
@@ -104,6 +86,7 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                 })
                 .catch(exception => {
+                    this.setState({blogs:[]})
                 });
         }
     }
@@ -124,7 +107,7 @@ class HomePage extends Component {
                                                         placeholder='Search...'
                                                         onChange={this.handleFilterChange}
                                                     />
-                                                    <Header color='green' as='h2'>Most Popular</Header>
+                                                    <Header color='green' as='h2'>Popular on Tech</Header>
                                                     <List>
                                                         {
                                                             (this.state.blogs[0]) ?
@@ -134,13 +117,13 @@ class HomePage extends Component {
                                                                             <div>
                                                                                 { _.times(this.state.blogs.length, i =>
                                                                                     <List.Item key={this.state.blogs[i].title} >
-                                                                                    <List.Icon name='leaf' />
-                                                                                    <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
-                                                                                    <List.Content>Author: {this.state.blogs[i].author}</List.Content>
-                                                                                    <List.Content>Likes {i}</List.Content>
-                                                                                    <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
-                                                                                    <hr/>
-                                                                                </List.Item>)
+                                                                                        <List.Icon name='leaf' />
+                                                                                        <List.Content><Header color='green' as='h3'>{(this.state.blogs[i].title.length>21) ? this.state.blogs[i].title: this.state.blogs[i].title}</Header></List.Content>
+                                                                                        <List.Content>Author: {this.state.blogs[i].author}</List.Content>
+                                                                                        <List.Content>Likes {i}</List.Content>
+                                                                                        <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                                                                        <hr/>
+                                                                                    </List.Item>)
                                                                                 }
                                                                             </div>:
                                                                             <div>
@@ -154,8 +137,7 @@ class HomePage extends Component {
                                                                                             <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
                                                                                             <hr/>
                                                                                         </List.Item>
-                                                                                    )
-                                                                                }
+                                                                                    )}
                                                                             </div>
                                                                     }
                                                                 </div>:
@@ -176,7 +158,7 @@ class HomePage extends Component {
                                                 <div style={{ position:'center', margin: '20em 2em 2em 2em'}}>
                                                     <Loader active inline='centered' />
                                                 </div>:
-                                                <div style={{margin: '1em 1em 1em 1em'}}>
+                                                <div style={{margin: '2em 1em 3em 1em'}}>
                                                     {
                                                         (this.state.blog===null) ?
                                                             <div>
@@ -196,11 +178,11 @@ class HomePage extends Component {
                                                                     </p>
                                                                 </div>
 
-                                                        </div>:
+                                                            </div>:
                                                             <div>
                                                                 <Header style={{}} color='green' as='h1'>
                                                                     {
-                                                                    this.state.blog.title
+                                                                        this.state.blog.title
                                                                     }
                                                                 </Header>
                                                                 <div style={{}}>
@@ -247,7 +229,7 @@ class HomePage extends Component {
 
 
                                             </Grid.Column>:
-                                           <p>Hello</p>
+                                            <p>Hello</p>
                                     }
                                 </Grid.Row>
                             </Grid>
