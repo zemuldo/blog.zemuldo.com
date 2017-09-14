@@ -8,7 +8,7 @@ class HomePage extends Component {
         super(props);
         this.state = {
             bodySize:10,
-            blogs:this.handleData(),
+            blogs:[],
             blog:null,
             logged:false,
             isLoaded: false,
@@ -32,35 +32,38 @@ class HomePage extends Component {
         }
     }
     onReadMore(thisBlog){
-        this.setState({blogIsLoading:true})
+        this.setState({blogIsLoading:true});
         return axios.get('http://zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
-                this.setState({blog:response.data})
-                this.isLoading(true)
-                this.setState({blogIsLoading:false})
-                window.scrollTo(0,0)
-                return response
+                console.log(response)
+                this.setState({blog:response.data});
+                this.isLoading(true);
+                this.setState({blogIsLoading:false});
+                window.scrollTo(0,0);
+                return response;
             })
             .catch(exception => {
-                this.isLoading(true)
-                return exception
+                this.isLoading(true);
+                return exception;
             });
     }
     goToHome(){
-        this.setState({current:'Zemuldo Tech Blog and Articles'})
+        this.setState({current:'Zemuldo Tech Blog and Articles'});
     }
-    resize = () => this.forceUpdate()
+    resize = () => this.forceUpdate();
     componentDidMount() {
+        this.handleData()
         if(window.innerWidth>600){
-            this.setState({bodySize:10})
+            this.setState({bodySize:10});
         }
         else {
-            this.setState({bodySize:12})
+            this.setState({bodySize:12});
         }
-        window.addEventListener('resize', this.resize)
+        window.addEventListener('resize', this.resize);
     }
     componentWillUnmount() {
+
         if(window.innerWidth>800){
             this.setState({bodySize:10})
         }
@@ -73,9 +76,10 @@ class HomePage extends Component {
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return Promise.all([axios.get('http://zemuldo.com:8090/all', {}),axios.get('http://zemuldo.com:8090/posts/business/How to keep your Customers', {})])
+        return axios.get('http://zemuldo.com:8090/all', {})
             .then(response => {
-                this.setState({blogs:response[0].data})
+                console.log(response)
+                this.setState({blogs:response.data})
                 this.isLoading(true)
                 return response[0].data
             })
@@ -150,7 +154,8 @@ class HomePage extends Component {
                                                                                             <Button size="mini" ref={this.state.blogs[i].title} onClick={() => { this.onReadMore(this.state.blogs[i]) }}  content='Read Full Content' color='green'/>
                                                                                             <hr/>
                                                                                         </List.Item>
-                                                                                    )}
+                                                                                    )
+                                                                                }
                                                                             </div>
                                                                     }
                                                                 </div>:

@@ -7,7 +7,7 @@ class DeveloperArticles extends Component {
     constructor(props){
         super(props);
         this.state = {
-            blogs:this.handleData(),
+            blogs:[],
             blog:{},
             logged:false,
             isLoaded: false,
@@ -43,6 +43,7 @@ class DeveloperArticles extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        this.handleData()
         window.addEventListener('resize', this.resize)
     }
     componentWillUnmount() {
