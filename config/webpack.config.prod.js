@@ -15,10 +15,10 @@ const getClientEnvironment = require('./env');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-const publicPath = paths.servedPath;
+const publicPath = '';
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
-const shouldUseRelativeAssetPaths = publicPath === './';
+const shouldUseRelativeAssetPaths = publicPath === '';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -152,7 +152,7 @@ module.exports = {
         loader: require.resolve('url-loader'),
         options: {
           limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]',
+          name: 'static/css/media/media/[name].[hash:8].[ext]',
         },
       },
       // Process JS with Babel.
