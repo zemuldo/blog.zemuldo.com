@@ -22,7 +22,8 @@ class App extends Component {
             current:'ZemuldO-Home',
             logged:false,
             iKnowYou:false,
-            visitorInfo:null
+            visitorInfo:null,
+            windowSize:window.innerWidth,
         };
         this.handleItemClick = this.handleItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -30,10 +31,22 @@ class App extends Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.handleHomeClick = this.handleHomeClick.bind(this);
+        this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
 
     };
+    _handleChangeBodySize(size){
+        this.setState({windowSize:size})
+    }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        this.forceUpdate()
+        if(window.innerWidth<503){
+            this._handleChangeBodySize(503)
+        }
+        if(window.innerWidth>503){
+            this._handleChangeBodySize(503)
+        }
+        window.addEventListener('resize', this.resize)
         if(!this.state.iKnowYou){
             return axios.get('http://zemuldo.com:8090/getIp', {})
                 .then(response => {
@@ -51,7 +64,6 @@ class App extends Component {
                     console.log(exception)
                 });
         }
-        window.addEventListener('resize', this.resize)
     }
 
     componentWillUnmount() {
@@ -65,7 +77,6 @@ class App extends Component {
     handleItemClick = (e, { name }) => {
         if(name === 'ZemuldO-Home'){
             window.location = "/"
-
         }
         else {
             this.setState({ current:name,})
@@ -89,7 +100,7 @@ class App extends Component {
                 </Helmet>
                 <div>
                     {
-                        (window.innerWidth<600) ?
+                        (window.innerWidth<this.state.windowSize) ?
                             <Menu pointing size='small' color="green" borderless>
                                 <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick} />
                                 <Dropdown item text='Categories'>
@@ -106,7 +117,7 @@ class App extends Component {
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {
-                                    (window.innerWidth>521) ?
+                                    (window.innerWidth>this.state.windowSize) ?
                                         <Menu.Menu position='right'>
                                             <Menu.Item>
                                                 <a href="https://twitter.com/zemuldo" rel="noreferrer noopener" target="_blank">
@@ -164,7 +175,7 @@ class App extends Component {
                                     <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
                                     <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />
                                     {
-                                        (window.innerWidth>500) ?
+                                        (window.innerWidth>this.state.windowSize) ?
                                             <Menu.Menu position='right'>
                                                 <Menu.Item>
                                                     <a href="https://twitter.com/zemuldo" rel="noreferrer noopener" target="_blank">
