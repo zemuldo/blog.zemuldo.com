@@ -30,7 +30,6 @@ class HomePage extends Component {
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
-                    console.log(this.state.blogs[0].title)
                 }
             })
             .catch(exception => {
@@ -225,7 +224,7 @@ class HomePage extends Component {
                                                                                 this.state.blog.title
                                                                             }
                                                                         </Header>
-                                                                        <div style={{fontSize:"16px",fontFamily:"georgia"}}>
+                                                                        <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                                                                             Share:
                                                                             <List size="tiny" icon='labeled' horizontal color='green'>
                                                                                 <List.Item>

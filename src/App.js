@@ -50,18 +50,14 @@ class App extends Component {
         if(!this.state.iKnowYou){
             return axios.get('http://zemuldo.com:8090/getIp', {})
                 .then(response => {
-                    console.log(response.data)
                     return axios.get('http://ip-api.com/json/'+response.data.ip, {})
                 })
                 .then(function (visitorData) {
-                    console.log(visitorData.data)
                     return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
                 })
                 .then(function (final) {
-                    console.log(final.data)
                 })
                 .catch(exception => {
-                    console.log(exception)
                 });
         }
     }
