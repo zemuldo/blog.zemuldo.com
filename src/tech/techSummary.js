@@ -60,7 +60,7 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
-        this.interval = setInterval(this.tick, 15000);
+        this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
         if(window.innerWidth<503){
             this._handleChangeBodySize(16)
