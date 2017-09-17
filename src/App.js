@@ -7,6 +7,7 @@ import BusinessSummary from './business/businessSummary'
 import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
 import GeoLocator from './mixins/geoLocator'
+import Footer from './mixins/footer'
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios'
 
@@ -25,9 +26,11 @@ class App extends Component {
             iKnowYou:false,
             visitorInfo:null,
             windowSize:window.innerWidth,
-            geoAllowed:false
+            geoAllowed:false,
+            log: [],
+            open: false,
         };
-        this.handleItemClick = this.handleItemClick.bind(this);
+        this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
@@ -52,11 +55,13 @@ class App extends Component {
         if(!this.state.iKnowYou){
             return axios.get('http://api.zemuldo.com/getIp', {})
                 .then(response => {
+                    console.log(response.data)
                     return axios.get('http://ip-api.com/json/'+response.data.ip, {})
                 })
                 .then(function (visitorData) {
                     let o= visitorData.data
                     if(localStorage.getItem('user')){
+                        console.log(localStorage.getItem('user').data)
                         o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
                         return axios.post('http://api.zemuldo.com/analytics/visitors/new', visitorData.data)
                     }
@@ -71,9 +76,9 @@ class App extends Component {
                     }
                 })
                 .then(function (final) {
-                    sessionStorage.setItem('user',final.data)
+                    sessionStorage.setItem('user',JSON.stringify(final.data))
                     if(!localStorage.getItem('user')){
-                        localStorage.setItem('user',final.data)
+                        localStorage.setItem('user',JSON.stringify(final.data))
                     }
                 })
                 .catch(exception => {
@@ -89,7 +94,7 @@ class App extends Component {
         this.setState({ current:'ZemuldO-Home',})
     }
 
-    handleItemClick = (e, { name }) => {
+    handleMenuItemClick = (e, { name }) => {
         if(name === 'ZemuldO-Home'){
             window.location = "/"
         }
@@ -120,18 +125,42 @@ class App extends Component {
                 <div>
                     {
                         (window.innerWidth<this.state.windowSize) ?
-                            <Menu pointing size='small' color="green" borderless>
-                                <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick} />
+                            <Menu fixed='top' pointing size='small' color="green" borderless>
+                                <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick}>
+                                    <Icon color='green' name='home' />
+                                    <span color='green'>Home</span>
+                                </Menu.Item>
                                 <Dropdown item text='Categories'>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
-                                            <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />
+                                            <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleMenuItemClick}>
+                                                <Icon color='green' name='square' />
+                                                <span color='green'>Dev</span>
+                                            </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
-                                            <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
+                                            <Menu.Item name='business' active={current === 'business'} onClick={this.handleMenuItemClick}>
+                                                <Icon color='green' name='square' />
+                                                <span color='green'>Business</span>
+                                            </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
-                                            <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleItemClick} />
+                                            <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleMenuItemClick}>
+                                                <Icon color='green' name='square' />
+                                                <span color='green'>Cookie Policy</span>
+                                            </Menu.Item>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <Menu.Item name='reviews' active={current === 'reviews'} onClick={this.handleMenuItemClick}>
+                                                <Icon color='green' name='square' />
+                                                <span color='green'>Reviews</span>
+                                            </Menu.Item>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <Menu.Item name='Tuts' active={current === 'tuts'} onClick={this.handleMenuItemClick}>
+                                                <Icon color='green' name='square' />
+                                                <span color='green'>Tuts</span>
+                                            </Menu.Item>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -188,11 +217,31 @@ class App extends Component {
                                     }
                                 </Menu.Item>
                             </Menu> :
-                                <Menu pointing size='small' color="green" borderless>
-                                    <Menu.Item  name='ZemuldO-Home' active={current === 'ZemuldO-Home'} onClick={this.handleItemClick} />
-                                    <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleItemClick} />
-                                    <Menu.Item name='business' active={current === 'business'} onClick={this.handleItemClick} />
-                                    <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleItemClick} />
+                                <Menu fixed='top' pointing size='small' color="green" borderless>
+                                    <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick}>
+                                        <Icon color='green' name='home' />
+                                        <span color='green'>Home</span>
+                                    </Menu.Item>
+                                    <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleMenuItemClick}>
+                                        <Icon color='green' name='square' />
+                                        <span color='green'>Tech</span>
+                                    </Menu.Item>
+                                    <Menu.Item name='business' active={current === 'business'} onClick={this.handleMenuItemClick}>
+                                        <Icon color='green' name='square' />
+                                        <span color='green'>Business</span>
+                                    </Menu.Item>
+                                    <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleMenuItemClick}>
+                                        <Icon color='green' name='square' />
+                                        <span color='green'>Dev</span>
+                                    </Menu.Item>
+                                    <Menu.Item name='reviews' active={current === 'reviews'} onClick={this.handleMenuItemClick}>
+                                        <Icon color='green' name='square' />
+                                        <span color='green'>Reviews</span>
+                                    </Menu.Item>
+                                    <Menu.Item name='Tuts' active={current === 'tuts'} onClick={this.handleMenuItemClick}>
+                                        <Icon color='green' name='square' />
+                                        <span color='green'>Tuts</span>
+                                    </Menu.Item>
                                     {
                                         (window.innerWidth>this.state.windowSize) ?
                                             <Menu.Menu position='right'>
@@ -249,7 +298,7 @@ class App extends Component {
                     }
 
                 </div>
-                <div>
+                <div style={{marginTop:'3em'}}>
                     {
                         (this.state.current ==='login') ? <Login current={this.state.current} /> :
                         (this.state.current === 'ZemuldO-Home') ? <HomePage current={this.state.current} /> :
@@ -259,6 +308,7 @@ class App extends Component {
                         <HomePage />
                     }
                 </div>
+                <Footer corrent={this.state.current}/>
             </div>
         )
     }
