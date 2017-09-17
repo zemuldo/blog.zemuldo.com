@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Segment, Portal,Form ,Checkbox,TextArea} from 'semantic-ui-react'
-
+import axios from 'axios'
 export default class ReviewPortal extends Component {
     constructor(props){
         super(props)
@@ -14,6 +14,8 @@ export default class ReviewPortal extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
         this.toggle = this.toggle.bind(this);
+        this.handlePortalClose = this.handlePortalClose.bind(this);
+        this.handlePortalOpen = this.handlePortalOpen.bind(this);
     }
     toggle = () => {
         this.setState({ checked: !this.state.checked })
@@ -21,7 +23,6 @@ export default class ReviewPortal extends Component {
 
     handlePortalOpen = () => {
         this.setState({ open: true })
-        this.writeLog('Portal mounted')
     }
 
     handlePortalClose = () => {
@@ -30,9 +31,22 @@ export default class ReviewPortal extends Component {
     }
     handleSubmit= (e)=>{
         e.preventDefault();
+        let review = {
+            body:this.state.message,
+            user:JSON.parse(sessionStorage.getItem('user')).sessionID
+        }
+        this.setState({ open: false })
+        console.log(JSON.parse(sessionStorage.getItem('user')).sessionID)
+        return axios.post('http://api.zemuldo.com:8090/analytics/visitors/review',review, {
+        })
+            .then(function (success) {
+                this.handlePortalClose()
+            })
+            .catch(function (err) {
+
+            })
     }
     handleTextChange(event) {
-        console.log(event.target.value)
         this.setState({message: event.target.value});
     }
     writeLog = message => this.setState({ log: [message, ...this.state.log] })
