@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import React,{Component} from 'react'
 import { Header, Icon,  List , Button  , Grid ,Loader,Input} from 'semantic-ui-react'
+import { Timeline } from 'react-twitter-widgets'
 import axios from 'axios';
+import WelcomePage from './welCome'
 
 class HomePage extends Component {
     constructor(props){
@@ -146,7 +148,7 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color='green' as='h2'>Most Popular</Header>
+                                                            <Header  color='green' as='h2'>Most Popular</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -191,81 +193,31 @@ class HomePage extends Component {
                                                     <p>Hello</p>
 
                                             }
-                                            <Grid.Column  width={10}>
-                                                {
-                                                    (this.state.blogIsLoading) ?
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
-                                                            <Loader active inline='centered' />
-                                                        </div>:
-                                                        <div style={{margin: '3em 3em 3em 1em'}}>
-                                                            {
-                                                                (this.state.blog===null) ?
-                                                                    <div >
-                                                                        <Header style={{ textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                                                            Welcome To ZemuldO.COM
-                                                                        </Header>
-                                                                        <hr color="green"/>
-                                                                        <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
-                                                                            <p>
-                                                                                We share content on trending technologies like Artificial Intelligence and BlockChain.
-                                                                                You are definitely in the right place. Here you acn get very good content on business, development
-                                                                                and technology.
-                                                                            </p>
-                                                                            <p>
-                                                                                We also offer Business and Tech Consultancy. If you are looking for ways to grow your business,
-                                                                                We are the choice you are looking for. Reach us for insights and growth.
-                                                                            </p>
-                                                                        </div>
-
-                                                                    </div>:
-                                                                    <div>
-                                                                        <Header style={{ textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                                                            {
-                                                                                this.state.blog.title
-                                                                            }
-                                                                        </Header>
-                                                                        <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                                                                            Share:
-                                                                            <List size="tiny" icon='labeled' horizontal color='green'>
-                                                                                <List.Item>
-                                                                                    <Icon color='blue' name='twitter' />
-                                                                                </List.Item>
-
-                                                                                <List.Item >
-                                                                                    <Icon color='violet' name='facebook' />
-                                                                                </List.Item>
-
-                                                                                <List.Item>
-                                                                                    <Icon color='blue' name='linkedin' />
-                                                                                </List.Item>
-                                                                                <List.Item>
-                                                                                    <Icon color='orange' name='google plus official' />
-                                                                                </List.Item>
-                                                                                <List.Item>
-                                                                                    <Icon color='red' name='mail' />
-                                                                                </List.Item>
-                                                                            </List>
-                                                                            <br/>
-                                                                            Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                                        </div>
-                                                                        <hr color="green"/>
-                                                                        <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
-                                                                            <p>
-                                                                                {
-                                                                                    this.state.blog.body
-                                                                                }
-                                                                            </p>
-                                                                        </div>
-
-                                                                    </div>
-                                                            }
-                                                        </div>
-                                                }
+                                            <Grid.Column  width={9}>
+                                                <WelcomePage blog={this.state.blog} blogs={this.state.blogs} blogIsLoading={this.state.blogIsLoading}/>
                                             </Grid.Column>
                                             {
                                                 (window.innerWidth>1030) ?
-                                                    <Grid.Column  width={2}>
-
+                                                    <Grid.Column  width={3}>
+                                                        <div style={{textAlign:'centre',margin:'2em 0em 0em 0em'}}>
+                                                            <Header color='blue' as='h3'>On Twitter</Header>
+                                                            <Timeline
+                                                                dataSource={{
+                                                                    sourceType: 'profile',
+                                                                    screenName: 'zemuldo'
+                                                                }}
+                                                                options={{
+                                                                    username: 'zemuldo',
+                                                                    height: '50',
+                                                                    width: '30'
+                                                                }}
+                                                                onLoad={() => console.log('Timeline is loaded!')}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
+                                                            <script type="IN/MemberProfile" data-id="https://www.linkedin.com/in/zemuldo" data-format="inline" data-related="false"></script>
+                                                        </div>
 
                                                     </Grid.Column>:
                                                     <p>Hello</p>
