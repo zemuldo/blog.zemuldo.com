@@ -6,6 +6,7 @@ import TechSummary from './tech/techSummary'
 import BusinessSummary from './business/businessSummary'
 import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
+import GeoLocator from './mixins/geoLocator'
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios'
 
@@ -24,6 +25,7 @@ class App extends Component {
             iKnowYou:false,
             visitorInfo:null,
             windowSize:window.innerWidth,
+            geoAllowed:false
         };
         this.handleItemClick = this.handleItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -53,9 +55,26 @@ class App extends Component {
                     return axios.get('http://ip-api.com/json/'+response.data.ip, {})
                 })
                 .then(function (visitorData) {
-                    return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                    let o= visitorData.data
+                    if(localStorage.getItem('user')){
+                        o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
+                        return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                    }
+                    else {
+                        if(o.status==='success'){
+                            visitorData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
+                            return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                        }
+                        else {
+                            return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                        }
+                    }
                 })
                 .then(function (final) {
+                    sessionStorage.setItem('user',final.data)
+                    if(!localStorage.getItem('user')){
+                        localStorage.setItem('user',final.data)
+                    }
                 })
                 .catch(exception => {
                 });
@@ -80,6 +99,7 @@ class App extends Component {
 
     }
     handleLoginButton = ()=>{
+        console.log(this.state.geoAllowed)
         this.setState({ current: 'login' ,logged:true})
     }
     handleLogoutinButton = ()=>{
@@ -90,6 +110,9 @@ class App extends Component {
         const { current } = this.state
         return (
             <div>
+                <div>
+                    <GeoLocator geoAllowed={this.state.geoAllowed}/>
+                </div>
                 <Helmet>
                     <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
                     <meta name="owner" content="ZemuldO-Home" />
