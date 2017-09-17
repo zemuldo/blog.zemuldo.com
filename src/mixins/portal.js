@@ -30,6 +30,7 @@ export default class ReviewPortal extends Component {
         this.writeLog('Portal closed')
     }
     handleSubmit= (e)=>{
+        this.handlePortalClose()
         e.preventDefault();
         let review = {
             body:this.state.message,
@@ -40,7 +41,6 @@ export default class ReviewPortal extends Component {
         return axios.post('http://api.zemuldo.com:8090/analytics/visitors/review',review, {
         })
             .then(function (success) {
-                this.handlePortalClose()
             })
             .catch(function (err) {
 
