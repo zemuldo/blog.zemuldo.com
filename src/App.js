@@ -50,7 +50,7 @@ class App extends Component {
         }
         window.addEventListener('resize', this.resize)
         if(!this.state.iKnowYou){
-            return axios.get('http://zemuldo.com:8090/getIp', {})
+            return axios.get('http://api.zemuldo.com/getIp', {})
                 .then(response => {
                     return axios.get('http://ip-api.com/json/'+response.data.ip, {})
                 })
@@ -58,15 +58,15 @@ class App extends Component {
                     let o= visitorData.data
                     if(localStorage.getItem('user')){
                         o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                        return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                        return axios.post('http://api.zemuldo.com/analytics/visitors/new', visitorData.data)
                     }
                     else {
                         if(o.status==='success'){
                             visitorData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                            return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                            return axios.post('http://api.zemuldo.com/analytics/visitors/new', visitorData.data)
                         }
                         else {
-                            return axios.post('http://zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                            return axios.post('http://api.zemuldo.com/analytics/visitors/new', visitorData.data)
                         }
                     }
                 })

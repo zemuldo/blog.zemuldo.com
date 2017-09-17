@@ -14,7 +14,7 @@ class HomeBlog extends Component {
     };
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
-        return axios.get('http://zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
+        return axios.get('http://api.zemuldo.com/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
                 this.setState({blog:response.data})
