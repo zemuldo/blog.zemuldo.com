@@ -208,7 +208,7 @@ class HomePage extends Component {
                                                                 }}
                                                                 options={{
                                                                     username: 'zemuldo',
-                                                                    height: '50',
+                                                                    height: '300',
                                                                     width: '30'
                                                                 }}
                                                                 onLoad={() => console.log('Timeline is loaded!')}
