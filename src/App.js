@@ -55,13 +55,11 @@ class App extends Component {
         if(!this.state.iKnowYou){
             return axios.get('http://api.zemuldo.com:8090/getIp', {})
                 .then(response => {
-                    console.log(response.data)
                     return axios.get('http://ip-api.com/json/'+response.data.ip, {})
                 })
                 .then(function (visitorData) {
                     let o= visitorData.data
                     if(localStorage.getItem('user')){
-                        console.log(localStorage.getItem('user').data)
                         o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
                         return axios.post('http://api.zemuldo.com:8090/analytics/visitors/new', visitorData.data)
                     }
