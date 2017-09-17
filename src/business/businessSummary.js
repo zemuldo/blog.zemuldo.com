@@ -26,7 +26,7 @@ class BusinessSummary extends Component {
         this.tick = this.tick.bind(this);
     };
     tick () {
-        return Promise.all([axios.get('http://api.zemuldo.com/posts/business', {}),axios.get('http://api.zemuldo.com/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get('http://api.zemuldo.com:8090/posts/business', {}),axios.get('http://api.zemuldo.com:8090/posts/business/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -38,7 +38,7 @@ class BusinessSummary extends Component {
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
-        return axios.get('http://api.zemuldo.com/posts/'+ thisBlog.type +'/'+thisBlog.title, {
+        return axios.get('http://api.zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
                 this.setState({blog:response.data})
@@ -71,7 +71,7 @@ class BusinessSummary extends Component {
 
         this.handleData()
         window.addEventListener('resize', this.resize)
-        return Promise.all([axios.get('http://api.zemuldo.com/posts/business', {}),axios.get('http://api.zemuldo.com/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get('http://api.zemuldo.com:8090/posts/business', {}),axios.get('http://api.zemuldo.com:8090/posts/business/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -89,7 +89,7 @@ class BusinessSummary extends Component {
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return Promise.all([axios.get('http://api.zemuldo.com/posts/business', {}),axios.get('http://api.zemuldo.com/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get('http://api.zemuldo.com:8090/posts/business', {}),axios.get('http://api.zemuldo.com:8090/posts/business/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data,blog:response[0].data[0]})
@@ -110,7 +110,7 @@ class BusinessSummary extends Component {
     handleFilterChange(e) {
         //e.preventDefault();
         if(e.target.value===''){
-            return axios.get('http://api.zemuldo.com/posts/business', {})
+            return axios.get('http://api.zemuldo.com:8090/posts/business', {})
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
@@ -118,7 +118,7 @@ class BusinessSummary extends Component {
                 });
         }
         else {
-            return axios.get('http://api.zemuldo.com/filter/'+e.target.value, {})
+            return axios.get('http://api.zemuldo.com:8090/filter/'+e.target.value, {})
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
