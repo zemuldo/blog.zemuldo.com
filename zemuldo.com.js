@@ -22,6 +22,19 @@ app.use(helmet({
     noCache:true
 }))
 
+let expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+app.use(checkMe({
+    name: 'session',
+    keys: ['themati#@tripple26=n26gohb()@#$$#$THF$%^$FGDFRFU', '#$THF$%^$FGDFRFU26gohb()@#i#@tripple26='],
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        domain: 'zemuldo.com',
+        path: '/',
+        expires: expiryDate
+    }
+}))
+
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/', function (req, res) {
