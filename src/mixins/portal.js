@@ -6,7 +6,7 @@ export default class ReviewPortal extends Component {
         super(props)
         this.state = {
             log: [],
-            open: false,
+            portalOpen: false,
             rating:0,
             message:'',
             checked:true,
@@ -22,12 +22,11 @@ export default class ReviewPortal extends Component {
     }
 
     handlePortalOpen = () => {
-        this.setState({ open: true })
+        this.setState({ portalOpen: true })
     }
 
     handlePortalClose = () => {
-        this.setState({ open: false })
-        this.writeLog('Portal closed')
+        this.setState({ portalOpen: false })
     }
     handleSubmit= (e)=>{
         this.handlePortalClose()
@@ -36,7 +35,7 @@ export default class ReviewPortal extends Component {
             body:this.state.message,
             user:JSON.parse(sessionStorage.getItem('user')).sessionID
         }
-        this.setState({ open: false })
+        this.setState({ portalOpen: false })
         console.log(JSON.parse(sessionStorage.getItem('user')).sessionID)
         return axios.post('http://api.zemuldo.com:8090/analytics/visitors/review',review, {
         })
@@ -49,8 +48,6 @@ export default class ReviewPortal extends Component {
     handleTextChange(event) {
         this.setState({message: event.target.value});
     }
-    writeLog = message => this.setState({ log: [message, ...this.state.log] })
-
     render() {
         return (
             <div>
@@ -66,9 +63,9 @@ export default class ReviewPortal extends Component {
                                 openOnTriggerClick
                                 trigger={(
                                     <Button
-                                        content={this.state.open ? 'Help Us Improve' : 'Mind a Review?'}
-                                        negative={this.state.open}
-                                        positive={!this.state.open}
+                                        content={this.state.portalOpen ? 'Help Us Improve' : 'Mind a Review?'}
+                                        negative={this.state.portalOpen}
+                                        positive={!this.state.portalOpen}
                                     />
                                 )}
                                 onOpen={this.handlePortalOpen}
