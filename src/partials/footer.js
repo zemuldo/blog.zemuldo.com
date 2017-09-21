@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {  Menu, Button,Icon,Header,Modal} from 'semantic-ui-react'
-import ReviewPortal from '../mixins/portal'
+import ReviewPortal from './portal'
 
 class Footer extends Component {
     constructor(props){
