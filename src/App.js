@@ -6,8 +6,8 @@ import TechSummary from './tech/techSummary'
 import BusinessSummary from './business/businessSummary'
 import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
-import GeoLocator from './mixins/geoLocator'
-import Footer from './mixins/footer'
+import GeoLocator from './partials/geoLocator'
+import Footer from './partials/footer'
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios'
 
