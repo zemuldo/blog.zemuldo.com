@@ -1,6 +1,7 @@
 import React from 'react';
 import {geolocated} from 'react-geolocated';
-
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 class Demo extends React.Component {
     componentDidMount() {
         if(!sessionStorage.getItem("location")){
