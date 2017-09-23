@@ -11,7 +11,7 @@ export default class ReviewPortal extends Component {
             portalOpen: false,
             rating:0,
             message:'',
-            checked:true,
+            checked:false,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
@@ -20,26 +20,26 @@ export default class ReviewPortal extends Component {
         this.handlePortalOpen = this.handlePortalOpen.bind(this);
     }
     toggle = () => {
-        this.setState({ checked: !this.state.checked })
+        this.setState({ checked: !this.state.checked });
     }
 
     handlePortalOpen = () => {
-        this.setState({ portalOpen: true })
+        this.setState({ portalOpen: true ,checked: false});
     }
 
     handlePortalClose = () => {
-        this.setState({ portalOpen: false })
+        this.setState({ portalOpen: false ,checked: false});
     }
     handleSubmit= (e)=>{
-        this.handlePortalClose()
+        this.setState({ checked: false});
         e.preventDefault();
         let review = {
             body:this.state.message,
             user:JSON.parse(sessionStorage.getItem('user')).sessionID
         }
-        this.setState({ portalOpen: false })
-        console.log(JSON.parse(sessionStorage.getItem('user')).sessionID)
-        return axios.post('http://api.zemuldo.com:8090/analytics/visitors/review',review, {
+        this.setState({ checked: true });
+        setTimeout(function() { this.setState({portalOpen: false}); }.bind(this),1500);
+        return axios.post(env.httpURL+'/analytics/visitors/review',review, {
         })
             .then(function (success) {
             })
@@ -61,6 +61,7 @@ export default class ReviewPortal extends Component {
                             right: '3%'
                         }}>
                             <Portal
+                                open={this.state.portalOpen}
                                 closeOnTriggerClick
                                 openOnTriggerClick
                                 trigger={(
@@ -83,12 +84,14 @@ export default class ReviewPortal extends Component {
                                         <Form.Field>
                                             <Checkbox label='I agree to the Terms and Conditions' onChange={this.toggle} />
                                         </Form.Field>
-                                        <Button  disabled={(this.state.message.length<20) || this.state.checked} onClick={this.handleSubmit} type='submit'>Submit</Button>
+                                        <Button  disabled={!(this.state.message.length>20 && this.state.checked)} onClick={this.handleSubmit} type='submit'>Submit</Button>
                                     </Form>
                                 </Segment>
                             </Portal>
                         </div>:
-                        <div></div>
+                        <div>
+
+                        </div>
                 }
             </div>
 
