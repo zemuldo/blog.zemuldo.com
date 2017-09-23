@@ -107,7 +107,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
+  "description": "Zemuldo.COM User Interface",
   "main": "build.js",
   "repository": {
     "type": "git",
@@ -124,5 +124,5 @@
   "bugs": {
     "url": "https://github.com/zemuldo/zemuldo.com/issues"
   },
-  "homepage": "https://github.com/zemuldo/zemuldo.com#readme"
+  "homepage": "https://zemuldo.com"
 }
