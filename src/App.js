@@ -10,6 +10,8 @@ import GeoLocator from './partials/geoLocator'
 import Footer from './partials/footer'
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios'
+import config from './environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 
 function toTitleCase(str)
 {
@@ -53,7 +55,7 @@ class App extends Component {
         }
         window.addEventListener('resize', this.resize)
         if(!this.state.iKnowYou){
-            return axios.get('http://api.zemuldo.com:8090/getIp', {})
+            return axios.get(env.httpURL+'/getIp', {})
                 .then(response => {
                     return axios.get('http://ip-api.com/json/'+response.data.ip, {})
                 })
@@ -61,15 +63,15 @@ class App extends Component {
                     let o= visitorData.data
                     if(localStorage.getItem('user')){
                         o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                        return axios.post('http://api.zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                        return axios.post(env.httpURL+'/analytics/visitors/new', visitorData.data)
                     }
                     else {
                         if(o.status==='success'){
                             visitorData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                            return axios.post('http://api.zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                            return axios.post(env.httpURL+'/analytics/visitors/new', visitorData.data)
                         }
                         else {
-                            return axios.post('http://api.zemuldo.com:8090/analytics/visitors/new', visitorData.data)
+                            return axios.post(env.httpURL+'/analytics/visitors/new', visitorData.data)
                         }
                     }
                 })

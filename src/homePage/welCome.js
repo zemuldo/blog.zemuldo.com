@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {  Header,Loader,List,Icon } from 'semantic-ui-react'
-
+import ProfileBot from '../bots/profileBot'
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 export default class WelcomePage extends Component {
     constructor(props){
         super(props)

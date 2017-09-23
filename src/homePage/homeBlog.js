@@ -2,8 +2,8 @@ import _ from 'lodash'
 import React,{Component} from 'react'
 import { Container, Divider, Dropdown, Grid, Header, Icon, Image, List, Menu, Segment,Loader } from 'semantic-ui-react'
 import axios from 'axios'
-
-
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 class HomeBlog extends Component {
     constructor(props){
         super(props);
@@ -14,7 +14,7 @@ class HomeBlog extends Component {
     };
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
-        return axios.get('http://api.zemuldo.com:8090/posts/'+ thisBlog.type +'/'+thisBlog.title, {
+        return axios.get(env.httpURL+'/posts/'+ thisBlog.type +'/'+thisBlog.title, {
         })
             .then(response => {
                 this.setState({blog:response.data})

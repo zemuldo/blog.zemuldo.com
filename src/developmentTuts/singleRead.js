@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import React,{Component} from 'react'
 import { Container, Divider, Dropdown, Grid, Header, Icon, Image, List, Menu, Segment } from 'semantic-ui-react'
-
-
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 class DevSingleRead extends Component {
     constructor(props){
         super(props);
