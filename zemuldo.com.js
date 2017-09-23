@@ -6,7 +6,7 @@ let helmet = require('helmet')
 let checkMe = require('cookie-session')
 let ENV = require('./config/env');
 let env = ENV().raw.NODE_ENV
-const conf = require('./config/conf')
+const conf = require('./src/environments/conf')
 
 
 
