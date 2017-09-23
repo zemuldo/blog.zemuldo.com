@@ -104,7 +104,6 @@ class App extends Component {
 
     }
     handleLoginButton = ()=>{
-        console.log(this.state.geoAllowed)
         this.setState({ current: 'login' ,logged:true})
     }
     handleLogoutinButton = ()=>{
