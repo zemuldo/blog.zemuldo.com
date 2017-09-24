@@ -24,12 +24,13 @@ class HomePage extends Component {
         this.onReadMore = this.onReadMore.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.tick = this.tick.bind(this);
+        this.setCurrentBlog = this.setCurrentBlog.bind(this);
+
     };
     tick () {
         return Promise.all([axios.get(env.httpURL+'/all', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
@@ -64,8 +65,28 @@ class HomePage extends Component {
     _handleChangeBodySize(size){
         this.setState({bodySize:size})
     }
-    resize = () => this.forceUpdate()
+    resize = () => this.forceUpdate();
+    setCurrentBlog(title){
+        return axios.get(env.httpURL+'/posts/all/'+title, {
+        })
+            .then(response => {
+                if(response.data.error){
+                }
+                else {
+                    this.setState({blog:response.data})
+                    this.isLoading(true)
+                    this.setState({blogIsLoading:false})
+                    window.scrollTo(0,0)
+                }
+
+            })
+            .catch(exception => {
+                this.isLoading(true)
+                return exception
+            });
+    }
     componentDidMount() {
+        this.setCurrentBlog(window.location.pathname.slice(1,window.location.pathname.length).split('%20').join(' '))
         this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
         if(window.innerWidth<503){

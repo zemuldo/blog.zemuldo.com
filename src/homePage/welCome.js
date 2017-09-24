@@ -9,6 +9,8 @@ export default class WelcomePage extends Component {
         this.state = {
         }
     }
+    componentDidMount() {
+    }
 
     render() {
         return (
@@ -20,7 +22,7 @@ export default class WelcomePage extends Component {
                         </div>:
                         <div style={{margin: '3em 3em 3em 1em'}}>
                             {
-                                (this.props.blog===null) ?
+                                (this.props.blog===null || !this.props.blog.title) ?
                                     <div >
                                         <Header style={{ textAlign :'left',alignment:'center'}} color='green' as='h1'>
                                             Welcome To ZemuldO.COM

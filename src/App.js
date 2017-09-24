@@ -17,7 +17,14 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
-
+const pages = {
+    dev:'Development',
+    tech:'Technology',
+    business:'Business',
+    reviews:'Reviews',
+    tuts:'Tutorials',
+    home:'Zemuldo Home Pgae'
+}
 class App extends Component {
     constructor(props){
         super(props);
@@ -31,7 +38,8 @@ class App extends Component {
             geoAllowed:false,
             log: [],
             open: false,
-            colors:['green','blue','orange']
+            colors:['green','blue','orange'],
+            currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ? window.location.pathname.slice(1,window.location.pathname.length):'home'
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -111,16 +119,20 @@ class App extends Component {
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
+        this.setState({ currentLocation:'home',})
         this.setState({blog:null})
-        this.setState({ current:'ZemuldO-Home',})
+        this.setState({ current:'home',})
+        window.location.pathname = "/"
     }
 
     handleMenuItemClick = (e, { name }) => {
-        if(name === 'ZemuldO-Home'){
-            window.location = "/"
+        if(name === 'home'){
+            window.location.pathname = "/"
+            this.setState({ currentLocation:name,})
         }
         else {
-            this.setState({ current:name,})
+            window.location.pathname = "/"+name
+            this.setState({ currentLocation:name,})
         }
 
     }
@@ -146,38 +158,38 @@ class App extends Component {
                     {
                         (window.innerWidth<this.state.windowSize) ?
                             <Menu fixed='top' pointing size='small' color="green" borderless>
-                                <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick}>
+                                <Menu.Item  name='home' active={this.state.currentLocation === 'home'} onClick={this.handleHomeClick}>
                                     <Icon color={this.state.colors[0]} name='home' />
                                     <span color={this.state.colors[0]}>Home</span>
                                 </Menu.Item>
                                 <Dropdown item text='Categories'>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
-                                            <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleMenuItemClick}>
+                                            <Menu.Item name='dev' active={this.state.currentLocation === 'dev'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                                 <span color={this.state.colors[0]}>Dev</span>
                                             </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
-                                            <Menu.Item name='business' active={current === 'business'} onClick={this.handleMenuItemClick}>
+                                            <Menu.Item name='business' active={this.state.currentLocation === 'business'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                                 <span color={this.state.colors[0]}>Business</span>
                                             </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
-                                            <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleMenuItemClick}>
+                                            <Menu.Item name='tech' active={this.state.currentLocation === 'tech'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                                 <span color={this.state.colors[0]}>Cookie Policy</span>
                                             </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
-                                            <Menu.Item name='reviews' active={current === 'reviews'} onClick={this.handleMenuItemClick}>
+                                            <Menu.Item name='reviews' active={this.state.currentLocation === 'reviews'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                                 <span color={this.state.colors[0]}>Reviews</span>
                                             </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
-                                            <Menu.Item name='Tuts' active={current === 'tuts'} onClick={this.handleMenuItemClick}>
+                                            <Menu.Item name='Tuts' active={this.state.currentLocation === 'tuts'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                                 <span color={this.state.colors[0]}>Tuts</span>
                                             </Menu.Item>
@@ -238,27 +250,27 @@ class App extends Component {
                                 </Menu.Item>
                             </Menu> :
                                 <Menu fixed='top' pointing size='small' color="green" borderless>
-                                    <Menu.Item  name='ZemuldO-Home' active={this.state.current === 'ZemuldO-Home'} onClick={this.handleHomeClick}>
+                                    <Menu.Item  name='home' active={this.state.currentLocation === 'home'} onClick={this.handleHomeClick}>
                                         <Icon color={this.state.colors[0]} name='home' />
                                         <span color={this.state.colors[0]}>Home</span>
                                     </Menu.Item>
-                                    <Menu.Item name='tech' active={current === 'tech'} onClick={this.handleMenuItemClick}>
+                                    <Menu.Item name='tech' active={this.state.currentLocation === 'tech'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Tech</span>
                                     </Menu.Item>
-                                    <Menu.Item name='business' active={current === 'business'} onClick={this.handleMenuItemClick}>
+                                    <Menu.Item name='business' active={this.state.currentLocation === 'business'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Business</span>
                                     </Menu.Item>
-                                    <Menu.Item name='dev' active={current === 'dev'} onClick={this.handleMenuItemClick}>
+                                    <Menu.Item name='dev' active={this.state.currentLocation === 'dev'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Dev</span>
                                     </Menu.Item>
-                                    <Menu.Item name='reviews' active={current === 'reviews'} onClick={this.handleMenuItemClick}>
+                                    <Menu.Item name='reviews' active={this.state.currentLocation === 'reviews'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Reviews</span>
                                     </Menu.Item>
-                                    <Menu.Item name='Tuts' active={current === 'tuts'} onClick={this.handleMenuItemClick}>
+                                    <Menu.Item name='Tuts' active={this.state.currentLocation === 'tuts'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Tuts</span>
                                     </Menu.Item>
@@ -320,11 +332,11 @@ class App extends Component {
                 </div>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.current ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} /> :
-                        (this.state.current === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} current={this.state.current} /> :
-                        (this.state.current === 'tech') ? <TechSummary color={this.state.colors[1]} current={this.state.current} /> :
-                        (this.state.current === 'business') ? <BusinessSummary color={this.state.colors[2]} current={this.state.current} /> :
-                        (this.state.current === 'dev') ? <DevArticles color={this.state.colors[0]} current={this.state.current} /> :
+                        (window.location.pathname.slice(1,window.location.pathname.length) ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} /> :
+                        (window.location.pathname.slice(1,window.location.pathname.length) === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} current={this.state.current} /> :
+                        (window.location.pathname.slice(1,window.location.pathname.length) === 'tech') ? <TechSummary color={this.state.colors[1]} current={this.state.current} /> :
+                        (window.location.pathname.slice(1,window.location.pathname.length) === 'business') ? <BusinessSummary color={this.state.colors[2]} current={this.state.current} /> :
+                        (window.location.pathname.slice(1,window.location.pathname.length) === 'dev') ? <DevArticles color={this.state.colors[0]} current={this.state.current} /> :
                         <HomePage color={this.state.colors[1]} current={this.state.current} />
                     }
                 </div>
