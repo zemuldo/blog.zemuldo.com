@@ -150,7 +150,7 @@ class DeveloperArticles extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color='green' as='h2'>Dev Articles</Header>
+                                                            <Header color={this.props.color} as='h2'>Dev Articles</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -177,14 +177,14 @@ class DeveloperArticles extends Component {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
                                                                     <div>
-                                                                        <Header style={{ textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                                                        <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                                                             {
                                                                                 this.state.blog.title
                                                                             }
                                                                         </Header>
                                                                         <div style={{fontSize:"16px",fontFamily:"georgia"}}>
                                                                             Share:
-                                                                            <List size="tiny" icon='labeled' horizontal color='green'>
+                                                                            <List size="tiny" icon='labeled' horizontal color={this.props.color}>
                                                                                 <List.Item>
                                                                                     <Icon color='blue' name='twitter' />
                                                                                 </List.Item>
@@ -206,7 +206,7 @@ class DeveloperArticles extends Component {
                                                                             <br/>
                                                                             Published on:  {this.state.blog.date}  By {this.state.blog.author}
                                                                         </div>
-                                                                        <hr color="green"/>
+                                                                        <hr color={this.props.color}/>
                                                                         <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
                                                                             <p>
                                                                                 {
@@ -241,7 +241,7 @@ class DeveloperArticles extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color='green' as='h2'>Most Popular</Header>
+                                                            <Header color={this.props.color} as='h2'>Most Popular</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?

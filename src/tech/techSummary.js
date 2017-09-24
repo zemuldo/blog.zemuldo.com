@@ -150,7 +150,7 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color='green' as='h2'>Popular in Tech</Header>
+                                                            <Header color={this.props.color} as='h2'>Popular in Tech</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -202,7 +202,7 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color='green' as='h2'>Most Popular</Header>
+                                                            <Header color={this.props.color} as='h2'>Most Popular</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?

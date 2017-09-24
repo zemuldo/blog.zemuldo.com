@@ -36,7 +36,7 @@ class LoginForm extends Component {
                       type='password'
                   />
 
-                  <Button color='green' fluid size='large'>Login</Button>
+                  <Button color={this.props.color} fluid size='large'>Login</Button>
                 </Segment>
               </Form>
               <Message>
