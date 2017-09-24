@@ -74,7 +74,17 @@ app.use(function(req, res, next) {
     next();
 });
 app.get("*", async function (req, res) {
-    let incomingPath = req.url.slice(1,req.url.length).split('%20').join(' ');
+    let incomingPath = 'home'
+    if(req.url.match('-')){
+        incomingPath = req.url.slice(1,req.url.length).split('-').join(' ');
+    }
+    if(req.url.match('%20')){
+        incomingPath = req.url.slice(1,req.url.length).split('%20').join(' ');
+    }
+    if(req.url.match('%2520')){
+        incomingPath = req.url.slice(1,req.url.length).split('%2520').join(' ');
+    }
+
     let details = null
     if(pages[incomingPath]){
        details = {
