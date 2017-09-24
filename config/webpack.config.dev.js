@@ -134,6 +134,7 @@ module.exports = {
       // In production, they would get copied to the `build` folder.
       {
         exclude: [
+          /\.ejs/,
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
@@ -156,7 +157,7 @@ module.exports = {
         loader: require.resolve('url-loader'),
         options: {
           limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]',
+          name: 'static/media/[name].[main].[ext]',
         },
       },
       // Process JS with Babel.
