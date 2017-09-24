@@ -53,7 +53,6 @@ app.get("*", function (req, res) {
     }
 
 });
-console.log(conf[env].httpPort)
 app.listen(conf[env].httpPort,()=>{
     console.log("**Server started at http://localhost:"+conf[env].httpPort)
 });
