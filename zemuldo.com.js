@@ -74,15 +74,17 @@ app.use(function(req, res, next) {
     next();
 });
 app.get("*", async function (req, res) {
+    let url = req.url.split('/').join('')
+    console.log(url)
     let incomingPath = 'home'
-    if(req.url.match('-')){
-        incomingPath = req.url.slice(1,req.url.length).split('-').join(' ');
+    if(url.indexOf('-')!==-1){
+        incomingPath = url.split('-').join(' ')
     }
-    if(req.url.match('%20')){
-        incomingPath = req.url.slice(1,req.url.length).split('%20').join(' ');
+    if(url.indexOf('%20')!==-1){
+        incomingPath = url.split('%20').join(' ')
     }
-    if(req.url.match('%2520')){
-        incomingPath = req.url.slice(1,req.url.length).split('%2520').join(' ');
+    if(url.indexOf('%2520')!==-1){
+        incomingPath = url.split('%2520').join(' ')
     }
 
     let details = null
@@ -118,7 +120,6 @@ app.get("*", async function (req, res) {
         console.log('the user agent is a crawler!');
     }
     else {
-        console.log(req.url)
         res.sendFile(path.join(__dirname, 'build', 'index.html'));
     }
 
