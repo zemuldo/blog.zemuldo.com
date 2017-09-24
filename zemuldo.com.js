@@ -68,7 +68,6 @@ app.use(checkMe({
     }
 }))
 app.use(function(req, res, next) {
-    console.log(req.url[req.url.length-1])
     if(req.url[req.url.length-1]==='/'){
         res.redirect(req.url.slice(0,req.url.length-1))
     }
@@ -83,7 +82,6 @@ app.use(function(req, res, next) {
 });
 app.get("*", async function (req, res) {
     let url = req.url.split('/').join('')
-    console.log(url)
     let incomingPath = 'home'
     if(url.indexOf('-')!==-1){
         incomingPath = url.split('-').join(' ')
