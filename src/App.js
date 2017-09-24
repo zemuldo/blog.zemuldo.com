@@ -121,26 +121,22 @@ class App extends Component {
     handleHomeClick = () => {
         this.setState({ currentLocation:'home',})
         this.setState({blog:null})
-        this.setState({ current:'home',})
-        window.location.pathname = "/"
     }
 
     handleMenuItemClick = (e, { name }) => {
         if(name === 'home'){
-            window.location.pathname = "/"
             this.setState({ currentLocation:name,})
         }
         else {
-            window.location.pathname = "/"+name
             this.setState({ currentLocation:name,})
         }
 
     }
     handleLoginButton = ()=>{
-        this.setState({ current: 'login' ,logged:true})
+        this.setState({ currentLocation: 'login' ,logged:true})
     }
     handleLogoutinButton = ()=>{
-        this.setState({ current: 'ZemuldO-Home' ,logged:false})
+        this.setState({ currentLocation: 'home' ,logged:false})
     }
 
     render() {
@@ -332,11 +328,11 @@ class App extends Component {
                 </div>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (window.location.pathname.slice(1,window.location.pathname.length) ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} /> :
-                        (window.location.pathname.slice(1,window.location.pathname.length) === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} current={this.state.current} /> :
-                        (window.location.pathname.slice(1,window.location.pathname.length) === 'tech') ? <TechSummary color={this.state.colors[1]} current={this.state.current} /> :
-                        (window.location.pathname.slice(1,window.location.pathname.length) === 'business') ? <BusinessSummary color={this.state.colors[2]} current={this.state.current} /> :
-                        (window.location.pathname.slice(1,window.location.pathname.length) === 'dev') ? <DevArticles color={this.state.colors[0]} current={this.state.current} /> :
+                        (this.state.currentLocation ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} /> :
+                        (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} current={this.state.current} /> :
+                        (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} current={this.state.current} /> :
+                        (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} current={this.state.current} /> :
+                        (this.state.currentLocation === 'dev') ? <DevArticles color={this.state.colors[0]} current={this.state.current} /> :
                         <HomePage color={this.state.colors[1]} current={this.state.current} />
                     }
                 </div>
