@@ -266,7 +266,7 @@ class App extends Component {
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Reviews</span>
                                     </Menu.Item>
-                                    <Menu.Item name='Tuts' active={this.state.currentLocation === 'tuts'} onClick={this.handleMenuItemClick}>
+                                    <Menu.Item name='tuts' active={this.state.currentLocation === 'tuts'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Tuts</span>
                                     </Menu.Item>
