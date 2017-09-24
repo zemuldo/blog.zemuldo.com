@@ -44,10 +44,12 @@ const pages = {
 
 
 app.use(bodyParser.json());
+app.use(helmet())
 app.set('x-powered-by',false)
 app.set('X-Powered-By',false)
 app.use(helmet.ieNoOpen())
 app.use(helmet.xssFilter())
+app.use(helmet.noSniff())
 app.use(helmet({
     frameguard: false,
     noCache:true
@@ -65,7 +67,15 @@ app.use(checkMe({
         expires: expiryDate
     }
 }))
-
+app.use(function(req, res, next) {
+    console.log(req.url[req.url.length-1])
+    if(req.url[req.url.length-1]==='/'){
+        res.redirect(req.url.slice(0,req.url.length-1))
+    }
+    else {
+        next();
+    }
+});
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(function(req, res, next) {
     res.locals.ua = req.get('User-Agent');
