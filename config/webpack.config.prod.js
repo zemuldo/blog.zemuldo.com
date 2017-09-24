@@ -131,6 +131,7 @@ module.exports = {
       // When you `import` an asset, you get its filename.
       {
         exclude: [
+           /\.ejs$/,
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
