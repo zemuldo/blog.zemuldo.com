@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Header,Loader,List,Icon } from 'semantic-ui-react'
+import { Button,Image, Header,Loader,List,Icon } from 'semantic-ui-react'
 import ProfileBot from '../bots/profileBot'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -10,6 +10,20 @@ export default class WelcomePage extends Component {
         }
     }
     componentDidMount() {
+    }
+    fbShare () {
+        if(this.props.blog){
+            let shareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F'+this.props.blog.title.split(' ').join('%2520')+"&amp;src=sdkpreparse'"
+            window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
+
+        }
+    }
+    tweetShare () {
+        if(this.props.blog){
+            let shareURL = 'https://twitter.com/intent/tweet?text='+this.props.blog.title.split(' ').join('%20')+'&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'%2F'+'&via=zemuldo'
+            window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
+
+        }
     }
 
     render() {
@@ -49,25 +63,15 @@ export default class WelcomePage extends Component {
                                         </Header>
                                         <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                                             Share:
-                                            <List size="tiny" icon='labeled' horizontal color='green'>
-                                                <List.Item>
-                                                    <Icon color='blue' name='twitter' />
-                                                </List.Item>
-
-                                                <List.Item >
-                                                    <Icon color='violet' name='facebook' />
-                                                </List.Item>
-
-                                                <List.Item>
-                                                    <Icon color='blue' name='linkedin' />
-                                                </List.Item>
-                                                <List.Item>
-                                                    <Icon color='orange' name='google plus official' />
-                                                </List.Item>
-                                                <List.Item>
-                                                    <Icon color='red' name='mail' />
-                                                </List.Item>
-                                            </List>
+                                            {'  '}
+                                                <Button onClick={() => {this.tweetShare();}} circular color='twitter' icon='twitter' />
+                                            {'  '}
+                                                <Button onClick={() => {this.fbShare();}} circular color='facebook' icon='facebook' />
+                                            {'  '}
+                                                <Button onClick={() => {this.fbShare();}} circular color='linkedin' icon='linkedin' />
+                                            {'  '}
+                                                <Button onClick={() => {this.fbShare();}} circular color='google plus' icon='google plus' />
+                                            <br/>
                                             <br/>
                                             Published on:  {this.props.blog.date}  By {this.props.blog.author}
                                         </div>

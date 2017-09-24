@@ -86,7 +86,19 @@ class HomePage extends Component {
             });
     }
     componentDidMount() {
-        this.setCurrentBlog(window.location.pathname.slice(1,window.location.pathname.length).split('%20').join(' '))
+        let url = window.location.pathname.split('/').join('')
+        if(url.indexOf('-')!==-1){
+            url = url.split('-').join(' ')
+            this.setCurrentBlog(url.split('-').join(' '))
+        }
+        if(url.indexOf('%20')!==-1){
+            url = url.split('%20').join(' ')
+            this.setCurrentBlog(url.split('%20').join(' '))
+        }
+        if(url.indexOf('%2520')!==-1){
+            url = url.split('%2520').join(' ')
+            this.setCurrentBlog(url.split('%2520').join(' '))
+        }
         this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
         if(window.innerWidth<503){
