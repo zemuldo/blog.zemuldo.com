@@ -44,12 +44,10 @@ const pages = {
 
 
 app.use(bodyParser.json());
-app.use(helmet())
 app.set('x-powered-by',false)
 app.set('X-Powered-By',false)
 app.use(helmet.ieNoOpen())
 app.use(helmet.xssFilter())
-app.use(helmet.noSniff())
 app.use(helmet({
     frameguard: false,
     noCache:true
