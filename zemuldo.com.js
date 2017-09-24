@@ -8,6 +8,7 @@ let ENV = require('./config/env');
 let env = ENV().raw.NODE_ENV
 let {getBlogTemplate} = require('./tools/tools')
 const conf = require('./src/environments/conf')
+let {getFilterBlogs,getAllBlogs,getBlog,getBlogs} = require('./tools/database')
 const pages = {
     dev:{
         title:"ZemuldO.COM-DEVELOPMENT",
@@ -72,12 +73,32 @@ app.use(function(req, res, next) {
     res.locals.ua = req.get('User-Agent');
     next();
 });
-app.get("*", function (req, res) {
+app.get("*", async function (req, res) {
     let incomingPath = req.url.slice(1,req.url.length).split('%20').join(' ');
-    let details = {
-        title:pages[incomingPath].title,
-        description:pages[incomingPath].description,
-        imgSRC:pages[incomingPath].imgSRC
+    let details = null
+    if(pages[incomingPath]){
+       details = {
+            title:pages[incomingPath].title,
+            description:pages[incomingPath].description,
+            imgSRC:pages[incomingPath].imgSRC
+        }
+    }
+    else{
+        let blog = await getBlog(incomingPath)
+       if(blog){
+           details = {
+               title:blog.title,
+               description:blog.body.slice(0,300),
+               imgSRC:pages['home'].imgSRC
+           }
+       }
+       else{
+           details = {
+               title:pages['home'].title,
+               description:pages['home'].description,
+               imgSRC:pages['home'].imgSRC
+           }
+        }
     }
     let botPattern = "(googlebot\/|Googlebot-Mobile|Googlebot-Image|Google favicon|Mediapartners-Google|bingbot|slurp|java|wget|curl|Commons-HttpClient|Python-urllib|libwww|httpunit|nutch|phpcrawl|msnbot|jyxobot|FAST-WebCrawler|FAST Enterprise Crawler|biglotron|teoma|convera|seekbot|gigablast|exabot|ngbot|ia_archiver|GingerCrawler|webmon |httrack|webcrawler|grub.org|UsineNouvelleCrawler|antibot|netresearchserver|speedy|fluffy|bibnum.bnf|findlink|msrbot|panscient|yacybot|AISearchBot|IOI|ips-agent|tagoobot|MJ12bot|dotbot|woriobot|yanga|buzzbot|mlbot|yandexbot|purebot|Linguee Bot|Voyager|CyberPatrol|voilabot|baiduspider|citeseerxbot|spbot|twengabot|postrank|turnitinbot|scribdbot|page2rss|sitebot|linkdex|Adidxbot|blekkobot|ezooms|dotbot|Mail.RU_Bot|discobot|heritrix|findthatfile|europarchive.org|NerdByNature.Bot|sistrix crawler|ahrefsbot|Aboundex|domaincrawler|wbsearchbot|summify|ccbot|edisterbot|seznambot|ec2linkfinder|gslfbot|aihitbot|intelium_bot|facebookexternalhit|yeti|RetrevoPageAnalyzer|lb-spider|sogou|lssbot|careerbot|wotbox|wocbot|ichiro|DuckDuckBot|lssrocketcrawler|drupact|webcompanycrawler|acoonbot|openindexspider|gnam gnam spider|web-archive-net.com.bot|backlinkcrawler|coccoc|integromedb|content crawler spider|toplistbot|seokicks-robot|it2media-domain-crawler|ip-web-crawler.com|siteexplorer.info|elisabot|proximic|changedetection|blexbot|arabot|WeSEE:Search|niki-bot|CrystalSemanticsBot|rogerbot|360Spider|psbot|InterfaxScanBot|Lipperhey SEO Service|CC Metadata Scaper|g00g1e.net|GrapeshotCrawler|urlappendbot|brainobot|fr-crawler|binlar|SimpleCrawler|Livelapbot|Twitterbot|cXensebot|smtbot|bnf.fr_bot|A6-Indexer|ADmantX|Facebot|Twitterbot|OrangeBot|memorybot|AdvBot|MegaIndex|SemanticScholarBot|ltx71|nerdybot|xovibot|BUbiNG|Qwantify|archive.org_bot|Applebot|TweetmemeBot|crawler4j|findxbot|SemrushBot|yoozBot|lipperhey|y!j-asr|Domain Re-Animator Bot|AddThis)";
     let re = new RegExp(botPattern, 'i');
