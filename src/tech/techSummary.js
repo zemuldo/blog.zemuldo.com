@@ -7,7 +7,7 @@ import Blogs from '../partials/blogs'
 import Blog from '../partials/blog'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-class HomePage extends Component {
+class TechSummary extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ class HomePage extends Component {
         this.tick = this.tick.bind(this);
     };
     tick () {
-        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -75,7 +75,7 @@ class HomePage extends Component {
 
         this.handleData()
         window.addEventListener('resize', this.resize)
-        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -93,7 +93,7 @@ class HomePage extends Component {
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data,blog:response[0].data[0]})
@@ -245,4 +245,4 @@ class HomePage extends Component {
             </div>)
     }
 }
-export default HomePage
+export default TechSummary

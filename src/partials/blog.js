@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon,List,Header} from 'semantic-ui-react'
+import { Image,Icon,List,Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -11,6 +11,8 @@ class Blog extends Component {
         };
 
     };
+    componentDidMount() {
+    }
     render() {
         return (
             <div>
@@ -19,7 +21,7 @@ class Blog extends Component {
                         this.props.blog.title
                     }
                 </Header>
-                <div style={{}}>
+                <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                     Share:
                     <List size="tiny" icon='labeled' horizontal color='green'>
                         <List.Item>
@@ -44,7 +46,9 @@ class Blog extends Component {
                     Published on:  {this.props.blog.date}  By {this.props.blog.author}
                 </div>
                 <hr color="green"/>
-                <div style={{margin: '3em 1em 3em 2em'}}>
+                <div style={{margin: '3em 1em 3em 2em', display:'block',fontSize:"16px",fontFamily:"georgia"}}>
+                    <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
+                    <br/>
                     <p>
                         {
                             this.props.blog.body

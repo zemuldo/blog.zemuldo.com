@@ -7,7 +7,7 @@ import Blogs from '../partials/blogs'
 import Blog from '../partials/blog'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-class DeveloperArticles extends Component {
+class DevArticles extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ class DeveloperArticles extends Component {
         this.tick = this.tick.bind(this);
     };
     tick () {
-        return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/dev/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -57,7 +57,6 @@ class DeveloperArticles extends Component {
             });
     }
     goToHome(){
-        this.setState({current:'ZemuldO-Home'})
     }
     _handleChangeBodySize(size){
         this.setState({bodySize:size})
@@ -75,7 +74,7 @@ class DeveloperArticles extends Component {
 
         this.handleData()
         window.addEventListener('resize', this.resize)
-        return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -93,7 +92,7 @@ class DeveloperArticles extends Component {
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/dev/How to keep your Customers', {})])
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data,blog:response[0].data[0]})
@@ -114,7 +113,7 @@ class DeveloperArticles extends Component {
     handleFilterChange(e) {
         //e.preventDefault();
         if(e.target.value===''){
-            return axios.get(env.httpURL+'/posts/dev', {})
+            return axios.get(env.httpURL+'/post/dev', {})
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
@@ -150,7 +149,7 @@ class DeveloperArticles extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Dev Articles</Header>
+                                                            <Header color={this.props.color} as='h2'>Developer Articles</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -176,46 +175,7 @@ class DeveloperArticles extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <div>
-                                                                        <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
-                                                                            {
-                                                                                this.state.blog.title
-                                                                            }
-                                                                        </Header>
-                                                                        <div style={{fontSize:"16px",fontFamily:"georgia"}}>
-                                                                            Share:
-                                                                            <List size="tiny" icon='labeled' horizontal color={this.props.color}>
-                                                                                <List.Item>
-                                                                                    <Icon color='blue' name='twitter' />
-                                                                                </List.Item>
-
-                                                                                <List.Item >
-                                                                                    <Icon color='violet' name='facebook' />
-                                                                                </List.Item>
-
-                                                                                <List.Item>
-                                                                                    <Icon color='blue' name='linkedin' />
-                                                                                </List.Item>
-                                                                                <List.Item>
-                                                                                    <Icon color='orange' name='google plus official' />
-                                                                                </List.Item>
-                                                                                <List.Item>
-                                                                                    <Icon color='red' name='mail' />
-                                                                                </List.Item>
-                                                                            </List>
-                                                                            <br/>
-                                                                            Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                                        </div>
-                                                                        <hr color={this.props.color}/>
-                                                                        <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
-                                                                            <p>
-                                                                                {
-                                                                                    this.state.blog.body
-                                                                                }
-                                                                            </p>
-                                                                        </div>
-
-                                                                    </div>
+                                                                    <Blog blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }
@@ -284,4 +244,4 @@ class DeveloperArticles extends Component {
             </div>)
     }
 }
-export default DeveloperArticles
+export default DevArticles

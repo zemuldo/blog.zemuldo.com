@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {  Header,Loader,List,Icon } from 'semantic-ui-react'
+import { Image, Header,Loader,List,Icon } from 'semantic-ui-react'
 import ProfileBot from '../bots/profileBot'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -73,6 +73,8 @@ export default class WelcomePage extends Component {
                                         </div>
                                         <hr color="green"/>
                                         <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
+                                            <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
+                                            <br/>
                                             <p>
                                                 {
                                                     this.props.blog.body

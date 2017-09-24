@@ -114,7 +114,7 @@ class BusinessSummary extends Component {
     handleFilterChange(e) {
         //e.preventDefault();
         if(e.target.value===''){
-            return axios.get(env.httpURL+'/posts/business', {})
+            return axios.get(env.httpURL+'/post/tech', {})
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
@@ -150,7 +150,7 @@ class BusinessSummary extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Business Related</Header>
+                                                            <Header color={this.props.color} as='h2'>Featured in Business</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -176,46 +176,7 @@ class BusinessSummary extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <div>
-                                                                        <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
-                                                                            {
-                                                                                this.state.blog.title
-                                                                            }
-                                                                        </Header>
-                                                                        <div style={{fontSize:"16px",fontFamily:"georgia"}}>
-                                                                            Share:
-                                                                            <List size="tiny" icon='labeled' horizontal color={this.props.color}>
-                                                                                <List.Item>
-                                                                                    <Icon color='blue' name='twitter' />
-                                                                                </List.Item>
-
-                                                                                <List.Item >
-                                                                                    <Icon color='violet' name='facebook' />
-                                                                                </List.Item>
-
-                                                                                <List.Item>
-                                                                                    <Icon color='blue' name='linkedin' />
-                                                                                </List.Item>
-                                                                                <List.Item>
-                                                                                    <Icon color='orange' name='google plus official' />
-                                                                                </List.Item>
-                                                                                <List.Item>
-                                                                                    <Icon color='red' name='mail' />
-                                                                                </List.Item>
-                                                                            </List>
-                                                                            <br/>
-                                                                            Published on:  {this.state.blog.date}  By {this.state.blog.author}
-                                                                        </div>
-                                                                        <hr color={this.props.color}/>
-                                                                        <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
-                                                                            <p>
-                                                                                {
-                                                                                    this.state.blog.body
-                                                                                }
-                                                                            </p>
-                                                                        </div>
-
-                                                                    </div>
+                                                                    <Blog blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }
