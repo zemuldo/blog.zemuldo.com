@@ -68,7 +68,7 @@ app.use(checkMe({
     }
 }))
 app.use(function(req, res, next) {
-    if(req.url[req.url.length-1]==='/'){
+    if(req.url[req.url.length-1]==='/' && req.url!=='/' ){
         res.redirect(req.url.slice(0,req.url.length-1))
     }
     else {
