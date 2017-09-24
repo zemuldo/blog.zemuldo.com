@@ -167,7 +167,6 @@ module.exports = {
                     reject({error:'error in db'})
                 }
                 else{
-                    console.log(o)
                     resolve(o)
                 }
             });
