@@ -20,7 +20,7 @@ export default class WelcomePage extends Component {
     }
     tweetShare () {
         if(this.props.blog){
-            let shareURL = 'https://twitter.com/intent/tweet?text='+this.props.blog.title.split(' ').join('%20')+'&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'%2F'+'&via=zemuldo'
+            let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blog.title.split(' ').join('%20')+'&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'%2F'+'&hashtags=tech'+'&via=zemuldo'+'&related=http%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
