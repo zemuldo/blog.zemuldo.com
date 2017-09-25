@@ -16,7 +16,12 @@ class DevArticles extends Component {
             logged:false,
             isLoaded: false,
             blogIsLoading:false,
-            bodySize:(window.innerWidth<503)?16:12
+            bodySize:(window.innerWidth<503)?16:12,
+            counts:{
+                fbC:null,
+                twtC:null,
+                gplsC:null
+            }
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -28,6 +33,7 @@ class DevArticles extends Component {
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.tick = this.tick.bind(this);
+        this.getCounts = this.getCounts.bind(this);
     };
     tick () {
         return Promise.all([axios.get(env.httpURL+'/posts/dev', {}),axios.get(env.httpURL+'/posts/dev/How to keep your Customers', {})])
@@ -49,8 +55,33 @@ class DevArticles extends Component {
                 this.isLoading(true)
                 this.setState({blogIsLoading:false})
                 window.scrollTo(0,0)
-                return response
+                let gplusPost = {
+                    "method": "pos.plusones.get",
+                    "id": "p",
+                    "params": {
+                        "nolog": true,
+                        "id": "https://zemuldo/"+this.state.blog.title.split(' ').join('-'),
+                        "source": "widget",
+                        "userId": "@viewer",
+                        "groupId": "@self"
+                    },
+                    "jsonrpc": "2.0",
+                    "key": "p",
+                    "apiVersion": "v1"
+                }
+                return Promise.all([
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blog.title.split(' ').join('%2520'),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blog.title.split(' ').join('-'),{}),
+                    axios.post(' https://clients6.google.com/rpc',gplusPost)
+                ])
             })
+            .then(function (res) {
+                this.setState({counts:{
+                    fbC:res[0].data.share.share_count,
+                    twtC:res[1].data.count,
+                    gplsC:res[2].data.result.metadata.globalCounts.count
+                }})
+            }.bind(this))
             .catch(exception => {
                 this.isLoading(true)
                 return exception
@@ -79,6 +110,7 @@ class DevArticles extends Component {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
                 }
+                this.getCounts()
             })
             .catch(exception => {
 
@@ -109,6 +141,41 @@ class DevArticles extends Component {
                 return exception
             });
     };
+    getCounts(){
+        if(this.state.blog){
+            let gplusPost = {
+                "method": "pos.plusones.get",
+                "id": "p",
+                "params": {
+                    "nolog": true,
+                    "id": "https://zemuldo/"+this.state.blog.title.split(' ').join('-'),
+                    "source": "widget",
+                    "userId": "@viewer",
+                    "groupId": "@self"
+                },
+                "jsonrpc": "2.0",
+                "key": "p",
+                "apiVersion": "v1"
+            }
+            return Promise.all([
+                axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blog.title.split(' ').join('%2520'),{}),
+                axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blog.title.split(' ').join('-'),{}),
+                axios.post(' https://clients6.google.com/rpc',gplusPost)
+            ])
+                .then(function (res) {
+                    this.setState({counts:{
+                        fbC:res[0].data.share.share_count,
+                        twtC:res[1].data.count,
+                        gplsC:res[2].data.result.metadata.globalCounts.count
+                    }})
+                }.bind(this))
+                .catch(exception => {
+                    this.isLoading(true)
+                    return exception
+                });
+        }
+
+    }
 
     handleFilterChange(e) {
         //e.preventDefault();
@@ -159,7 +226,7 @@ class DevArticles extends Component {
                                                                         </div>
                                                                 }
                                                             </List>
-                                                            <a onClick={this.goToHome}><Header color='orange' as='h4'>More</Header></a>
+                                                            <a onClick={() => {this.goToHome()}}><Header color='orange' as='h4'>More</Header></a>
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
@@ -175,7 +242,7 @@ class DevArticles extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog color={this.props.color} blog = {this.state.blog}/>
+                                                                    <Blog counts={this.state.counts} color={this.props.color} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }
@@ -211,7 +278,7 @@ class DevArticles extends Component {
                                                                         </div>
                                                                 }
                                                             </List>
-                                                            <a onClick={this.goToHome}><Header color='orange' as='h4'>More</Header></a>
+                                                            <a onClick={() => {this.goToHome()}}><Header color='orange' as='h4'>More</Header></a>
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
@@ -227,7 +294,7 @@ class DevArticles extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog color={this.props.color} blog = {this.state.blog}/>
+                                                                    <Blog counts={this.state.counts} color={this.props.color} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }

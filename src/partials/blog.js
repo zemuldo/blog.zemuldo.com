@@ -38,13 +38,25 @@ class Blog extends Component {
                 <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                     Share:
                     {'  '}
-                    <Button onClick={() => {this.tweetShare();}} circular color='twitter' icon='twitter' />
-                    {'  '}
-                    <Button onClick={() => {this.fbShare();}} circular color='facebook' icon='facebook' />
-                    {'  '}
-                    <Button onClick={() => {this.fbShare();}} circular color='linkedin' icon='linkedin' />
-                    {'  '}
-                    <Button onClick={() => {this.fbShare();}} circular color='google plus' icon='google plus' />
+                    <Button
+                        onClick={() => {this.tweetShare();}}
+                        circular color='twitter' icon='twitter' />
+                    <sup>{this.props.counts.twtC}</sup>
+                    {'   '}
+                    <Button
+                        onClick={() => {this.fbShare();}}
+                        circular color='facebook' icon='facebook' />
+                    <sup>{this.props.counts.fbC}</sup>
+                    {'   '}
+                    <Button
+                        onClick={() => {this.fbShare();}}
+                        circular color='linkedin' icon='linkedin' />
+                    <sup>{this.props.counts.fbC}</sup>
+                    {'   '}
+                    <Button
+                        onClick={() => {this.gplusShare();}}
+                        circular color='google plus' icon='google plus' />
+                    <sup>{this.props.counts.gplsC}</sup>
                     <br/>
                     <br/>
                     Published on:  {this.props.blog.date}  By {this.props.blog.author}

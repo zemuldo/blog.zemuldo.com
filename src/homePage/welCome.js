@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Button,Image, Header,Loader,List,Icon } from 'semantic-ui-react'
-import ProfileBot from '../bots/profileBot'
+import {Label, Button,Image, Header,Loader,List,Icon } from 'semantic-ui-react'
+import axios from 'axios'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 export default class WelcomePage extends Component {
@@ -8,8 +8,22 @@ export default class WelcomePage extends Component {
         super(props)
         this.state = {
         }
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.getFaceBookShare = this.getFaceBookShare.bind(this);
     }
     componentDidMount() {
+        this.getFaceBookShare()
+    }
+    getFaceBookShare(){
+        if(this.props.blog){
+            return axios.get('https://graph.facebook.com/?id=http://zemuldo.com',{})
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (err) {
+                    console.log(err)
+                })
+        }
     }
     fbShare () {
         if(this.props.blog){
@@ -24,6 +38,10 @@ export default class WelcomePage extends Component {
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
+    }
+    gplusShare () {
+        window.open("https://plus.google.com/share?url="+'http://zemuldo.com/'+this.props.blog.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
+        return false;
     }
 
     render() {
@@ -64,13 +82,25 @@ export default class WelcomePage extends Component {
                                         <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                                             Share:
                                             {'  '}
-                                                <Button onClick={() => {this.tweetShare();}} circular color='twitter' icon='twitter' />
-                                            {'  '}
-                                                <Button onClick={() => {this.fbShare();}} circular color='facebook' icon='facebook' />
-                                            {'  '}
-                                                <Button onClick={() => {this.fbShare();}} circular color='linkedin' icon='linkedin' />
-                                            {'  '}
-                                                <Button onClick={() => {this.fbShare();}} circular color='google plus' icon='google plus' />
+                                                <Button
+                                                    onClick={() => {this.tweetShare();}}
+                                                    circular color='twitter' icon='twitter' />
+                                            <sup>{this.props.counts.twtC}</sup>
+                                            {'   '}
+                                                <Button
+                                                    onClick={() => {this.fbShare();}}
+                                                    circular color='facebook' icon='facebook' />
+                                            <sup>{this.props.counts.fbC}</sup>
+                                            {'   '}
+                                                <Button
+                                                    onClick={() => {this.fbShare();}}
+                                                    circular color='linkedin' icon='linkedin' />
+                                            <sup>{this.props.counts.fbC}</sup>
+                                            {'   '}
+                                                <Button
+                                                    onClick={() => {this.gplusShare();}}
+                                                    circular color='google plus' icon='google plus' />
+                                            <sup>{this.props.counts.gplsC}</sup>
                                             <br/>
                                             <br/>
                                             Published on:  {this.props.blog.date}  By {this.props.blog.author}
