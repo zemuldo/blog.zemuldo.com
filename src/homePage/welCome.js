@@ -38,7 +38,7 @@ export default class WelcomePage extends Component {
                             {
                                 (this.props.blog===null || !this.props.blog.title) ?
                                     <div >
-                                        <Header style={{ textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                        <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                             Welcome To ZemuldO.COM
                                         </Header>
                                         <hr color="green"/>
@@ -56,7 +56,7 @@ export default class WelcomePage extends Component {
 
                                     </div>:
                                     <div>
-                                        <Header style={{ textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                        <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                             {
                                                 this.props.blog.title
                                             }

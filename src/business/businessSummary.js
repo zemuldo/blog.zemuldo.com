@@ -154,7 +154,7 @@ class BusinessSummary extends Component {
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
-                                                                        <Blogs onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                        <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                         <div>
                                                                             No matching data
                                                                         </div>
@@ -176,7 +176,7 @@ class BusinessSummary extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog blog = {this.state.blog}/>
+                                                                    <Blog color={this.props.color} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }
@@ -206,7 +206,7 @@ class BusinessSummary extends Component {
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
-                                                                        <Blogs onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                        <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                         <div>
                                                                             No matching data
                                                                         </div>
@@ -228,7 +228,7 @@ class BusinessSummary extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog blog = {this.state.blog}/>
+                                                                    <Blog color={this.props.color} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }

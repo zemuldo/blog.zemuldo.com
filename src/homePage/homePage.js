@@ -188,7 +188,7 @@ class HomePage extends Component {
                                                             <Header  color={this.props.color} as='h2'>Most Popular</Header>
                                                             {
                                                                 (this.state.blogs[0]) ?
-                                                                    <Blogs onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                    <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
                                                                         No matching data
                                                                     </div>
@@ -200,7 +200,7 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={9}>
-                                                <WelcomePage blog={this.state.blog} blogs={this.state.blogs} blogIsLoading={this.state.blogIsLoading}/>
+                                                <WelcomePage color={this.props.color} blog={this.state.blog} blogs={this.state.blogs} blogIsLoading={this.state.blogIsLoading}/>
                                             </Grid.Column>
                                             {
                                                 (window.innerWidth>1030) ?
@@ -238,7 +238,7 @@ class HomePage extends Component {
                                                             <Header color={this.props.color} as='h2'>Most Popular</Header>
                                                             {
                                                                 (this.state.blogs[0]) ?
-                                                                    <Blogs blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                    <Blogs color={this.props.color} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
                                                                         No matching data
                                                                     </div>
@@ -259,7 +259,7 @@ class HomePage extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog blog = {this.state.blog}/>
+                                                                    <Blog  color={this.props.color} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }
