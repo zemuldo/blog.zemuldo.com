@@ -150,7 +150,7 @@ class TechSummary extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Popular in Tech</Header>
+                                                            <Header color={this.props.colors[0]} as='h2'>Popular in Tech</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?

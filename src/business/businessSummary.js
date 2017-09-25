@@ -150,7 +150,7 @@ class BusinessSummary extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Featured in Business</Header>
+                                                            <Header color={this.props.colors[2]} as='h2'>Featured in Business</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -176,7 +176,7 @@ class BusinessSummary extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog color={this.props.color} blog = {this.state.blog}/>
+                                                                    <Blog color={this.props.colors[1]} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }
@@ -202,7 +202,7 @@ class BusinessSummary extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Most Popular</Header>
+                                                            <Header color={this.props.colors[1]} as='h2'>Most Popular</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
@@ -228,7 +228,7 @@ class BusinessSummary extends Component {
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
-                                                                    <Blog color={this.props.color} blog = {this.state.blog}/>
+                                                                    <Blog color={this.props.colors[1]} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }

@@ -38,7 +38,7 @@ class App extends Component {
             geoAllowed:false,
             log: [],
             open: false,
-            colors:['green','blue','orange'],
+            colors:['green','blue','orange','violet','pink'],
             currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ? window.location.pathname.slice(1,window.location.pathname.length):'home'
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
@@ -328,12 +328,12 @@ class App extends Component {
                 </div>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.currentLocation ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} /> :
-                        (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} current={this.state.current} /> :
-                        (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} current={this.state.current} /> :
-                        (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} current={this.state.current} /> :
-                        (this.state.currentLocation === 'dev') ? <DevArticles color={this.state.colors[0]} current={this.state.current} /> :
-                        <HomePage color={this.state.colors[1]} current={this.state.current} />
+                        (this.state.currentLocation ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} colors={this.state.colors} /> :
+                        (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} colors={this.state.colors}  current={this.state.current} /> :
+                        (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} colors={this.state.colors} current={this.state.current} /> :
+                        (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} colors={this.state.colors} current={this.state.current} /> :
+                        (this.state.currentLocation === 'dev') ? <DevArticles color={this.state.colors[0]} colors={this.state.colors} current={this.state.current} /> :
+                        <HomePage color={this.state.colors[1]} colors={this.state.colors} current={this.state.current} />
                     }
                 </div>
                 <Footer color={this.state.colors[0]} corrent={this.state.current}/>

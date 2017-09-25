@@ -185,7 +185,7 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header  color={this.props.color} as='h2'>Most Popular</Header>
+                                                            <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
                                                                 (this.state.blogs[0]) ?
                                                                     <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
@@ -200,7 +200,7 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={9}>
-                                                <WelcomePage color={this.props.color} blog={this.state.blog} blogs={this.state.blogs} blogIsLoading={this.state.blogIsLoading}/>
+                                                <WelcomePage color={this.props.colors[1]} blog={this.state.blog} blogs={this.state.blogs} blogIsLoading={this.state.blogIsLoading}/>
                                             </Grid.Column>
                                             {
                                                 (window.innerWidth>1030) ?
@@ -258,8 +258,8 @@ class HomePage extends Component {
                                                         <div style={{margin: '3em 1em 3em 2em'}}>
                                                             {
                                                                 (this.state.blog===null) ?
-                                                                    <About/>:
-                                                                    <Blog  color={this.props.color} blog = {this.state.blog}/>
+                                                                    <About  color={this.props.color}  colors={this.props.colors}/>:
+                                                                    <Blog  color={this.props.color} colors={this.props.colors} blog = {this.state.blog}/>
                                                             }
                                                         </div>
                                                 }

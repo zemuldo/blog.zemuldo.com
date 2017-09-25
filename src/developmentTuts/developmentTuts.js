@@ -149,7 +149,7 @@ class DevArticles extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Developer Articles</Header>
+                                                            <Header color={this.props.colors[1]} as='h2'>Developer Articles</Header>
                                                             <List>
                                                                 {
                                                                     (this.state.blogs[0]) ?
