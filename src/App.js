@@ -140,7 +140,6 @@ class App extends Component {
     }
 
     render() {
-        const { current } = this.state
         return (
             <div>
                 <div>

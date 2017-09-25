@@ -1,6 +1,5 @@
-import _ from 'lodash'
 import React,{Component} from 'react'
-import { Header, Icon,  List , Button  , Grid ,Loader,Input} from 'semantic-ui-react'
+import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
 import { Timeline } from 'react-twitter-widgets'
 import axios from 'axios';
 import WelcomePage from './welCome'

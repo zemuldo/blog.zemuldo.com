@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {  Menu, Button,Icon,Header,Modal} from 'semantic-ui-react'
 import ReviewPortal from './portal'
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
+/*import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'*/
 class Footer extends Component {
     constructor(props){
         super(props);

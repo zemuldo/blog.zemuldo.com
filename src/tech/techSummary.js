@@ -1,6 +1,5 @@
-import _ from 'lodash'
 import React,{Component} from 'react'
-import { Header, Icon,  List , Button  , Grid ,Loader,Input} from 'semantic-ui-react'
+import { Header, Icon,  List , Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
 import About from '../partials/aboutHome'
 import Blogs from '../partials/blogs'
