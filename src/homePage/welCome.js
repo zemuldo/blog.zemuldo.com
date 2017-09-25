@@ -44,6 +44,10 @@ export default class WelcomePage extends Component {
         return false;
     }
 
+    linkdnShare(){
+        window.open('https://www.linkedin.com/cws/share?url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
+    }
+
     render() {
         return (
             <div>
@@ -93,9 +97,9 @@ export default class WelcomePage extends Component {
                                             <sup>{this.props.counts.fbC}</sup>
                                             {'   '}
                                                 <Button
-                                                    onClick={() => {this.fbShare();}}
+                                                    onClick={() => {this.linkdnShare();}}
                                                     circular color='linkedin' icon='linkedin' />
-                                            <sup>{this.props.counts.fbC}</sup>
+                                            <sup>{this.props.counts.gplsC}</sup>
                                             {'   '}
                                                 <Button
                                                     onClick={() => {this.gplusShare();}}

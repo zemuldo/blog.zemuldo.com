@@ -77,9 +77,9 @@ class TechSummary extends Component {
             })
             .then(function (res) {
                 this.setState({counts:{
-                    fbC:res[0].data.share.share_count,
-                    twtC:res[1].data.count,
-                    gplsC:res[2].data.result.metadata.globalCounts.count
+                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
+                    twtC:(res[1].data.count)?res[1].data.count:0,
+                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
                 }})
             }.bind(this))
             .catch(exception => {
@@ -95,6 +95,7 @@ class TechSummary extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        this.countsInteval = setTimeout(this.getCounts, 400);
         this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
         if(window.innerWidth<503){
@@ -118,6 +119,7 @@ class TechSummary extends Component {
             });
     }
     componentWillUnmount() {
+        clearInterval(this.countsInteval);
         clearInterval(this.interval);
         window.removeEventListener('resize', this.resize)
     }
@@ -165,9 +167,9 @@ class TechSummary extends Component {
             ])
                 .then(function (res) {
                     this.setState({counts:{
-                        fbC:res[0].data.share.share_count,
-                        twtC:res[1].data.count,
-                        gplsC:res[2].data.result.metadata.globalCounts.count
+                        fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
+                        twtC:(res[1].data.count)?res[1].data.count:0,
+                        gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
                     }})
                 }.bind(this))
                 .catch(exception => {

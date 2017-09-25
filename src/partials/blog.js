@@ -51,7 +51,7 @@ class Blog extends Component {
                     <Button
                         onClick={() => {this.fbShare();}}
                         circular color='linkedin' icon='linkedin' />
-                    <sup>{this.props.counts.fbC}</sup>
+                    <sup>{this.props.counts.gplsC}</sup>
                     {'   '}
                     <Button
                         onClick={() => {this.gplusShare();}}

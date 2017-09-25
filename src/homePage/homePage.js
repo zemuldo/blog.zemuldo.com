@@ -74,14 +74,14 @@ class HomePage extends Component {
                 return Promise.all([
                     axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blog.title.split(' ').join('%2520'),{}),
                     axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blog.title.split(' ').join('-'),{}),
-                    axios.post(' https://clients6.google.com/rpc',gplusPost)
+                    axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })
             .then(function (res) {
                 this.setState({counts:{
-                    fbC:res[0].data.share.share_count,
-                    twtC:res[1].data.count,
-                    gplsC:res[2].data.result.metadata.globalCounts.count
+                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
+                    twtC:(res[1].data.count)?res[1].data.count:0,
+                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
                 }})
             }.bind(this))
             .catch(exception => {
