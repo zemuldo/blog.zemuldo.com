@@ -188,9 +188,12 @@ class HomePage extends Component {
     };
 
     handleFilterChange(e) {
-        //e.preventDefault();
+        e.preventDefault();
         if(e.target.value===''){
-            return axios.get(env.httpURL+'/all', {})
+            return axios.post(env.httpURL, {
+                "query":"getAllPosts",
+                "queryParam":{}
+            })
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
@@ -198,7 +201,12 @@ class HomePage extends Component {
                 });
         }
         else {
-            return axios.get(env.httpURL+'/filter/'+e.target.value, {})
+            return axios.post(env.httpURL, {
+                "query":"getFiltered",
+                "queryParam":{
+                    "filter":e.target.value,
+                }
+            })
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
