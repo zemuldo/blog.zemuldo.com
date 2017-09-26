@@ -10,7 +10,6 @@ module.exports = {
             '    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">\n' +
             '    <link rel="shortcut icon" href="img/icons/NN.png">\n' +
             '    <link rel="stylesheet" type="text/css" href="./semantic.min.css" />\n' +
-            '    <link rel="stylesheet" type="text/css" href="./styles.css" />\n' +
             '    <meta name="description" content='+details.description+'>\n' +
             '    <meta name="keywords" content="Tech Articles, Business Articles, Blogs, BigData, Artificila Intelligence, Marchine Learning, Business Development">\n' +
             '    <title>'+details.title+'</title>\n' +
