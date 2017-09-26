@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button,Image, Header} from 'semantic-ui-react'
+import { Button,Image, Header, Icon} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
@@ -44,7 +44,7 @@ class Blog extends Component {
                     }
                 </Header>
                 <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                    Share:
+                    <Icon size="large" color='green' name='external share' />
                     {'  '}
                     <Button
                         onClick={() => {this.tweetShare();}}
