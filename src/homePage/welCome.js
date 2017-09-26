@@ -74,6 +74,7 @@ export default class WelcomePage extends Component {
                                                 We also offer Business and Tech Consultancy. If you are looking for ways to grow your business,
                                                 We are the choice you are looking for. Reach us for insights and growth.
                                             </p>
+                                            <img src='img/blogs/blogs_pic.jpg'/>
                                         </div>
 
                                     </div>:
