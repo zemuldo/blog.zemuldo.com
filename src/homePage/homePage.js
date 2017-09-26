@@ -38,10 +38,13 @@ class HomePage extends Component {
 
     };
     tick () {
-        return Promise.all([axios.get(env.httpURL+'/all', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getAllPosts",
+            "queryParam":{}
+        })
             .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data})
+                if(response.data[0]){
+                    this.setState({blogs:response.data})
                 }
             })
             .catch(exception => {
@@ -97,7 +100,9 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate();
     setCurrentBlog(title){
-        return axios.get(env.httpURL+'/posts/all/'+title, {
+        return axios.post(env.httpURL, {
+            "query":"getAllPosts",
+            "queryParam":{}
         })
             .then(response => {
                 if(response.data.error){
@@ -140,10 +145,13 @@ class HomePage extends Component {
 
         this.handleData()
         window.addEventListener('resize', this.resize)
-        return Promise.all([axios.get(env.httpURL+'/all', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getAllPosts",
+            "queryParam":{}
+        })
             .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data})
+                if(response.data[0]){
+                    this.setState({blogs:response.data})
                 }
             })
             .catch(exception => {
@@ -158,10 +166,13 @@ class HomePage extends Component {
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return Promise.all([axios.get(env.httpURL+'/all', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getAllPosts",
+            "queryParam":{}
+        })
             .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data})
+                if(response.data[0]){
+                    this.setState({blogs:response.data})
                 }
                 else{
                     this.setState({blogs:[],blog:null})
