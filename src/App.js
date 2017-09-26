@@ -9,6 +9,7 @@ import HomePage from './homePage/homePage'
 import GeoLocator from './partials/geoLocator'
 import Footer from './partials/footer'
 import 'semantic-ui-css/semantic.min.css';
+import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios'
 import config from './environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'

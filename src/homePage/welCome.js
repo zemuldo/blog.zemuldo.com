@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button,Image, Header,Loader} from 'semantic-ui-react'
+import {Button,Image, Header,Loader,Icon} from 'semantic-ui-react'
 import axios from 'axios'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
@@ -84,7 +84,7 @@ export default class WelcomePage extends Component {
                                             }
                                         </Header>
                                         <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                                            Share:
+                                            <Icon size="large" color='green' name='external share' />
                                             {'  '}
                                                 <Button
                                                     onClick={() => {this.tweetShare();}}
