@@ -9,7 +9,6 @@ import HomePage from './homePage/homePage'
 import GeoLocator from './partials/geoLocator'
 import Footer from './partials/footer'
 import 'semantic-ui-css/semantic.min.css';
-import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios'
 import config from './environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -175,19 +174,13 @@ class App extends Component {
                                         <Dropdown.Item>
                                             <Menu.Item name='tech' active={this.state.currentLocation === 'tech'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
-                                                <span color={this.state.colors[0]}>Cookie Policy</span>
+                                                <span color={this.state.colors[0]}>Tech</span>
                                             </Menu.Item>
                                         </Dropdown.Item>
                                         <Dropdown.Item>
                                             <Menu.Item name='reviews' active={this.state.currentLocation === 'reviews'} onClick={this.handleMenuItemClick}>
                                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                                 <span color={this.state.colors[0]}>Reviews</span>
-                                            </Menu.Item>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <Menu.Item name='Tuts' active={this.state.currentLocation === 'tuts'} onClick={this.handleMenuItemClick}>
-                                                <Icon color={this.state.colors[0]} name='circle notched' />
-                                                <span color={this.state.colors[0]}>Tuts</span>
                                             </Menu.Item>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
@@ -265,10 +258,6 @@ class App extends Component {
                                     <Menu.Item name='reviews' active={this.state.currentLocation === 'reviews'} onClick={this.handleMenuItemClick}>
                                         <Icon color={this.state.colors[0]} name='circle notched' />
                                         <span color={this.state.colors[0]}>Reviews</span>
-                                    </Menu.Item>
-                                    <Menu.Item name='tuts' active={this.state.currentLocation === 'tuts'} onClick={this.handleMenuItemClick}>
-                                        <Icon color={this.state.colors[0]} name='circle notched' />
-                                        <span color={this.state.colors[0]}>Tuts</span>
                                     </Menu.Item>
                                     {
                                         (window.innerWidth>this.state.windowSize) ?

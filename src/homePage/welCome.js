@@ -85,6 +85,7 @@ export default class WelcomePage extends Component {
                                         </Header>
                                         <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                                             <Icon size="large" color='green' name='external share' />
+                                            Share this on: {  }
                                             {'  '}
                                                 <Button
                                                     onClick={() => {this.tweetShare();}}

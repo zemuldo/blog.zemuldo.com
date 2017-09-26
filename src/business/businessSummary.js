@@ -235,7 +235,7 @@ class BusinessSummary extends Component {
                                                     <p>Hello</p>
 
                                             }
-                                            <Grid.Column  width={10}>
+                                            <Grid.Column  width={9}>
                                                 {
                                                     (this.state.blogIsLoading) ?
                                                         <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
