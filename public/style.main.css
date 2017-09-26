@@ -1,0 +1,62 @@
+/*
+
+    CopyRight: Danstan Onyango@ZEMULDO.COM
+    Author : Danstan Otieno Onyango
+    Website : http://www.zemuldo.com/
+
+
+*/
+/*
+    Buttons
+ */
+.redMoreButton span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.redMoreButton span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.redMoreButton:hover span {
+    color:orange;
+    padding-right: 25px;
+}
+
+.redMoreButton:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+
+.topicButton span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.topicButton span:after {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -5px;
+    transition: 1s;
+}
+
+.topicButton:hover span {
+    color: orange;
+    padding-right: 3px;
+}
+
+.topicButton:hover span:after {
+    opacity: 1;
+    right: 0;
+}
