@@ -111,6 +111,7 @@ class DevArticles extends Component {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
                 }
+                this.getCounts()
             })
             .catch(exception => {
 
