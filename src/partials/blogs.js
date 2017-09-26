@@ -22,9 +22,8 @@ class Blogs extends Component {
                                 <List.Item key={this.props.blogs[i].title} >
                                     <List.Icon name='leaf' />
                                     <List.Content><Header color='green' as='h3'>{(this.props.blogs[i].title.length>21) ? this.props.blogs[i].title: this.props.blogs[i].title}</Header></List.Content>
-                                    <List.Content>Author: {this.props.blogs[i].author}</List.Content>
-                                    <List.Content>Likes {i}</List.Content>
-                                    <Button size="mini" ref={this.props.blogs[i].title} onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                    <List.Content>Author: {this.props.blogs[i].author}</List.Content><span>Likes:{26}</span>
+                                    <button ref={this.props.blogs[i].title} onClick={() => { this.props.onReadMore(this.props.blogs[i]) }} name="all" style={{color:'blue',backgroundColor:'transparent',border:'none'}}>Read</button>
                                     <hr/>
                                 </List.Item>)
                             }
@@ -35,9 +34,8 @@ class Blogs extends Component {
                                     <List.Item key={this.props.blogs[i].title}>
                                         <List.Icon name='leaf' />
                                         <List.Content><Header color='green' as='h3'>{(this.props.blogs[i].title.length>21) ? this.props.blogs[i].title: this.props.blogs[i].title}</Header></List.Content>
-                                        <List.Content>Author: {this.props.blogs[i].author}</List.Content>
-                                        <List.Content>Likes {i}</List.Content>
-                                        <Button size="mini" ref={this.props.blogs[i].title} onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}  content='Read Full Content' color='green'/>
+                                        <List.Content>Author: {this.props.blogs[i].author}</List.Content><span>Likes:{26}</span>
+                                        <button ref={this.props.blogs[i].title} onClick={() => { this.props.onReadMore(this.props.blogs[i]) }} name="all" style={{color:'blue',backgroundColor:'transparent',border:'none'}}>Read</button>
                                         <hr/>
                                     </List.Item>
                                 )}

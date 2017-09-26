@@ -1,11 +1,12 @@
 import React,{Component} from 'react'
 import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
-import { Timeline } from 'react-twitter-widgets'
 import axios from 'axios';
 import WelcomePage from './welCome'
 import About from '../partials/aboutHome'
 import Blogs from '../partials/blogs'
 import Blog from '../partials/blog'
+import Topics from '../partials/topics'
+import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class HomePage extends Component {
@@ -234,20 +235,8 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>1030) ?
                                                     <Grid.Column  width={3}>
-                                                        <div style={{textAlign:'centre',margin:'2em 0em 0em 0em'}}>
-                                                            <Header color='blue' as='h3'>On Twitter</Header>
-                                                            <Timeline
-                                                                dataSource={{
-                                                                    sourceType: 'profile',
-                                                                    screenName: 'zemuldo'
-                                                                }}
-                                                                options={{
-                                                                    username: 'zemuldo',
-                                                                    height: '300',
-                                                                    width: '30'
-                                                                }}
-                                                            />
-                                                        </div>
+                                                        <Topics/>
+                                                        <TwitterProf/>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
                                             }
