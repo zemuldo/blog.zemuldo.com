@@ -220,10 +220,9 @@ class HomePage extends Component {
                                                                 (this.state.blogs[0]) ?
                                                                     <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
-                                                                        No matching data
+                                                                        <Topics/>
                                                                     </div>
                                                             }
-                                                            <a onClick={this.goToHome}><Header color='orange' as='h4'>More</Header></a>
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
@@ -258,10 +257,9 @@ class HomePage extends Component {
                                                                 (this.state.blogs[0]) ?
                                                                     <Blogs color={this.props.color} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
-                                                                        No matching data
+                                                                        <Topics/>
                                                                     </div>
                                                             }
-                                                            <a  onClick={() => {this.goToHome()}}><Header color='orange' as='h4'>More</Header></a>
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>

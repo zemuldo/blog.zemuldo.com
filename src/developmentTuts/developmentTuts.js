@@ -4,6 +4,7 @@ import axios from 'axios';
 import About from '../partials/aboutHome'
 import Blogs from '../partials/blogs'
 import Blog from '../partials/blog'
+import Topics from '../partials/topics'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class DevArticles extends Component {
@@ -222,11 +223,11 @@ class DevArticles extends Component {
                                                                     (this.state.blogs[0]) ?
                                                                         <Blogs onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                         <div>
-                                                                            No matching data
+                                                                            No Content on this Topic. Browser more Topics.
+                                                                            <Topics/>
                                                                         </div>
                                                                 }
                                                             </List>
-                                                            <a onClick={() => {this.goToHome()}}><Header color='orange' as='h4'>More</Header></a>
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
@@ -274,11 +275,11 @@ class DevArticles extends Component {
                                                                     (this.state.blogs[0]) ?
                                                                         <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                         <div>
-                                                                            No matching data
+                                                                            No Content on this Topic. Browser more Topics.
+                                                                            <Topics/>
                                                                         </div>
                                                                 }
                                                             </List>
-                                                            <a onClick={() => {this.goToHome()}}><Header color='orange' as='h4'>More</Header></a>
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
