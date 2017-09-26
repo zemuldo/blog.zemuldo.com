@@ -20,10 +20,18 @@ class Blog extends Component {
     }
     tweetShare () {
         if(this.props.blog){
-            let shareURL = 'https://twitter.com/intent/tweet?text='+this.props.blog.title.split(' ').join('%20')+'&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'%2F'+'&via=zemuldo'
+            let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blog.title.split(' ').join('%20')+'&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'%2F&hashtags=tech&via=zemuldo&related=http%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
+    }
+    gplusShare () {
+        window.open("https://plus.google.com/share?url="+'http://zemuldo.com/'+this.props.blog.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
+        return false;
+    }
+
+    linkdnShare(){
+        window.open('https://www.linkedin.com/cws/share?url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
     }
     componentDidMount() {
     }
@@ -49,7 +57,7 @@ class Blog extends Component {
                     <sup>{this.props.counts.fbC}</sup>
                     {'   '}
                     <Button
-                        onClick={() => {this.fbShare();}}
+                        onClick={() => {this.linkdnShare();}}
                         circular color='linkedin' icon='linkedin' />
                     <sup>{this.props.counts.gplsC}</sup>
                     {'   '}
