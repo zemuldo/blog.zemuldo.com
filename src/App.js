@@ -84,31 +84,41 @@ class App extends Component {
         }
         window.addEventListener('resize', this.resize)
         if(!this.state.iKnowYou){
-            return axios.get(env.httpURL+'/getIp', {})
+            return axios.post(env.httpURL, {"query":"getIp"})
                 .then(response => {
-                    return axios.get('http://ip-api.com/json/'+response.data.ip, {})
+                    return axios.get('http://ip-api.com/json/'+'197.232.39.171', {})
                 })
                 .then(function (visitorData) {
-                    let o= visitorData.data
-                    if(localStorage.getItem('user')){
-                        o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                        return axios.post(env.httpURL+'/analytics/visitors/new', visitorData.data)
-                    }
-                    else {
-                        if(o.status==='success'){
-                            visitorData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                            return axios.post(env.httpURL+'/analytics/visitors/new', visitorData.data)
-                        }
-                        else {
-                            return axios.post(env.httpURL+'/analytics/visitors/new', visitorData.data)
-                        }
+                   if(visitorData.data.status !=='fail'){
+                       if(localStorage.getItem('user')){
+                           let user = JSON.parse(localStorage.getItem('user'))
+                           let o = visitorData.data;
+                           o.sessionID = user.sessionID
+                           o.query = 'addNewVisitor'
+                           o.known = true
+                           visitorData.data.query = 'addNewVisitor'
+                           return axios.post(env.httpURL, o)
+                       }
+                       else {
+                           let o = visitorData.data;
+                           o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
+                           o.query = 'addNewVisitor'
+                           visitorData.data.query = 'addNewVisitor'
+                           return axios.post(env.httpURL, o)
+                       }
+                   }
+                   else{
+                       return{error:'localhost'}
                     }
                 })
                 .then(function (final) {
-                    sessionStorage.setItem('user',JSON.stringify(final.data))
-                    if(!localStorage.getItem('user')){
-                        localStorage.setItem('user',JSON.stringify(final.data))
-                    }
+                    console.log(final)
+                   if(!final.error){
+                       sessionStorage.setItem('user',JSON.stringify(final.data))
+                       if(!localStorage.getItem('user')){
+                           localStorage.setItem('user',JSON.stringify(final.data))
+                       }
+                   }
                 })
                 .catch(exception => {
                 });
