@@ -33,6 +33,7 @@ class BusinessSummary extends Component {
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.tick = this.tick.bind(this);
         this.getCounts = this.getCounts.bind(this);
+        this.setTopicPosts = this.setTopicPosts.bind(this);
     };
     tick () {
         return axios.post(env.httpURL, {
@@ -139,7 +140,6 @@ class BusinessSummary extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
-        console.log(this.props.current)
         this.countsInteval = setTimeout(this.getCounts, 400);
         this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
@@ -208,6 +208,14 @@ class BusinessSummary extends Component {
                 });
         }
     }
+    setTopicPosts(topicBlogs,topic){
+        if(topicBlogs[0]){
+            this.setState({blogs:topicBlogs,topic:topic})
+        }
+        else {
+            this.setState({blogs:[],topic:topic})
+        }
+    }
     render(){
         return(
             <div>
@@ -221,23 +229,22 @@ class BusinessSummary extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
+                                                        <Topics setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
+                                                            <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
                                                                 icon={<Icon name='search' inverted circular link />}
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.colors[2]} as='h2'>Featured in Business</Header>
-                                                            <List>
-                                                                {
-                                                                    (this.state.blogs[0]) ?
-                                                                        <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
-                                                                        <div>
-                                                                            No Content on this Topic. Browser more Topics.
-                                                                            <Topics/>
-                                                                        </div>
-                                                                }
-                                                            </List>
+                                                            <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                                            {
+                                                                (this.state.blogs[0]) ?
+                                                                    <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                    <div>
+                                                                        No matching content on this Topic
+                                                                    </div>
+                                                            }
                                                         </div>
                                                     </Grid.Column>:
                                                     <p>Hello</p>

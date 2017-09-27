@@ -17,9 +17,6 @@ class TwitterProf extends Component {
     render() {
         return (
             <div>
-
-                <br/>
-                <hr/>
                 <div style={{textAlign:'centre',margin:'2em 0em 0em 0em'}}>
                     <Header color='blue' as='h3'>On Twitter</Header>
                     <Timeline

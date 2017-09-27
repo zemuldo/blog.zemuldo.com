@@ -20,11 +20,14 @@ class Topics extends Component {
         return axios.post(env.httpURL,{
             "query":"getPostsTopic",
             "queryParam":{
-                "topic":"bigdata"
+                "topic":e
             }
         })
             .then(function (blogs) {
                 this.setState({topicBlogs:blogs.data})
+                if(this.props.setTopicPosts){
+                    this.props.setTopicPosts(blogs.data,e)
+                }
             }.bind(this))
             .catch(function (err) {
 
@@ -34,8 +37,8 @@ class Topics extends Component {
     render() {
         return (
             <div>
-                <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 0em'}}>
-                    <Header color='blue' as='h3'>Topics</Header>
+                <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
+                    <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
                     <button className="topicButton" onClick={ this.onTopicClick.bind(this,'bigdata')}  name="bigdata" style={{backgroundColor:'transparent',border:'none'} }><span>BigData</span> |</button>
                     <button className="topicButton" onClick={ this.onTopicClick.bind(this,'bi')}  name="bi" style={{backgroundColor:'transparent',border:'none'} }><span>BI</span> |</button>
                     <button className="topicButton" onClick={ this.onTopicClick.bind(this,'iot')}  name="iot" style={{backgroundColor:'transparent',border:'none'} }><span>IoT</span> |</button>
@@ -66,17 +69,6 @@ class Topics extends Component {
                     <button className="topicButton" onClick={ this.onTopicClick.bind(this,'phones')}  name="phones" style={{backgroundColor:'transparent',border:'none'} }><span>Phones</span> |</button>
                     <button className="topicButton" onClick={ this.onTopicClick.bind(this,'laptops')}  name="laptops" style={{backgroundColor:'transparent',border:'none'} }><span>Laptops</span> |</button>
                     <button className="topicButton" onClick={ this.onTopicClick.bind(this,'wearables')}  name="wearables" style={{backgroundColor:'transparent',border:'none'} }><span>Wearables</span> |</button>
-                </div>
-                <div>
-                    {
-                        this.state.topicBlogs?
-                            <div>
-                                Blogs Here
-                            </div>:
-                            <div>
-
-                            </div>
-                    }
                 </div>
             </div>
         )

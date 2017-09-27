@@ -23,7 +23,8 @@ class HomePage extends Component {
                 fbC:null,
                 twtC:null,
                 gplsC:null
-            }
+            },
+            topic:null
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -35,6 +36,8 @@ class HomePage extends Component {
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.tick = this.tick.bind(this);
         this.setCurrentBlog = this.setCurrentBlog.bind(this);
+        this.setTopicPosts = this.setTopicPosts.bind(this);
+
 
     };
     tick () {
@@ -216,6 +219,15 @@ class HomePage extends Component {
                 });
         }
     }
+
+    setTopicPosts(topicBlogs,topic){
+        if(topicBlogs[0]){
+            this.setState({blogs:topicBlogs,topic:topic})
+        }
+        else {
+            this.setState({blogs:[],topic:topic})
+        }
+    }
     render(){
         return(
             <div>
@@ -229,7 +241,9 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
+                                                        <Topics setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
+                                                            <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
                                                                 icon={<Icon name='search' inverted circular link />}
                                                                 placeholder='Search...'
@@ -240,6 +254,7 @@ class HomePage extends Component {
                                                                 (this.state.blogs[0]) ?
                                                                     <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
+                                                                        No matching content on this Topic
                                                                     </div>
                                                             }
                                                         </div>
@@ -253,7 +268,6 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>1030) ?
                                                     <Grid.Column  width={3}>
-                                                        <Topics/>
                                                         <TwitterProf/>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
@@ -265,17 +279,20 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
+                                                        <Topics setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
+                                                            <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
                                                                 icon={<Icon name='search' inverted circular link />}
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header color={this.props.color} as='h2'>Most Popular</Header>
+                                                            <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
                                                                 (this.state.blogs[0]) ?
-                                                                    <Blogs color={this.props.color} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                    <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
+                                                                        No matching content on this Topic
                                                                     </div>
                                                             }
                                                         </div>

@@ -45,7 +45,6 @@ class Blogs extends Component {
                             }
                         </div>
                 }
-                <Topics/>
             </div>
         )
     }
