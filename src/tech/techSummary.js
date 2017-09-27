@@ -28,7 +28,6 @@ class TechSummary extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.handleData = this.handleData.bind(this);
         this.isLoading = this.isLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
@@ -61,7 +60,6 @@ class TechSummary extends Component {
             }
         })
             .then(response => {
-                console.log(response.data)
                 this.setState({blog:response.data})
                 this.isLoading(true)
                 this.setState({blogIsLoading:false})
@@ -152,7 +150,6 @@ class TechSummary extends Component {
             this._handleChangeBodySize(16)
         }
 
-        this.handleData()
         window.addEventListener('resize', this.resize)
         return axios.post(env.httpURL, {
             "query":"getPosts",
@@ -178,29 +175,6 @@ class TechSummary extends Component {
     }
     isLoading(value){
         this.setState({ isLoaded: value });
-    };
-    handleData(){
-        return axios.post(env.httpURL, {
-            "query":"getPosts",
-            "queryParam":{
-                "type":this.props.current
-            }
-        })
-            .then(response => {
-                if(response.data[0]){
-                    this.setState({blogs:response.data,})
-                }
-                else {
-                    this.setState({blogs:[],blog:null})
-                }
-                this.isLoading(true)
-                return response[0].data
-            })
-            .catch(exception => {
-                this.setState({blogs:[],blog:null})
-                this.isLoading(true)
-                return exception
-            });
     };
 
     handleFilterChange(e) {

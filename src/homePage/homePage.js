@@ -111,6 +111,7 @@ class HomePage extends Component {
                     this.setState({blog:response.data})
                     this.isLoading(true)
                     this.setState({blogIsLoading:false})
+                    this.isLoading(true)
                     window.scrollTo(0,0)
                 }
 
@@ -143,7 +144,6 @@ class HomePage extends Component {
             this._handleChangeBodySize(16)
         }
 
-        this.handleData()
         window.addEventListener('resize', this.resize)
         return axios.post(env.httpURL, {
             "query":"getAllPosts",
@@ -152,6 +152,7 @@ class HomePage extends Component {
             .then(response => {
                 if(response.data[0]){
                     this.setState({blogs:response.data})
+                    this.isLoading(true)
                 }
             })
             .catch(exception => {

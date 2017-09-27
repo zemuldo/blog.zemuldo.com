@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button,List,Header} from 'semantic-ui-react'
+import { List,Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import Topics from '../partials/topics'
 import _ from 'lodash'

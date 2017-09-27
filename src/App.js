@@ -108,11 +108,10 @@ class App extends Component {
                        }
                    }
                    else{
-                       return{error:'localhost'}
+                       return{error:'user at localhost'}
                     }
                 })
                 .then(function (final) {
-                    console.log(final)
                    if(!final.error){
                        sessionStorage.setItem('user',JSON.stringify(final.data))
                        if(!localStorage.getItem('user')){
@@ -157,7 +156,7 @@ class App extends Component {
                 </div>
                 <Helmet>
                     <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
-                    <meta name="owner" content="ZemuldO-Home" />
+                    <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <div>
                     {

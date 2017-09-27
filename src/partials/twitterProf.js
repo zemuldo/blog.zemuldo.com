@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {  Menu, Button,Icon,Header,Modal} from 'semantic-ui-react'
+import {  Header } from 'semantic-ui-react'
 import { Timeline } from 'react-twitter-widgets'
-import ReviewPortal from './portal'
-/*import config from '../environments/conf'
+/*import ReviewPortal from './portal'
+import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
 class TwitterProf extends Component {
     constructor(props){
