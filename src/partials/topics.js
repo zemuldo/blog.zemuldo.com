@@ -14,9 +14,9 @@ class Topics extends Component {
 
         };
         this.onTopicClick = this.onTopicClick.bind(this);
-
     };
     onTopicClick = (e) => {
+        this.props.blogsAreLoading(false)
         return axios.post(env.httpURL,{
             "query":"getPostsTopic",
             "queryParam":{
@@ -29,9 +29,7 @@ class Topics extends Component {
                     this.props.setTopicPosts(blogs.data,e)
                 }
             }.bind(this))
-            .catch(function (err) {
-
-            })
+            .catch(function (err) {})
     }
 
     render() {
