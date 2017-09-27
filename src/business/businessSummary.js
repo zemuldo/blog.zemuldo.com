@@ -222,7 +222,7 @@ class BusinessSummary extends Component {
                         <div>
                             {
                                 (window.innerWidth>503) ?
-                                    <Grid columns={2} divided>
+                                    <Grid columns={2}>
                                         <Grid.Row>
                                             {
                                                 (window.innerWidth>600) ?
