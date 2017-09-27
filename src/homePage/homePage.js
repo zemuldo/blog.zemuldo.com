@@ -240,7 +240,6 @@ class HomePage extends Component {
                                                                 (this.state.blogs[0]) ?
                                                                     <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
-                                                                        <Topics/>
                                                                     </div>
                                                             }
                                                         </div>
@@ -277,7 +276,6 @@ class HomePage extends Component {
                                                                 (this.state.blogs[0]) ?
                                                                     <Blogs color={this.props.color} blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                     <div>
-                                                                        <Topics/>
                                                                     </div>
                                                             }
                                                         </div>
