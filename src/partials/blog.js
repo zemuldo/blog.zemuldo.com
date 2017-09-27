@@ -70,7 +70,7 @@ class Blog extends Component {
                     <br/>
                     Published on:  {this.props.blog.date}  By {this.props.blog.author}
                 </div>
-                <hr color={this.props.color}/>
+                <hr  color={this.props.color}/>
                 <div style={{margin: '3em 1em 3em 2em', display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                     <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
                     <br/>
