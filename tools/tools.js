@@ -16,8 +16,8 @@ module.exports = {
             '</head>\n' +
             '<body>\n' +
             '<div style="margin: 4% 20% 0% 20%;">' +
-            '<h2 style="text-align: center">' +details.title+
-            '</h2>'+
+            '<h1 style="text-align: center">' +details.title+
+            '</h1>'+
             '<img style="height:20%;  width:60%; margin-left: 20%" src='+details.imgSRC+'>'+
             '<hr >'+
             '<p style="text-align: left;">\n' +details.description+
