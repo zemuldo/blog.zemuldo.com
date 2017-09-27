@@ -35,12 +35,12 @@ export default class ReviewPortal extends Component {
         e.preventDefault();
         let review = {
             body:this.state.message,
-            user:JSON.parse(sessionStorage.getItem('user')).sessionID
+            user:JSON.parse(sessionStorage.getItem('user')).sessionID,
+            query:"addNewReview"
         }
         this.setState({ checked: true });
         setTimeout(function() { this.setState({portalOpen: false}); }.bind(this),1500);
-        return axios.post(env.httpURL+'/analytics/visitors/review',review, {
-        })
+        return axios.post(env.httpURL, review)
             .then(function (success) {
             })
             .catch(function (err) {
