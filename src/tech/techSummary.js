@@ -141,7 +141,6 @@ class TechSummary extends Component {
     resize = () => this.forceUpdate()
     componentDidMount() {
         this.countsInteval = setTimeout(this.getCounts, 400);
-        this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
         if(window.innerWidth<503){
             this._handleChangeBodySize(16)
@@ -170,7 +169,6 @@ class TechSummary extends Component {
     }
     componentWillUnmount() {
         clearInterval(this.countsInteval);
-        clearInterval(this.interval);
         window.removeEventListener('resize', this.resize)
     }
     isLoading(value){

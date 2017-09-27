@@ -138,7 +138,6 @@ class HomePage extends Component {
             url = url.split('%2520').join(' ')
             this.setCurrentBlog(url.split('%2520').join(' '))
         }
-        this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
         if(window.innerWidth<503){
             this._handleChangeBodySize(16)
@@ -163,7 +162,6 @@ class HomePage extends Component {
             });
     }
     componentWillUnmount() {
-        clearInterval(this.interval);
         window.removeEventListener('resize', this.resize)
     }
     isLoading(value){
