@@ -36,7 +36,12 @@ class BusinessSummary extends Component {
         this.getCounts = this.getCounts.bind(this);
     };
     tick () {
-        return Promise.all([axios.get(env.httpURL+'/posts/business', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getPosts",
+            "queryParam":{
+                "type":this.props.current
+            }
+        })
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -48,9 +53,15 @@ class BusinessSummary extends Component {
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
-        return axios.get(env.httpURL+'/posts/'+ thisBlog.type +'/'+thisBlog.title, {
+        return axios.post(env.httpURL, {
+            "query":"getPost",
+            "queryParam":{
+                "title":thisBlog.title,
+                "type":this.props.current
+            }
         })
             .then(response => {
+                console.log(response.data)
                 this.setState({blog:response.data})
                 this.isLoading(true)
                 this.setState({blogIsLoading:false})
@@ -130,6 +141,7 @@ class BusinessSummary extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        console.log(this.props.current)
         this.countsInteval = setTimeout(this.getCounts, 400);
         this.interval = setInterval(this.tick, 30000);
         this.forceUpdate()
@@ -142,10 +154,16 @@ class BusinessSummary extends Component {
 
         this.handleData()
         window.addEventListener('resize', this.resize)
-        return Promise.all([axios.get(env.httpURL+'/posts/business', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getPosts",
+            "queryParam":{
+                "type":this.props.current
+            }
+        })
             .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data})
+                if(response.data[0]){
+                    this.setState({blogs:response.data})
+                    this.onReadMore(response.data[0])
                 }
                 this.getCounts()
             })
@@ -162,10 +180,15 @@ class BusinessSummary extends Component {
         this.setState({ isLoaded: value });
     };
     handleData(){
-        return Promise.all([axios.get(env.httpURL+'/posts/business', {}),axios.get(env.httpURL+'/posts/business/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getPosts",
+            "queryParam":{
+                "type":this.props.current
+            }
+        })
             .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data,blog:response[0].data[0]})
+                if(response.data[0]){
+                    this.setState({blogs:response.data,})
                 }
                 else {
                     this.setState({blogs:[],blog:null})
@@ -181,9 +204,14 @@ class BusinessSummary extends Component {
     };
 
     handleFilterChange(e) {
-        //e.preventDefault();
+        e.preventDefault();
         if(e.target.value===''){
-            return axios.get(env.httpURL+'/post/tech', {})
+            return axios.post(env.httpURL, {
+                "query":"getPosts",
+                "queryParam":{
+                    "type":this.props.current
+                }
+            })
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
@@ -191,7 +219,13 @@ class BusinessSummary extends Component {
                 });
         }
         else {
-            return axios.get(env.httpURL+'/filter/'+e.target.value, {})
+            return axios.post(env.httpURL, {
+                "query":"getFiltered",
+                "queryParam":{
+                    "filter":e.target.value,
+                    "type":this.props.current
+                }
+            })
                 .then(response => {
                     this.setState({blogs:response.data})
                 })

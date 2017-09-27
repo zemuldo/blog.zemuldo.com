@@ -317,12 +317,12 @@ class App extends Component {
                 </div>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.currentLocation ==='login') ? <Login color={this.state.colors[0]} current={this.state.current} colors={this.state.colors} /> :
-                        (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} colors={this.state.colors}  current={this.state.current} /> :
-                        (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} colors={this.state.colors} current={this.state.current} /> :
-                        (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} colors={this.state.colors} current={this.state.current} /> :
-                        (this.state.currentLocation === 'dev') ? <DevArticles color={this.state.colors[0]} colors={this.state.colors} current={this.state.current} /> :
-                        <HomePage color={this.state.colors[1]} colors={this.state.colors} current={this.state.current} />
+                        (this.state.currentLocation ==='login') ? <Login color={this.state.colors[0]} current={this.state.currentLocation} colors={this.state.colors} /> :
+                        (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} colors={this.state.colors}  current={this.state.currentLocation} /> :
+                        (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} colors={this.state.colors} current={this.state.currentLocation} /> :
+                        (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} colors={this.state.colors} current={this.state.currentLocation} /> :
+                        (this.state.currentLocation === 'dev') ? <DevArticles color={this.state.colors[0]} colors={this.state.colors} current={this.state.currentLocation} /> :
+                        <HomePage color={this.state.colors[1]} colors={this.state.colors} current={this.state.currentLocation} />
                     }
                 </div>
                 <Footer color={this.state.colors[0]} corrent={this.state.current}/>
@@ -331,5 +331,3 @@ class App extends Component {
     }
 }
 export default App;
-
-//add tweet photo, "pic.twitter.com/Ew9ZJJDPAR"

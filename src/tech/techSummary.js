@@ -36,7 +36,12 @@ class TechSummary extends Component {
         this.getCounts = this.getCounts.bind(this);
     };
     tick () {
-        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
+        return axios.post(env.httpURL, {
+            "query":"getPosts",
+            "queryParam":{
+                "type":this.props.current
+            }
+        })
             .then(response => {
                 if(response[0].data[0]){
                     this.setState({blogs:response[0].data})
@@ -48,9 +53,15 @@ class TechSummary extends Component {
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
-        return axios.get(env.httpURL+'/posts/'+ thisBlog.type +'/'+thisBlog.title, {
+        return axios.post(env.httpURL, {
+            "query":"getPost",
+            "queryParam":{
+                "title":thisBlog.title,
+                "type":this.props.current
+            }
         })
             .then(response => {
+                console.log(response.data)
                 this.setState({blog:response.data})
                 this.isLoading(true)
                 this.setState({blogIsLoading:false})
@@ -93,57 +104,6 @@ class TechSummary extends Component {
     _handleChangeBodySize(size){
         this.setState({bodySize:size})
     }
-    resize = () => this.forceUpdate()
-    componentDidMount() {
-        this.countsInteval = setTimeout(this.getCounts, 400);
-        this.interval = setInterval(this.tick, 30000);
-        this.forceUpdate()
-        if(window.innerWidth<503){
-            this._handleChangeBodySize(16)
-        }
-        if(window.innerWidth>503){
-            this._handleChangeBodySize(16)
-        }
-
-        this.handleData()
-        window.addEventListener('resize', this.resize)
-        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
-            .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data})
-                }
-                this.getCounts()
-            })
-            .catch(exception => {
-
-            });
-    }
-    componentWillUnmount() {
-        clearInterval(this.countsInteval);
-        clearInterval(this.interval);
-        window.removeEventListener('resize', this.resize)
-    }
-    isLoading(value){
-        this.setState({ isLoaded: value });
-    };
-    handleData(){
-        return Promise.all([axios.get(env.httpURL+'/posts/tech', {}),axios.get(env.httpURL+'/posts/tech/How to keep your Customers', {})])
-            .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data,blog:response[0].data[0]})
-                }
-                else {
-                    this.setState({blogs:[],blog:null})
-                }
-                this.isLoading(true)
-                return response[0].data
-            })
-            .catch(exception => {
-                this.setState({blogs:[],blog:null})
-                this.isLoading(true)
-                return exception
-            });
-    };
     getCounts(){
         if(this.state.blog){
             let gplusPost = {
@@ -179,10 +139,79 @@ class TechSummary extends Component {
         }
 
     }
+    resize = () => this.forceUpdate()
+    componentDidMount() {
+        console.log(this.props.current)
+        this.countsInteval = setTimeout(this.getCounts, 400);
+        this.interval = setInterval(this.tick, 30000);
+        this.forceUpdate()
+        if(window.innerWidth<503){
+            this._handleChangeBodySize(16)
+        }
+        if(window.innerWidth>503){
+            this._handleChangeBodySize(16)
+        }
+
+        this.handleData()
+        window.addEventListener('resize', this.resize)
+        return axios.post(env.httpURL, {
+            "query":"getPosts",
+            "queryParam":{
+                "type":this.props.current
+            }
+        })
+            .then(response => {
+                if(response.data[0]){
+                    this.setState({blogs:response.data})
+                    this.onReadMore(response.data[0])
+                }
+                this.getCounts()
+            })
+            .catch(exception => {
+
+            });
+    }
+    componentWillUnmount() {
+        clearInterval(this.countsInteval);
+        clearInterval(this.interval);
+        window.removeEventListener('resize', this.resize)
+    }
+    isLoading(value){
+        this.setState({ isLoaded: value });
+    };
+    handleData(){
+        return axios.post(env.httpURL, {
+            "query":"getPosts",
+            "queryParam":{
+                "type":this.props.current
+            }
+        })
+            .then(response => {
+                if(response.data[0]){
+                    this.setState({blogs:response.data,})
+                }
+                else {
+                    this.setState({blogs:[],blog:null})
+                }
+                this.isLoading(true)
+                return response[0].data
+            })
+            .catch(exception => {
+                this.setState({blogs:[],blog:null})
+                this.isLoading(true)
+                return exception
+            });
+    };
+
     handleFilterChange(e) {
-        //e.preventDefault();
+        e.preventDefault();
         if(e.target.value===''){
-            return axios.get(env.httpURL+'/post/tech', {})
+            return axios.post(env.httpURL, {
+                "query":"getPosts",
+                "queryParam":{
+                    "type":this.props.current
+                }
+            })
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
@@ -190,7 +219,13 @@ class TechSummary extends Component {
                 });
         }
         else {
-            return axios.get(env.httpURL+'/filter/'+e.target.value, {})
+            return axios.post(env.httpURL, {
+                "query":"getFiltered",
+                "queryParam":{
+                    "filter":e.target.value,
+                    "type":this.props.current
+                }
+            })
                 .then(response => {
                     this.setState({blogs:response.data})
                 })
