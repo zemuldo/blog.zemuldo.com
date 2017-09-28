@@ -159,7 +159,7 @@ class TechSummary extends Component {
         })
             .then(response => {
                 if(response.data[0]){
-                    this.setState({blogs:response.data})
+                    this.setState({blogs:response.data,blog:response.data[0]})
                     this.isLoading(true)
                 }
                 else {
