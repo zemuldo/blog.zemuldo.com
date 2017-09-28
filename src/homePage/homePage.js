@@ -158,6 +158,10 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                     this.isLoading(true)
                 }
+                else {
+                    this.setState({blogs:[]})
+                    this.isLoading(true)
+                }
             })
             .catch(exception => {
 

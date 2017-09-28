@@ -160,7 +160,11 @@ class DevArticles extends Component {
             .then(response => {
                 if(response.data[0]){
                     this.setState({blogs:response.data})
-                    this.onReadMore(response.data[0])
+                    this.isLoading(true)
+                }
+                else {
+                    this.setState({blogs:[]})
+                    this.isLoading(true)
                 }
                 this.getCounts()
             })
