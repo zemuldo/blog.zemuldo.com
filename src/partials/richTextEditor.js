@@ -61,100 +61,89 @@ class RichEditorExample extends React.Component {
             )
         );
     }
-    logState = () => {
+    publish = () => {
         const content = localStorage.getItem('draftContent');
-        console.log(content);
-        let save = {
-            query:"addRichText",
-            title:"What is Javascript",
-            queryParam:{draftConten:content}
-        }
-        axios.post("http://localhost:8090",save)
-
-            .then(function (success) {
-                console.log(success)
+        axios.post(env.httpURL, {
+            title:"What is Java",
+            type:"business",
+            query:"newPost",
+            topics:["bigdata","development","startup","java"],
+            images:["blogs_pic.jpg"],
+            author:"Danstan Onyango",
+            body:content
+        })
+            .then(response => {
+                console.log(response)
             })
-            .catch(function (err) {
+            .catch(err => {
                 console.log(err)
-            })
+            });
     };
     saveContent = debounce((content) => {
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
-        fetch('http://localhost:8090', {
-            query:"addRichText",
-          method: 'POST',
-          body: JSON.stringify({
-            queryParam:{content: convertToRaw(content),}
-          }),
-          headers: new Headers({
-            'Content-Type': 'application/json'
-          })
-        })
-      }, 1000);
+    }, 1000);
 
-      componentDidMount() {
+    componentDidMount() {
         this.handleEditorState()
-      }
-      handleEditorState(){
-          axios.post(env.httpURL, {
-            "query":"getRichText",
-            "queryParam":{}
-        })
-            .then(response => {
-                const draftState = response.data[0].draftConten
-                this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(draftState))),isLoading:true});
-            })
-            .catch(exception => {
-               this.state.editorState = EditorState.createEmpty();
-            });
+        console.log(this.props)
+    }
+    handleEditorState(){
+        const editorState = window.localStorage.getItem('draftContent')
+        if(editorState){
+            this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState))),isLoading:true});
+        }
+        else {
+            this.setState({editorState : EditorState.createEmpty()});
+        }
     };
     render() {
         const {editorState} = this.state;
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
         let className = 'RichEditor-editor';
-        var contentState = editorState.getCurrentContent();
+        let contentState = editorState.getCurrentContent();
         if (!contentState.hasText()) {
             if (contentState.getBlockMap().first().getType() !== 'unstyled') {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
         return (
-           <div>
-               {
-                   this.state.isLoading?<div>
-               <div className="RichEditor-root">
-                   <BlockStyleControls
-                       editorState={editorState}
-                       onToggle={this.toggleBlockType}
-                   />
-                   <InlineStyleControls
-                       editorState={editorState}
-                       onToggle={this.toggleInlineStyle}
-                   />
-                   <div className={className} onClick={this.focus}>
-                       <Editor
-                           blockStyleFn={getBlockStyle}
-                           customStyleMap={styleMap}
-                           editorState={editorState}
-                           handleKeyCommand={this.handleKeyCommand}
-                           onChange={this.onChange}
-                           onTab={this.onTab}
-                           placeholder="Tell a story..."
-                           ref="editor"
-                           spellCheck={true}
-                       />
-                   </div>
-               </div>
-               <input
-                   onClick={this.logState}
-                   type="button"
-                   value="Log State"
-               />
-           </div>:
-           <Loader active inline='centered' />
-               }
-           </div>
+            <div>
+                {
+                    this.state.isLoading?
+                        <div>
+                            <div className="RichEditor-root">
+                                <BlockStyleControls
+                                    editorState={editorState}
+                                    onToggle={this.toggleBlockType}
+                                />
+                                <InlineStyleControls
+                                    editorState={editorState}
+                                    onToggle={this.toggleInlineStyle}
+                                />
+                                <div className={className} onClick={this.focus}>
+                                    <Editor
+                                        blockStyleFn={getBlockStyle}
+                                        customStyleMap={styleMap}
+                                        editorState={editorState}
+                                        handleKeyCommand={this.handleKeyCommand}
+                                        onChange={this.onChange}
+                                        onTab={this.onTab}
+                                        placeholder="Tell a story..."
+                                        ref="editor"
+                                        spellCheck={true}
+                                    />
+                                </div>
+                            </div>
+                            <input
+                                onClick={this.publish}
+                                type="button"
+                                value="Publish"
+                            />
+                        </div>:
+                        <Loader active inline='centered' />
+                }
+            </div>
         );
     }
 }
