@@ -87,7 +87,6 @@ class RichEditorExample extends React.Component {
         this.handleEditorState()
     }
     handleEditorState(){
-        const editorState = window.localStorage.getItem('draftContent')
         if(this.props.body){
             this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)))});
             this.isLoading(true)
@@ -129,7 +128,7 @@ class RichEditorExample extends React.Component {
                                         handleKeyCommand={this.handleKeyCommand}
                                         onChange={this.onChange}
                                         onTab={this.onTab}
-                                        placeholder="Tell a story..."
+                                        placeholder="Content not available."
                                         ref="editor"
                                         spellCheck={true}
                                     />

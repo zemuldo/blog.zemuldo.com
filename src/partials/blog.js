@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button,Image, Header, Icon} from 'semantic-ui-react'
+import BlogEditor from '../partials/richTextEditor'
 import 'semantic-ui-css/semantic.min.css';
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
@@ -74,11 +75,7 @@ class Blog extends Component {
                 <div style={{margin: '3em 1em 3em 2em', display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                     <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
                     <br/>
-                    <p>
-                        {
-                            this.props.blog.body
-                        }
-                    </p>
+                    <BlogEditor body={this.props.blog.body}/>
                 </div>
 
             </div>
