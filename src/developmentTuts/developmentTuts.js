@@ -34,6 +34,7 @@ class DevArticles extends Component {
         this.tick = this.tick.bind(this);
         this.getCounts = this.getCounts.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
+        this.blogsAreLoading = this.blogsAreLoading.bind(this);
     };
     tick () {
         return axios.post(env.httpURL, {
@@ -209,10 +210,15 @@ class DevArticles extends Component {
     setTopicPosts(topicBlogs,topic){
         if(topicBlogs[0]){
             this.setState({blogs:topicBlogs,topic:topic})
+            this.blogsAreLoading(true)
         }
         else {
             this.setState({blogs:[],topic:topic})
+            this.blogsAreLoading(true)
         }
+    }
+    blogsAreLoading(state){
+        this.setState({blogsLoading:!state})
     }
     render(){
         return(
@@ -227,7 +233,7 @@ class DevArticles extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
-                                                        <Topics setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
+                                                        <Topics blogsAreLoading={this.blogsAreLoading} setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                             <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
@@ -237,10 +243,18 @@ class DevArticles extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                (this.state.blogs[0]) ?
-                                                                    <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                this.state.blogsLoading?
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
+                                                                    </div>:
                                                                     <div>
-                                                                        No matching content on this Topic
+                                                                        {
+                                                                            (this.state.blogs[0]) ?
+                                                                                <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                                <div>
+                                                                                    No matching content on this Topic
+                                                                                </div>
+                                                                        }
                                                                     </div>
                                                             }
                                                         </div>
@@ -278,7 +292,7 @@ class DevArticles extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
-                                                        <Topics setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
+                                                        <Topics blogsAreLoading={this.blogsAreLoading} setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                             <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
@@ -288,10 +302,18 @@ class DevArticles extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                (this.state.blogs[0]) ?
-                                                                    <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                this.state.blogsLoading?
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
+                                                                    </div>:
                                                                     <div>
-                                                                        No matching content on this Topic
+                                                                        {
+                                                                            (this.state.blogs[0]) ?
+                                                                                <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                                <div>
+                                                                                    No matching content on this Topic
+                                                                                </div>
+                                                                        }
                                                                     </div>
                                                             }
                                                         </div>

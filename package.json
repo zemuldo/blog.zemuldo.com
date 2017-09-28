@@ -19,6 +19,7 @@
     "react-file-download": "^0.3.4",
     "react-geolocated": "^2.0.0",
     "react-helmet": "^5.2.0",
+    "react-icons": "^2.2.5",
     "react-native": "^0.48.3",
     "react-native-websocket": "^1.0.1",
     "react-tabs": "^1.1.0",

@@ -292,7 +292,7 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
-                                                        <Topics setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
+                                                        <Topics blogsAreLoading={this.blogsAreLoading} setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                             <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
@@ -302,10 +302,18 @@ class HomePage extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                (this.state.blogs[0]) ?
-                                                                    <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                this.state.blogsLoading?
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
+                                                                    </div>:
                                                                     <div>
-                                                                        No matching content on this Topic
+                                                                        {
+                                                                            (this.state.blogs[0]) ?
+                                                                                <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                                <div>
+                                                                                    No matching content on this Topic
+                                                                                </div>
+                                                                        }
                                                                     </div>
                                                             }
                                                         </div>
