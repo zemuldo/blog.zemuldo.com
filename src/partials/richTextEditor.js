@@ -12,7 +12,7 @@ class RichEditorExample extends React.Component {
         super(props);
         this.state = {
             editorState:EditorState.createEmpty(),
-            isLoading:false
+            isLoaded:false
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.onTab = this._onTab.bind(this);
@@ -85,12 +85,12 @@ class RichEditorExample extends React.Component {
 
     componentDidMount() {
         this.handleEditorState()
-        console.log(this.props)
     }
     handleEditorState(){
         const editorState = window.localStorage.getItem('draftContent')
-        if(editorState){
-            this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState))),isLoading:true});
+        if(this.props.body){
+            this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)))});
+            this.isLoading(true)
         }
         else {
             this.setState({editorState : EditorState.createEmpty()});
@@ -110,7 +110,7 @@ class RichEditorExample extends React.Component {
         return (
             <div>
                 {
-                    this.state.isLoading?
+                    this.state.isLoaded?
                         <div>
                             <div className="RichEditor-root">
                                 <BlockStyleControls

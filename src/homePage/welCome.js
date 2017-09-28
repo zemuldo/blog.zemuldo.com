@@ -79,7 +79,6 @@ export default class WelcomePage extends Component {
 
                                     </div>:
                                     <div>
-                                        <BlogEditor/>
                                         <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                             {
                                                 this.props.blog.title
@@ -116,11 +115,7 @@ export default class WelcomePage extends Component {
                                         <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
                                             <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
                                             <br/>
-                                            <p>
-                                                {
-                                                    this.props.blog.body
-                                                }
-                                            </p>
+                                            <BlogEditor body={this.props.blog.body}/>
                                         </div>
 
                                     </div>
