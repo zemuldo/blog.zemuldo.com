@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Button,Image, Header,Loader,Icon} from 'semantic-ui-react'
 import axios from 'axios'
+import BlogEditor from '../partials/richTextEditor'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
 export default class WelcomePage extends Component {
@@ -78,6 +79,7 @@ export default class WelcomePage extends Component {
 
                                     </div>:
                                     <div>
+                                        <BlogEditor/>
                                         <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                             {
                                                 this.props.blog.title
