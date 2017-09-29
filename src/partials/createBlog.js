@@ -85,14 +85,6 @@ class RichEditorExample extends React.Component {
         let obj = JSON.parse(content)
         let title = obj.blocks[0].text
         obj.blocks.splice(0,1)
-        let x = {
-            title:title,
-            type:cats[blogData.type],
-            query:"newPost",
-            topics:blogData.topics,
-            images:["blogs_pic.jpg"],
-            author:"Danstan Onyango",
-        }
         axios.post(env.httpURL, {
             type:cats[blogData.type],
             title:title,
