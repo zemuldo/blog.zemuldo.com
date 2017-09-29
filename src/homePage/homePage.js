@@ -52,6 +52,7 @@ class HomePage extends Component {
         this.setState({blogLoaded:!state})
     }
     onReadMore(thisBlog){
+        console.log(thisBlog)
         this.setState({blogIsLoading:true})
         return axios.post(env.httpURL, {
             "query":"getPost",
@@ -60,6 +61,7 @@ class HomePage extends Component {
             }
         })
             .then(response => {
+                console.log(response)
                 this.setState({blog:response.data})
                 this.setState({blogIsLoading:false})
                 window.scrollTo(0,0)
@@ -153,7 +155,7 @@ class HomePage extends Component {
             "query":"getAllPosts",
             "queryParam":{}
         })
-            .then(response => {
+            .then(function (response) {
                 if(response.data[0]){
                     this.setState({blogs:response.data})
                     this.homePageIsLoading(false)
@@ -164,12 +166,13 @@ class HomePage extends Component {
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
                 }
-            })
-            .catch(exception => {
+            }.bind(this))
+            .catch(function (err) {
+                console.log(err)
                 this.setState({blogs:[]})
                 this.homePageIsLoading(false)
                 this.blogsAreLoading(false)
-            });
+            }.bind(this))
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)

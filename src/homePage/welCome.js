@@ -27,8 +27,8 @@ export default class WelcomePage extends Component {
             let hashTgs = '%2F&hashtags='+this.props.blog.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=http%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let url= '\n&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'_'+this.props.blog.date.split(' ').join('-')
-            let fullURL = url+related+via+hashTgs
+            let url= '&url=http%3A%2F%2Fzemuldo.com/'+this.props.blog.title.split(' ').join('-')+'_'+this.props.blog.date.split(' ').join('-')
+            let fullURL = url+related+hashTgs+via
             let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blog.title+fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
