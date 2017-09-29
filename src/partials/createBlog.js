@@ -46,7 +46,6 @@ class RichEditorExample extends React.Component {
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
-        console.log(localStorage.getItem('draftContent'))
 
     }
     focus = () => this.refs.editor.focus();
@@ -81,7 +80,6 @@ class RichEditorExample extends React.Component {
     publish = () => {
         const content = localStorage.getItem('draftContent');
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        console.log(blogData)
         let obj = JSON.parse(content)
         let title = obj.blocks[0].text
         obj.blocks.splice(0,1)
@@ -95,10 +93,14 @@ class RichEditorExample extends React.Component {
             body:JSON.stringify(obj),
         })
             .then(response => {
-                console.log(response)
+                if(response.data.state===true){
+                    window.localStorage.removeItem('blogData')
+                    window.localStorage.removeItem('draftContent')
+                    localStorage.clear();
+                    this.setState({maliza:false})
+                }
             })
             .catch(err => {
-                console.log(err)
             });
     };
     saveContent = debounce((content) => {
@@ -119,15 +121,12 @@ class RichEditorExample extends React.Component {
         }
     };
     handleCategoryChange(e,data){
-        console.log(data.value)
         this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
     }
     handleTopicChange(e,data){
-        console.log(data)
         this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
     }
     handleUTAChange(e,data){
-        console.log(data.checked)
         this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
     }
     onFinishClick(){

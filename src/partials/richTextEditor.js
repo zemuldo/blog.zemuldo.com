@@ -1,12 +1,10 @@
 import React from 'react';
 import axios from 'axios'
-import ReactDOM from 'react-dom';
 import debounce from 'lodash/debounce';
 import {convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
+import { Loader} from 'semantic-ui-react'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
@@ -29,7 +27,6 @@ class RichEditorExample extends React.Component {
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
-        console.log(localStorage.getItem('draftContent'))
 
     }
     focus = () => this.refs.editor.focus();
@@ -73,10 +70,8 @@ class RichEditorExample extends React.Component {
             body:content
         })
             .then(response => {
-                console.log(response)
             })
             .catch(err => {
-                console.log(err)
             });
     };
     saveContent = debounce((content) => {
@@ -112,16 +107,9 @@ class RichEditorExample extends React.Component {
                     this.state.isLoaded?
                         <div>
                             <div className="RichEditor-root">
-                                <BlockStyleControls
-                                    editorState={editorState}
-                                    onToggle={this.toggleBlockType}
-                                />
-                                <InlineStyleControls
-                                    editorState={editorState}
-                                    onToggle={this.toggleInlineStyle}
-                                />
                                 <div className={className} onClick={this.focus}>
                                     <Editor
+                                        readOnly
                                         blockStyleFn={getBlockStyle}
                                         customStyleMap={styleMap}
                                         editorState={editorState}
@@ -134,11 +122,6 @@ class RichEditorExample extends React.Component {
                                     />
                                 </div>
                             </div>
-                            <input
-                                onClick={this.publish}
-                                type="button"
-                                value="Publish"
-                            />
                         </div>:
                         <Loader active inline='centered' />
                 }
