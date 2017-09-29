@@ -3,16 +3,27 @@ import axios from 'axios'
 import ReactDOM from 'react-dom';
 import debounce from 'lodash/debounce';
 import {convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
+import {Button,Form, Segment,Image,Header, Icon, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
 import config from '../environments/conf'
+import EditorsForm from './editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
-
+const cats = {
+    Development:'dev',
+    Business:'business',
+    Technology:'tech'
+}
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             editorState:EditorState.createEmpty(),
-            isLoading:false
+            isLoaded:false,
+            category:null,
+            topics:null,
+            termsAccept:false,
+            dialogInComplete:true,
+            maliza:false,
+            continueEdit:false
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.onTab = this._onTab.bind(this);
@@ -21,7 +32,13 @@ class RichEditorExample extends React.Component {
         this.saveContent = this.saveContent.bind(this);
         this.handleEditorState = this.handleEditorState.bind(this);
         this.isLoading = this.isLoading.bind(this);
+        this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleTopicChange = this.handleTopicChange.bind(this);
+        this.handleUTAChange = this.handleUTAChange.bind(this);
+        this.onFinishClick = this.onFinishClick.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
+
     isLoading(value){
         this.setState({ isLoaded: value });
     };
@@ -63,14 +80,27 @@ class RichEditorExample extends React.Component {
     }
     publish = () => {
         const content = localStorage.getItem('draftContent');
-        axios.post(env.httpURL, {
-            title:"What is Java",
-            type:"business",
+        const blogData = JSON.parse(localStorage.getItem('blogData'))
+        console.log(blogData)
+        let obj = JSON.parse(content)
+        let title = obj.blocks[0].text
+        obj.blocks.splice(0,1)
+        let x = {
+            title:title,
+            type:cats[blogData.type],
             query:"newPost",
-            topics:["bigdata","development","startup","java"],
+            topics:blogData.topics,
             images:["blogs_pic.jpg"],
             author:"Danstan Onyango",
-            body:content
+        }
+        axios.post(env.httpURL, {
+            type:cats[blogData.type],
+            title:title,
+            query:"newPost",
+            topics:blogData.topics,
+            images:["blogs_pic.jpg"],
+            author:"Danstan Onyango",
+            body:JSON.stringify(obj),
         })
             .then(response => {
                 console.log(response)
@@ -89,12 +119,34 @@ class RichEditorExample extends React.Component {
     handleEditorState(){
         const editorState = window.localStorage.getItem('draftContent')
         if(editorState){
-            this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState))),isLoading:true});
+            this.setState({maliza:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)))});
+            this.isLoading(true)
         }
         else {
             this.setState({editorState : EditorState.createEmpty()});
         }
     };
+    handleCategoryChange(e,data){
+        console.log(data.value)
+        this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    handleTopicChange(e,data){
+        console.log(data)
+        this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    handleUTAChange(e,data){
+        console.log(data.checked)
+        this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    onFinishClick(){
+        let blogDta = {
+            type:this.state.category,
+            topics:this.state.topics
+        }
+        window.localStorage.setItem('blogData',JSON.stringify(blogDta))
+        this.setState({maliza:true})
+        this.isLoading(false)
+    }
     render() {
         const {editorState} = this.state;
         // If the user changes block type before entering any text, we can
@@ -108,40 +160,74 @@ class RichEditorExample extends React.Component {
         }
         return (
             <div>
-                {
-                    this.state.isLoading?
-                        <div>
-                            <div className="RichEditor-root">
-                                <BlockStyleControls
-                                    editorState={editorState}
-                                    onToggle={this.toggleBlockType}
-                                />
-                                <InlineStyleControls
-                                    editorState={editorState}
-                                    onToggle={this.toggleInlineStyle}
-                                />
-                                <div className={className} onClick={this.focus}>
-                                    <Editor
-                                        blockStyleFn={getBlockStyle}
-                                        customStyleMap={styleMap}
-                                        editorState={editorState}
-                                        handleKeyCommand={this.handleKeyCommand}
-                                        onChange={this.onChange}
-                                        onTab={this.onTab}
-                                        placeholder="Tell a story..."
-                                        ref="editor"
-                                        spellCheck={true}
-                                    />
-                                </div>
-                            </div>
-                            <input
-                                onClick={this.publish}
-                                type="button"
-                                value="Publish"
-                            />
-                        </div>:
-                        <Loader active inline='centered' />
-                }
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width={3}>
+                        </Grid.Column>
+                        <Grid.Column width={13}>
+                            <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                Draft an article on the fly.
+                            </Header>
+                            {
+                                this.state.maliza?
+                                    <div>
+
+                                </div>:
+                                    <EditorsForm onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />
+
+                            }
+                        </Grid.Column>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <Grid.Column width={3}>
+
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            {
+                                (this.state.maliza)?
+                                    <div style={{ margin:'0em 0em 5em 0em'}}>
+                                        <div className="RichEditor-root">
+                                            <input
+                                                style={{float:'right'}}
+                                                onClick={this.publish}
+                                                type="button"
+                                                value="Publish"
+                                            />
+                                            <BlockStyleControls
+                                                editorState={editorState}
+                                                onToggle={this.toggleBlockType}
+                                            />
+                                            <InlineStyleControls
+                                                editorState={editorState}
+                                                onToggle={this.toggleInlineStyle}
+                                            />
+                                            <div className={className} onClick={this.focus}>
+                                                <Editor
+                                                    blockStyleFn={getBlockStyle}
+                                                    customStyleMap={styleMap}
+                                                    editorState={editorState}
+                                                    handleKeyCommand={this.handleKeyCommand}
+                                                    onChange={this.onChange}
+                                                    onTab={this.onTab}
+                                                    placeholder="Tell a story..."
+                                                    ref="editor"
+                                                    spellCheck={true}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>:
+                                   <div>
+                                        This should be ivisible
+                                   </div>
+                            }
+                        </Grid.Column>
+                        <Grid.Column width={3}>
+
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+
             </div>
         );
     }
