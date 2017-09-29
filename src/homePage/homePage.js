@@ -32,13 +32,13 @@ class HomePage extends Component {
         this.onReadMore = this.onReadMore.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.blogIsLoading = this.blogIsLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
+        this.blogIsLoading = this.blogIsLoading.bind(this);
 
 
     };

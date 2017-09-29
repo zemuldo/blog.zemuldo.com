@@ -14,7 +14,9 @@ class BusinessSummary extends Component {
             blogs:[],
             blog:null,
             logged:false,
-            isLoaded: false,
+            homePageLoaded:false,
+            blogsLoaded:false,
+            blogLoaded:false,
             blogIsLoading:false,
             bodySize:(window.innerWidth<503)?16:12,
             counts:{
@@ -29,28 +31,36 @@ class BusinessSummary extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.isLoading = this.isLoading.bind(this);
+        this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
-        this.tick = this.tick.bind(this);
         this.getCounts = this.getCounts.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
+        this.homePageIsLoading = this.homePageIsLoading.bind(this);
+        this.blogIsLoading = this.blogIsLoading.bind(this);
     };
-    tick () {
+    setCurrentBlog(postID){
         return axios.post(env.httpURL, {
-            "query":"getPosts",
+            "query":"getPost",
             "queryParam":{
-                "type":this.props.current
+                "_id":postID
             }
         })
             .then(response => {
-                if(response[0].data[0]){
-                    this.setState({blogs:response[0].data})
+                if(response.data.error){
                 }
+                else {
+                    this.setState({blog:response.data})
+                    this.blogIsLoading(false)
+                    window.scrollTo(0,0)
+                }
+
             })
             .catch(exception => {
-
+                this.setState({blog:null})
+                this.blogIsLoading(false)
+                return exception
             });
     }
     onReadMore(thisBlog){
@@ -64,8 +74,10 @@ class BusinessSummary extends Component {
         })
             .then(response => {
                 this.setState({blog:response.data})
-                this.isLoading(true)
-                this.setState({blogIsLoading:false})
+                this.blogIsLoading(true)
+                if(response.data[0]){
+                    this.setCurrentBlog(response.data[0].postID)
+                }
                 window.scrollTo(0,0)
                 let gplusPost = {
                     "method": "pos.plusones.get",
@@ -95,7 +107,6 @@ class BusinessSummary extends Component {
                 }})
             }.bind(this))
             .catch(exception => {
-                this.isLoading(true)
                 return exception
             });
     }
@@ -134,7 +145,6 @@ class BusinessSummary extends Component {
                     }})
                 }.bind(this))
                 .catch(exception => {
-                    this.isLoading(true)
                     return exception
                 });
         }
@@ -161,11 +171,13 @@ class BusinessSummary extends Component {
             .then(response => {
                 if(response.data[0]){
                     this.setState({blogs:response.data,blog:response.data[0]})
-                    this.isLoading(true)
+                    this.homePageIsLoading(false)
+                    this.blogsAreLoading(false)
                 }
                 else {
                     this.setState({blogs:[]})
-                    this.isLoading(true)
+                    this.homePageIsLoading(false)
+                    this.blogsAreLoading(false)
                 }
                 this.getCounts()
             })
@@ -177,9 +189,6 @@ class BusinessSummary extends Component {
         clearInterval(this.countsInteval);
         window.removeEventListener('resize', this.resize)
     }
-    isLoading(value){
-        this.setState({ isLoaded: value });
-    };
 
     handleFilterChange(e) {
         e.preventDefault();
@@ -215,21 +224,27 @@ class BusinessSummary extends Component {
     setTopicPosts(topicBlogs,topic){
         if(topicBlogs[0]){
             this.setState({blogs:topicBlogs,topic:topic})
-            this.blogsAreLoading(true)
+            this.blogsAreLoading(false)
         }
         else {
             this.setState({blogs:[],topic:topic})
-            this.blogsAreLoading(true)
+            this.blogsAreLoading(false)
         }
     }
+    homePageIsLoading(value){
+        this.setState({homePageLoaded:!value})
+    }
     blogsAreLoading(state){
-        this.setState({blogsLoading:!state})
+        this.setState({blogsLoaded:!state})
+    }
+    blogIsLoading(state){
+        this.setState({blogLoaded:!state})
     }
     render(){
         return(
             <div>
                 {
-                    (this.state.isLoaded) ?
+                    (this.state.homePageLoaded) ?
                         <div>
                             {
                                 (window.innerWidth>503) ?
@@ -248,10 +263,7 @@ class BusinessSummary extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                this.state.blogsLoading?
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                                        <Loader active inline='centered' />
-                                                                    </div>:
+                                                                this.state.blogsLoaded?
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
@@ -260,7 +272,11 @@ class BusinessSummary extends Component {
                                                                                     No matching content on this Topic
                                                                                 </div>
                                                                         }
+                                                                    </div>:
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
                                                                     </div>
+
                                                             }
                                                         </div>
                                                     </Grid.Column>:
@@ -269,17 +285,18 @@ class BusinessSummary extends Component {
                                             }
                                             <Grid.Column  width={9}>
                                                 {
-                                                    (this.state.blogIsLoading) ?
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
-                                                            <Loader active inline='centered' />
-                                                        </div>:
+                                                    (this.state.blogLoaded) ?
                                                         <div style={{margin: '3em 3em 3em 1em'}}>
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
                                                                     <Blog counts={this.state.counts} color={this.props.colors[1]} blog = {this.state.blog}/>
                                                             }
+                                                        </div>:
+                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                            <Loader active inline='centered' />
                                                         </div>
+
                                                 }
                                             </Grid.Column>
                                             {
@@ -307,10 +324,7 @@ class BusinessSummary extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                this.state.blogsLoading?
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                                        <Loader active inline='centered' />
-                                                                    </div>:
+                                                                this.state.blogsLoaded?
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
@@ -319,7 +333,11 @@ class BusinessSummary extends Component {
                                                                                     No matching content on this Topic
                                                                                 </div>
                                                                         }
+                                                                    </div>:
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
                                                                     </div>
+
                                                             }
                                                         </div>
                                                     </Grid.Column>:
@@ -328,16 +346,16 @@ class BusinessSummary extends Component {
                                             }
                                             <Grid.Column  width={16}>
                                                 {
-                                                    (this.state.blogIsLoading) ?
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
-                                                            <Loader active inline='centered' />
-                                                        </div>:
-                                                        <div style={{margin: '3em 1em 3em 2em'}}>
+                                                    (this.state.blogLoaded) ?
+                                                        <div style={{margin: '3em 3em 3em 1em'}}>
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About/>:
                                                                     <Blog counts={this.state.counts} color={this.props.colors[1]} blog = {this.state.blog}/>
                                                             }
+                                                        </div>:
+                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                            <Loader active inline='centered' />
                                                         </div>
                                                 }
                                             </Grid.Column>
