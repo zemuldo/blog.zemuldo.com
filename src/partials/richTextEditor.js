@@ -107,7 +107,7 @@ class RichEditorExample extends React.Component {
                     this.state.isLoaded?
                         <div>
                             <div className="RichEditor-root">
-                                <div className={className} onClick={this.focus}>
+                                <div className={className}>
                                     <Editor
                                         readOnly
                                         blockStyleFn={getBlockStyle}

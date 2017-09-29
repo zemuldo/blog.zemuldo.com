@@ -16,7 +16,9 @@ class HomePage extends Component {
             blogs:[],
             blog:null,
             logged:false,
-            isLoaded: false,
+            homePageLoaded:false,
+            blogsLoaded:false,
+            blogLoaded:false,
             blogIsLoading:false,
             bodySize:(window.innerWidth<503)?16:12,
             counts:{
@@ -24,47 +26,43 @@ class HomePage extends Component {
                 twtC:null,
                 gplsC:null
             },
-            topic:null,
-            blogsLoading:false
+            topic:null
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.handleData = this.handleData.bind(this);
-        this.isLoading = this.isLoading.bind(this);
+        this.blogIsLoading = this.blogIsLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
-        this.tick = this.tick.bind(this);
         this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
+        this.homePageIsLoading = this.homePageIsLoading.bind(this);
 
 
     };
-    tick () {
-        return axios.post(env.httpURL, {
-            "query":"getAllPosts",
-            "queryParam":{}
-        })
-            .then(response => {
-                if(response.data[0]){
-                    this.setState({blogs:response.data})
-                }
-            })
-            .catch(exception => {
-
-            });
+    homePageIsLoading(value){
+        this.setState({homePageLoaded:!value})
+    }
+    blogsAreLoading(state){
+        this.setState({blogsLoaded:!state})
+    }
+    blogIsLoading(state){
+        this.setState({blogLoaded:!state})
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true})
-        return axios.get(env.httpURL+'/posts/'+ thisBlog.type +'/'+thisBlog.title, {
+        return axios.post(env.httpURL, {
+            "query":"getPost",
+            "queryParam":{
+                "_id":thisBlog.postID
+            }
         })
             .then(response => {
                 this.setState({blog:response.data})
-                this.isLoading(true)
                 this.setState({blogIsLoading:false})
-                window.scrollTo(0,0)
+                //window.scrollTo(0,0)
                 let gplusPost = {
                     "method": "pos.plusones.get",
                     "id": "p",
@@ -92,10 +90,12 @@ class HomePage extends Component {
                     gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
                 }})
             }.bind(this))
-            .catch(exception => {
-                this.isLoading(true)
-                return exception
-            });
+            .catch(function (err) {
+                this.setState({blog:null})
+                this.setState({blogIsLoading:false})
+                return err
+            }.bind(this))
+
     }
     goToHome(){
         this.setState({current:'ZemuldO-Home'})
@@ -114,15 +114,14 @@ class HomePage extends Component {
                 }
                 else {
                     this.setState({blog:response.data})
-                    this.isLoading(true)
-                    this.setState({blogIsLoading:false})
-                    this.isLoading(true)
+                    this.blogIsLoading(false)
                     window.scrollTo(0,0)
                 }
 
             })
             .catch(exception => {
-                this.isLoading(true)
+                this.setState({blog:null})
+                this.blogIsLoading(false)
                 return exception
             });
     }
@@ -155,46 +154,27 @@ class HomePage extends Component {
         })
             .then(response => {
                 if(response.data[0]){
+                    console.log(response.data[0])
                     this.setState({blogs:response.data})
-                    this.isLoading(true)
+                    this.homePageIsLoading(false)
+                    this.blogsAreLoading(false)
                 }
                 else {
                     this.setState({blogs:[]})
-                    this.isLoading(true)
+                    this.homePageIsLoading(false)
+                    this.blogsAreLoading(false)
                 }
             })
             .catch(exception => {
-
+                console.log(exception)
+                this.setState({blogs:[]})
+                this.homePageIsLoading(false)
+                this.blogsAreLoading(false)
             });
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     }
-    isLoading(value){
-        this.setState({ isLoaded: value });
-    };
-    handleData(){
-        return axios.post(env.httpURL, {
-            "query":"getAllPosts",
-            "queryParam":{}
-        })
-            .then(response => {
-                if(response.data[0]){
-                    this.setState({blogs:response.data})
-                }
-                else{
-                    this.setState({blogs:[],blog:null})
-                }
-                this.isLoading(true)
-                return response[0].data
-            })
-            .catch(exception => {
-                this.setState({blogs:[],blog:null})
-                this.isLoading(true)
-                return exception
-            });
-    };
-
     handleFilterChange(e) {
         e.preventDefault();
         if(e.target.value===''){
@@ -227,21 +207,18 @@ class HomePage extends Component {
     setTopicPosts(topicBlogs,topic){
         if(topicBlogs[0]){
             this.setState({blogs:topicBlogs,topic:topic})
-            this.blogsAreLoading(true)
+            this.blogsAreLoading(false)
         }
         else {
             this.setState({blogs:[],topic:topic})
-            this.blogsAreLoading(true)
+            this.blogsAreLoading(false)
         }
-    }
-    blogsAreLoading(state){
-        this.setState({blogsLoading:!state})
     }
     render(){
         return(
             <div>
                 {
-                    (this.state.isLoaded) ?
+                    this.state.homePageLoaded ?
                         <div>
                             {
                                 (window.innerWidth>503) ?
@@ -260,10 +237,7 @@ class HomePage extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                this.state.blogsLoading?
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                                        <Loader active inline='centered' />
-                                                                    </div>:
+                                                               this.state.blogsLoaded?
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
@@ -272,7 +246,11 @@ class HomePage extends Component {
                                                                                     No matching content on this Topic
                                                                                 </div>
                                                                         }
+                                                                    </div>:
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
                                                                     </div>
+
                                                             }
                                                         </div>
                                                     </Grid.Column>:
@@ -280,7 +258,14 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={9}>
-                                                <WelcomePage counts={this.state.counts} color={this.props.colors[1]} blog={this.state.blog} blogs={this.state.blogs} blogIsLoading={this.state.blogIsLoading}/>
+                                                {
+                                                    this.state.blogIsLoading?
+                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                            <Loader active inline='centered' />
+                                                        </div>:
+                                                        <WelcomePage counts={this.state.counts} color={this.props.colors[1]} blog={this.state.blog} blogs={this.state.blogs} blogLoaded={this.state.blogLoaded}/>
+                                                }
+
                                             </Grid.Column>
                                             {
                                                 (window.innerWidth>1030) ?
@@ -306,10 +291,7 @@ class HomePage extends Component {
                                                             />
                                                             <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                             {
-                                                                this.state.blogsLoading?
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                                        <Loader active inline='centered' />
-                                                                    </div>:
+                                                                this.state.blogsLoaded?
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
@@ -318,7 +300,11 @@ class HomePage extends Component {
                                                                                     No matching content on this Topic
                                                                                 </div>
                                                                         }
+                                                                    </div>:
+                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                        <Loader active inline='centered' />
                                                                     </div>
+
                                                             }
                                                         </div>
                                                     </Grid.Column>:
@@ -327,17 +313,18 @@ class HomePage extends Component {
                                             }
                                             <Grid.Column  width={16}>
                                                 {
-                                                    (this.state.blogIsLoading) ?
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
-                                                            <Loader active inline='centered' />
-                                                        </div>:
+                                                    this.state.blogLoaded ?
                                                         <div style={{margin: '3em 1em 3em 2em'}}>
                                                             {
                                                                 (this.state.blog===null) ?
                                                                     <About  color={this.props.color}  colors={this.props.colors}/>:
                                                                     <Blog counts={this.state.counts}  color={this.props.color} colors={this.props.colors} blog = {this.state.blog}/>
                                                             }
+                                                        </div>:
+                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                            <Loader active inline='centered' />
                                                         </div>
+
                                                 }
                                             </Grid.Column>
                                         </Grid.Row>

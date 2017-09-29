@@ -41,7 +41,7 @@ class Blog extends Component {
             <div>
                 <Header style={{}} color={this.props.color} as='h1'>
                     {
-                        this.props.blog.title
+                        this.props.blog.title.split(' ').join('')
                     }
                 </Header>
                 <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>

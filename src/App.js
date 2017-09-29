@@ -86,10 +86,17 @@ class App extends Component {
         if(!this.state.iKnowYou){
             return axios.post(env.httpURL, {"query":"getIp"})
                 .then(response => {
-                    return axios.get('http://ip-api.com/json/'+'197.232.39.171', {})
+                    if(response.data.ip==='::1' || response.data.ip==='127.0.0.1'){
+                        return{error:'user at localhost'}
+                    }
+                    else {
+                        return axios.get('http://ip-api.com/json/'+response.data.ip, {})
+
+                    }
+
                 })
                 .then(function (visitorData) {
-                   if(visitorData.data.status !=='fail'){
+                   if(!visitorData.error){
                        if(localStorage.getItem('user')){
                            let user = JSON.parse(localStorage.getItem('user'))
                            let o = visitorData.data;
@@ -107,9 +114,9 @@ class App extends Component {
                            return axios.post(env.httpURL, o)
                        }
                    }
-                   else{
+                   else {
                        return{error:'user at localhost'}
-                    }
+                   }
                 })
                 .then(function (final) {
                    if(!final.error){
