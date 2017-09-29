@@ -62,13 +62,13 @@ class HomePage extends Component {
             .then(response => {
                 this.setState({blog:response.data})
                 this.setState({blogIsLoading:false})
-                //window.scrollTo(0,0)
+                window.scrollTo(0,0)
                 let gplusPost = {
                     "method": "pos.plusones.get",
                     "id": "p",
                     "params": {
                         "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blog.title.split(' ').join('-'),
+                        "id": "https://zemuldo/"+this.state.blog.title.split(' ').join('-')+'_'+this.state.blog.date.split(' ').join('-'),
                         "source": "widget",
                         "userId": "@viewer",
                         "groupId": "@self"
@@ -78,8 +78,8 @@ class HomePage extends Component {
                     "apiVersion": "v1"
                 }
                 return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blog.title.split(' ').join('%2520'),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blog.title.split(' ').join('-'),{}),
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blog.title.split(' ').join('%2520')+'_'+this.state.blog.date.split(' ').join('%2520'),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blog.title.split(' ').join('-')+'_'+this.state.blog.date.split(' ').join('-'),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })
@@ -93,6 +93,7 @@ class HomePage extends Component {
             .catch(function (err) {
                 this.setState({blog:null})
                 this.setState({blogIsLoading:false})
+                window.scrollTo(0,0)
                 return err
             }.bind(this))
 
@@ -154,7 +155,6 @@ class HomePage extends Component {
         })
             .then(response => {
                 if(response.data[0]){
-                    console.log(response.data[0])
                     this.setState({blogs:response.data})
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
@@ -166,7 +166,6 @@ class HomePage extends Component {
                 }
             })
             .catch(exception => {
-                console.log(exception)
                 this.setState({blogs:[]})
                 this.homePageIsLoading(false)
                 this.blogsAreLoading(false)

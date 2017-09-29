@@ -10,21 +10,8 @@ export default class WelcomePage extends Component {
         this.state = {
         }
         this.componentDidMount = this.componentDidMount.bind(this);
-        this.getFaceBookShare = this.getFaceBookShare.bind(this);
     }
     componentDidMount() {
-        this.getFaceBookShare()
-    }
-    getFaceBookShare(){
-        if(this.props.blog){
-            return axios.get('https://graph.facebook.com/?id=http://zemuldo.com',{})
-                .then(function (res) {
-                    console.log(res)
-                })
-                .catch(function (err) {
-                    console.log(err)
-                })
-        }
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
