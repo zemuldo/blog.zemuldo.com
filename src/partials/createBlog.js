@@ -3,7 +3,7 @@ import axios from 'axios'
 import ReactDOM from 'react-dom';
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
-import {convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
+import {CompositeDecorator,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
 import {Button,Form, Segment,Image,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
 import config from '../environments/conf'
 import EditorsForm from './editorsForm'
@@ -13,38 +13,70 @@ const cats = {
     Business:'business',
     Technology:'tech'
 }
-class NestedModal extends Component {
-    constructor(props) {
-        super(props);
-    }
 
-    render() {
-
-        return (
-            <Modal
-                dimmer={false}
-                open={this.props.confirmOpen}
-                onOpen={this.open}
-                onClose={this.close}
-                size='small'
-                trigger={<Button primary icon>Proceed <Icon name='right chevron' /></Button>}
-            >
-                <Modal.Header>Modal #2</Modal.Header>
-                <Modal.Content>
-                    <p>That's everything!</p>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button icon='check' content='cancel' onClick={this.props.handleCancel} />
-                    <Button icon='check' content='confrm' onClick={this.props.handleConfirm} />
-                </Modal.Actions>
-            </Modal>
-        )
-    }
+function findLinkEntities(contentBlock, callback, contentState) {
+    contentBlock.findEntityRanges(
+        (character) => {
+            const entityKey = character.getEntity();
+            return (
+                entityKey !== null &&
+                contentState.getEntity(entityKey).getType() === 'LINK'
+            );
+        },
+        callback
+    );
 }
+const Link = (props) => {
+    const {url} = props.contentState.getEntity(props.entityKey).getData();
+    return (
+        <a href={url} style={styles.link}>
+            {props.children}
+        </a>
+    );
+};
+const styles = {
+    root: {
+        fontFamily: '\'Georgia\', serif',
+        padding: 20,
+        width: 600,
+    },
+    buttons: {
+        marginBottom: 10,
+    },
+    urlInputContainer: {
+        marginBottom: 10,
+    },
+    urlInput: {
+        fontFamily: '\'Georgia\', serif',
+        marginRight: 10,
+        padding: 3,
+    },
+    editor: {
+        border: '1px solid #ccc',
+        cursor: 'text',
+        minHeight: 80,
+        padding: 10,
+    },
+    button: {
+        marginTop: 10,
+        textAlign: 'center',
+    },
+    link: {
+        color: '#3b5998',
+        textDecoration: 'underline',
+    },
+};
+
 
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
+        const decorator = new CompositeDecorator([
+            {
+                strategy: findLinkEntities,
+                component: Link,
+            },
+        ]);
         this.state = {
             editorState:EditorState.createEmpty(),
             isLoaded:false,
@@ -58,6 +90,7 @@ class RichEditorExample extends React.Component {
             open:false,
             previewOpen:false,
             confirmOpen:false
+
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.onTab = this._onTab.bind(this);
@@ -72,6 +105,72 @@ class RichEditorExample extends React.Component {
         this.onFinishClick = this.onFinishClick.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.reinInitEditorState=this.reinInitEditorState.bind(this)
+        this.promptForLink = this._promptForLink.bind(this);
+        this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+        this.confirmLink = this._confirmLink.bind(this);
+        this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
+        this.removeLink = this._removeLink.bind(this);
+    }
+    _promptForLink(e) {
+        e.preventDefault();
+        const {editorState} = this.state;
+        const selection = editorState.getSelection();
+        if (!selection.isCollapsed()) {
+            const contentState = editorState.getCurrentContent();
+            const startKey = editorState.getSelection().getStartKey();
+            const startOffset = editorState.getSelection().getStartOffset();
+            const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+            const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+            let url = '';
+            if (linkKey) {
+                const linkInstance = contentState.getEntity(linkKey);
+                url = linkInstance.getData().url;
+            }
+            this.setState({
+                showURLInput: true,
+                urlValue: url,
+            }, () => {
+                setTimeout(() => this.refs.url.focus(), 0);
+            });
+        }
+    }
+    _confirmLink(e) {
+        e.preventDefault();
+        const {editorState, urlValue} = this.state;
+        const contentState = editorState.getCurrentContent();
+        const contentStateWithEntity = contentState.createEntity(
+            'LINK',
+            'MUTABLE',
+            {url: urlValue}
+        );
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+        this.setState({
+            editorState: RichUtils.toggleLink(
+                newEditorState,
+                newEditorState.getSelection(),
+                entityKey
+            ),
+            showURLInput: false,
+            urlValue: '',
+        }, () => {
+            setTimeout(() => this.refs.editor.focus(), 0);
+        });
+    }
+    _onLinkInputKeyDown(e) {
+        if (e.which === 13) {
+            this._confirmLink(e);
+        }
+    }
+    _removeLink(e) {
+        e.preventDefault();
+        const {editorState} = this.state;
+        const selection = editorState.getSelection();
+        if (!selection.isCollapsed()) {
+            this.setState({
+                editorState: RichUtils.toggleLink(editorState, selection, null),
+            });
+        }
     }
     isLoading(value){
         this.setState({ isLoaded: value });
@@ -216,6 +315,23 @@ class RichEditorExample extends React.Component {
     }
 
     render() {
+        let urlInput;
+        if (this.state.showURLInput) {
+            urlInput =
+                <div style={styles.urlInputContainer}>
+                    <input
+                        onChange={this.onURLChange}
+                        ref="url"
+                        style={styles.urlInput}
+                        type="text"
+                        value={this.state.urlValue}
+                        onKeyDown={this.onLinkInputKeyDown}
+                    />
+                    <button onMouseDown={this.confirmLink}>
+                        Confirm
+                    </button>
+                </div>;
+        }
         const {editorState} = this.state;
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
@@ -268,6 +384,21 @@ class RichEditorExample extends React.Component {
                                                     editorState={editorState}
                                                     onToggle={this.toggleInlineStyle}
                                                 />
+                                                <div style={{marginBottom: 10}}>
+                                                    Select some text, then use the buttons to add or remove links
+                                                    on the selected text.
+                                                </div>
+                                                <div style={styles.buttons}>
+                                                    <button
+                                                        onMouseDown={this.promptForLink}
+                                                        style={{marginRight: 10}}>
+                                                        Add Link
+                                                    </button>
+                                                    <button onMouseDown={this.removeLink}>
+                                                        Remove Link
+                                                    </button>
+                                                </div>
+                                                {urlInput}
                                             </div>
                                             <Modal open ={this.state.previewOpen}>
                                                 <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
