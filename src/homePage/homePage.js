@@ -272,7 +272,9 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>1030) ?
                                                     <Grid.Column  width={3}>
-                                                        <TwitterProf/>
+                                                        {
+                                                            //<TwitterProf/>
+                                                        }
                                                     </Grid.Column>:
                                                     <p>Hello</p>
                                             }
