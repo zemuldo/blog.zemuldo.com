@@ -1,10 +1,9 @@
-import React,{Component} from 'react'
+import React from 'react'
 import axios from 'axios'
-import ReactDOM from 'react-dom';
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Form, Segment,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
+import {Button,Header, Icon,Modal, Grid } from 'semantic-ui-react'
 import config from '../environments/conf'
 import EditorsForm from './editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -161,7 +160,6 @@ class RichEditorExample extends React.Component {
         this._confirmMedia = this._confirmMedia.bind(this)
     }
     __promptForMedia(type) {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -171,7 +169,6 @@ class RichEditorExample extends React.Component {
         });
     }
     _addAudio() {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -181,7 +178,6 @@ class RichEditorExample extends React.Component {
         });
     }
     _addImage() {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -191,7 +187,6 @@ class RichEditorExample extends React.Component {
         });
     }
     _addVideo() {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -487,152 +482,91 @@ class RichEditorExample extends React.Component {
         }
         return (
             <div>
-
-                {
-                    this.state.filledForm?
-                        <Grid celled>
-                            <Grid.Row>
-                                <Grid.Column verticalAlign='middle' width={16}>
-                                    <div>
-                                        Your name and profile pic will show here
-                                    </div>
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column verticalAlign='middle' width={3}>
-                                    <div>
-                                        Your previous posts will show here
-                                    </div>
-                                </Grid.Column>
-                                <Grid.Column verticalAlign='middle' width={10}>
-                                    <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                        Draft an article on the fly.
-                                    </Header>
-
-                                    <EditorsForm onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />
-                                </Grid.Column>
-                                <Grid.Column verticalAlign='middle' width={3}>
-                                    <div>
-                                        I will give you some more stuff here
-                                    </div>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>:
-                        <Grid celled>
-                            <Grid.Row>
-                                <Grid.Column verticalAlign='middle' width={14}>
-                                    <div  style={{ margin:'0em 0em 0em 3em'}}>
-                                        <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='tiny'>Publish</Button>
-                                        <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                            Draft an article on the fly.
-                                        </Header>
-                                        <br/>
-                                        <div>
-                                            <BlockStyleControls
-                                                editorState={editorState}
-                                                onToggle={this.toggleBlockType}
-                                            />
-                                            <br/>
-                                            <InlineStyleControls
-                                                editorState={editorState}
-                                                onToggle={this.toggleInlineStyle}
-                                            />
-                                            Select some text, then use the buttons to add or remove links
-                                            on the selected text.
-                                            <div style={styles.buttons}>
-                                                <Button color='green' size='mini' onMouseDown={this.promptForLink} style={{marginRight: 10}}>
-                                                    <Icon name ='external share'/>
-                                                    Add Link
-                                                </Button>
-                                                <Button color='red' size='mini' onMouseDown={this.removeLink}>
-                                                    <Icon name ='external share'/>
-                                                    Remove Link
-                                                </Button>
-                                            </div>
-                                            {urlInput}
-                                            <div style={styles.root}>
-                                                <div style={{marginBottom: 10}}>
-                                                    Use the buttons to add audio, image, or video.
-                                                </div>
-                                                <div style={{marginBottom: 10}}>
-                                                    Here are some local examples that can be entered as a URL:
-                                                    <ul>
-                                                        <li>media.mp3</li>
-                                                        <li>media.png</li>
-                                                        <li>media.mp4</li>
-                                                    </ul>
-                                                </div>
-                                                <div style={styles.buttons}>
-                                                    <button onMouseDown={this._addAudio } style={{marginRight: 10}}>
-                                                        Add Audio
-                                                    </button>
-                                                    <button onMouseDown={this._addImage} style={{marginRight: 10}}>
-                                                        Add Image
-                                                    </button>
-                                                    <button onMouseDown={this._addVideo} style={{marginRight: 10}}>
-                                                        Add Video
-                                                    </button>
-                                                </div>
-                                                {mediaInput}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column verticalAlign='middle' width={1}>
-                                </Grid.Column>
-                                <Grid.Column verticalAlign='middle'  width={12}>
-                                    <Modal open ={this.state.previewOpen}>
-                                        <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                            You are about to publish this article.
-                                        </Header></Modal.Header>
-                                        <Modal.Content>
-                                            <div>
-                                                <p>
-                                                    This is how will appear. Review and publish. Click back if you need to make changes
-                                                </p>
-                                            </div>
-                                            <hr/>
-                                            <Modal.Description>
-                                                <div>
-                                                    <ShowPreview reinInitEditorState = {this.reinInitEditorState} editoPreview={this.state.editorState}/>
-                                                </div>
-                                            </Modal.Description>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button.Group>
-                                                <Button color="blue" onClick={this.closePreview}>Back</Button>
-                                                <Button.Or />
-                                                <Button color="green" onClick={this.handleConfirm}>Publish</Button>
-                                            </Button.Group>
-                                        </Modal.Actions>
-                                    </Modal>
-                                    <div className='RichEditor-root'>
-                                        <Editor
-                                            blockRendererFn={mediaBlockRenderer}
-                                            blockStyleFn={getBlockStyle}
-                                            customStyleMap={styleMap}
-                                            editorState={editorState}
-                                            handleKeyCommand={this.handleKeyCommand}
-                                            onChange={this.onChange}
-                                            onTab={this.onTab}
-                                            placeholder="Start putting it down..."
-                                            ref="editor"
-                                            spellCheck={true}
-                                        />
-                                    </div>
-
-
-                                </Grid.Column>
-                                <Grid.Column verticalAlign='middle' width={1}>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                }
-
+                <div  style={{ margin:'0em 0em 0em 3em'}}>
+                    <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='tiny'>Publish</Button>
+                    <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                        Draft an article on the fly.
+                    </Header>
+                    <br/>
+                    <div>
+                        <BlockStyleControls
+                            editorState={editorState}
+                            onToggle={this.toggleBlockType}
+                        />
+                        <br/>
+                        <InlineStyleControls
+                            editorState={editorState}
+                            onToggle={this.toggleInlineStyle}
+                        />
+                        Add External Links
+                        Select some text, then use the buttons to add or remove links
+                        on the selected text.
+                        <div style={styles.buttons}>
+                            <Button color='green' size='mini' onMouseDown={this.promptForLink} style={{marginRight: 10}}>
+                                <Icon name ='external share'/>
+                                Add Link
+                            </Button>
+                            <Button color='red' size='mini' onMouseDown={this.removeLink}>
+                                <Icon name ='external share'/>
+                                Remove Link
+                            </Button>
+                        </div>
+                        {urlInput}
+                        Use the buttons to add audio, image, or video.
+                        <div style={styles.buttons}>
+                            <Button color='green' size='mini' onMouseDown={this._addAudio } style={{marginRight: 10}}>
+                                Add Audio
+                            </Button>
+                            <Button color='green' size='mini' onMouseDown={this._addImage} style={{marginRight: 10}}>
+                                Add Image
+                            </Button>
+                            <Button color='green' size='mini' onMouseDown={this._addVideo} style={{marginRight: 10}}>
+                                Add Video
+                            </Button>
+                        </div>
+                        {mediaInput}
+                    </div>
+                </div>
+                <hr/>
+                <Modal open ={this.state.previewOpen}>
+                    <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                        You are about to publish this article.
+                    </Header></Modal.Header>
+                    <Modal.Content>
+                        <div>
+                            <p>
+                                This is how will appear. Review and publish. Click back if you need to make changes
+                            </p>
+                        </div>
+                        <hr/>
+                        <Modal.Description>
+                            <div>
+                                <ShowPreview reinInitEditorState = {this.reinInitEditorState} editoPreview={this.state.editorState}/>
+                            </div>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button.Group>
+                            <Button color="blue" onClick={this.closePreview}>Back</Button>
+                            <Button.Or />
+                            <Button color="green" onClick={this.handleConfirm}>Publish</Button>
+                        </Button.Group>
+                    </Modal.Actions>
+                </Modal>
+                <div className='RichEditor-root'>
+                    <Editor
+                        blockRendererFn={mediaBlockRenderer}
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        handleKeyCommand={this.handleKeyCommand}
+                        onChange={this.onChange}
+                        onTab={this.onTab}
+                        placeholder="Start putting it down..."
+                        ref="editor"
+                        spellCheck={true}
+                    />
+                </div>
             </div>
         );
     }
