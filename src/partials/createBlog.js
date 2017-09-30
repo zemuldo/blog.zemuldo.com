@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{Component} from 'react'
 import axios from 'axios'
 import ReactDOM from 'react-dom';
+import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Form, Segment,Image,Header, Icon, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
+import {Button,Form, Segment,Image,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
 import config from '../environments/conf'
 import EditorsForm from './editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -12,6 +13,35 @@ const cats = {
     Business:'business',
     Technology:'tech'
 }
+class NestedModal extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+
+        return (
+            <Modal
+                dimmer={false}
+                open={this.props.confirmOpen}
+                onOpen={this.open}
+                onClose={this.close}
+                size='small'
+                trigger={<Button primary icon>Proceed <Icon name='right chevron' /></Button>}
+            >
+                <Modal.Header>Modal #2</Modal.Header>
+                <Modal.Content>
+                    <p>That's everything!</p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button icon='check' content='cancel' onClick={this.props.handleCancel} />
+                    <Button icon='check' content='confrm' onClick={this.props.handleConfirm} />
+                </Modal.Actions>
+            </Modal>
+        )
+    }
+}
+
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
@@ -22,8 +52,12 @@ class RichEditorExample extends React.Component {
             topics:null,
             termsAccept:false,
             dialogInComplete:true,
-            maliza:false,
-            continueEdit:false
+            filledForm:false,
+            continueEdit:false,
+            isPublished:false,
+            open:false,
+            previewOpen:false,
+            confirmOpen:false
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.onTab = this._onTab.bind(this);
@@ -31,14 +65,14 @@ class RichEditorExample extends React.Component {
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
         this.saveContent = this.saveContent.bind(this);
         this.handleEditorState = this.handleEditorState.bind(this);
-        this.isLoading = this.isLoading.bind(this);
+        this.publish = this.publish.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleTopicChange = this.handleTopicChange.bind(this);
         this.handleUTAChange = this.handleUTAChange.bind(this);
         this.onFinishClick = this.onFinishClick.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.reinInitEditorState=this.reinInitEditorState.bind(this)
     }
-
     isLoading(value){
         this.setState({ isLoaded: value });
     };
@@ -46,6 +80,7 @@ class RichEditorExample extends React.Component {
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
+        this.setState({hasSavedContent:false})
 
     }
     focus = () => this.refs.editor.focus();
@@ -78,46 +113,63 @@ class RichEditorExample extends React.Component {
         );
     }
     publish = () => {
+        this.setState({ open: true })
         const content = localStorage.getItem('draftContent');
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        let obj = JSON.parse(content)
-        let title = obj.blocks[0].text
-        obj.blocks.splice(0,1)
-        axios.post(env.httpURL, {
-            type:cats[blogData.type],
-            title:title,
-            query:"newPost",
-            topics:blogData.topics,
-            images:["blogs_pic.jpg"],
-            author:"Danstan Onyango",
-            body:JSON.stringify(obj),
-        })
-            .then(response => {
-                if(response.data.state===true){
-                    window.localStorage.removeItem('blogData')
-                    window.localStorage.removeItem('draftContent')
-                    localStorage.clear();
-                    this.setState({maliza:false})
-                }
+        if(content && blogData){
+            let obj = JSON.parse(content)
+            let title = obj.blocks[0].text
+            obj.blocks.splice(0,1)
+            axios.post(env.httpURL, {
+                type:cats[blogData.type],
+                title:title,
+                query:"publish",
+                topics:blogData.topics,
+                images:["blogs_pic.jpg"],
+                author:"Danstan Onyango",
+                body:JSON.stringify(obj),
+                hasSavedContent:true,
+                accepted:false,
+                publishing:false
             })
-            .catch(err => {
-            });
+                .then(function (response) {
+                    if(response.data.state===true){
+                        window.localStorage.removeItem('blogData')
+                        window.localStorage.removeItem('draftContent')
+                        localStorage.clear();
+                        this.setState({isPublished:true,filledForm:true})
+                        console.log(this.state.filledForm)
+
+                    }
+                    else {
+                    }
+                    this.closePreview()
+                }.bind(this))
+
+                .catch(function (err) {
+                    this.setState({filledForm:true})
+                    this.setState({isPublished:false})
+                }.bind(this))
+        }
+        else{
+
+        }
+
     };
     saveContent = debounce((content) => {
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
-
     componentDidMount() {
         this.handleEditorState()
     }
     handleEditorState(){
         const editorState = window.localStorage.getItem('draftContent')
-        if(editorState){
-            this.setState({maliza:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)))});
-            this.isLoading(true)
+        const blogDataState = window.localStorage.getItem('blogData')
+        if(editorState && blogDataState){
+            this.setState({hasSavedContent:false,filledForm:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)))});
         }
         else {
-            this.setState({editorState : EditorState.createEmpty()});
+            this.setState({filledForm:true,editorState : EditorState.createEmpty()});
         }
     };
     handleCategoryChange(e,data){
@@ -135,9 +187,34 @@ class RichEditorExample extends React.Component {
             topics:this.state.topics
         }
         window.localStorage.setItem('blogData',JSON.stringify(blogDta))
-        this.setState({maliza:true})
-        this.isLoading(false)
+        this.setState({filledForm:false})
     }
+    startPublish = ()=>{
+        this.showPreview()
+    }
+    showConfirm = () => {
+        this.setState({ confirmOpen: true })
+    }
+    showPreview=()=>{
+        this.setState({ previewOpen: true })
+    }
+    closePreview=()=>{
+        this.setState({ previewOpen: false })
+    }
+    handleConfirm = () => {
+        this.closePreview()
+        this.setState({startPublish:true, confirmOpen: false })
+        this.publish()
+    }
+    handleCancel = () =>{
+        this.reinInitEditorState(this.state.editorState)
+        this.closePreview()
+        this.setState({ confirmOpen: false })
+    }
+    reinInitEditorState (state){
+        this.setState({editorState:state})
+    }
+
     render() {
         const {editorState} = this.state;
         // If the user changes block type before entering any text, we can
@@ -160,12 +237,11 @@ class RichEditorExample extends React.Component {
                                 Draft an article on the fly.
                             </Header>
                             {
-                                this.state.maliza?
+                                this.state.filledForm?
+                                    <EditorsForm onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />:
                                     <div>
 
-                                </div>:
-                                    <EditorsForm onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />
-
+                                    </div>
                             }
                         </Grid.Column>
                     </Grid.Row>
@@ -176,19 +252,45 @@ class RichEditorExample extends React.Component {
                         </Grid.Column>
                         <Grid.Column width={10}>
                             {
-                                (this.state.maliza)?
+                                (this.state.filledForm)?
+                                    <div>
+                                        This should be ivisible
+                                    </div>:
                                     <div style={{ margin:'0em 0em 5em 0em'}}>
                                         <div className="RichEditor-root">
-                                            <input
-                                                style={{float:'right'}}
-                                                onClick={this.publish}
-                                                type="button"
-                                                value="Publish"
-                                            />
+                                            <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='large'>Publish</Button>
                                             <BlockStyleControls
                                                 editorState={editorState}
                                                 onToggle={this.toggleBlockType}
                                             />
+                                            <Modal open ={this.state.previewOpen}>
+                                                <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                                    You are about to publish this article.
+                                                </Header></Modal.Header>
+                                                <Modal.Content>
+                                                    <div>
+                                                        <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h2'>
+                                                            You are about to publish this article.
+                                                        </Header>
+                                                        <p>
+                                                            This is how will appear. Review and publish. Click back if you need to make changes
+                                                        </p>
+                                                    </div>
+                                                    <hr/>
+                                                    <Modal.Description>
+                                                        <div>
+                                                            <ShowPreview reinInitEditorState = {this.reinInitEditorState} editoPreview={this.state.editorState}/>
+                                                        </div>
+                                                    </Modal.Description>
+                                                </Modal.Content>
+                                                <Modal.Actions>
+                                                    <Button.Group>
+                                                        <Button onClick={this.closePreview}>Make Changes</Button>
+                                                        <Button.Or />
+                                                        <Button onClick={this.handleConfirm}>Publish</Button>
+                                                    </Button.Group>
+                                                </Modal.Actions>
+                                            </Modal>
                                             <InlineStyleControls
                                                 editorState={editorState}
                                                 onToggle={this.toggleInlineStyle}
@@ -206,11 +308,10 @@ class RichEditorExample extends React.Component {
                                                     spellCheck={true}
                                                 />
                                             </div>
+                                            <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='large'>Publish</Button>
                                         </div>
-                                    </div>:
-                                   <div>
-                                        This should be ivisible
-                                   </div>
+                                    </div>
+
                             }
                         </Grid.Column>
                         <Grid.Column width={3}>
