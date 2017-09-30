@@ -3,8 +3,8 @@ import axios from 'axios'
 import ReactDOM from 'react-dom';
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
-import {CompositeDecorator,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Form, Segment,Image,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
+import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
+import {Button,Form, Segment,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
 import config from '../environments/conf'
 import EditorsForm from './editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
@@ -13,6 +13,41 @@ const cats = {
     Business:'business',
     Technology:'tech'
 }
+
+function mediaBlockRenderer(block) {
+    if (block.getType() === 'atomic') {
+        return {
+            component: Media,
+            editable: false,
+        };
+    }
+    return null;
+}
+const Audio = (props) => {
+    return <audio controls src={props.src} style={styles.media} />;
+};
+const Image = (props) => {
+    return <img src={props.src} style={styles.media} />;
+};
+const Video = (props) => {
+    return <video controls src={props.src} style={styles.media} />;
+};
+const Media = (props) => {
+    const entity = props.contentState.getEntity(
+        props.block.getEntityAt(0)
+    );
+    const {src} = entity.getData();
+    const type = entity.getType();
+    let media;
+    if (type === 'audio') {
+        media = <Audio src={src} />;
+    } else if (type === 'image') {
+        media = <Image src={src} />;
+    } else if (type === 'video') {
+        media = <Video src={src} />;
+    }
+    return media;
+};
 
 function findLinkEntities(contentBlock, callback, contentState) {
     contentBlock.findEntityRanges(
@@ -71,6 +106,12 @@ const styles = {
         color: '#3b5998',
         textDecoration: 'underline'
     },
+    media: {
+        width: '100%',
+        // Fix an issue with Firefox rendering video controls
+        // with 'pre-wrap' white-space
+        whiteSpace: 'initial'
+    },
 };
 
 
@@ -89,7 +130,10 @@ class RichEditorExample extends React.Component {
             isPublished:false,
             open:false,
             previewOpen:false,
-            confirmOpen:false
+            confirmOpen:false,
+            showMedURLInput: false,
+            url: '',
+            urlType: '',
 
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -110,6 +154,82 @@ class RichEditorExample extends React.Component {
         this.confirmLink = this._confirmLink.bind(this);
         this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
         this.removeLink = this._removeLink.bind(this);
+        this._addAudio = this._addAudio.bind(this);
+        this._addImage = this._addImage.bind(this);
+        this._addVideo = this._addVideo.bind(this);
+        this.__promptForMedia = this.__promptForMedia.bind(this);
+        this._confirmMedia = this._confirmMedia.bind(this)
+    }
+    __promptForMedia(type) {
+        const {editorState} = this.state;
+        this.setState({
+            showMedURLInput: true,
+            urlValue: '',
+            urlType: type,
+        }, () => {
+            setTimeout(() => this.refs.url.focus(), 0);
+        });
+    }
+    _addAudio() {
+        const {editorState} = this.state;
+        this.setState({
+            showMedURLInput: true,
+            urlValue: '',
+            urlType: 'audio',
+        }, () => {
+            setTimeout(() => this.refs.url.focus(), 0);
+        });
+    }
+    _addImage() {
+        const {editorState} = this.state;
+        this.setState({
+            showMedURLInput: true,
+            urlValue: '',
+            urlType: 'image',
+        }, () => {
+            setTimeout(() => this.refs.url.focus(), 0);
+        });
+    }
+    _addVideo() {
+        const {editorState} = this.state;
+        this.setState({
+            showMedURLInput: true,
+            urlValue: '',
+            urlType: 'video',
+        }, () => {
+            setTimeout(() => this.refs.url.focus(), 0);
+        });
+    }
+    _confirmMedia(e) {
+        e.preventDefault();
+        const {editorState, urlValue, urlType} = this.state;
+        const contentState = editorState.getCurrentContent();
+        const contentStateWithEntity = contentState.createEntity(
+            urlType,
+            'IMMUTABLE',
+            {src: urlValue}
+        );
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        const newEditorState = EditorState.set(
+            editorState,
+            {currentContent: contentStateWithEntity}
+        );
+        this.setState({
+            editorState: AtomicBlockUtils.insertAtomicBlock(
+                newEditorState,
+                entityKey,
+                ' '
+            ),
+            showMedURLInput: false,
+            urlValue: '',
+        }, () => {
+            setTimeout(() => this.focus(), 0);
+        });
+    }
+    _onURLInputKeyDown(e) {
+        if (e.which === 13) {
+            this._confirmMedia(e);
+        }
     }
     _promptForLink(e) {
         e.preventDefault();
@@ -176,6 +296,7 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
+        console.log("----++++++saving state")
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
@@ -184,6 +305,7 @@ class RichEditorExample extends React.Component {
     }
     focus = () => this.refs.editor.focus();
     _handleKeyCommand(command, editorState) {
+        console.log('key presed'+command)
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             this.onChange(newState);
@@ -192,10 +314,12 @@ class RichEditorExample extends React.Component {
         return false;
     }
     _onTab(e) {
+        console.log('tab presed'+e)
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
     _toggleBlockType(blockType) {
+        console.log('toglle presed'+blockType)
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -256,6 +380,7 @@ class RichEditorExample extends React.Component {
 
     };
     saveContent = debounce((content) => {
+        console.log("localstoring....")
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
     componentDidMount() {
@@ -314,7 +439,25 @@ class RichEditorExample extends React.Component {
         this.setState({editorState:state})
     }
 
+
     render() {
+        let mediaInput;
+        if (this.state.showMedURLInput) {
+            mediaInput =
+                <div style={styles.urlInputContainer}>
+                    <input
+                        onChange={this.onURLChange}
+                        ref="url"
+                        style={styles.urlInput}
+                        type="text"
+                        value={this.state.urlValue}
+                        onKeyDown={this.onURLInputKeyDown}
+                    />
+                    <button onMouseDown={this._confirmMedia}>
+                        Confirm
+                    </button>
+                </div>;
+        }
         let urlInput;
         if (this.state.showURLInput) {
             urlInput =
@@ -345,16 +488,16 @@ class RichEditorExample extends React.Component {
         return (
             <div>
 
-                    {
-                        this.state.filledForm?
-                            <Grid celled>
-                                <Grid.Row>
-                                    <Grid.Column verticalAlign='middle' width={16}>
-                                        <div>
-                                            Your name and profile pic will show here
-                                        </div>
-                                    </Grid.Column>
-                                </Grid.Row>
+                {
+                    this.state.filledForm?
+                        <Grid celled>
+                            <Grid.Row>
+                                <Grid.Column verticalAlign='middle' width={16}>
+                                    <div>
+                                        Your name and profile pic will show here
+                                    </div>
+                                </Grid.Column>
+                            </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column verticalAlign='middle' width={3}>
                                     <div>
@@ -374,45 +517,70 @@ class RichEditorExample extends React.Component {
                                     </div>
                                 </Grid.Column>
                             </Grid.Row>
-                            </Grid>:
-                            <Grid celled>
-                                <Grid.Row>
-                                    <Grid.Column verticalAlign='middle' width={14}>
-                                        <div  style={{ margin:'0em 0em 0em 3em'}}>
-                                            <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='tiny'>Publish</Button>
-                                            <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                                Draft an article on the fly.
-                                            </Header>
+                        </Grid>:
+                        <Grid celled>
+                            <Grid.Row>
+                                <Grid.Column verticalAlign='middle' width={14}>
+                                    <div  style={{ margin:'0em 0em 0em 3em'}}>
+                                        <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='tiny'>Publish</Button>
+                                        <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                            Draft an article on the fly.
+                                        </Header>
+                                        <br/>
+                                        <div>
+                                            <BlockStyleControls
+                                                editorState={editorState}
+                                                onToggle={this.toggleBlockType}
+                                            />
                                             <br/>
-                                            <div>
-                                                <BlockStyleControls
-                                                    editorState={editorState}
-                                                    onToggle={this.toggleBlockType}
-                                                />
-                                                <br/>
-                                                <InlineStyleControls
-                                                    editorState={editorState}
-                                                    onToggle={this.toggleInlineStyle}
-                                                />
-                                                Select some text, then use the buttons to add or remove links
-                                                on the selected text.
-                                                <div style={styles.buttons}>
-                                                    <Button color='green' size='mini' onMouseDown={this.promptForLink} style={{marginRight: 10}}>
-                                                        <Icon name ='external share'/>
-                                                        Add Link
-                                                    </Button>
-                                                    <Button color='red' size='mini' onMouseDown={this.removeLink}>
-                                                        <Icon name ='external share'/>
-                                                        Remove Link
-                                                    </Button>
-                                                </div>
-                                                {urlInput}
-
+                                            <InlineStyleControls
+                                                editorState={editorState}
+                                                onToggle={this.toggleInlineStyle}
+                                            />
+                                            Select some text, then use the buttons to add or remove links
+                                            on the selected text.
+                                            <div style={styles.buttons}>
+                                                <Button color='green' size='mini' onMouseDown={this.promptForLink} style={{marginRight: 10}}>
+                                                    <Icon name ='external share'/>
+                                                    Add Link
+                                                </Button>
+                                                <Button color='red' size='mini' onMouseDown={this.removeLink}>
+                                                    <Icon name ='external share'/>
+                                                    Remove Link
+                                                </Button>
                                             </div>
+                                            {urlInput}
+                                            <div style={styles.root}>
+                                                <div style={{marginBottom: 10}}>
+                                                    Use the buttons to add audio, image, or video.
+                                                </div>
+                                                <div style={{marginBottom: 10}}>
+                                                    Here are some local examples that can be entered as a URL:
+                                                    <ul>
+                                                        <li>media.mp3</li>
+                                                        <li>media.png</li>
+                                                        <li>media.mp4</li>
+                                                    </ul>
+                                                </div>
+                                                <div style={styles.buttons}>
+                                                    <button onMouseDown={this._addAudio } style={{marginRight: 10}}>
+                                                        Add Audio
+                                                    </button>
+                                                    <button onMouseDown={this._addImage} style={{marginRight: 10}}>
+                                                        Add Image
+                                                    </button>
+                                                    <button onMouseDown={this._addVideo} style={{marginRight: 10}}>
+                                                        Add Video
+                                                    </button>
+                                                </div>
+                                                {mediaInput}
+                                            </div>
+
                                         </div>
-                                        <hr/>
-                                    </Grid.Column>
-                                </Grid.Row>
+                                    </div>
+                                    <hr/>
+                                </Grid.Column>
+                            </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column verticalAlign='middle' width={1}>
                                 </Grid.Column>
@@ -444,6 +612,7 @@ class RichEditorExample extends React.Component {
                                     </Modal>
                                     <div className='RichEditor-root'>
                                         <Editor
+                                            blockRendererFn={mediaBlockRenderer}
                                             blockStyleFn={getBlockStyle}
                                             customStyleMap={styleMap}
                                             editorState={editorState}
@@ -461,8 +630,8 @@ class RichEditorExample extends React.Component {
                                 <Grid.Column verticalAlign='middle' width={1}>
                                 </Grid.Column>
                             </Grid.Row>
-                            </Grid>
-                    }
+                        </Grid>
+                }
 
             </div>
         );
