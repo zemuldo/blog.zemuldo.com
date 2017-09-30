@@ -1,14 +1,13 @@
-import React, {Component} from 'react'
+import React from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
-import RichEditorExample from '../partials/createBlog'
+import Pofile from '../partials/profile'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
-class LoginForm extends Component {
+class LoginForm extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-           user:null,
-            loggedin:false,
+           user:this.props.user,
             password:null,
             userName:null
         };
@@ -18,9 +17,18 @@ class LoginForm extends Component {
     };
     onLoginClick= () => {
         if(this.state.userName==='zemuldo' && this.state.password==='omera'){
-            this.setState({loggedin:true})
+            let user = {
+                id:"123456789",
+                name:"Zemuldo"
+            }
+            this.props.successLogin(user)
         }
         else {
+            let user = {
+                id:"123456789",
+                name:"Zemuldo"
+            }
+            this.props.successLogin(user)
             this.setState({loggedin:true})
         }
 
@@ -40,10 +48,10 @@ class LoginForm extends Component {
     return(
         <div>
             {
-                this.state.loggedin?
+                this.props.loggedin?
                     <div>
-                        <RichEditorExample/>
-                </div>:
+                        <Pofile editingMode={this.props.editingMode} createNew={this.props.createNew} _handleCreateNew={this.props._handleCreateNew} colors = {this.props.colors}/>
+                    </div> :
                     <div className='login-form'>
                         <Grid
                             textAlign='center'
