@@ -89,7 +89,7 @@ class RichEditorExample extends React.Component {
             }
         }
         return (
-            <div className="RichEditor-root">
+            <div className="RichEditor-root-preview">
                 <div className={className}>
                     <Editor
                         readOnly

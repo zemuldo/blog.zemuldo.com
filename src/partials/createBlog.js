@@ -34,6 +34,12 @@ const Link = (props) => {
         </a>
     );
 };
+const decorator = new CompositeDecorator([
+    {
+        strategy: findLinkEntities,
+        component: Link,
+    },
+]);
 const styles = {
     root: {
         fontFamily: '\'Georgia\', serif',
@@ -63,7 +69,7 @@ const styles = {
     },
     link: {
         color: '#3b5998',
-        textDecoration: 'underline',
+        textDecoration: 'underline'
     },
 };
 
@@ -71,12 +77,6 @@ const styles = {
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
-        const decorator = new CompositeDecorator([
-            {
-                strategy: findLinkEntities,
-                component: Link,
-            },
-        ]);
         this.state = {
             editorState:EditorState.createEmpty(),
             isLoaded:false,
@@ -265,10 +265,10 @@ class RichEditorExample extends React.Component {
         const editorState = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
         if(editorState && blogDataState){
-            this.setState({hasSavedContent:false,filledForm:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)))});
+            this.setState({hasSavedContent:false,filledForm:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)),decorator)});
         }
         else {
-            this.setState({filledForm:true,editorState : EditorState.createEmpty()});
+            this.setState({filledForm:true,editorState : EditorState.createEmpty(decorator)});
         }
     };
     handleCategoryChange(e,data){
@@ -344,37 +344,47 @@ class RichEditorExample extends React.Component {
         }
         return (
             <div>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={3}>
-                        </Grid.Column>
-                        <Grid.Column width={13}>
-                            <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                Draft an article on the fly.
-                            </Header>
-                            {
-                                this.state.filledForm?
-                                    <EditorsForm onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />:
-                                    <div>
 
+                    {
+                        this.state.filledForm?
+                            <Grid celled>
+                                <Grid.Row>
+                                    <Grid.Column verticalAlign='middle' width={16}>
+                                        <div>
+                                            Your name and profile pic will show here
+                                        </div>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column verticalAlign='middle' width={3}>
+                                    <div>
+                                        Your previous posts will show here
                                     </div>
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
+                                </Grid.Column>
+                                <Grid.Column verticalAlign='middle' width={10}>
+                                    <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                        Draft an article on the fly.
+                                    </Header>
 
-                    <Grid.Row>
-                        <Grid.Column width={3}>
-
-                        </Grid.Column>
-                        <Grid.Column width={10}>
-                            {
-                                (this.state.filledForm)?
+                                    <EditorsForm onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />
+                                </Grid.Column>
+                                <Grid.Column verticalAlign='middle' width={3}>
                                     <div>
-                                        This should be ivisible
-                                    </div>:
-                                    <div style={{ margin:'0em 0em 5em 0em'}}>
-                                        <div className="RichEditor-root">
-                                            <div className="TextEditTools">
+                                        I will give you some more stuff here
+                                    </div>
+                                </Grid.Column>
+                            </Grid.Row>
+                            </Grid>:
+                            <Grid celled>
+                                <Grid.Row>
+                                    <Grid.Column verticalAlign='middle' width={14}>
+                                        <div  style={{ margin:'0em 0em 0em 3em'}}>
+                                            <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='tiny'>Publish</Button>
+                                            <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                                Draft an article on the fly.
+                                            </Header>
+                                            <br/>
+                                            <div>
                                                 <BlockStyleControls
                                                     editorState={editorState}
                                                     onToggle={this.toggleBlockType}
@@ -384,74 +394,75 @@ class RichEditorExample extends React.Component {
                                                     editorState={editorState}
                                                     onToggle={this.toggleInlineStyle}
                                                 />
-                                                <div style={{marginBottom: 10}}>
-                                                    Select some text, then use the buttons to add or remove links
-                                                    on the selected text.
-                                                </div>
+                                                Select some text, then use the buttons to add or remove links
+                                                on the selected text.
                                                 <div style={styles.buttons}>
-                                                    <button
-                                                        onMouseDown={this.promptForLink}
-                                                        style={{marginRight: 10}}>
+                                                    <Button color='green' size='mini' onMouseDown={this.promptForLink} style={{marginRight: 10}}>
+                                                        <Icon name ='external share'/>
                                                         Add Link
-                                                    </button>
-                                                    <button onMouseDown={this.removeLink}>
+                                                    </Button>
+                                                    <Button color='red' size='mini' onMouseDown={this.removeLink}>
+                                                        <Icon name ='external share'/>
                                                         Remove Link
-                                                    </button>
+                                                    </Button>
                                                 </div>
                                                 {urlInput}
+
                                             </div>
-                                            <Modal open ={this.state.previewOpen}>
-                                                <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                                    You are about to publish this article.
-                                                </Header></Modal.Header>
-                                                <Modal.Content>
-                                                    <div>
-                                                        <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h2'>
-                                                            You are about to publish this article.
-                                                        </Header>
-                                                        <p>
-                                                            This is how will appear. Review and publish. Click back if you need to make changes
-                                                        </p>
-                                                    </div>
-                                                    <hr/>
-                                                    <Modal.Description>
-                                                        <div>
-                                                            <ShowPreview reinInitEditorState = {this.reinInitEditorState} editoPreview={this.state.editorState}/>
-                                                        </div>
-                                                    </Modal.Description>
-                                                </Modal.Content>
-                                                <Modal.Actions>
-                                                    <Button.Group>
-                                                        <Button color="blue" onClick={this.closePreview}>Back</Button>
-                                                        <Button.Or />
-                                                        <Button color="green" onClick={this.handleConfirm}>Publish</Button>
-                                                    </Button.Group>
-                                                </Modal.Actions>
-                                            </Modal>
-                                            <div className={className}>
-                                                <Editor
-                                                    blockStyleFn={getBlockStyle}
-                                                    customStyleMap={styleMap}
-                                                    editorState={editorState}
-                                                    handleKeyCommand={this.handleKeyCommand}
-                                                    onChange={this.onChange}
-                                                    onTab={this.onTab}
-                                                    placeholder="Start putting it down..."
-                                                    ref="editor"
-                                                    spellCheck={true}
-                                                />
-                                            </div>
-                                            <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='large'>Publish</Button>
                                         </div>
+                                        <hr/>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column verticalAlign='middle' width={1}>
+                                </Grid.Column>
+                                <Grid.Column verticalAlign='middle'  width={12}>
+                                    <Modal open ={this.state.previewOpen}>
+                                        <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                            You are about to publish this article.
+                                        </Header></Modal.Header>
+                                        <Modal.Content>
+                                            <div>
+                                                <p>
+                                                    This is how will appear. Review and publish. Click back if you need to make changes
+                                                </p>
+                                            </div>
+                                            <hr/>
+                                            <Modal.Description>
+                                                <div>
+                                                    <ShowPreview reinInitEditorState = {this.reinInitEditorState} editoPreview={this.state.editorState}/>
+                                                </div>
+                                            </Modal.Description>
+                                        </Modal.Content>
+                                        <Modal.Actions>
+                                            <Button.Group>
+                                                <Button color="blue" onClick={this.closePreview}>Back</Button>
+                                                <Button.Or />
+                                                <Button color="green" onClick={this.handleConfirm}>Publish</Button>
+                                            </Button.Group>
+                                        </Modal.Actions>
+                                    </Modal>
+                                    <div className='RichEditor-root'>
+                                        <Editor
+                                            blockStyleFn={getBlockStyle}
+                                            customStyleMap={styleMap}
+                                            editorState={editorState}
+                                            handleKeyCommand={this.handleKeyCommand}
+                                            onChange={this.onChange}
+                                            onTab={this.onTab}
+                                            placeholder="Start putting it down..."
+                                            ref="editor"
+                                            spellCheck={true}
+                                        />
                                     </div>
 
-                            }
-                        </Grid.Column>
-                        <Grid.Column width={3}>
 
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
+                                </Grid.Column>
+                                <Grid.Column verticalAlign='middle' width={1}>
+                                </Grid.Column>
+                            </Grid.Row>
+                            </Grid>
+                    }
 
             </div>
         );
@@ -503,7 +514,7 @@ const BLOCK_TYPES = [
     {label: 'Blockquote', style: 'blockquote',icon:'header'},
     {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
     {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
-    {label: 'Code Block', style: 'code-block',icon:'indent'},
+    {label: 'Code Block', style: 'code-block',icon:'code'},
 ];
 const BlockStyleControls = (props) => {
     const {editorState} = props;

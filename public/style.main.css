@@ -61,6 +61,7 @@
     right: 0;
 }
 .RichEditor-root {
+    border: 1px solid grey;
     background: #fff;
     font-family: 'Georgia', serif;
     font-size: 14px;
@@ -123,6 +124,12 @@
 
 .TextEditTools{
     border: 1px solid grey;
-    border-radius: 12px;
-    padding:10px
+    border-radius: 5px;
+    padding:3px
+}
+.RichEditor-root-preview {
+    background: #fff;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    padding: 15px;
 }
