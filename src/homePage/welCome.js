@@ -4,7 +4,7 @@ import axios from 'axios'
 import BlogEditor from '../partials/richTextEditor'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
-export default class WelcomePage extends Component {
+export default class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -45,11 +45,11 @@ export default class WelcomePage extends Component {
 
     render() {
         return (
-            <div style={{margin: '3em 3em 3em 1em'}}>
+            <div style={{margin: '2em 1em 3em 1em'}}>
                 {
                     (this.props.blog===null || !this.props.blog.title) ?
                         <div >
-                            <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
+                            <Header style={{alignment:'center'}} color={this.props.color} as='h1'>
                                 Welcome To ZemuldO.COM
                             </Header>
                             <hr color="green"/>
