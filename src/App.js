@@ -39,6 +39,8 @@ class App extends Component {
             geoAllowed:false,
             log: [],
             open: false,
+            createNew:false,
+            editingMode:false,
             colors:['green','blue','orange','violet','pink'],
             currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ? window.location.pathname.slice(1,window.location.pathname.length):'home'
         };
@@ -52,6 +54,8 @@ class App extends Component {
         this.shuffle = this.shuffle.bind(this);
         this.successLogin = this.successLogin.bind(this);
         this.handleUserLogged = this.handleUserLogged.bind(this);
+        this._handleCreateNew = this._handleCreateNew.bind(this)
+        this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
 
 
     };
@@ -165,6 +169,21 @@ class App extends Component {
     handleLogoutinButton = ()=>{
         this.setState({ currentLocation: 'home' ,loggedin:false})
     }
+    _handleCreateNew = () =>{
+        console.log("you can now create a new artivle")
+        console.log(window.localStorage.getItem('draftContent'))
+        let editorState = window.localStorage.getItem('draftContent')
+        let blogData = window.localStorage.getItem('blogData')
+        if(editorState && blogData){
+            console.log("directt to edit mode")
+            this.setState({editingMode:true})
+        }
+        this.setState({createNew:true})
+    }
+    _handleSwitchToProfile = () =>{
+        this.setState({currentLocation:'login',createNew:false})
+    }
+
 
     render() {
 
@@ -207,7 +226,7 @@ class App extends Component {
                             <Button style={{position: 'fixed',top: '1%',right: '1%'}} floated='right' onClick={() => { this.handleLoginButton() }} color={this.state.colors[0]}  size='mini'>Login</Button>:
                             <Dropdown style={{position: 'fixed',top: '1%',right: '1%'}} pointing='top'  item text={'Hello, '+this.state.user.name}>
                                 <Dropdown.Menu style = {{margin:'1em'}}>
-                                    <Dropdown.Item>
+                                    <Dropdown.Item onClick={this._handleSwitchToProfile}>
                                         <Icon color={this.state.colors[0]} name='user circle' />
                                         <span color={this.state.colors[1]} >Your Profile</span>
                                     </Dropdown.Item>
@@ -219,11 +238,15 @@ class App extends Component {
                                         <Icon color={this.state.colors[0]} name='help' />
                                         <span color={this.state.colors[0]} >Help</span>
                                     </Dropdown.Item>
+                                    <Dropdown.Item onClick={this._handleCreateNew}>
+                                        <Icon color={this.state.colors[0]} name='plus'  />
+                                        <span color={this.state.colors[0]} >New Article</span>
+                                    </Dropdown.Item>
                                     <Dropdown.Item>
                                         <Icon color={this.state.colors[0]} name='setting' />
                                         <span color={this.state.colors[1]} >Settings</span>
                                     </Dropdown.Item>
-                                    <Dropdown.Item>
+                                    <Dropdown.Item onClick={this.handleLogoutinButton}>
                                         <Icon color={this.state.colors[0]} name='sign out' />
                                         <span color={this.state.colors[0]} >Sign Out</span>
                                     </Dropdown.Item>
@@ -234,7 +257,7 @@ class App extends Component {
                 </Menu>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.currentLocation ==='login') ? <Login handleUserLogged={this.handleUserLogged} loggedin={this.state.loggedin} successLogin={this.successLogin} color={this.state.colors[0]} current={this.state.currentLocation} colors={this.state.colors} /> :
+                        (this.state.currentLocation ==='login') ? <Login editingMode={this.state.editingMode} createNew = {this.state.createNew} _handleCreateNew={this._handleCreateNew} handleUserLogged={this.handleUserLogged} loggedin={this.state.loggedin} successLogin={this.successLogin} color={this.state.colors[0]} current={this.state.currentLocation} colors={this.state.colors} /> :
                         (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} colors={this.state.colors}  current={this.state.currentLocation} /> :
                         (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} colors={this.state.colors} current={this.state.currentLocation} /> :
                         (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} colors={this.state.colors} current={this.state.currentLocation} /> :
