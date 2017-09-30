@@ -99,7 +99,7 @@ class RichEditorExample extends React.Component {
                         handleKeyCommand={this.handleKeyCommand}
                         onChange={this.onChange}
                         onTab={this.onTab}
-                        placeholder="Content not available."
+                        placeholder="!!!!!!!!!!!!!!!!!Please take your time write content before you try to publish."
                         ref="editor"
                         spellCheck={true}
                     />

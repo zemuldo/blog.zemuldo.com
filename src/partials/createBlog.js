@@ -258,11 +258,17 @@ class RichEditorExample extends React.Component {
                                     </div>:
                                     <div style={{ margin:'0em 0em 5em 0em'}}>
                                         <div className="RichEditor-root">
-                                            <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='large'>Publish</Button>
-                                            <BlockStyleControls
-                                                editorState={editorState}
-                                                onToggle={this.toggleBlockType}
-                                            />
+                                            <div className="TextEditTools">
+                                                <BlockStyleControls
+                                                    editorState={editorState}
+                                                    onToggle={this.toggleBlockType}
+                                                />
+                                                <br/>
+                                                <InlineStyleControls
+                                                    editorState={editorState}
+                                                    onToggle={this.toggleInlineStyle}
+                                                />
+                                            </div>
                                             <Modal open ={this.state.previewOpen}>
                                                 <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
                                                     You are about to publish this article.
@@ -285,16 +291,12 @@ class RichEditorExample extends React.Component {
                                                 </Modal.Content>
                                                 <Modal.Actions>
                                                     <Button.Group>
-                                                        <Button onClick={this.closePreview}>Make Changes</Button>
+                                                        <Button color="blue" onClick={this.closePreview}>Back</Button>
                                                         <Button.Or />
-                                                        <Button onClick={this.handleConfirm}>Publish</Button>
+                                                        <Button color="green" onClick={this.handleConfirm}>Publish</Button>
                                                     </Button.Group>
                                                 </Modal.Actions>
                                             </Modal>
-                                            <InlineStyleControls
-                                                editorState={editorState}
-                                                onToggle={this.toggleInlineStyle}
-                                            />
                                             <div className={className}>
                                                 <Editor
                                                     blockStyleFn={getBlockStyle}
@@ -303,7 +305,7 @@ class RichEditorExample extends React.Component {
                                                     handleKeyCommand={this.handleKeyCommand}
                                                     onChange={this.onChange}
                                                     onTab={this.onTab}
-                                                    placeholder="Tell a story..."
+                                                    placeholder="Start putting it down..."
                                                     ref="editor"
                                                     spellCheck={true}
                                                 />
@@ -327,7 +329,7 @@ class RichEditorExample extends React.Component {
 // Custom overrides for "code" style.
 const styleMap = {
     CODE: {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        backgroundColor: 'red',
         fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
         fontSize: 16,
         padding: 2,
@@ -354,22 +356,23 @@ class StyleButton extends React.Component {
         }
         return (
             <span className={className} onMouseDown={this.onToggle}>
+                <Icon color="black" name = {this.props.icon}/>
               {this.props.label}
             </span>
         );
     }
 }
 const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'H3', style: 'header-three'},
-    {label: 'H4', style: 'header-four'},
-    {label: 'H5', style: 'header-five'},
-    {label: 'H6', style: 'header-six'},
-    {label: 'Blockquote', style: 'blockquote'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'},
-    {label: 'Code Block', style: 'code-block'},
+    {label: 'H1', style: 'header-one',icon:'header'},
+    {label: 'H2', style: 'header-two',icon:'header'},
+    {label: 'H3', style: 'header-three',icon:'header'},
+    {label: 'H4', style: 'header-four',icon:'header'},
+    {label: 'H5', style: 'header-five',icon:'header'},
+    {label: 'H6', style: 'header-six',icon:'header'},
+    {label: 'Blockquote', style: 'blockquote',icon:'header'},
+    {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
+    {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
+    {label: 'Code Block', style: 'code-block',icon:'indent'},
 ];
 const BlockStyleControls = (props) => {
     const {editorState} = props;
@@ -379,7 +382,7 @@ const BlockStyleControls = (props) => {
         .getBlockForKey(selection.getStartKey())
         .getType();
     return (
-        <div className="RichEditor-controls">
+        <div  className="RichEditor-controls">
             {BLOCK_TYPES.map((type) =>
                 <StyleButton
                     key={type.label}
@@ -387,16 +390,17 @@ const BlockStyleControls = (props) => {
                     label={type.label}
                     onToggle={props.onToggle}
                     style={type.style}
+                    icon={type.icon}
                 />
             )}
         </div>
     );
 };
 var INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'},
-    {label: 'Monospace', style: 'CODE'},
+    {label: 'Bold', style: 'BOLD',icon:'bold'},
+    {label: 'Italic', style: 'ITALIC',icon:'italic'},
+    {label: 'Underline', style: 'UNDERLINE',icon:'underline'},
+    {label: 'Monospace', style: 'CODE',icon:'font'},
 ];
 const InlineStyleControls = (props) => {
     var currentStyle = props.editorState.getCurrentInlineStyle();
@@ -409,6 +413,7 @@ const InlineStyleControls = (props) => {
                     label={type.label}
                     onToggle={props.onToggle}
                     style={type.style}
+                    icon={type.icon}
                 />
             )}
         </div>
