@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Label, Header,Form,Select,Dropdown} from 'semantic-ui-react'
-import axios from 'axios'
-import ReviewPortal from './portal'
-import Blogs from './blogs'
+import Creator from './createBlog'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 const categories = [
@@ -38,31 +36,47 @@ class EditorsForm extends Component {
 
         };
     };
+    componentDidMount() {
+        console.log(this.props.editingMode)
+    }
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resize)
+    }
 
     render() {
         return (
             <div>
-                Lets get a few things ready first. this.
-                Fill the form below to feed details of your article.
-                <Form style={{padding:'2em 2em 2em 2em'}}>
-                    <br/>
-                    <Form.Group widths='equal'>
-                        <Form.Field inline>
-                            <Label style={{border:'none'}} as='a' size="large" color='blue'>Select Category</Label>{'   '}
-                            <Select style={{margin:'0em 0em 1em 0em',color:'green'}}  onChange={this.props.handleCategoryChange} placeholder='Select Category' options={categories} />
-                        </Form.Field>
-                    </Form.Group>
-                    <Form.Group inline>
-                        <Form.Field>
-                            <Label  style={{border:'none'}} as='a' size="large" color='blue'>Select Tags</Label>{'   '}
-                            <Dropdown style={{margin:'0em 0em 1em 0em',color:'green'}} onChange={this.props.handleTopicChange} multiple search selection closeOnChange options={topics} placeholder='Select topics' />
-                        </Form.Field>
-                    </Form.Group >
-                    <Form.TextArea label='About' placeholder='Small details about your article...' />
-                    <Form.Checkbox onChange = {this.props.handleUTAChange} label='I agree to the Community Terms and Conditions' />
-                    <Form.Button type="button" onClick={this.props.onFinishClick}  color='green' size='large'>Submit</Form.Button>
-                </Form>
+                {
+                    !this.props.editingMode?
+                        <div>
+                            <Header color='green' as='h3'>
+                                Creating your Article is easy. Save and continue where you left..
+                            </Header>
+                            Lets get a few things ready first. this.
+                            Fill the form below to feed details of your article.
+                            <Form style={{padding:'2em 2em 2em 2em'}}>
+                                <br/>
+                                <Form.Group widths='equal'>
+                                    <Form.Field inline>
+                                        <Label style={{border:'none'}} as='a' size="large" color='blue'>Select Category</Label>{'   '}
+                                        <Select style={{margin:'0em 0em 1em 0em',color:'green'}}  onChange={this.props.handleCategoryChange} placeholder='Select Category' options={categories} />
+                                    </Form.Field>
+                                </Form.Group>
+                                <Form.Group inline>
+                                    <Form.Field>
+                                        <Label  style={{border:'none'}} as='a' size="large" color='blue'>Select Tags</Label>{'   '}
+                                        <Dropdown style={{margin:'0em 0em 1em 0em',color:'green'}} onChange={this.props.handleTopicChange} multiple search selection closeOnChange options={topics} placeholder='Select topics' />
+                                    </Form.Field>
+                                </Form.Group >
+                                <Form.TextArea label='About' placeholder='Small details about your article...' />
+                                <Form.Checkbox onChange = {this.props.handleUTAChange} label='I agree to the Community Terms and Conditions' />
+                                <Form.Button type="button" onClick={this.props._goToEditor}  color='green' size='large'>Submit</Form.Button>
+                            </Form>
+                        </div>:
+                        <Creator/>
+                }
             </div>
+
         )
     }
 }
