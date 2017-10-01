@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import {Button,Image, Header,Loader,Icon} from 'semantic-ui-react'
-import axios from 'axios'
+import React from 'react'
+import {Button,Image, Header,Icon} from 'semantic-ui-react'
 import BlogEditor from '../editor/renderBlog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
@@ -12,11 +11,7 @@ export default class WelcomePage extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
     }
     componentDidMount() {
-        console.log("___at home now and this is what we have")
-        if(this.props.blogDetails){
-            console.log(this.props.blogDetails.title)
-            console.log(this.props.blog)
-        }
+
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -108,7 +103,7 @@ export default class WelcomePage extends React.Component {
                             <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
                                 <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
                                 <br/>
-                                <BlogEditor body={this.props.blog.body}/>
+                                <BlogEditor body={this.props.richViewerState}/>
                             </div>
 
                         </div>

@@ -1,12 +1,9 @@
-import React,{Component} from 'react'
+import React from 'react'
 import axios from 'axios'
-import ReactDOM from 'react-dom';
-import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Form, Segment,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
+import { Icon} from 'semantic-ui-react'
 import config from '../environments/conf'
-import EditorsForm from '../profile/editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',

@@ -1,22 +1,17 @@
 import React from 'react'
-import axios from 'axios'
-import ShowPreview from '../editor/showPreview'
-import debounce from 'lodash/debounce';
-import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Loader,Input,Header, Icon,Modal, Grid } from 'semantic-ui-react'
-import config from '../environments/conf'
+import {Loader,Input,Header, Icon, Grid } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Topics from '../partials/topics'
 import Blogs from '../posts/blog'
 import Welcome from '../homePage/welCome'
-
+/*
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',
     Business:'business',
     Technology:'tech'
 }
-
+*/
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
@@ -29,7 +24,6 @@ class RichEditorExample extends React.Component {
 
     }
     componentDidMount() {
-        console.log(this.props.editingMode)
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)

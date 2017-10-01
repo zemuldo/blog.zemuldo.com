@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Label, Header,Form,Select,Dropdown} from 'semantic-ui-react'
 import Creator from '../editor/createBlog'
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
 const categories = [
     { key: 'dev', value: 'Development', text: 'Development',name:'development' },
     { key: 'tech', value: 'Technology', text: 'Technology' ,name:'technology'},

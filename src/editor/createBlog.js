@@ -3,9 +3,8 @@ import axios from 'axios'
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Header, Icon,Modal, Grid } from 'semantic-ui-react'
+import {Button,Header, Icon,Modal } from 'semantic-ui-react'
 import config from '../environments/conf'
-import EditorsForm from '../profile/editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',

@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
 class SignUpForm extends Component {
     constructor(props){
         super(props);

@@ -377,9 +377,11 @@ class RichEditorExample extends React.Component {
     }, 1000);
     componentDidMount() {
         console.log("____________rich text viewer initializing")
+        console.log(this.props.body)
         this.handleEditorState()
     }
     handleEditorState(){
+        console.log(this.props.rich)
         if(this.props.body){
             this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)))});
             this.isLoading(true)
@@ -420,40 +422,6 @@ class RichEditorExample extends React.Component {
 
 
     render() {
-        let mediaInput;
-        if (this.state.showMedURLInput) {
-            mediaInput =
-                <div style={styles.urlInputContainer}>
-                    <input
-                        onChange={this.onURLChange}
-                        ref="url"
-                        style={styles.urlInput}
-                        type="text"
-                        value={this.state.urlValue}
-                        onKeyDown={this.onURLInputKeyDown}
-                    />
-                    <button onMouseDown={this._confirmMedia}>
-                        Confirm
-                    </button>
-                </div>;
-        }
-        let urlInput;
-        if (this.state.showURLInput) {
-            urlInput =
-                <div style={styles.urlInputContainer}>
-                    <input
-                        onChange={this.onURLChange}
-                        ref="url"
-                        style={styles.urlInput}
-                        type="text"
-                        value={this.state.urlValue}
-                        onKeyDown={this.onLinkInputKeyDown}
-                    />
-                    <button onMouseDown={this.confirmLink}>
-                        Confirm
-                    </button>
-                </div>;
-        }
         const {editorState} = this.state;
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
@@ -465,20 +433,26 @@ class RichEditorExample extends React.Component {
             }
         }
         return (
-            <div className='RichEditor-root'>
-                <Editor
-                    blockRendererFn={mediaBlockRenderer}
-                    blockStyleFn={getBlockStyle}
-                    customStyleMap={styleMap}
-                    editorState={editorState}
-                    handleKeyCommand={this.handleKeyCommand}
-                    onChange={this.onChange}
-                    onTab={this.onTab}
-                    placeholder="Start putting it down..."
-                    ref="editor"
-                    spellCheck={true}
-                />
-            </div>
+            (!this.props.richViewerState)?
+                <div className='RichEditor-root'>
+                    <Editor
+                        readOnly
+                        blockRendererFn={mediaBlockRenderer}
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        handleKeyCommand={this.handleKeyCommand}
+                        onChange={this.onChange}
+                        onTab={this.onTab}
+                        placeholder="Start putting it down..."
+                        ref="editor"
+                        spellCheck={true}
+                    />
+                </div>:
+                <div>
+                    This Document has problems
+                </div>
+
         );
     }
 }

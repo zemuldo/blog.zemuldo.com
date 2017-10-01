@@ -6,7 +6,7 @@ import About from '../partials/aboutHome'
 import Blogs from '../posts/blogs'
 import Blog from '../posts/blog'
 import Topics from '../partials/topics'
-import TwitterProf from '../partials/twitterProf'
+/*import TwitterProf from '../partials/twitterProf'*/
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class HomePage extends Component {
@@ -27,7 +27,8 @@ class HomePage extends Component {
                 twtC:null,
                 gplsC:null
             },
-            topic:null
+            topic:null,
+            richViewerState:null
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -53,7 +54,6 @@ class HomePage extends Component {
         this.setState({blogLoaded:!state})
     }
     onReadMore(thisBlog){
-        console.log(thisBlog)
         this.setState({blogIsLoading:true})
         return axios.post(env.httpURL, {
             "queryMethod":"getPost",
@@ -64,10 +64,7 @@ class HomePage extends Component {
             .then(response => {
                 console.log(response)
                 this.setState({blog:response.data,blogDetails:thisBlog})
-                this.setState({blogIsLoading:false})
-                console.log("++++++++++++BLOGS LOADED+++++++++++++++")
-                console.log(this.state.blogDetails)
-                console.log(this.state.blog)
+                this.setState({blogIsLoading:false,richViewerState:response.data.body})
                 window.scrollTo(0,0)
                 let gplusPost = {
                     "method": "pos.plusones.get",
@@ -99,9 +96,6 @@ class HomePage extends Component {
             .catch(function (err) {
                 this.setState({blog:null,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false})
-                console.log("++++++++++++BLOGS ERROR+++++++++++++++")
-                console.log(this.state.blogDetails)
-                console.log(this.state.blog)
                 window.scrollTo(0,0)
                 return err
             }.bind(this))
@@ -236,9 +230,18 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
-                                                        <Topics blogsAreLoading={this.blogsAreLoading} setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
+                                                        <Topics
+                                                            blogsAreLoading={this.blogsAreLoading}
+                                                            setTopicPosts={this.setTopicPosts}
+                                                            onReadMore = {this.onReadMore}
+                                                            blog ={this.state.blog}
+                                                            color={this.props.color}
+                                                            blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
-                                                            <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
+                                                            <Header
+                                                                style={{marginLeft:'10px'}}
+                                                                color='blue' as='h3'>Search for it
+                                                            </Header>
                                                             <Input
                                                                 icon={<Icon name='search' inverted circular link />}
                                                                 placeholder='Search...'
@@ -250,7 +253,11 @@ class HomePage extends Component {
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
-                                                                                <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                                <Blogs
+                                                                                    color={this.props.color}
+                                                                                    onReadMore = {this.onReadMore}
+                                                                                    blogs ={this.state.blogs}
+                                                                                    blog ={this.state.blog}/>:
                                                                                 <div>
                                                                                     No matching content on this Topic
                                                                                 </div>
@@ -273,6 +280,7 @@ class HomePage extends Component {
                                                             <Loader active inline='centered' />
                                                         </div>:
                                                         <WelcomePage
+                                                            richViewerState={this.state.richViewerState}
                                                             counts={this.state.counts}
                                                             color={this.props.colors[1]}
                                                             blogDetails={this.state.blogDetails}
@@ -298,7 +306,13 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>600) ?
                                                     <Grid.Column  width={4}>
-                                                        <Topics blogsAreLoading={this.blogsAreLoading} setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
+                                                        <Topics
+                                                            blogsAreLoading={this.blogsAreLoading}
+                                                            setTopicPosts={this.setTopicPosts}
+                                                            onReadMore = {this.onReadMore}
+                                                            blog ={this.state.blog}
+                                                            color={this.props.color}
+                                                            blogs={this.state.blogs}/>
                                                         <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                             <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
                                                             <Input
@@ -306,13 +320,19 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                                            <Header
+                                                                color={this.props.colors[2]} as='h2'>
+                                                                Most Popular
+                                                            </Header>
                                                             {
                                                                 this.state.blogsLoaded?
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
-                                                                                <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                                <Blogs
+                                                                                    color={this.props.color}
+                                                                                    onReadMore = {this.onReadMore}
+                                                                                    blogs ={this.state.blogs} blog ={this.state.blog}/>:
                                                                                 <div>
                                                                                     No matching content on this Topic
                                                                                 </div>
@@ -334,8 +354,14 @@ class HomePage extends Component {
                                                         <div style={{margin: '3em 1em 3em 2em'}}>
                                                             {
                                                                 (this.state.blog===null) ?
-                                                                    <About  color={this.props.color}  colors={this.props.colors}/>:
-                                                                    <Blog counts={this.state.counts}  color={this.props.color} colors={this.props.colors} blog = {this.state.blog}/>
+                                                                    <About
+                                                                        color={this.props.color}
+                                                                        colors={this.props.colors}/>:
+                                                                    <Blog
+                                                                        counts={this.state.counts}
+                                                                        color={this.props.color}
+                                                                        colors={this.props.colors}
+                                                                        blog = {this.state.blog}/>
                                                             }
                                                         </div>:
                                                         <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
