@@ -3,8 +3,8 @@ import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
 import WelcomePage from './welCome'
 import About from '../partials/aboutHome'
-import Blogs from '../partials/blogs'
-import Blog from '../partials/blog'
+import Blogs from '../posts/blogs'
+import Blog from '../posts/blog'
 import Topics from '../partials/topics'
 import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
@@ -15,6 +15,7 @@ class HomePage extends Component {
         this.state = {
             blogs:[],
             blog:null,
+            blogDetails:null,
             logged:false,
             homePageLoaded:false,
             blogsLoaded:false,
@@ -55,22 +56,25 @@ class HomePage extends Component {
         console.log(thisBlog)
         this.setState({blogIsLoading:true})
         return axios.post(env.httpURL, {
-            "query":"getPost",
-            "queryParam":{
+            "queryMethod":"getPost",
+            "queryData":{
                 "_id":thisBlog.postID
             }
         })
             .then(response => {
                 console.log(response)
-                this.setState({blog:response.data})
+                this.setState({blog:response.data,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false})
+                console.log("++++++++++++BLOGS LOADED+++++++++++++++")
+                console.log(this.state.blogDetails)
+                console.log(this.state.blog)
                 window.scrollTo(0,0)
                 let gplusPost = {
                     "method": "pos.plusones.get",
                     "id": "p",
                     "params": {
                         "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blog.title.split(' ').join('-')+'_'+this.state.blog.date.split(' ').join('-'),
+                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),
                         "source": "widget",
                         "userId": "@viewer",
                         "groupId": "@self"
@@ -80,8 +84,8 @@ class HomePage extends Component {
                     "apiVersion": "v1"
                 }
                 return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blog.title.split(' ').join('%2520')+'_'+this.state.blog.date.split(' ').join('%2520'),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blog.title.split(' ').join('-')+'_'+this.state.blog.date.split(' ').join('-'),{}),
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520'),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })
@@ -93,8 +97,11 @@ class HomePage extends Component {
                 }})
             }.bind(this))
             .catch(function (err) {
-                this.setState({blog:null})
+                this.setState({blog:null,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false})
+                console.log("++++++++++++BLOGS ERROR+++++++++++++++")
+                console.log(this.state.blogDetails)
+                console.log(this.state.blog)
                 window.scrollTo(0,0)
                 return err
             }.bind(this))
@@ -152,8 +159,8 @@ class HomePage extends Component {
 
         window.addEventListener('resize', this.resize)
         return axios.post(env.httpURL, {
-            "query":"getAllPosts",
-            "queryParam":{}
+            "queryMethod":"getAllPosts",
+            "queryData":{}
         })
             .then(function (response) {
                 if(response.data[0]){
@@ -265,7 +272,13 @@ class HomePage extends Component {
                                                         <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
                                                             <Loader active inline='centered' />
                                                         </div>:
-                                                        <WelcomePage counts={this.state.counts} color={this.props.colors[1]} blog={this.state.blog} blogs={this.state.blogs} blogLoaded={this.state.blogLoaded}/>
+                                                        <WelcomePage
+                                                            counts={this.state.counts}
+                                                            color={this.props.colors[1]}
+                                                            blogDetails={this.state.blogDetails}
+                                                            blog={this.state.blog}
+                                                            blogs={this.state.blogs}
+                                                            blogLoaded={this.state.blogLoaded}/>
                                                 }
 
                                             </Grid.Column>
