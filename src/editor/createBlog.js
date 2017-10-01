@@ -336,16 +336,16 @@ class RichEditorExample extends React.Component {
             let title = obj.blocks[0].text
             obj.blocks.splice(0,1)
             axios.post(env.httpURL, {
-                type:cats[blogData.type],
-                title:title,
-                query:"publish",
-                topics:blogData.topics,
-                images:["blogs_pic.jpg"],
-                author:"Danstan Onyango",
-                body:JSON.stringify(obj),
-                hasSavedContent:true,
-                accepted:false,
-                publishing:false
+                queryMethod:"publish",
+                "queryData":{
+                    type:cats[blogData.type],
+                    title:title,
+                    query:"publish",
+                    topics:blogData.topics,
+                    images:["blogs_pic.jpg"],
+                    author:"Danstan Onyango",
+                    body:JSON.stringify(obj)}
+
             })
                 .then(function (response) {
                     console.log(response)

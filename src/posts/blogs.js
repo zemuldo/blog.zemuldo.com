@@ -20,7 +20,7 @@ class Blogs extends Component {
                     (this.props.blogs.length>10) ?
                         <div>
                             { _.times(this.props.blogs.length, i =>
-                                    <List.Item key={this.props.blogs[i].postID} >
+                                    <List.Item key={this.props.blogs[i].id} >
                                         <List.Icon name='leaf' />
                                         <List.Content><Header color='green' as='h3'>{this.props.blogs[i].title.split(' ').join(' ')}</Header></List.Content>
                                         <List.Content>Author: {this.props.blogs[i].author}</List.Content><span><Icon color='green' name="thumbs up"/>:{this.props.blogs[i].likes}</span>

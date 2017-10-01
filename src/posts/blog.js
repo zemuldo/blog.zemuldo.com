@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button,Image, Header, Icon} from 'semantic-ui-react'
-import BlogEditor from '../partials/richTextEditor'
+import BlogEditor from '../editor/showPreview'
 import 'semantic-ui-css/semantic.min.css';
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/

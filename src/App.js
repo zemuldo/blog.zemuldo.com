@@ -98,10 +98,13 @@ class App extends Component {
             this._handleChangeBodySize(503)
         }
         window.addEventListener('resize', this.resize)
+        console.log(this.state.iKnowYou)
         if(!this.state.iKnowYou){
             return axios.post(env.httpURL, {"query":"getIp"})
                 .then(response => {
+                    console.log(response)
                     if(response.data.ip==='::1' || response.data.ip==='127.0.0.1'){
+                        console.log("user accessing at localhost")
                         return{error:'user at localhost'}
                     }
                     else {
@@ -111,6 +114,7 @@ class App extends Component {
 
                 })
                 .then(function (visitorData) {
+                    console.log(visitorData)
                    if(!visitorData.error){
                        if(localStorage.getItem('user')){
                            let user = JSON.parse(localStorage.getItem('user'))

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header} from 'semantic-ui-react'
 import axios from 'axios'
 import ReviewPortal from './portal'
-import Blogs from './blogs'
+import Blogs from '../posts/blogs'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class Topics extends Component {
