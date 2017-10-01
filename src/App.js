@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Menu, Button,Icon, Dropdown} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
-import Login from './login/loginForm'
+import Login from './profile/loginForm'
 import TechSummary from './tech/techSummary'
 import BusinessSummary from './business/businessSummary'
 import DevArticles from './developmentTuts/developmentTuts'
@@ -42,7 +42,8 @@ class App extends Component {
             createNew:false,
             editingMode:false,
             colors:['green','blue','orange','violet','pink'],
-            currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ? window.location.pathname.slice(1,window.location.pathname.length):'home'
+            currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ?
+                window.location.pathname.slice(1,window.location.pathname.length):'home'
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -200,25 +201,40 @@ class App extends Component {
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <Menu fixed='top' size='small' color="green" borderless>
-                    <Menu.Item  name='home' active={this.state.currentLocation === 'home'} onClick={this.handleHomeClick}>
+                    <Menu.Item
+                        name='home'
+                        active={this.state.currentLocation === 'home'}
+                        onClick={this.handleHomeClick}>
                         <Icon color={this.state.colors[0]} name='home' />
                         <span color={this.state.colors[0]}>HOME</span>
                     </Menu.Item>
                     <Dropdown pointing='top' item text='Categories'>
                         <Dropdown.Menu style = {{margin:'1em'}}>
-                            <Dropdown.Item name='dev' active={this.state.currentLocation === 'dev'} onClick={this.handleMenuItemClick}>
+                            <Dropdown.Item
+                                name='dev'
+                                active={this.state.currentLocation === 'dev'}
+                                onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='code' />
                                 <span color={this.state.colors[0]}>Dev</span>
                             </Dropdown.Item>
-                            <Dropdown.Item name='business' active={this.state.currentLocation === 'business'} onClick={this.handleMenuItemClick}>
+                            <Dropdown.Item
+                                name='business'
+                                active={this.state.currentLocation === 'business'}
+                                onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='creative commons' />
                                 <span color={this.state.colors[0]}>Business</span>
                             </Dropdown.Item>
-                            <Dropdown.Item  name='tech' active={this.state.currentLocation === 'tech'} onClick={this.handleMenuItemClick}>
+                            <Dropdown.Item
+                                name='tech'
+                                active={this.state.currentLocation === 'tech'}
+                                onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='server' />
                                 <span color={this.state.colors[0]}>Tech</span>
                             </Dropdown.Item>
-                            <Dropdown.Item name='reviews' active={this.state.currentLocation === 'use'} onClick={this.handleMenuItemClick}>
+                            <Dropdown.Item
+                                name='reviews'
+                                active={this.state.currentLocation === 'use'}
+                                onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='circle notched' />
                                 <span color={this.state.colors[0]}>Reviews</span>
                             </Dropdown.Item>
@@ -226,8 +242,14 @@ class App extends Component {
                     </Dropdown>
                     {
                         (!this.state.loggedin) ?
-                            <Button style={{position: 'fixed',top: '1%',right: '1%'}} floated='right' onClick={() => { this.handleLoginButton() }} color={this.state.colors[0]}  size='mini'>Login</Button>:
-                            <Dropdown style={{position: 'fixed',top: '1%',right: '1%'}} pointing='top'  item text={'Hello, '+this.state.user.name}>
+                            <Button
+                                style={{position: 'fixed',top: '1%',right: '1%'}} floated='right'
+                                onClick={() => { this.handleLoginButton() }}
+                                color={this.state.colors[0]}  size='mini'>Login</Button>:
+                            <Dropdown
+                                style={{position: 'fixed',top: '1%',right: '1%'}}
+                                pointing='top'  item
+                                text={'Hello, '+this.state.user.name}>
                                 <Dropdown.Menu style = {{margin:'1em'}}>
                                     <Dropdown.Item onClick={this._handleSwitchToProfile}>
                                         <Icon color={this.state.colors[0]} name='user circle' />
@@ -260,12 +282,41 @@ class App extends Component {
                 </Menu>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.currentLocation ==='login') ? <Login _goToEditor = {this._goToEditor} editingMode={this.state.editingMode} createNew = {this.state.createNew} _handleCreateNew={this._handleCreateNew} handleUserLogged={this.handleUserLogged} loggedin={this.state.loggedin} successLogin={this.successLogin} color={this.state.colors[0]} current={this.state.currentLocation} colors={this.state.colors} /> :
-                        (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} colors={this.state.colors}  current={this.state.currentLocation} /> :
-                        (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} colors={this.state.colors} current={this.state.currentLocation} /> :
-                        (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} colors={this.state.colors} current={this.state.currentLocation} /> :
-                        (this.state.currentLocation === 'dev') ? <DevArticles color={this.state.colors[0]} colors={this.state.colors} current={this.state.currentLocation} /> :
-                        <HomePage color={this.state.colors[1]} colors={this.state.colors} current={this.state.currentLocation} />
+                        (this.state.currentLocation ==='login') ?
+                            <Login
+                                _goToEditor = {this._goToEditor}
+                                editingMode={this.state.editingMode}
+                                createNew = {this.state.createNew}
+                                _handleCreateNew={this._handleCreateNew}
+                                handleUserLogged={this.handleUserLogged}
+                                loggedin={this.state.loggedin}
+                                successLogin={this.successLogin}
+                                color={this.state.colors[0]}
+                                current={this.state.currentLocation}
+                                colors={this.state.colors} /> :
+                        (this.state.currentLocation === 'ZemuldO-Home') ?
+                            <HomePage
+                                color={this.state.colors[2]}
+                                colors={this.state.colors}
+                                current={this.state.currentLocation} /> :
+                        (this.state.currentLocation === 'tech') ?
+                            <TechSummary
+                                color={this.state.colors[1]}
+                                colors={this.state.colors}
+                                current={this.state.currentLocation} /> :
+                        (this.state.currentLocation === 'business') ?
+                            <BusinessSummary
+                                color={this.state.colors[2]}
+                                colors={this.state.colors}
+                                current={this.state.currentLocation} /> :
+                        (this.state.currentLocation === 'dev') ?
+                            <DevArticles
+                                color={this.state.colors[0]}
+                                colors={this.state.colors}
+                                current={this.state.currentLocation} /> :
+                        <HomePage color={this.state.colors[1]}
+                                  colors={this.state.colors}
+                                  current={this.state.currentLocation} />
                     }
                 </div>
                 <Footer color={this.state.colors[0]} corrent={this.state.current}/>
