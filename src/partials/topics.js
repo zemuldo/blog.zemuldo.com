@@ -16,18 +16,19 @@ class Topics extends Component {
     onTopicClick = (e) => {
         this.props.blogsAreLoading(true)
         return axios.post(env.httpURL,{
-            "query":"getPostsTopic",
-            "queryParam":{
+            "queryMethod":"getPostsTopic",
+            "queryData":{
                 "topic":e
             }
         })
             .then(function (blogs) {
+                console.log("++++++++fetching TOPIC B;LOGS++++++")
+                console.log(blogs.data)
                 this.setState({topicBlogs:blogs.data})
-                if(this.props.setTopicPosts){
-                    this.props.setTopicPosts(blogs.data,e)
-                }
+                this.props.setTopicPosts(blogs.data,e)
             }.bind(this))
             .catch(function (err) {
+                console.log("++++++++ERREOR IN FETCH TOPIC B;LOGS++++++")
                 this.props.setTopicPosts([],e)
             }.bind(this))
     }

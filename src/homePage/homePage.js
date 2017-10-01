@@ -182,8 +182,8 @@ class HomePage extends Component {
         e.preventDefault();
         if(e.target.value===''){
             return axios.post(env.httpURL, {
-                "query":"getAllPosts",
-                "queryParam":{}
+                "queryMethod":"getAllPosts",
+                "queryData":{}
             })
                 .then(response => {
                     this.setState({blogs:response.data})
@@ -193,8 +193,8 @@ class HomePage extends Component {
         }
         else {
             return axios.post(env.httpURL, {
-                "query":"getFiltered",
-                "queryParam":{
+                "queryMethod":"getFiltered",
+                "queryData":{
                     "filter":e.target.value,
                 }
             })
