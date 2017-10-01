@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
-import Pofile from '../partials/profile'
+import Pofile from './profile'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
 class LoginForm extends React.Component {
@@ -50,7 +50,13 @@ class LoginForm extends React.Component {
             {
                 this.props.loggedin?
                     <div>
-                        <Pofile _goToEditor = {this.props._goToEditor} editingMode={this.props.editingMode} createNew={this.props.createNew} _handleCreateNew={this.props._handleCreateNew} colors = {this.props.colors}/>
+                        <Pofile
+                            _goToEditor = {this.props._goToEditor}
+                            _exitEditMode={this.props._exitEditMode}
+                            editingMode={this.props.editingMode}
+                            createNew={this.props.createNew}
+                            _handleCreateNew={this.props._handleCreateNew}
+                            colors = {this.props.colors}/>
                     </div> :
                     <div className='login-form'>
                         <Grid

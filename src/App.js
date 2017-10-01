@@ -58,6 +58,7 @@ class App extends Component {
         this._handleCreateNew = this._handleCreateNew.bind(this)
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
         this._goToEditor = this._goToEditor.bind(this)
+        this._exitEditMode = this._exitEditMode.bind(this)
 
 
     };
@@ -185,8 +186,13 @@ class App extends Component {
     _handleSwitchToProfile = () =>{
         this.setState({currentLocation:'login',createNew:false})
     }
-    _goToEditor(){
+    _goToEditor=()=>{
+        console.log("==============going to editor now")
         this.setState({editingMode:true})
+    }
+    _exitEditMode=()=>{
+        console.log("-----------exiting editor")
+        this.setState({editingMode:false,createNew:false})
     }
 
     render() {
@@ -284,6 +290,7 @@ class App extends Component {
                     {
                         (this.state.currentLocation ==='login') ?
                             <Login
+                                _exitEditMode={this._exitEditMode}
                                 _goToEditor = {this._goToEditor}
                                 editingMode={this.state.editingMode}
                                 createNew = {this.state.createNew}

@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
 import {Button,Header, Icon,Modal, Grid } from 'semantic-ui-react'
 import config from '../environments/conf'
-import EditorsForm from './editorsForm'
+import EditorsForm from '../profile/editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',
@@ -120,8 +120,8 @@ class RichEditorExample extends React.Component {
         this.state = {
             editorState:EditorState.createEmpty(),
             isLoaded:false,
-            category:null,
-            topics:null,
+            category:this.props.category,
+            topics:this.props.topics,
             termsAccept:false,
             dialogInComplete:true,
             filledForm:false,
@@ -142,10 +142,6 @@ class RichEditorExample extends React.Component {
         this.saveContent = this.saveContent.bind(this);
         this.handleEditorState = this.handleEditorState.bind(this);
         this.publish = this.publish.bind(this);
-        this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this.handleTopicChange = this.handleTopicChange.bind(this);
-        this.handleUTAChange = this.handleUTAChange.bind(this);
-        this.onFinishClick = this.onFinishClick.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.reinInitEditorState=this.reinInitEditorState.bind(this)
         this.promptForLink = this._promptForLink.bind(this);
@@ -158,6 +154,7 @@ class RichEditorExample extends React.Component {
         this._addVideo = this._addVideo.bind(this);
         this.__promptForMedia = this.__promptForMedia.bind(this);
         this._confirmMedia = this._confirmMedia.bind(this)
+        this.handleGoBackToProfile = this.handleGoBackToProfile.bind(this)
     }
     __promptForMedia(type) {
         this.setState({
@@ -351,17 +348,17 @@ class RichEditorExample extends React.Component {
                 publishing:false
             })
                 .then(function (response) {
+                    console.log(response)
                     if(response.data.state===true){
-                        window.localStorage.removeItem('blogData')
-                        window.localStorage.removeItem('draftContent')
-                        localStorage.clear();
-                        this.setState({isPublished:true,filledForm:true})
-                        console.log(this.state.filledForm)
+                        window.localStorage.removeItem('blogData');
+                        window.localStorage.removeItem('draftContent');
+                        this.setState({isPublished:true,filledForm:true});
+                        this.props._exitEditMode();
 
                     }
                     else {
+                        this.props._exitEditMode();
                     }
-                    this.closePreview()
                 }.bind(this))
 
                 .catch(function (err) {
@@ -391,28 +388,14 @@ class RichEditorExample extends React.Component {
             this.setState({filledForm:true,editorState : EditorState.createEmpty(decorator)});
         }
     };
-    handleCategoryChange(e,data){
-        this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
-    }
-    handleTopicChange(e,data){
-        this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
-    }
-    handleUTAChange(e,data){
-        this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
-    }
-    onFinishClick(){
-        let blogDta = {
-            type:this.state.category,
-            topics:this.state.topics
-        }
-        window.localStorage.setItem('blogData',JSON.stringify(blogDta))
-        this.setState({filledForm:false})
-    }
     startPublish = ()=>{
         this.showPreview()
     }
     showConfirm = () => {
         this.setState({ confirmOpen: true })
+    }
+    handleGoBackToProfile = () => {
+       this.props._exitEditMode()
     }
     showPreview=()=>{
         this.setState({ previewOpen: true })
@@ -422,7 +405,7 @@ class RichEditorExample extends React.Component {
     }
     handleConfirm = () => {
         this.closePreview()
-        this.setState({startPublish:true, confirmOpen: false })
+        this.setState({confirmOpen: false })
         this.publish()
     }
     handleCancel = () =>{
@@ -483,7 +466,18 @@ class RichEditorExample extends React.Component {
         return (
             <div>
                 <div  style={{ margin:'0em 0em 0em 3em'}}>
-                    <Button disabled = {this.state.hasSavedContent} style={{float:'right'}} type="button"  onClick={this.startPublish}  color='green' size='tiny'>Publish</Button>
+                    <Button
+                        disabled = {this.state.hasSavedContent}
+                        style={{float:'right'}} type="button"
+                        onClick={this.startPublish}
+                        color='green' size='mini'>Publish
+                    </Button>
+                    <Button
+                        disabled = {this.state.hasSavedContent}
+                        style={{float:'left'}} type="button"
+                        onClick={this.handleGoBackToProfile}
+                        color='green' size='mini'>Publish
+                    </Button>
                     <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
                         Draft an article on the fly.
                     </Header>
@@ -541,7 +535,7 @@ class RichEditorExample extends React.Component {
                         <hr/>
                         <Modal.Description>
                             <div>
-                                <ShowPreview reinInitEditorState = {this.reinInitEditorState} editoPreview={this.state.editorState}/>
+                                <ShowPreview _exitEditMode={this.props._exitEditMode}  reinInitEditorState = {this.reinInitEditorState} editorState={this.state.editorState}/>
                             </div>
                         </Modal.Description>
                     </Modal.Content>

@@ -1,13 +1,13 @@
 import React from 'react'
 import axios from 'axios'
-import ShowPreview from './showPreview'
+import ShowPreview from '../editor/showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
 import {Loader,Input,Header, Icon,Modal, Grid } from 'semantic-ui-react'
 import config from '../environments/conf'
 import EditorsForm from './editorsForm'
-import Topics from './topics'
-import Blogs from './blog'
+import Topics from '../partials/topics'
+import Blogs from '../posts/blog'
 import Welcome from '../homePage/welCome'
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -80,7 +80,15 @@ class RichEditorExample extends React.Component {
                     </Grid.Column>
                     <Grid.Column  width={9}>
                         {
-                            this.props.createNew? <EditorsForm _goToEditor = {this.props._goToEditor}   editingMode = {this.props.editingMode} onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />:
+                            this.props.createNew?
+                                <EditorsForm
+                                    _goToEditor = {this.props._goToEditor}
+                                    _exitEditMode={this.props._exitEditMode}
+                                    editingMode = {this.props.editingMode}
+                                    onFinishClick={this.onFinishClick}
+                                    handleUTAChange={this.handleUTAChange}
+                                    handleCategoryChange={this.handleCategoryChange}
+                                    handleTopicChange={this.handleTopicChange} />:
                                 <Welcome color={this.props.color} blog = {null}/>
                         }
                     </Grid.Column>

@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
 import {Button,Form, Segment,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
 import config from '../environments/conf'
-import EditorsForm from './editorsForm'
+import EditorsForm from '../profile/editorsForm'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',
@@ -119,7 +119,7 @@ class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState:EditorState.createEmpty(),
+            editorState:this.props.editorState? this.props.editorState: EditorState.createEmpty(),
             isLoaded:false,
             category:null,
             topics:null,
@@ -361,6 +361,7 @@ class RichEditorExample extends React.Component {
                         window.localStorage.removeItem('draftContent')
                         localStorage.clear();
                         this.setState({isPublished:true,filledForm:true})
+                        this.props._exitEditMode()
                         console.log(this.state.filledForm)
 
                     }

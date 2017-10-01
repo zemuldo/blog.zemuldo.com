@@ -46,7 +46,7 @@ class SignUpForm extends Component {
                             </Segment>
                         </Form>
                         <Message>
-                            Have an account?  <a href="../profile/loginForm.js"> Login</a>
+                            Have an account?  <a href="loginForm.js"> Login</a>
                         </Message>
                     </Grid.Column>
                 </Grid>

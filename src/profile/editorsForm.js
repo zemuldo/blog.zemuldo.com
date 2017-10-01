@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Label, Header,Form,Select,Dropdown} from 'semantic-ui-react'
-import Creator from './createBlog'
+import Creator from '../editor/createBlog'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 const categories = [
@@ -32,9 +32,16 @@ class EditorsForm extends Component {
     constructor(props){
         super(props);
         this.state = {
-
-
+            category:null,
+            topics:null,
+            termsAccept:false,
+            dialogInComplete:true,
         };
+        this.handleTopicChange = this.handleTopicChange.bind(this);
+        this.handleUTAChange = this.handleUTAChange.bind(this);
+        this.onFinishClick = this.onFinishClick.bind(this);
+        this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this._handleGoBackToPrifile = this._handleGoBackToPrifile.bind(this)
     };
     componentDidMount() {
         console.log(this.props.editingMode)
@@ -42,6 +49,27 @@ class EditorsForm extends Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     }
+    handleCategoryChange(e,data){
+        this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    handleTopicChange(e,data){
+        this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    handleUTAChange(e,data){
+        this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    onFinishClick(){
+        let blogDta = {
+            type:this.state.category,
+            topics:this.state.topics
+        }
+        window.localStorage.setItem('blogData',JSON.stringify(blogDta))
+        this.setState({filledForm:false})
+        this.props._goToEditor()
+    }
+    _handleGoBackToPrifile = ()=>{
+        this.props._exitEditMode()
+}
 
     render() {
         return (
@@ -59,21 +87,22 @@ class EditorsForm extends Component {
                                 <Form.Group widths='equal'>
                                     <Form.Field inline>
                                         <Label style={{border:'none'}} as='a' size="large" color='blue'>Select Category</Label>{'   '}
-                                        <Select style={{margin:'0em 0em 1em 0em',color:'green'}}  onChange={this.props.handleCategoryChange} placeholder='Select Category' options={categories} />
+                                        <Select style={{margin:'0em 0em 1em 0em',color:'green'}}  onChange={this.handleCategoryChange} placeholder='Select Category' options={categories} />
                                     </Form.Field>
                                 </Form.Group>
                                 <Form.Group inline>
                                     <Form.Field>
                                         <Label  style={{border:'none'}} as='a' size="large" color='blue'>Select Tags</Label>{'   '}
-                                        <Dropdown style={{margin:'0em 0em 1em 0em',color:'green'}} onChange={this.props.handleTopicChange} multiple search selection closeOnChange options={topics} placeholder='Select topics' />
+                                        <Dropdown style={{margin:'0em 0em 1em 0em',color:'green'}} onChange={this.handleTopicChange} multiple search selection closeOnChange options={topics} placeholder='Select topics' />
                                     </Form.Field>
                                 </Form.Group >
                                 <Form.TextArea label='About' placeholder='Small details about your article...' />
-                                <Form.Checkbox onChange = {this.props.handleUTAChange} label='I agree to the Community Terms and Conditions' />
-                                <Form.Button type="button" onClick={this.props._goToEditor}  color='green' size='large'>Submit</Form.Button>
+                                <Form.Checkbox onChange = {this.handleUTAChange} label='I agree to the Community Terms and Conditions' />
+                                <Form.Button type="button" onClick={this.onFinishClick}  color='green' size='large'>Submit</Form.Button>
+                                <Form.Button type="button" onClick={this._handleGoBackToPrifile}  color='green' size='large'>Back</Form.Button>
                             </Form>
                         </div>:
-                        <Creator/>
+                        <Creator _exitEditMode={this.props._exitEditMode} topics={this.state.topics} category={this.state.category}/>
                 }
             </div>
 
