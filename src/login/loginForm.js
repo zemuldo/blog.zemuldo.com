@@ -50,7 +50,7 @@ class LoginForm extends React.Component {
             {
                 this.props.loggedin?
                     <div>
-                        <Pofile editingMode={this.props.editingMode} createNew={this.props.createNew} _handleCreateNew={this.props._handleCreateNew} colors = {this.props.colors}/>
+                        <Pofile _goToEditor = {this.props._goToEditor} editingMode={this.props.editingMode} createNew={this.props.createNew} _handleCreateNew={this.props._handleCreateNew} colors = {this.props.colors}/>
                     </div> :
                     <div className='login-form'>
                         <Grid

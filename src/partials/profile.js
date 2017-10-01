@@ -80,7 +80,7 @@ class RichEditorExample extends React.Component {
                     </Grid.Column>
                     <Grid.Column  width={9}>
                         {
-                            this.props.createNew? <EditorsForm   editingMode = {this.props.editingMode} onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />:
+                            this.props.createNew? <EditorsForm _goToEditor = {this.props._goToEditor}   editingMode = {this.props.editingMode} onFinishClick={this.onFinishClick} handleUTAChange={this.handleUTAChange} handleCategoryChange={this.handleCategoryChange} handleTopicChange={this.handleTopicChange} />:
                                 <Welcome color={this.props.color} blog = {null}/>
                         }
                     </Grid.Column>

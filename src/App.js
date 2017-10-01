@@ -56,6 +56,7 @@ class App extends Component {
         this.handleUserLogged = this.handleUserLogged.bind(this);
         this._handleCreateNew = this._handleCreateNew.bind(this)
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
+        this._goToEditor = this._goToEditor.bind(this)
 
 
     };
@@ -183,7 +184,9 @@ class App extends Component {
     _handleSwitchToProfile = () =>{
         this.setState({currentLocation:'login',createNew:false})
     }
-
+    _goToEditor(){
+        this.setState({editingMode:true})
+    }
 
     render() {
 
@@ -257,7 +260,7 @@ class App extends Component {
                 </Menu>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.currentLocation ==='login') ? <Login editingMode={this.state.editingMode} createNew = {this.state.createNew} _handleCreateNew={this._handleCreateNew} handleUserLogged={this.handleUserLogged} loggedin={this.state.loggedin} successLogin={this.successLogin} color={this.state.colors[0]} current={this.state.currentLocation} colors={this.state.colors} /> :
+                        (this.state.currentLocation ==='login') ? <Login _goToEditor = {this._goToEditor} editingMode={this.state.editingMode} createNew = {this.state.createNew} _handleCreateNew={this._handleCreateNew} handleUserLogged={this.handleUserLogged} loggedin={this.state.loggedin} successLogin={this.successLogin} color={this.state.colors[0]} current={this.state.currentLocation} colors={this.state.colors} /> :
                         (this.state.currentLocation === 'ZemuldO-Home') ? <HomePage color={this.state.colors[2]} colors={this.state.colors}  current={this.state.currentLocation} /> :
                         (this.state.currentLocation === 'tech') ? <TechSummary color={this.state.colors[1]} colors={this.state.colors} current={this.state.currentLocation} /> :
                         (this.state.currentLocation === 'business') ? <BusinessSummary color={this.state.colors[2]} colors={this.state.colors} current={this.state.currentLocation} /> :
