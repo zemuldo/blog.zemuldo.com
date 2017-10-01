@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
-import WelcomePage from './welCome'
+import WelcomePage from '../partials/welCome'
 import About from '../partials/aboutHome'
 import Blogs from '../posts/blogs'
 import Blog from '../posts/blog'
@@ -108,10 +108,12 @@ class HomePage extends Component {
         this.setState({bodySize:size})
     }
     resize = () => this.forceUpdate();
-    setCurrentBlog(title){
+    setCurrentBlog(id){
         return axios.post(env.httpURL, {
-            "query":"getAllPosts",
-            "queryParam":{}
+            "query":"getPost",
+            "queryParam":{
+                id:'id'
+            }
         })
             .then(response => {
                 if(response.data.error){

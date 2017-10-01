@@ -1,11 +1,13 @@
 import React from 'react'
 import {Loader,Input,Header, Icon, Grid } from 'semantic-ui-react'
+import axios from 'axios';
 import EditorsForm from './editorsForm'
 import Topics from '../partials/topics'
-import Blogs from '../posts/blog'
-import Welcome from '../homePage/welCome'
-/*
+import Blogs from '../posts/blogs'
+import Welcome from '../partials/welCome'
+import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
+/*
 const cats = {
     Development:'dev',
     Business:'business',
@@ -16,8 +18,10 @@ class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user:this.props.user,
+            user:this.props.currentUser,
             createNew:false,
+            posts:null,
+            post:null
         };
         this.componentDidMount=this.componentDidMount.bind(this)
         this.componentWillUnmount=this.componentWillUnmount.bind(this)
@@ -29,7 +33,7 @@ class RichEditorExample extends React.Component {
     }
     render() {
         return (
-            <Grid celled>
+            <Grid>
                 <Grid.Row>
                     <Grid.Column  width={16}>
                         <Header color='green' as='h1'>
@@ -39,37 +43,9 @@ class RichEditorExample extends React.Component {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column  width={4}>
-                        {
-                            (window.innerWidth>600) ?
-                                <Grid.Column  width={4}>
-                                    <Topics blogsAreLoading={this.blogsAreLoading} setTopicPosts={this.setTopicPosts} onReadMore = {this.onReadMore} blog ={this.state.blog} color={this.props.color} blogs={this.state.blogs}/>
-                                    <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
-                                        <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
-                                        <Input
-                                            icon={<Icon name='search' inverted circular link />}
-                                            placeholder='Search...'
-                                            onChange={this.handleFilterChange}
-                                        />
-                                        <Header  color={this.props.colors[2]} as='h2'>Posted by You</Header>
-                                        {
-                                            this.state.blogsLoaded?
-                                                <div>
-                                                    {
-                                                        (this.state.blogs[0]) ?
-                                                            <Blogs color={this.props.color} onReadMore = {this.onReadMore} blogs ={this.state.blogs} blog ={this.state.blog}/>:
-                                                            <div>
-                                                                No matching content on this Topic
-                                                            </div>
-                                                    }
-                                                </div>:
-                                                <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                    <Loader active inline='centered' />
-                                                </div>
-                                        }
-                                    </div>
-                                </Grid.Column>:
-                                <p>Hello</p>
-                        }
+                        <div>
+                            Good Stuff will be here
+                        </div>
                     </Grid.Column>
                     <Grid.Column  width={9}>
                         {

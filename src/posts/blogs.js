@@ -10,9 +10,12 @@ class Blogs extends React.Component {
         this.state = {
             
         };
+        this.componentDidMount = this.componentDidMount.bind(this)
 
     };
     componentDidMount() {
+        console.log("+++++++++at blogs+++++++++")
+        console.log(this.props.blogs)
     }
     render() {
         return (
