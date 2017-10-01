@@ -58,7 +58,7 @@ class HomePage extends Component {
         return axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
-                "_id":thisBlog.postID
+                "id":thisBlog.id
             }
         })
             .then(response => {
@@ -263,7 +263,7 @@ class HomePage extends Component {
                                                                                 </div>
                                                                         }
                                                                     </div>:
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                    <div style={{ position:'center', margin: '20em 0em 0em 0em'}} >
                                                                         <Loader active inline='centered' />
                                                                     </div>
 

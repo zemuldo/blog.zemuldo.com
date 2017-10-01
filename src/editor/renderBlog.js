@@ -218,11 +218,6 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.focus(), 0);
         });
     }
-    _onURLInputKeyDown(e) {
-        if (e.which === 13) {
-            this._confirmMedia(e);
-        }
-    }
     _promptForLink(e) {
         e.preventDefault();
         const {editorState} = this.state;
@@ -288,7 +283,6 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
-        console.log("----++++++saving state")
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
@@ -297,7 +291,6 @@ class RichEditorExample extends React.Component {
     }
     focus = () => this.refs.editor.focus();
     _handleKeyCommand(command, editorState) {
-        console.log('key presed'+command)
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             this.onChange(newState);
@@ -306,12 +299,10 @@ class RichEditorExample extends React.Component {
         return false;
     }
     _onTab(e) {
-        console.log('tab presed'+e)
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
     _toggleBlockType(blockType) {
-        console.log('toglle presed'+blockType)
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -348,7 +339,6 @@ class RichEditorExample extends React.Component {
 
             })
                 .then(function (response) {
-                    console.log(response)
                     if(response.data.state===true){
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');
@@ -376,40 +366,24 @@ class RichEditorExample extends React.Component {
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
     componentDidMount() {
-        console.log("____________rich text viewer initializing")
-        console.log(this.props.body)
         this.handleEditorState()
     }
     handleEditorState(){
-        console.log(this.props.rich)
         if(this.props.body){
-            this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)))});
+            this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)),decorator)});
             this.isLoading(true)
         }
         else {
-            this.setState({editorState : EditorState.createEmpty()});
+            this.setState({editorState : EditorState.createEmpty(decorator)});
             this.isLoading(true)
         }
     };
-    startPublish = ()=>{
-        this.showPreview()
-    }
-    showConfirm = () => {
-        this.setState({ confirmOpen: true })
-    }
     handleGoBackToProfile = () => {
         this.props._exitEditMode()
     }
-    showPreview=()=>{
-        this.setState({ previewOpen: true })
-    }
+
     closePreview=()=>{
         this.setState({ previewOpen: false })
-    }
-    handleConfirm = () => {
-        this.closePreview()
-        this.setState({confirmOpen: false })
-        this.publish()
     }
     handleCancel = () =>{
         this.reinInitEditorState(this.state.editorState)
@@ -423,15 +397,6 @@ class RichEditorExample extends React.Component {
 
     render() {
         const {editorState} = this.state;
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
-        let className = 'RichEditor-editor';
-        let contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className += ' RichEditor-hidePlaceholder';
-            }
-        }
         return (
             (!this.props.richViewerState)?
                 <div className='RichEditor-root'>

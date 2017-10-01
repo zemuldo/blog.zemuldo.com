@@ -101,7 +101,6 @@ export default class WelcomePage extends React.Component {
                             </div>
                             <hr color="green"/>
                             <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
-                                <Image width={1} size='big' shape='rounded' src='/img/blogs/blogs_pic.jpg' />
                                 <br/>
                                 <BlogEditor body={this.props.richViewerState}/>
                             </div>
