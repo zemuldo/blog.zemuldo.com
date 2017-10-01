@@ -9,6 +9,26 @@ import Topics from '../partials/topics'
 /*import TwitterProf from '../partials/twitterProf'*/
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
+const types ={
+    dev:{
+        name:"DEVELOPMENT"
+    },
+    business:{
+        name:"BUSINESS"
+    },
+    tech:{
+        name:"TECHNOLOGY"
+    }
+}
+const userText ={
+    "20":"Featured in ",
+    "21":"Popular Reads in ",
+    "22":"Popular in ",
+    "23":"Good reads in "
+}
+function rand () {
+    return Math.floor(Math.random() * (23 - 20 + 1)) + 20;
+}
 class HomePage extends Component {
     constructor(props){
         super(props);
@@ -157,7 +177,7 @@ class HomePage extends Component {
         return axios.post(env.httpURL, {
             "queryMethod":"getPosts",
             "queryData":{
-                "type":"business"
+                "type":'business'
             }
         })
             .then(function (response) {
@@ -165,12 +185,14 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
+                    this.onReadMore(response.data[0])
                 }
                 else {
                     this.setState({blogs:[]})
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
                 }
+
             }.bind(this))
             .catch(function (err) {
                 console.log(err)
@@ -251,7 +273,8 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                                            <Header
+                                                                color={this.props.colors[2]} as='h2'>Features in Business</Header>
                                                             {
                                                                 this.state.blogsLoaded?
                                                                     <div>

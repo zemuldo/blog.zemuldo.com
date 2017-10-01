@@ -186,10 +186,12 @@ class App extends Component {
     _handleSwitchToProfile = () =>{
         this.setState({currentLocation:'login',createNew:false})
     }
-    _goToEditor=()=>{
+    _goToEditor(){
+        console
         this.setState({editingMode:true})
     }
-    _exitEditMode=()=>{
+    _exitEditMode(){
+        console.log("-----------exiting editor")
         this.setState({editingMode:false,createNew:false})
     }
 
