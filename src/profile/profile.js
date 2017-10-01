@@ -26,7 +26,6 @@ class RichEditorExample extends React.Component {
     componentDidMount() {
     }
     componentWillUnmount() {
-        window.removeEventListener('resize', this.resize)
     }
     render() {
         return (
@@ -76,6 +75,7 @@ class RichEditorExample extends React.Component {
                         {
                             this.props.createNew?
                                 <EditorsForm
+                                    currentUser={this.props.currentUser}
                                     _goToEditor = {this.props._goToEditor}
                                     _exitEditMode={this.props._exitEditMode}
                                     editingMode = {this.props.editingMode}

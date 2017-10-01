@@ -8,6 +8,7 @@ class LoginForm extends React.Component {
         super(props);
         this.state = {
            user:this.props.user,
+            currentUser:null,
             password:null,
             userName:null
         };
@@ -15,19 +16,25 @@ class LoginForm extends React.Component {
         this.handleUnamedChange = this.handleUnamedChange.bind(this);
         this.onLoginClick = this.onLoginClick.bind(this);
     };
+    componentDidMount() {
+    }
+    componentWillUnmount() {
+    }
     onLoginClick= () => {
         if(this.state.userName==='zemuldo' && this.state.password==='omera'){
             let user = {
                 id:"123456789",
-                name:"Zemuldo"
+                name:"zemuldo"
             }
+            this.setState({currentUser:user})
             this.props.successLogin(user)
         }
         else {
             let user = {
                 id:"123456789",
-                name:"Zemuldo"
+                name:"zemuldo"
             }
+            this.setState({currentUser:user})
             this.props.successLogin(user)
             this.setState({loggedin:true})
         }
@@ -51,6 +58,7 @@ class LoginForm extends React.Component {
                 this.props.loggedin?
                     <div>
                         <Pofile
+                            currentUser={this.state.currentUser}
                             _goToEditor = {this.props._goToEditor}
                             _exitEditMode={this.props._exitEditMode}
                             editingMode={this.props.editingMode}

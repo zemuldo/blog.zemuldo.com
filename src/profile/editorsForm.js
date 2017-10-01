@@ -100,7 +100,11 @@ class EditorsForm extends Component {
                                 <Form.Button type="button" onClick={this._handleGoBackToPrifile}  color='green' size='large'>Back</Form.Button>
                             </Form>
                         </div>:
-                        <Creator _exitEditMode={this.props._exitEditMode} topics={this.state.topics} category={this.state.category}/>
+                        <Creator
+                            currentUser = {this.props.currentUser}
+                            _exitEditMode={this.props._exitEditMode}
+                            topics={this.state.topics}
+                            category={this.state.category}/>
                 }
             </div>
 

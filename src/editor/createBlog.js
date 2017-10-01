@@ -343,6 +343,7 @@ class RichEditorExample extends React.Component {
                     topics:blogData.topics,
                     images:["blogs_pic.jpg"],
                     author:"Danstan Onyango",
+                    userName:this.props.currentUser.name,
                     body:JSON.stringify(obj)}
 
             })
