@@ -18,12 +18,30 @@ function toTitleCase(str)
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 const pages = {
-    dev:'Development',
-    tech:'Technology',
-    business:'Business',
-    reviews:'Reviews',
-    tuts:'Tutorials',
-    home:'Zemuldo Home Pgae'
+    dev:{
+        name:'Development',
+        icon:'code'
+    },
+    tech:{
+        name:'Technology',
+        icon:'server'
+    },
+    business:{
+        name:'Business',
+        icon:'creative commons'
+    },
+    reviews:{
+        name:'Reviews',
+        icon:'circle notched'
+    },
+    tuts:{
+        name:'Tutorials',
+        icon:'code'
+    },
+    home:{
+        name:'Zemuldo Home Pgae',
+        icon:''
+    }
 }
 class App extends Component {
     constructor(props){
@@ -187,11 +205,9 @@ class App extends Component {
         this.setState({currentLocation:'login',createNew:false})
     }
     _goToEditor(){
-        console
         this.setState({editingMode:true})
     }
     _exitEditMode(){
-        console.log("-----------exiting editor")
         this.setState({editingMode:false,createNew:false})
     }
 
@@ -246,6 +262,13 @@ class App extends Component {
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
+                    <Menu.Item
+                        disabled={true}
+                        name={this.state.currentLocation==='home'?'':pages[this.state.currentLocation].name}
+                    >
+                        <Icon color={this.state.colors[0]} name={pages[this.state.currentLocation].icon} />
+                        <span color={this.state.colors[0]}>{this.state.currentLocation==='home'?'':pages[this.state.currentLocation].name}</span>
+                    </Menu.Item>
                     {
                         (!this.state.loggedin) ?
                             <Button
