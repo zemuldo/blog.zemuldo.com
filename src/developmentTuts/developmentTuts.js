@@ -82,7 +82,6 @@ class HomePage extends Component {
             }
         })
             .then(response => {
-                console.log(response)
                 this.setState({blog:response.data,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false,richViewerState:response.data.body})
                 window.scrollTo(0,0)

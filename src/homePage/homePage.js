@@ -2,9 +2,7 @@ import React,{Component} from 'react'
 import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
 import WelcomePage from '../partials/welCome'
-import About from '../partials/aboutHome'
 import Blogs from '../posts/blogs'
-import Blog from '../posts/blog'
 import Topics from '../partials/topics'
 import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
@@ -112,8 +110,6 @@ class HomePage extends Component {
     resize = () => this.forceUpdate();
     setCurrentBlog(id){
         this.blogIsLoading(true)
-        console.log(id)
-        console.log("_____________________####### "+id)
         return Promise.all([axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
@@ -127,8 +123,6 @@ class HomePage extends Component {
             }
         })])
             .then(response => {
-                console.log("###########33current blog fetched here+++++++++++")
-                console.log(response.data)
                 if(response[0].data && !response[0].data.error && response[1].data && !response[1].data.error ){
                     this.setState({blog:response[0].data,richViewerState:response[0].data.body})
                     this.setState({blogDetails:response[1].data})
