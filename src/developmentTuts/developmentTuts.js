@@ -375,33 +375,35 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={16}>
-                                                <Topics
-                                                    blogsAreLoading={this.blogsAreLoading}
-                                                    setTopicPosts={this.setTopicPosts}
-                                                    onReadMore = {this.onReadMore}
-                                                    blog ={this.state.blog}
-                                                    color={this.props.color}
-                                                    blogs={this.state.blogs}/>
-                                                <WelcomePage
-                                                    richViewerState={this.state.richViewerState}
-                                                    counts={this.state.counts}
-                                                    color={this.props.colors[1]}
-                                                    blogDetails={this.state.blogDetails}
-                                                    blog={this.state.blog}
-                                                    blogs={this.state.blogs}
-                                                    blogLoaded={this.state.blogLoaded}/>
-                                                <div>
-                                                    {
-                                                        (this.state.blogs[0]) ?
-                                                            <Blogs
-                                                                color={this.props.color}
-                                                                onReadMore = {this.onReadMore}
-                                                                blogs ={this.state.blogs}
-                                                                blog ={this.state.blog}/>:
-                                                            <div>
-                                                                No matching content on this Topic
-                                                            </div>
-                                                    }
+                                                <div style={{margin: '2em 1em 3em 1em'}}>
+                                                    <Topics
+                                                        blogsAreLoading={this.blogsAreLoading}
+                                                        setTopicPosts={this.setTopicPosts}
+                                                        onReadMore = {this.onReadMore}
+                                                        blog ={this.state.blog}
+                                                        color={this.props.color}
+                                                        blogs={this.state.blogs}/>
+                                                    <WelcomePage
+                                                        richViewerState={this.state.richViewerState}
+                                                        counts={this.state.counts}
+                                                        color={this.props.colors[1]}
+                                                        blogDetails={this.state.blogDetails}
+                                                        blog={this.state.blog}
+                                                        blogs={this.state.blogs}
+                                                        blogLoaded={this.state.blogLoaded}/>
+                                                    <div>
+                                                        {
+                                                            (this.state.blogs[0]) ?
+                                                                <Blogs
+                                                                    color={this.props.color}
+                                                                    onReadMore = {this.onReadMore}
+                                                                    blogs ={this.state.blogs}
+                                                                    blog ={this.state.blog}/>:
+                                                                <div>
+                                                                    No matching content on this Topic
+                                                                </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </Grid.Column>
                                         </Grid.Row>

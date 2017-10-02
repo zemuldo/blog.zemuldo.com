@@ -375,6 +375,7 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={16}>
+                                                <div style={{margin: '2em 1em 3em 1em'}}>
                                                 <Topics
                                                     blogsAreLoading={this.blogsAreLoading}
                                                     setTopicPosts={this.setTopicPosts}
@@ -402,6 +403,7 @@ class HomePage extends Component {
                                                                 No matching content on this Topic
                                                             </div>
                                                     }
+                                                </div>
                                                 </div>
                                             </Grid.Column>
                                         </Grid.Row>
