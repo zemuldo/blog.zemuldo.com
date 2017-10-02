@@ -23,7 +23,17 @@ const topics = [
     { key: 'go', value: 'go', text: 'go' ,name: 'go'},
     { key: 'growth haking', value: 'growth haking', text: 'growth haking' ,name: 'growth haking'},
     { key: 'cloud', value: 'cloud', text: 'cloud' ,name: 'cloud'},
-    { key: 'nodejs', value: 'nodejs', text: 'nodejs' ,name: 'nodejs'}
+    { key: 'nodejs', value: 'nodejs', text: 'nodejs' ,name: 'nodejs'},
+    { key: 'mongodb', value: 'mongodb', text: 'mongodb' ,name: 'mongodb'},
+    { key: 'sql', value: 'sql', text: 'sql' ,name: 'sql'},
+    { key: 'adf', value: 'adf', text: 'adf' ,name: 'adf'},
+    { key: 'git', value: 'git', text: 'git' ,name: 'git'},
+    { key: 'react', value: 'react', text: 'react' ,name: 'react'},
+    { key: 'angular', value: 'angular', text: 'angular' ,name: 'angular'},
+    { key: 'e-commerce', value: 'e-commerce', text: 'e-commerce' ,name: 'e-commerce'},
+    { key: 'code', value: 'code', text: 'code' ,name: 'code'},
+    { key: 'programming', value: 'programming', text: 'programming' ,name: 'programming'},
+
 
 ]
 class EditorsForm extends Component {
