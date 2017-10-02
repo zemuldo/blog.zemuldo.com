@@ -86,12 +86,16 @@ class HomePage extends Component {
                 this.setState({blog:response.data,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false,richViewerState:response.data.body})
                 window.scrollTo(0,0)
+                console.log(response)
+                this.setState({blog:response.data,blogDetails:thisBlog})
+                this.setState({blogIsLoading:false,richViewerState:response.data.body})
+                window.scrollTo(0,0)
                 let gplusPost = {
                     "method": "pos.plusones.get",
                     "id": "p",
                     "params": {
                         "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),
+                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
                         "source": "widget",
                         "userId": "@viewer",
                         "groupId": "@self"
@@ -101,8 +105,8 @@ class HomePage extends Component {
                     "apiVersion": "v1"
                 }
                 return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520'),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),{}),
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })

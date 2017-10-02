@@ -28,7 +28,8 @@ class HomePage extends Component {
                 gplsC:null
             },
             topic:null,
-            richViewerState:null
+            richViewerState:null,
+            validURL:false
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -41,10 +42,11 @@ class HomePage extends Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
+        this.setHomeBlogs = this.setHomeBlogs.bind(this)
 
 
     };
-    homePageIsLoading(value){
+    homePageIsLoading = (value)=>{
         this.setState({homePageLoaded:!value})
     }
     blogsAreLoading(state){
@@ -71,7 +73,7 @@ class HomePage extends Component {
                     "id": "p",
                     "params": {
                         "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),
+                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
                         "source": "widget",
                         "userId": "@viewer",
                         "groupId": "@self"
@@ -81,8 +83,8 @@ class HomePage extends Component {
                     "apiVersion": "v1"
                 }
                 return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520'),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),{}),
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })
@@ -109,41 +111,58 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate();
     setCurrentBlog(id){
+        console.log(id)
+        console.log("_____________________####### "+id)
         return axios.post(env.httpURL, {
-            "query":"getPost",
-            "queryParam":{
-                id:'id'
+            "queryMethod":"getPost",
+            "queryData":{
+                id:id
             }
         })
             .then(response => {
-                if(response.data.error){
+                console.log("###########33current blog fetched here+++++++++++")
+                console.log(response.data)
+                if(!response.data || response.data.error){
+                    this.setState({blog:null,blogDetails:null})
                 }
                 else {
                     this.setState({blog:response.data})
-                    this.blogIsLoading(false)
-                    window.scrollTo(0,0)
+                    return axios.post(env.httpURL, {
+                        "queryMethod":"getPostDetails",
+                        "queryData":{
+                            "id":id
+                        }
+                    })
+
                 }
 
             })
+            .then(function (res) {
+                if(!res.data || res.data.error){
+                }
+                else {
+                    this.setState({blogDetails:res.data,richViewerState:res.data.body})
+
+                }
+            })
             .catch(exception => {
-                this.setState({blog:null})
-                this.blogIsLoading(false)
                 return exception
             });
     }
     componentDidMount() {
+        console.log(window.location.pathname)
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
-            url = url.split('-').join(' ')
-            this.setCurrentBlog(url.split('-').join(' '))
+            let id = url.split('_')[2]
+            this.setCurrentBlog(id)
         }
         if(url.indexOf('%20')!==-1){
-            url = url.split('%20').join(' ')
-            this.setCurrentBlog(url.split('%20').join(' '))
+            let id = url.split('_')[2]
+            this.setCurrentBlog(id)
         }
         if(url.indexOf('%2520')!==-1){
-            url = url.split('%2520').join(' ')
-            this.setCurrentBlog(url.split('%2520').join(' '))
+            let id = url.split('_')[2]
+            this.setCurrentBlog(id)
         }
         this.forceUpdate()
         if(window.innerWidth<503){
@@ -154,28 +173,26 @@ class HomePage extends Component {
         }
 
         window.addEventListener('resize', this.resize)
+        this.setHomeBlogs()
+        this.homePageIsLoading(false)
+        this.blogsAreLoading(false)
+        this.blogIsLoading(false)
+
+    }
+    setHomeBlogs(){
         return axios.post(env.httpURL, {
             "queryMethod":"getAllPosts",
             "queryData":{}
         })
             .then(function (response) {
+                console.log(response)
                 if(response.data[0]){
+                    console.log(response.data)
                     this.setState({blogs:response.data})
-                    this.homePageIsLoading(false)
-                    this.blogsAreLoading(false)
-                }
-                else {
-                    this.setState({blogs:[]})
-                    this.homePageIsLoading(false)
-                    this.blogsAreLoading(false)
                 }
             }.bind(this))
             .catch(function (err) {
-                console.log(err)
-                this.setState({blogs:[]})
-                this.homePageIsLoading(false)
-                this.blogsAreLoading(false)
-            }.bind(this))
+            })
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
@@ -202,6 +219,9 @@ class HomePage extends Component {
             })
                 .then(response => {
                     this.setState({blogs:response.data})
+                    console.log("||||||||||||||||||||||||||||")
+                    console.log(this.state.blog)
+                    console.log(this.state.blogDetails)
                 })
                 .catch(exception => {
                     this.setState({blogs:[]})

@@ -38,45 +38,68 @@ class Blog extends Component {
     }
     render() {
         return (
-            <div>
-                <Header style={{}} color={this.props.color} as='h1'>
-                    {
-                        this.props.blog.title.split(' ').join('')
-                    }
-                </Header>
-                <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                    <Icon size="large" color='green' name='external share' />
-                    Share this on: {  }
-                    {'  '}
-                    <Button
-                        onClick={() => {this.tweetShare();}}
-                        circular color='twitter' icon='twitter' />
-                    <sup>{this.props.counts.twtC}</sup>
-                    {'   '}
-                    <Button
-                        onClick={() => {this.fbShare();}}
-                        circular color='facebook' icon='facebook' />
-                    <sup>{this.props.counts.fbC}</sup>
-                    {'   '}
-                    <Button
-                        onClick={() => {this.linkdnShare();}}
-                        circular color='linkedin' icon='linkedin' />
-                    <sup>{this.props.counts.gplsC}</sup>
-                    {'   '}
-                    <Button
-                        onClick={() => {this.gplusShare();}}
-                        circular color='google plus' icon='google plus' />
-                    <sup>{this.props.counts.gplsC}</sup>
-                    <br/>
-                    <br/>
-                    Published on:  {this.props.blog.date}  By {this.props.blog.author}
-                </div>
-                <hr  color={this.props.color}/>
-                <div style={{margin: '3em 1em 3em 2em', display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                    <br/>
-                    <BlogEditor body={this.props.blog.body}/>
-                </div>
+            <div style={{margin: '2em 1em 3em 1em'}}>
+                {
+                    (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
+                        <div >
+                            <Header style={{alignment:'center'}} color={this.props.color} as='h1'>
+                                Welcome To ZemuldO.COM
+                            </Header>
+                            <hr color="green"/>
+                            <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
+                                <p>
+                                    We share content on trending technologies like Artificial Intelligence and BlockChain.
+                                    You are definitely in the right place. Here you acn get very good content on business, development
+                                    and technology.
+                                </p>
+                                <p>
+                                    We also offer Business and Tech Consultancy. If you are looking for ways to grow your business,
+                                    We are the choice you are looking for. Reach us for insights and growth.
+                                </p>
+                            </div>
 
+                        </div>:
+                        <div>
+                            <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
+                                {
+                                    this.props.blogDetails.title
+                                }
+                            </Header>
+                            <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
+                                <Icon size="large" color='green' name='external share' />
+                                Share this on: {  }
+                                {'  '}
+                                <Button
+                                    onClick={() => {this.tweetShare();}}
+                                    circular color='twitter' icon='twitter' />
+                                <sup>{this.props.counts.twtC}</sup>
+                                {'   '}
+                                <Button
+                                    onClick={() => {this.fbShare();}}
+                                    circular color='facebook' icon='facebook' />
+                                <sup>{this.props.counts.fbC}</sup>
+                                {'   '}
+                                <Button
+                                    onClick={() => {this.linkdnShare();}}
+                                    circular color='linkedin' icon='linkedin' />
+                                <sup>{this.props.counts.gplsC}</sup>
+                                {'   '}
+                                <Button
+                                    onClick={() => {this.gplusShare();}}
+                                    circular color='google plus' icon='google plus' />
+                                <sup>{this.props.counts.gplsC}</sup>
+                                <br/>
+                                <br/>
+                                Published on:  {this.props.blogDetails.date}  By {this.props.blogDetails.author}
+                            </div>
+                            <hr color="green"/>
+                            <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
+                                <br/>
+                                <BlogEditor body={this.props.richViewerState}/>
+                            </div>
+
+                        </div>
+                }
             </div>
         )
     }

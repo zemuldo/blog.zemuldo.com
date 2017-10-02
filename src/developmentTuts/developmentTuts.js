@@ -91,7 +91,7 @@ class HomePage extends Component {
                     "id": "p",
                     "params": {
                         "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),
+                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
                         "source": "widget",
                         "userId": "@viewer",
                         "groupId": "@self"
@@ -101,8 +101,8 @@ class HomePage extends Component {
                     "apiVersion": "v1"
                 }
                 return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520'),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),{}),
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })
@@ -128,18 +128,18 @@ class HomePage extends Component {
         this.setState({bodySize:size})
     }
     resize = () => this.forceUpdate();
-    setCurrentBlog(id){
+    setCurrentBlog(thisBlog){
         return axios.post(env.httpURL, {
             "query":"getPost",
             "queryParam":{
-                id:'id'
+                id:thisBlog.id
             }
         })
             .then(response => {
                 if(response.data.error){
                 }
                 else {
-                    this.setState({blog:response.data})
+                    this.setState({blog:response.data,blogDetails:thisBlog})
                     this.blogIsLoading(false)
                     window.scrollTo(0,0)
                 }
@@ -185,6 +185,7 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
+                    this.onReadMore(response.data[0])
                 }
                 else {
                     this.setState({blogs:[]})
@@ -272,7 +273,7 @@ class HomePage extends Component {
                                                                 onChange={this.handleFilterChange}
                                                             />
                                                             <Header
-                                                                color={this.props.colors[2]} as='h2'>{userText[rand().toString()]} Development</Header>
+                                                                color={this.props.colors[2]} as='h2'>{userText[rand().toString()]}Dev</Header>
                                                             {
                                                                 this.state.blogsLoaded?
                                                                     <div>
