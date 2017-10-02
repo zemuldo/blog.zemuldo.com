@@ -111,43 +111,36 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate();
     setCurrentBlog(id){
+        this.blogIsLoading(true)
         console.log(id)
         console.log("_____________________####### "+id)
-        return axios.post(env.httpURL, {
+        return Promise.all([axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
                 id:id
             }
-        })
+        }),
+        axios.post(env.httpURL, {
+            "queryMethod":"getPostDetails",
+            "queryData":{
+                "id":id
+            }
+        })])
             .then(response => {
                 console.log("###########33current blog fetched here+++++++++++")
                 console.log(response.data)
-                if(!response.data || response.data.error){
-                    this.setState({blog:null,blogDetails:null})
+                if(response[0].data && !response[0].data.error && response[1].data && !response[1].data.error ){
+                    this.setState({blog:response[0].data,richViewerState:response[0].data.body})
+                    this.setState({blogDetails:response[1].data})
                 }
-                else {
-                    this.setState({blog:response.data})
-                    return axios.post(env.httpURL, {
-                        "queryMethod":"getPostDetails",
-                        "queryData":{
-                            "id":id
-                        }
-                    })
-
-                }
-
-            })
-            .then(function (res) {
-                if(!res.data || res.data.error){
-                }
-                else {
-                    this.setState({blogDetails:res.data,richViewerState:res.data.body})
-
-                }
+                this.blogIsLoading(false)
+                return true
             })
             .catch(exception => {
+                this.blogIsLoading(false)
                 return exception
             });
+
     }
     componentDidMount() {
         console.log(window.location.pathname)
@@ -156,13 +149,16 @@ class HomePage extends Component {
             let id = url.split('_')[2]
             this.setCurrentBlog(id)
         }
-        if(url.indexOf('%20')!==-1){
+        else if(url.indexOf('%20')!==-1){
             let id = url.split('_')[2]
             this.setCurrentBlog(id)
         }
-        if(url.indexOf('%2520')!==-1){
+        else if(url.indexOf('%2520')!==-1){
             let id = url.split('_')[2]
             this.setCurrentBlog(id)
+        }
+        else {
+            this.blogIsLoading(false)
         }
         this.forceUpdate()
         if(window.innerWidth<503){
@@ -176,7 +172,6 @@ class HomePage extends Component {
         this.setHomeBlogs()
         this.homePageIsLoading(false)
         this.blogsAreLoading(false)
-        this.blogIsLoading(false)
 
     }
     setHomeBlogs(){
@@ -297,7 +292,7 @@ class HomePage extends Component {
                                             }
                                             <Grid.Column  width={9}>
                                                 {
-                                                    this.state.blogIsLoading?
+                                                    !this.state.blogLoaded?
                                                         <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
                                                             <Loader active inline='centered' />
                                                         </div>:
@@ -376,14 +371,20 @@ class HomePage extends Component {
                                                     blog ={this.state.blog}
                                                     color={this.props.color}
                                                     blogs={this.state.blogs}/>
-                                                <WelcomePage
-                                                    richViewerState={this.state.richViewerState}
-                                                    counts={this.state.counts}
-                                                    color={this.props.colors[1]}
-                                                    blogDetails={this.state.blogDetails}
-                                                    blog={this.state.blog}
-                                                    blogs={this.state.blogs}
-                                                    blogLoaded={this.state.blogLoaded}/>
+                                                {
+                                                    !this.state.blogLoaded?
+                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                            <Loader active inline='centered' />
+                                                        </div>:
+                                                        <WelcomePage
+                                                            richViewerState={this.state.richViewerState}
+                                                            counts={this.state.counts}
+                                                            color={this.props.colors[1]}
+                                                            blogDetails={this.state.blogDetails}
+                                                            blog={this.state.blog}
+                                                            blogs={this.state.blogs}
+                                                            blogLoaded={this.state.blogLoaded}/>
+                                                }
                                                 {
                                                     this.state.blogsLoaded?
                                                         <div>
