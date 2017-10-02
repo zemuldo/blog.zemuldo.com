@@ -2,9 +2,7 @@ import React,{Component} from 'react'
 import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
 import WelcomePage from '../partials/welCome'
-import About from '../partials/aboutHome'
 import Blogs from '../posts/blogs'
-import Blog from '../posts/blog'
 import Topics from '../partials/topics'
 /*import TwitterProf from '../partials/twitterProf'*/
 import config from '../environments/conf'
