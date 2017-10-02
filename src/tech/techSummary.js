@@ -91,7 +91,7 @@ class HomePage extends Component {
                     "id": "p",
                     "params": {
                         "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),
+                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
                         "source": "widget",
                         "userId": "@viewer",
                         "groupId": "@self"
@@ -101,8 +101,8 @@ class HomePage extends Component {
                     "apiVersion": "v1"
                 }
                 return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520'),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-'),{}),
+                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
+                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
             })
@@ -128,18 +128,18 @@ class HomePage extends Component {
         this.setState({bodySize:size})
     }
     resize = () => this.forceUpdate();
-    setCurrentBlog(id){
+    setCurrentBlog(thisBlog){
         return axios.post(env.httpURL, {
             "query":"getPost",
             "queryParam":{
-                id:'id'
+                id:thisBlog.id
             }
         })
             .then(response => {
                 if(response.data.error){
                 }
                 else {
-                    this.setState({blog:response.data})
+                    this.setState({blog:response.data,blogDetails:thisBlog})
                     this.blogIsLoading(false)
                     window.scrollTo(0,0)
                 }
@@ -375,26 +375,34 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={16}>
-                                                {
-                                                    this.state.blogLoaded ?
-                                                        <div style={{margin: '3em 1em 3em 2em'}}>
-                                                            {
-                                                                (this.state.blog===null) ?
-                                                                    <About
-                                                                        color={this.props.color}
-                                                                        colors={this.props.colors}/>:
-                                                                    <Blog
-                                                                        counts={this.state.counts}
-                                                                        color={this.props.color}
-                                                                        colors={this.props.colors}
-                                                                        blog = {this.state.blog}/>
-                                                            }
-                                                        </div>:
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
-                                                            <Loader active inline='centered' />
-                                                        </div>
-
-                                                }
+                                                <Topics
+                                                    blogsAreLoading={this.blogsAreLoading}
+                                                    setTopicPosts={this.setTopicPosts}
+                                                    onReadMore = {this.onReadMore}
+                                                    blog ={this.state.blog}
+                                                    color={this.props.color}
+                                                    blogs={this.state.blogs}/>
+                                                <WelcomePage
+                                                    richViewerState={this.state.richViewerState}
+                                                    counts={this.state.counts}
+                                                    color={this.props.colors[1]}
+                                                    blogDetails={this.state.blogDetails}
+                                                    blog={this.state.blog}
+                                                    blogs={this.state.blogs}
+                                                    blogLoaded={this.state.blogLoaded}/>
+                                                <div>
+                                                    {
+                                                        (this.state.blogs[0]) ?
+                                                            <Blogs
+                                                                color={this.props.color}
+                                                                onReadMore = {this.onReadMore}
+                                                                blogs ={this.state.blogs}
+                                                                blog ={this.state.blog}/>:
+                                                            <div>
+                                                                No matching content on this Topic
+                                                            </div>
+                                                    }
+                                                </div>
                                             </Grid.Column>
                                         </Grid.Row>
                                     </Grid>
