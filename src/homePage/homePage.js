@@ -369,26 +369,41 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={16}>
+                                                <Topics
+                                                    blogsAreLoading={this.blogsAreLoading}
+                                                    setTopicPosts={this.setTopicPosts}
+                                                    onReadMore = {this.onReadMore}
+                                                    blog ={this.state.blog}
+                                                    color={this.props.color}
+                                                    blogs={this.state.blogs}/>
+                                                <WelcomePage
+                                                    richViewerState={this.state.richViewerState}
+                                                    counts={this.state.counts}
+                                                    color={this.props.colors[1]}
+                                                    blogDetails={this.state.blogDetails}
+                                                    blog={this.state.blog}
+                                                    blogs={this.state.blogs}
+                                                    blogLoaded={this.state.blogLoaded}/>
                                                 {
-                                                    this.state.blogLoaded ?
-                                                        <div style={{margin: '3em 1em 3em 2em'}}>
+                                                    this.state.blogsLoaded?
+                                                        <div>
                                                             {
-                                                                (this.state.blog===null) ?
-                                                                    <About
+                                                                (this.state.blogs[0]) ?
+                                                                    <Blogs
                                                                         color={this.props.color}
-                                                                        colors={this.props.colors}/>:
-                                                                    <Blog
-                                                                        counts={this.state.counts}
-                                                                        color={this.props.color}
-                                                                        colors={this.props.colors}
-                                                                        blog = {this.state.blog}/>
+                                                                        onReadMore = {this.onReadMore}
+                                                                        blogs ={this.state.blogs} blog ={this.state.blog}/>:
+                                                                    <div>
+                                                                        No matching content on this Topic
+                                                                    </div>
                                                             }
                                                         </div>:
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                        <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
                                                             <Loader active inline='centered' />
                                                         </div>
 
                                                 }
+
                                             </Grid.Column>
                                         </Grid.Row>
                                     </Grid>
