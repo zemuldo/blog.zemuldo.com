@@ -82,7 +82,6 @@ class HomePage extends Component {
             }
         })
             .then(response => {
-                console.log(response)
                 this.setState({blog:response.data,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false,richViewerState:response.data.body})
                 window.scrollTo(0,0)
@@ -194,7 +193,6 @@ class HomePage extends Component {
                 }
             }.bind(this))
             .catch(function (err) {
-                console.log(err)
                 this.setState({blogs:[]})
                 this.homePageIsLoading(false)
                 this.blogsAreLoading(false)
