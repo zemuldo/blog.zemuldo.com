@@ -11,6 +11,99 @@ const cats = {
     Business:'business',
     Technology:'tech'
 }
+// Custom overrides for "code" style.
+const styleMap = {
+    CODE: {
+        backgroundColor: 'red',
+        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+        fontSize: 16,
+        padding: 2,
+    },
+};
+function getBlockStyle(block) {
+    switch (block.getType()) {
+        case 'blockquote': return 'RichEditor-blockquote';
+        default: return null;
+    }
+}
+class StyleButton extends React.Component {
+    constructor() {
+        super();
+        this.onToggle = (e) => {
+            e.preventDefault();
+            this.props.onToggle(this.props.style);
+        };
+    }
+    render() {
+        let className = 'RichEditor-styleButton';
+        if (this.props.active) {
+            className += ' RichEditor-activeButton';
+        }
+        return (
+            <span className={className} onMouseDown={this.onToggle}>
+                <Icon color="black" name = {this.props.icon}/>
+                {this.props.label}
+            </span>
+        );
+    }
+}
+const BLOCK_TYPES = [
+    {label: 'H1', style: 'header-one',icon:'header'},
+    {label: 'H2', style: 'header-two',icon:'header'},
+    {label: 'H3', style: 'header-three',icon:'header'},
+    {label: 'H4', style: 'header-four',icon:'header'},
+    {label: 'H5', style: 'header-five',icon:'header'},
+    {label: 'H6', style: 'header-six',icon:'header'},
+    {label: 'Blockquote', style: 'blockquote',icon:'header'},
+    {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
+    {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
+    {label: 'Code Block', style: 'code-block',icon:'code'},
+];
+const BlockStyleControls = (props) => {
+    const {editorState} = props;
+    const selection = editorState.getSelection();
+    const blockType = editorState
+        .getCurrentContent()
+        .getBlockForKey(selection.getStartKey())
+        .getType();
+    return (
+        <div  className="RichEditor-controls">
+            {BLOCK_TYPES.map((type) =>
+                <StyleButton
+                    key={type.label}
+                    active={type.style === blockType}
+                    label={type.label}
+                    onToggle={props.onToggle}
+                    style={type.style}
+                    icon={type.icon}
+                />
+            )}
+        </div>
+    );
+};
+var INLINE_STYLES = [
+    {label: 'Bold', style: 'BOLD',icon:'bold'},
+    {label: 'Italic', style: 'ITALIC',icon:'italic'},
+    {label: 'Underline', style: 'UNDERLINE',icon:'underline'},
+    {label: 'Monospace', style: 'CODE',icon:'font'},
+];
+const InlineStyleControls = (props) => {
+    var currentStyle = props.editorState.getCurrentInlineStyle();
+    return (
+        <div className="RichEditor-controls">
+            {INLINE_STYLES.map(type =>
+                <StyleButton
+                    key={type.label}
+                    active={currentStyle.has(type.style)}
+                    label={type.label}
+                    onToggle={props.onToggle}
+                    style={type.style}
+                    icon={type.icon}
+                />
+            )}
+        </div>
+    );
+};
 
 function mediaBlockRenderer(block) {
     if (block.getType() === 'atomic') {
@@ -547,7 +640,7 @@ class RichEditorExample extends React.Component {
                         </Button.Group>
                     </Modal.Actions>
                 </Modal>
-                <div className='RichEditor-root'>
+                <div className={className} onClick={this.focus}>
                     <Editor
                         blockRendererFn={mediaBlockRenderer}
                         blockStyleFn={getBlockStyle}
@@ -565,99 +658,7 @@ class RichEditorExample extends React.Component {
         );
     }
 }
-// Custom overrides for "code" style.
-const styleMap = {
-    CODE: {
-        backgroundColor: 'red',
-        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 16,
-        padding: 2,
-    },
-};
-function getBlockStyle(block) {
-    switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
-    }
-}
-class StyleButton extends React.Component {
-    constructor() {
-        super();
-        this.onToggle = (e) => {
-            e.preventDefault();
-            this.props.onToggle(this.props.style);
-        };
-    }
-    render() {
-        let className = 'RichEditor-styleButton';
-        if (this.props.active) {
-            className += ' RichEditor-activeButton';
-        }
-        return (
-            <span className={className} onMouseDown={this.onToggle}>
-                <Icon color="black" name = {this.props.icon}/>
-              {this.props.label}
-            </span>
-        );
-    }
-}
-const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one',icon:'header'},
-    {label: 'H2', style: 'header-two',icon:'header'},
-    {label: 'H3', style: 'header-three',icon:'header'},
-    {label: 'H4', style: 'header-four',icon:'header'},
-    {label: 'H5', style: 'header-five',icon:'header'},
-    {label: 'H6', style: 'header-six',icon:'header'},
-    {label: 'Blockquote', style: 'blockquote',icon:'header'},
-    {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
-    {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
-    {label: 'Code Block', style: 'code-block',icon:'code'},
-];
-const BlockStyleControls = (props) => {
-    const {editorState} = props;
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-    return (
-        <div  className="RichEditor-controls">
-            {BLOCK_TYPES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={type.style === blockType}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                    icon={type.icon}
-                />
-            )}
-        </div>
-    );
-};
-var INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD',icon:'bold'},
-    {label: 'Italic', style: 'ITALIC',icon:'italic'},
-    {label: 'Underline', style: 'UNDERLINE',icon:'underline'},
-    {label: 'Monospace', style: 'CODE',icon:'font'},
-];
-const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
-    return (
-        <div className="RichEditor-controls">
-            {INLINE_STYLES.map(type =>
-                <StyleButton
-                    key={type.label}
-                    active={currentStyle.has(type.style)}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                    icon={type.icon}
-                />
-            )}
-        </div>
-    );
-};
+
 
 
 export default RichEditorExample
