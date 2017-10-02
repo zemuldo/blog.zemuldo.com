@@ -30,13 +30,6 @@ class LoginForm extends React.Component {
             this.props.successLogin(user)
         }
         else {
-            let user = {
-                id:"123456789",
-                name:"zemuldo"
-            }
-            this.setState({currentUser:user})
-            this.props.successLogin(user)
-            this.setState({loggedin:true})
         }
 
     }
