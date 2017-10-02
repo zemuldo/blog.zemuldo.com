@@ -6,7 +6,7 @@ import About from '../partials/aboutHome'
 import Blogs from '../posts/blogs'
 import Blog from '../posts/blog'
 import Topics from '../partials/topics'
-/*import TwitterProf from '../partials/twitterProf'*/
+import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class HomePage extends Component {
@@ -295,9 +295,7 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>1030) ?
                                                     <Grid.Column  width={3}>
-                                                        {
-                                                            //<TwitterProf/>
-                                                        }
+                                                        <TwitterProf/>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
                                             }
