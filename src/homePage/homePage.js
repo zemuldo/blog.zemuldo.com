@@ -4,9 +4,18 @@ import axios from 'axios';
 import WelcomePage from '../partials/welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
-import TwitterProf from '../partials/twitterProf'
+/*import TwitterProf from '../partials/twitterProf'*/
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
+const userText ={
+    "20":"Featured in ",
+    "21":"Popular Reads in ",
+    "22":"Popular in ",
+    "23":"Good reads in "
+}
+function rand () {
+    return Math.floor(Math.random() * (23 - 20 + 1)) + 20;
+}
 class HomePage extends Component {
     constructor(props){
         super(props);
@@ -26,8 +35,7 @@ class HomePage extends Component {
                 gplsC:null
             },
             topic:null,
-            richViewerState:null,
-            validURL:false
+            richViewerState:null
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -40,11 +48,10 @@ class HomePage extends Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
-        this.setHomeBlogs = this.setHomeBlogs.bind(this)
 
 
     };
-    homePageIsLoading = (value)=>{
+    homePageIsLoading(value){
         this.setState({homePageLoaded:!value})
     }
     blogsAreLoading(state){
@@ -107,50 +114,43 @@ class HomePage extends Component {
         this.setState({bodySize:size})
     }
     resize = () => this.forceUpdate();
-    setCurrentBlog(id){
-        this.blogIsLoading(true)
-        return Promise.all([axios.post(env.httpURL, {
-            "queryMethod":"getPost",
-            "queryData":{
-                id:id
+    setCurrentBlog(thisBlog){
+        return axios.post(env.httpURL, {
+            "query":"getPost",
+            "queryParam":{
+                id:thisBlog.id
             }
-        }),
-        axios.post(env.httpURL, {
-            "queryMethod":"getPostDetails",
-            "queryData":{
-                "id":id
-            }
-        })])
+        })
             .then(response => {
-                if(response[0].data && !response[0].data.error && response[1].data && !response[1].data.error ){
-                    this.setState({blog:response[0].data,richViewerState:response[0].data.body})
-                    this.setState({blogDetails:response[1].data})
+                if(response.data.error){
                 }
-                this.blogIsLoading(false)
-                return true
+                else {
+                    this.setState({blog:response.data,blogDetails:thisBlog})
+                    this.blogIsLoading(false)
+                    window.scrollTo(0,0)
+                }
+
             })
             .catch(exception => {
+                this.setState({blog:null})
                 this.blogIsLoading(false)
                 return exception
             });
-
     }
     componentDidMount() {
+        console.log(this.props.richViewerState)
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
-            let id = url.split('_')[2]
-            this.setCurrentBlog(id)
+            url = url.split('-').join(' ')
+            this.setCurrentBlog(url.split('-').join(' '))
         }
-        else if(url.indexOf('%20')!==-1){
-            let id = url.split('_')[2]
-            this.setCurrentBlog(id)
+        if(url.indexOf('%20')!==-1){
+            url = url.split('%20').join(' ')
+            this.setCurrentBlog(url.split('%20').join(' '))
         }
-        else if(url.indexOf('%2520')!==-1){
-            let id = url.split('_')[2]
-            this.setCurrentBlog(id)
-        }
-        else {
-            this.blogIsLoading(false)
+        if(url.indexOf('%2520')!==-1){
+            url = url.split('%2520').join(' ')
+            this.setCurrentBlog(url.split('%2520').join(' '))
         }
         this.forceUpdate()
         if(window.innerWidth<503){
@@ -161,23 +161,30 @@ class HomePage extends Component {
         }
 
         window.addEventListener('resize', this.resize)
-        this.setHomeBlogs()
-        this.homePageIsLoading(false)
-        this.blogsAreLoading(false)
-
-    }
-    setHomeBlogs(){
         return axios.post(env.httpURL, {
             "queryMethod":"getAllPosts",
-            "queryData":{}
+            "queryData":{
+            }
         })
             .then(function (response) {
                 if(response.data[0]){
                     this.setState({blogs:response.data})
+                    this.homePageIsLoading(false)
+                    this.blogsAreLoading(false)
+                    this.onReadMore(response.data[0])
+                }
+                else {
+                    this.setState({blogs:[]})
+                    this.homePageIsLoading(false)
+                    this.blogsAreLoading(false)
                 }
             }.bind(this))
             .catch(function (err) {
-            })
+                console.log(err)
+                this.setState({blogs:[]})
+                this.homePageIsLoading(false)
+                this.blogsAreLoading(false)
+            }.bind(this))
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
@@ -204,9 +211,6 @@ class HomePage extends Component {
             })
                 .then(response => {
                     this.setState({blogs:response.data})
-                    console.log("||||||||||||||||||||||||||||")
-                    console.log(this.state.blog)
-                    console.log(this.state.blogDetails)
                 })
                 .catch(exception => {
                     this.setState({blogs:[]})
@@ -254,9 +258,10 @@ class HomePage extends Component {
                                                                 placeholder='Search...'
                                                                 onChange={this.handleFilterChange}
                                                             />
-                                                            <Header  color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                                            <Header
+                                                                color={this.props.colors[2]} as='h2'>{userText[rand().toString()]}Dev</Header>
                                                             {
-                                                               this.state.blogsLoaded?
+                                                                this.state.blogsLoaded?
                                                                     <div>
                                                                         {
                                                                             (this.state.blogs[0]) ?
@@ -282,7 +287,7 @@ class HomePage extends Component {
                                             }
                                             <Grid.Column  width={9}>
                                                 {
-                                                    !this.state.blogLoaded?
+                                                    this.state.blogIsLoading?
                                                         <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
                                                             <Loader active inline='centered' />
                                                         </div>:
@@ -300,7 +305,9 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>1030) ?
                                                     <Grid.Column  width={3}>
-                                                        <TwitterProf/>
+                                                        {
+                                                            //<TwitterProf/>
+                                                        }
                                                     </Grid.Column>:
                                                     <p>Hello</p>
                                             }
@@ -354,47 +361,36 @@ class HomePage extends Component {
 
                                             }
                                             <Grid.Column  width={16}>
-                                                <Topics
-                                                    blogsAreLoading={this.blogsAreLoading}
-                                                    setTopicPosts={this.setTopicPosts}
-                                                    onReadMore = {this.onReadMore}
-                                                    blog ={this.state.blog}
-                                                    color={this.props.color}
-                                                    blogs={this.state.blogs}/>
-                                                {
-                                                    !this.state.blogLoaded?
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
-                                                            <Loader active inline='centered' />
-                                                        </div>:
-                                                        <WelcomePage
-                                                            richViewerState={this.state.richViewerState}
-                                                            counts={this.state.counts}
-                                                            color={this.props.colors[1]}
-                                                            blogDetails={this.state.blogDetails}
-                                                            blog={this.state.blog}
-                                                            blogs={this.state.blogs}
-                                                            blogLoaded={this.state.blogLoaded}/>
-                                                }
-                                                {
-                                                    this.state.blogsLoaded?
-                                                        <div>
-                                                            {
-                                                                (this.state.blogs[0]) ?
-                                                                    <Blogs
-                                                                        color={this.props.color}
-                                                                        onReadMore = {this.onReadMore}
-                                                                        blogs ={this.state.blogs} blog ={this.state.blog}/>:
-                                                                    <div>
-                                                                        No matching content on this Topic
-                                                                    </div>
-                                                            }
-                                                        </div>:
-                                                        <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                            <Loader active inline='centered' />
-                                                        </div>
-
-                                                }
-
+                                                <div style={{margin: '2em 1em 3em 1em'}}>
+                                                    <Topics
+                                                        blogsAreLoading={this.blogsAreLoading}
+                                                        setTopicPosts={this.setTopicPosts}
+                                                        onReadMore = {this.onReadMore}
+                                                        blog ={this.state.blog}
+                                                        color={this.props.color}
+                                                        blogs={this.state.blogs}/>
+                                                    <WelcomePage
+                                                        richViewerState={this.state.richViewerState}
+                                                        counts={this.state.counts}
+                                                        color={this.props.colors[1]}
+                                                        blogDetails={this.state.blogDetails}
+                                                        blog={this.state.blog}
+                                                        blogs={this.state.blogs}
+                                                        blogLoaded={this.state.blogLoaded}/>
+                                                    <div>
+                                                        {
+                                                            (this.state.blogs[0]) ?
+                                                                <Blogs
+                                                                    color={this.props.color}
+                                                                    onReadMore = {this.onReadMore}
+                                                                    blogs ={this.state.blogs}
+                                                                    blog ={this.state.blog}/>:
+                                                                <div>
+                                                                    No matching content on this Topic
+                                                                </div>
+                                                        }
+                                                    </div>
+                                                </div>
                                             </Grid.Column>
                                         </Grid.Row>
                                     </Grid>

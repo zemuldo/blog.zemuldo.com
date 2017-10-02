@@ -138,6 +138,7 @@ class HomePage extends Component {
             });
     }
     componentDidMount() {
+        console.log(this.props.richViewerState)
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
             url = url.split('-').join(' ')
