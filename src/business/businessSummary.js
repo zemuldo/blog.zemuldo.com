@@ -177,7 +177,7 @@ class HomePage extends Component {
         return axios.post(env.httpURL, {
             "queryMethod":"getPosts",
             "queryData":{
-                "type":'dev'
+                "type":'business'
             }
         })
             .then(function (response) {
