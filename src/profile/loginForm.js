@@ -28,8 +28,10 @@ class LoginForm extends React.Component {
             }
             this.setState({currentUser:user})
             this.props.successLogin(user)
+            this.setState({loggedin:true})
         }
         else {
+           
         }
 
     }
