@@ -24,9 +24,12 @@ class RichEditorExample extends React.Component {
         this.componentWillUnmount=this.componentWillUnmount.bind(this)
 
     }
+    resize = () => this.forceUpdate();
     componentDidMount() {
+        window.addEventListener('resize', this.resize)
     }
     componentWillUnmount() {
+        window.removeEventListener('resize', this.resize)
     }
     render() {
         return (
@@ -39,31 +42,58 @@ class RichEditorExample extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Grid.Column  width={3}>
-                        <div>
-                            Good Stuff will be here
-                        </div>
-                    </Grid.Column>
-                    <Grid.Column  width={10}>
-                        {
-                            this.props.createNew?
-                                <EditorsForm
-                                    currentUser={this.props.currentUser}
-                                    _goToEditor = {this.props._goToEditor}
-                                    _exitEditMode={this.props._exitEditMode}
-                                    editingMode = {this.props.editingMode}
-                                    onFinishClick={this.onFinishClick}
-                                    handleUTAChange={this.handleUTAChange}
-                                    handleCategoryChange={this.handleCategoryChange}
-                                    handleTopicChange={this.handleTopicChange} />:
-                                <Welcome color={this.props.color} blog = {null}/>
-                        }
-                    </Grid.Column>
-                    <Grid.Column  width={3}>
-                        <div>
-                            I will give you some more stuff here
-                        </div>
-                    </Grid.Column>
+                    {
+                        (window.innerWidth>600)?
+                            <Grid.Column  width={3}>
+                                <div>
+                                    Good Stuff will be here
+                                </div>
+                            </Grid.Column>:
+                            <div></div>
+                    }
+                    {
+                        window.innerWidth>600?
+                            <Grid.Column  width={10}>
+                                {
+                                    this.props.createNew?
+                                        <EditorsForm
+                                            currentUser={this.props.currentUser}
+                                            _goToEditor = {this.props._goToEditor}
+                                            _exitEditMode={this.props._exitEditMode}
+                                            editingMode = {this.props.editingMode}
+                                            onFinishClick={this.onFinishClick}
+                                            handleUTAChange={this.handleUTAChange}
+                                            handleCategoryChange={this.handleCategoryChange}
+                                            handleTopicChange={this.handleTopicChange} />:
+                                        <Welcome color={this.props.color} blog = {null}/>
+                                }
+                            </Grid.Column>:
+                            <Grid.Column  width={16}>
+                                {
+                                    this.props.createNew?
+                                        <EditorsForm
+                                            currentUser={this.props.currentUser}
+                                            _goToEditor = {this.props._goToEditor}
+                                            _exitEditMode={this.props._exitEditMode}
+                                            editingMode = {this.props.editingMode}
+                                            onFinishClick={this.onFinishClick}
+                                            handleUTAChange={this.handleUTAChange}
+                                            handleCategoryChange={this.handleCategoryChange}
+                                            handleTopicChange={this.handleTopicChange} />:
+                                        <Welcome color={this.props.color} blog = {null}/>
+                                }
+                            </Grid.Column>
+                    }
+                    {
+                        (window.innerWidth>600)?
+                            <Grid.Column  width={3}>
+                                <div>
+                                    I will give you some more stuff here
+                                </div>
+                            </Grid.Column>:
+                            <div></div>
+                    }
+
                 </Grid.Row>
             </Grid>
         );
