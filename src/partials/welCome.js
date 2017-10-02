@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button,Image, Header,Icon} from 'semantic-ui-react'
+import {Button, Header,Icon} from 'semantic-ui-react'
 import BlogEditor from '../editor/renderBlog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/

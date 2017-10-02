@@ -62,7 +62,6 @@ class HomePage extends Component {
             }
         })
             .then(response => {
-                console.log(response)
                 this.setState({blog:response.data,blogDetails:thisBlog})
                 this.setState({blogIsLoading:false,richViewerState:response.data.body})
                 window.scrollTo(0,0)
@@ -137,7 +136,6 @@ class HomePage extends Component {
 
     }
     componentDidMount() {
-        console.log(window.location.pathname)
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
             let id = url.split('_')[2]
@@ -174,9 +172,7 @@ class HomePage extends Component {
             "queryData":{}
         })
             .then(function (response) {
-                console.log(response)
                 if(response.data[0]){
-                    console.log(response.data)
                     this.setState({blogs:response.data})
                 }
             }.bind(this))

@@ -22,13 +22,10 @@ class Topics extends Component {
             }
         })
             .then(function (blogs) {
-                console.log("++++++++fetching TOPIC B;LOGS++++++")
-                console.log(blogs.data)
                 this.setState({topicBlogs:blogs.data})
                 this.props.setTopicPosts(blogs.data,e)
             }.bind(this))
             .catch(function (err) {
-                console.log("++++++++ERREOR IN FETCH TOPIC B;LOGS++++++")
                 this.props.setTopicPosts([],e)
             }.bind(this))
     }

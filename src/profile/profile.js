@@ -1,13 +1,10 @@
 import React from 'react'
-import {Loader,Input,Header, Icon, Grid } from 'semantic-ui-react'
-import axios from 'axios';
+import {Header, Grid } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
-import Topics from '../partials/topics'
-import Blogs from '../posts/blogs'
 import Welcome from '../partials/welCome'
-import config from '../environments/conf'
+/*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-/*
+
 const cats = {
     Development:'dev',
     Business:'business',

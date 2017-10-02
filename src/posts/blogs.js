@@ -14,8 +14,6 @@ class Blogs extends React.Component {
 
     };
     componentDidMount() {
-        console.log("+++++++++at blogs+++++++++")
-        console.log(this.props.blogs)
     }
     render() {
         return (

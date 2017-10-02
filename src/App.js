@@ -41,6 +41,10 @@ const pages = {
     home:{
         name:'Zemuldo Home Pgae',
         icon:''
+    },
+    login:{
+        name:'Profile',
+        icon:'user circle'
     }
 }
 class App extends Component {
@@ -264,10 +268,10 @@ class App extends Component {
                     </Dropdown>
                     <Menu.Item
                         disabled={true}
-                        name={this.state.currentLocation==='home'?'':pages[this.state.currentLocation].name}
+                        name={(this.state.currentLocation==='home')?'':pages[this.state.currentLocation].name}
                     >
-                        <Icon color={this.state.colors[0]} name={pages[this.state.currentLocation].icon} />
-                        <span color={this.state.colors[0]}>{this.state.currentLocation==='home'?'':pages[this.state.currentLocation].name}</span>
+                        <Icon color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
+                        <span color={this.state.colors[0]}>{(this.state.currentLocation==='home')?'':pages[this.state.currentLocation].name}</span>
                     </Menu.Item>
                     {
                         (!this.state.loggedin) ?

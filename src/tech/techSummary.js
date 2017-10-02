@@ -7,17 +7,6 @@ import Topics from '../partials/topics'
 /*import TwitterProf from '../partials/twitterProf'*/
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-const types ={
-    dev:{
-        name:"DEVELOPMENT"
-    },
-    business:{
-        name:"BUSINESS"
-    },
-    tech:{
-        name:"TECHNOLOGY"
-    }
-}
 const userText ={
     "20":"Featured in ",
     "21":"Popular Reads in ",
