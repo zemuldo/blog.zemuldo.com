@@ -42,12 +42,12 @@ class RichEditorExample extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Grid.Column  width={4}>
+                    <Grid.Column  width={3}>
                         <div>
                             Good Stuff will be here
                         </div>
                     </Grid.Column>
-                    <Grid.Column  width={9}>
+                    <Grid.Column  width={10}>
                         {
                             this.props.createNew?
                                 <EditorsForm
