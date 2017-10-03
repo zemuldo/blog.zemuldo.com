@@ -569,9 +569,9 @@ class RichEditorExample extends React.Component {
                         disabled = {this.state.hasSavedContent}
                         style={{float:'left'}} type="button"
                         onClick={this.handleGoBackToProfile}
-                        color='green' size='mini'>Publish
+                        color='green' size='mini'>Exit
                     </Button>
-                    <Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                    <Header style={{ margin:'3em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
                         Draft an article on the fly.
                     </Header>
                     <br/>
