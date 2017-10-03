@@ -288,7 +288,7 @@ class HomePage extends Component {
                                             <Grid.Column  width={9}>
                                                 {
                                                     this.state.blogIsLoading?
-                                                        <div style={{ position:'center', margin: '16em 2em 2em 2em'}}>
+                                                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                                             <Loader active inline='centered' />
                                                         </div>:
                                                         <WelcomePage
@@ -397,7 +397,7 @@ class HomePage extends Component {
                             }
 
                         </div>:
-                        <div   style={ {height:window.innerHeight,margin: '20em 3em 1em 0em'}}>
+                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                             <Loader active inline='centered' />
                         </div>
                 }
