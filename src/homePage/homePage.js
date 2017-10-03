@@ -173,7 +173,6 @@ class HomePage extends Component {
                     this.setState({blogs:response.data})
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
-                    this.onReadMore(response.data[0])
                 }
                 else {
                     this.setState({blogs:[]})
@@ -184,7 +183,6 @@ class HomePage extends Component {
             .catch(function (err) {
                 console.log(err)
                 this.setState({blogs:[]})
-                this.homePageIsLoading(false)
                 this.blogsAreLoading(false)
             }.bind(this))
     }

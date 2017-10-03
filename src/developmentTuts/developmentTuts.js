@@ -35,7 +35,8 @@ class HomePage extends Component {
                 gplsC:null
             },
             topic:null,
-            richViewerState:null
+            richViewerState:null,
+            isHome:true,
         };
         this.goToHome = this.goToHome.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
@@ -61,7 +62,7 @@ class HomePage extends Component {
         this.setState({blogLoaded:!state})
     }
     onReadMore(thisBlog){
-        this.setState({blogIsLoading:true})
+        this.setState({blogIsLoading:true,isHome:false})
         return axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
