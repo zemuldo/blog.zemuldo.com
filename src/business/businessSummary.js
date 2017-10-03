@@ -85,7 +85,8 @@ class HomePage extends Component {
                     "jsonrpc": "2.0",
                     "key": "p",
                     "apiVersion": "v1"
-                }
+                };
+                window.scrollTo(0,0)
                 return Promise.all([
                     axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
@@ -368,15 +369,20 @@ class HomePage extends Component {
                                                     blog ={this.state.blog}
                                                     color={this.props.color}
                                                     blogs={this.state.blogs}/>
-                                                <WelcomePage
-                                                    richViewerState={this.state.richViewerState}
-                                                    counts={this.state.counts}
-                                                    color={this.props.colors[1]}
-                                                    blogDetails={this.state.blogDetails}
-                                                    blog={this.state.blog}
-                                                    blogs={this.state.blogs}
-                                                    blogLoaded={this.state.blogLoaded}/>
-                                                <div>
+                                                    {
+                                                        this.state.blogIsLoading?
+                                                            <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                                                                <Loader active inline='centered' />
+                                                            </div>:
+                                                            <WelcomePage
+                                                                richViewerState={this.state.richViewerState}
+                                                                counts={this.state.counts}
+                                                                color={this.props.colors[1]}
+                                                                blogDetails={this.state.blogDetails}
+                                                                blog={this.state.blog}
+                                                                blogs={this.state.blogs}
+                                                                blogLoaded={this.state.blogLoaded}/>
+                                                    }
                                                     {
                                                         (this.state.blogs[0]) ?
                                                             <Blogs
@@ -388,7 +394,6 @@ class HomePage extends Component {
                                                                 No matching content on this Topic
                                                             </div>
                                                     }
-                                                </div>
                                                 </div>
                                             </Grid.Column>
                                         </Grid.Row>

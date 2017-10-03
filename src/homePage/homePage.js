@@ -86,11 +86,13 @@ class HomePage extends Component {
                     "key": "p",
                     "apiVersion": "v1"
                 }
+                window.scrollTo(0,0)
                 return Promise.all([
                     axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
                     axios.post(' https://clients6.google.com/rpc',gplusPost),
                 ])
+
             })
             .then(function (res) {
                 this.setState({counts:{
@@ -350,7 +352,7 @@ class HomePage extends Component {
                                                                                 </div>
                                                                         }
                                                                     </div>:
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
+                                                                    <div style={{ position:'center', margin: '20em 0em 0em 0em'}} >
                                                                         <Loader active inline='centered' />
                                                                     </div>
 
@@ -369,14 +371,20 @@ class HomePage extends Component {
                                                         blog ={this.state.blog}
                                                         color={this.props.color}
                                                         blogs={this.state.blogs}/>
-                                                    <WelcomePage
-                                                        richViewerState={this.state.richViewerState}
-                                                        counts={this.state.counts}
-                                                        color={this.props.colors[1]}
-                                                        blogDetails={this.state.blogDetails}
-                                                        blog={this.state.blog}
-                                                        blogs={this.state.blogs}
-                                                        blogLoaded={this.state.blogLoaded}/>
+                                                    {
+                                                        this.state.blogIsLoading?
+                                                            <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                                                                <Loader active inline='centered' />
+                                                            </div>:
+                                                            <WelcomePage
+                                                                richViewerState={this.state.richViewerState}
+                                                                counts={this.state.counts}
+                                                                color={this.props.colors[1]}
+                                                                blogDetails={this.state.blogDetails}
+                                                                blog={this.state.blog}
+                                                                blogs={this.state.blogs}
+                                                                blogLoaded={this.state.blogLoaded}/>
+                                                    }
                                                     <div>
                                                         {
                                                             (this.state.blogs[0]) ?
