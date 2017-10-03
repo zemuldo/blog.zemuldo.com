@@ -262,7 +262,7 @@ class HomePage extends Component {
                                                                 onChange={this.handleFilterChange}
                                                             />
                                                             <Header
-                                                                color={this.props.colors[2]} as='h2'>{userText[rand().toString()]}Dev</Header>
+                                                                color={this.props.colors[2]} as='h2'>{userText[rand().toString()]}Software Development</Header>
                                                             {
                                                                 this.state.blogsLoaded?
                                                                     <div>
