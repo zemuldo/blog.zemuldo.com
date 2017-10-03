@@ -48,6 +48,7 @@ class HomePage extends Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
+        this.getBlogDetails = this.getBlogDetails.bind(this)
 
 
     };
@@ -60,40 +61,78 @@ class HomePage extends Component {
     blogIsLoading(state){
         this.setState({blogLoaded:!state})
     }
-    onReadMore(thisBlog){
-        this.setState({blogIsLoading:true})
+    getBlogDetails(id){
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPostDetails",
+            "queryData":{
+                "id":id
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if(response.data.error){
+                }
+                else {
+                    this.setState({blogDetails:response.data,isHome:false});
+                    this.blogIsLoading(false);
+                    window.scrollTo(0,0);
+                    this.setBlogCounts();
+                }
+
+        }.bind(this))
+            .catch(function (err) {
+                this.setState({blog:null});
+                this.blogIsLoading(false);
+                return err
+            });
+    }
+    setCurrentBlog(id){
+        this.blogIsLoading(true);
+        console.log("++++++++++++setting home blog")
         return axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
-                "id":thisBlog.id
+                id:id
             }
         })
-            .then(response => {
-                this.setState({blog:response.data,blogDetails:thisBlog})
-                this.setState({blogIsLoading:false,richViewerState:response.data.body})
-                window.scrollTo(0,0)
-                let gplusPost = {
-                    "method": "pos.plusones.get",
-                    "id": "p",
-                    "params": {
-                        "nolog": true,
-                        "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
-                        "source": "widget",
-                        "userId": "@viewer",
-                        "groupId": "@self"
-                    },
-                    "jsonrpc": "2.0",
-                    "key": "p",
-                    "apiVersion": "v1"
+            .then(function (response) {
+                console.log(response.data);
+                if(response.data.error){
                 }
-                window.scrollTo(0,0)
-                return Promise.all([
-                    axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
-                    axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
-                    axios.post(' https://clients6.google.com/rpc',gplusPost),
-                ])
-
-            })
+                else {
+                    this.setState({blog:response.data,richViewerState:response.data.body});
+                    this.getBlogDetails(id);
+                    this.blogIsLoading(false);
+                    window.scrollTo(0,0)
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({blog:null});
+                this.blogIsLoading(false);
+                return err
+            }.bind(this));
+    }
+    setBlogCounts(){
+        let gplusPost = {
+            "method": "pos.plusones.get",
+            "id": "p",
+            "params": {
+                "nolog": true,
+                "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
+                "source": "widget",
+                "userId": "@viewer",
+                "groupId": "@self"
+            },
+            "jsonrpc": "2.0",
+            "key": "p",
+            "apiVersion": "v1"
+        }
+        window.scrollTo(0,0);
+        return Promise.all([
+            axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
+            axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
+            axios.post(' https://clients6.google.com/rpc',gplusPost),
+        ])
             .then(function (res) {
                 this.setState({counts:{
                     fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
@@ -102,10 +141,32 @@ class HomePage extends Component {
                 }})
             }.bind(this))
             .catch(function (err) {
-                this.setState({blog:null,blogDetails:thisBlog})
-                this.setState({blogIsLoading:false})
-                window.scrollTo(0,0)
-                return err
+                this.setState({counts:{
+                    fbC:0,
+                    twtC:0,
+                    gplsC:0
+                }})
+            })
+    }
+    onReadMore(thisBlog){
+        this.setState({blogIsLoading:true});
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPost",
+            "queryData":{
+                "id":thisBlog.id
+            }
+        })
+            .then(response => {
+                this.setState({blog:response.data,blogDetails:thisBlog});
+                this.setState({blogIsLoading:false,richViewerState:response.data.body});
+                window.scrollTo(0,0);
+                this.setBlogCounts()
+            })
+            .catch(function (err) {
+                this.setState({blog:null,blogDetails:thisBlog});
+                this.setState({blogIsLoading:false});
+                window.scrollTo(0,0);
+                return err;
             }.bind(this))
 
     }
@@ -116,50 +177,28 @@ class HomePage extends Component {
         this.setState({bodySize:size})
     }
     resize = () => this.forceUpdate();
-    setCurrentBlog(thisBlog){
-        return axios.post(env.httpURL, {
-            "query":"getPost",
-            "queryParam":{
-                id:thisBlog.id
-            }
-        })
-            .then(response => {
-                if(response.data.error){
-                }
-                else {
-                    this.setState({blog:response.data,blogDetails:thisBlog})
-                    this.blogIsLoading(false)
-                    window.scrollTo(0,0)
-                }
 
-            })
-            .catch(exception => {
-                this.setState({blog:null})
-                this.blogIsLoading(false)
-                return exception
-            });
-    }
     componentDidMount() {
-        console.log(this.props.richViewerState)
+        console.log(window.location.pathname);
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
-            url = url.split('-').join(' ')
-            this.setCurrentBlog(url.split('-').join(' '))
+            let id = url.split('_')[2];
+            this.setCurrentBlog(id);
         }
-        if(url.indexOf('%20')!==-1){
-            url = url.split('%20').join(' ')
-            this.setCurrentBlog(url.split('%20').join(' '))
+        else if(url.indexOf('%20')!==-1){
+            let id = url.split('_')[2];
+            this.setCurrentBlog(id)
         }
-        if(url.indexOf('%2520')!==-1){
-            url = url.split('%2520').join(' ')
-            this.setCurrentBlog(url.split('%2520').join(' '))
+        else if(url.indexOf('%2520')!==-1){
+            let id = url.split('_')[2];
+            this.setCurrentBlog(id)
         }
         this.forceUpdate()
         if(window.innerWidth<503){
-            this._handleChangeBodySize(16)
+            this._handleChangeBodySize(16);
         }
         if(window.innerWidth>503){
-            this._handleChangeBodySize(16)
+            this._handleChangeBodySize(16);
         }
 
         window.addEventListener('resize', this.resize)
@@ -171,23 +210,23 @@ class HomePage extends Component {
             .then(function (response) {
                 if(response.data[0]){
                     this.setState({blogs:response.data})
-                    this.homePageIsLoading(false)
-                    this.blogsAreLoading(false)
+                    this.homePageIsLoading(false);
+                    this.blogsAreLoading(false);
                 }
                 else {
-                    this.setState({blogs:[]})
-                    this.homePageIsLoading(false)
-                    this.blogsAreLoading(false)
+                    this.setState({blogs:[]});
+                    this.homePageIsLoading(false);
+                    this.blogsAreLoading(false);
                 }
             }.bind(this))
             .catch(function (err) {
                 console.log(err)
-                this.setState({blogs:[]})
+                this.setState({blogs:[]});
                 this.blogsAreLoading(false)
             }.bind(this))
     }
     componentWillUnmount() {
-        window.removeEventListener('resize', this.resize)
+        window.removeEventListener('resize', this.resize);
     }
     handleFilterChange(e) {
         e.preventDefault();
@@ -197,7 +236,7 @@ class HomePage extends Component {
                 "queryData":{}
             })
                 .then(response => {
-                    this.setState({blogs:response.data})
+                    this.setState({blogs:response.data});
                 })
                 .catch(exception => {
                 });
@@ -210,21 +249,21 @@ class HomePage extends Component {
                 }
             })
                 .then(response => {
-                    this.setState({blogs:response.data})
+                    this.setState({blogs:response.data});
                 })
                 .catch(exception => {
-                    this.setState({blogs:[]})
+                    this.setState({blogs:[]});
                 });
         }
     }
 
     setTopicPosts(topicBlogs,topic){
         if(topicBlogs[0]){
-            this.setState({blogs:topicBlogs,topic:topic})
+            this.setState({blogs:topicBlogs,topic:topic});
             this.blogsAreLoading(false)
         }
         else {
-            this.setState({blogs:[],topic:topic})
+            this.setState({blogs:[],topic:topic});
             this.blogsAreLoading(false)
         }
     }
