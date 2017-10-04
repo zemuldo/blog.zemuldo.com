@@ -262,7 +262,7 @@ class HomePage extends Component {
                                                                 onChange={this.handleFilterChange}
                                                             />
                                                             <Header
-                                                                color={this.props.colors[2]} as='h2'>{userText[rand().toString()]}Software Development</Header>
+                                                                color={this.props.colors[2]} as='h2'>Software Development Articles</Header>
                                                             {
                                                                 this.state.blogsLoaded?
                                                                     <div>
@@ -400,7 +400,7 @@ class HomePage extends Component {
                             }
 
                         </div>:
-                        <div   style={ {height:window.innerHeight,margin: '20em 3em 1em 0em'}}>
+                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                             <Loader active inline='centered' />
                         </div>
                 }

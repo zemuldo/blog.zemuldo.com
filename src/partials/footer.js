@@ -30,7 +30,7 @@ class Footer extends Component {
                             <Menu.Item name='copyright' onClick={this.handleMenuItemClick}>
                                 <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
                                     <Icon color={this.props.color} name='copyright' />
-                                    <span color={this.props.color}>CopyRight {" "+new Date().getFullYear()+" Danstan Otieno Onyango"}</span>
+                                    <span color={this.props.color}>CopyRight +{" Zemuldo "+new Date().getFullYear()}</span>
                                 </a>
 
                             </Menu.Item>

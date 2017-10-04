@@ -63,6 +63,7 @@ class App extends Component {
             open: false,
             createNew:false,
             editingMode:false,
+            secondMenu:true,
             colors:['green','blue','orange','violet','pink'],
             currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ?
                 window.location.pathname.slice(1,window.location.pathname.length):'home'
@@ -81,6 +82,7 @@ class App extends Component {
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
         this._goToEditor = this._goToEditor.bind(this)
         this._exitEditMode = this._exitEditMode.bind(this)
+        this.handleScroll = this.handleScroll.bind(this)
 
 
     };
@@ -111,6 +113,7 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll);
         this.shuffle()
         this.forceUpdate()
         if(window.innerWidth<503){
@@ -169,6 +172,7 @@ class App extends Component {
     }
 
     componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
@@ -214,11 +218,15 @@ class App extends Component {
     _exitEditMode(){
         this.setState({editingMode:false,createNew:false})
     }
+    handleScroll = function(event) {
+        //console.log(window.pageYOffset)
+        this.setState({secondMenu:false})
+    }
 
     render() {
 
         return (
-            <div>
+            <div onScroll={this.handleScroll}>
                 <div>
                     <GeoLocator geoAllowed={this.state.geoAllowed}/>
                 </div>
