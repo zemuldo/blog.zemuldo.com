@@ -39,8 +39,8 @@ const pages = {
         icon:'code'
     },
     home:{
-        name:'Zemuldo Home Pgae',
-        icon:''
+        name:'Home',
+        icon:'home'
     },
     login:{
         name:'Profile',
@@ -60,6 +60,7 @@ class App extends Component {
             windowSize:window.innerWidth,
             geoAllowed:false,
             log: [],
+            currentUserLocation:'name',
             open: false,
             createNew:false,
             editingMode:false,
@@ -234,16 +235,24 @@ class App extends Component {
                     <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                <Menu fixed='top' size='small' color="green" borderless>
+                <Menu style={{border:'none'}} fixed='top' size='small' color="green" borderless>
                     <Menu.Item
-                        name='home'
-                        active={this.state.currentLocation === 'home'}
-                        onClick={this.handleHomeClick}>
-                        <Icon color={this.state.colors[0]} name='home' />
-                        <span color={this.state.colors[0]}>HOME</span>
+                    >
+                        <Icon color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
+                        <span color={this.state.colors[0]}>{(this.state.currentLocation==='home')?'Home':pages[this.state.currentLocation].name}</span>
                     </Menu.Item>
-                    <Dropdown pointing='top' item text='Categories'>
+                    <Dropdown
+                        pointing='top'
+                        item
+                    >
                         <Dropdown.Menu style = {{margin:'1em'}}>
+                            <Dropdown.Item
+                                name='home'
+                                active={this.state.currentLocation === 'home'}
+                                onClick={this.handleHomeClick}>
+                                <Icon color={this.state.colors[0]} name='home' />
+                                <span color={this.state.colors[0]}>HOME</span>
+                            </Dropdown.Item>
                             <Dropdown.Item
                                 name='dev'
                                 active={this.state.currentLocation === 'dev'}
@@ -274,24 +283,21 @@ class App extends Component {
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <Menu.Item
-                        disabled={true}
-                        name={(this.state.currentLocation==='home')?'':pages[this.state.currentLocation].name}
-                    >
-                        <Icon color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
-                        <span color={this.state.colors[0]}>{(this.state.currentLocation==='home')?'':pages[this.state.currentLocation].name}</span>
-                    </Menu.Item>
                     {
                         (!this.state.loggedin) ?
                             <Button
-                                style={{position: 'fixed',top: '1%',right: '1%'}} floated='right'
+                                style={{position: 'fixed',top: '1%',right: '0%'}} floated='right'
                                 onClick={() => { this.handleLoginButton() }}
                                 color={this.state.colors[0]}  size='mini'>Login</Button>:
                             <Dropdown
                                 style={{position: 'fixed',top: '1%',right: '1%'}}
-                                pointing='top'  item
-                                text={'Hello, '+this.state.user.name}>
-                                <Dropdown.Menu style = {{margin:'1em'}}>
+                                floated='right'
+                                pointing='top left'
+                                item
+                                text={toTitleCase(this.state.user[this.state.currentUserLocation])}>
+                                <Dropdown.Menu
+                                    style={{margin:'1% 1% 1% 1%',border:'none'}}
+                                >
                                     <Dropdown.Item onClick={this._handleSwitchToProfile}>
                                         <Icon color={this.state.colors[0]} name='user circle' />
                                         <span color={this.state.colors[1]} >Your Profile</span>
