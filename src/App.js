@@ -235,54 +235,54 @@ class App extends Component {
                     <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                <Menu style={{border:'none'}} fixed='top' size='small' color="green" borderless>
+                <Menu secondary style={{border:'none'}} fixed='top' size='small' color="green" borderless>
                     <Menu.Item
                     >
-                        <Icon color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
-                        <span color={this.state.colors[0]}>{(this.state.currentLocation==='home')?'Home':pages[this.state.currentLocation].name}</span>
+                        <Icon size="large" color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
+                        <Dropdown
+                            pointing='top'
+                            item
+                            text={(this.state.currentLocation==='home')?'Home':pages[this.state.currentLocation].name}
+                        >
+                            <Dropdown.Menu style = {{margin:'1em'}}>
+                                <Dropdown.Item
+                                    name='home'
+                                    active={this.state.currentLocation === 'home'}
+                                    onClick={this.handleHomeClick}>
+                                    <Icon color={this.state.colors[0]} name='home' />
+                                    <span color={this.state.colors[0]}>HOME</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='dev'
+                                    active={this.state.currentLocation === 'dev'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='code' />
+                                    <span color={this.state.colors[0]}>Dev</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='business'
+                                    active={this.state.currentLocation === 'business'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='creative commons' />
+                                    <span color={this.state.colors[0]}>Business</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='tech'
+                                    active={this.state.currentLocation === 'tech'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='server' />
+                                    <span color={this.state.colors[0]}>Tech</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='reviews'
+                                    active={this.state.currentLocation === 'use'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='circle notched' />
+                                    <span color={this.state.colors[0]}>Reviews</span>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </Menu.Item>
-                    <Dropdown
-                        pointing='top'
-                        item
-                    >
-                        <Dropdown.Menu style = {{margin:'1em'}}>
-                            <Dropdown.Item
-                                name='home'
-                                active={this.state.currentLocation === 'home'}
-                                onClick={this.handleHomeClick}>
-                                <Icon color={this.state.colors[0]} name='home' />
-                                <span color={this.state.colors[0]}>HOME</span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='dev'
-                                active={this.state.currentLocation === 'dev'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='code' />
-                                <span color={this.state.colors[0]}>Dev</span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='business'
-                                active={this.state.currentLocation === 'business'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='creative commons' />
-                                <span color={this.state.colors[0]}>Business</span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='tech'
-                                active={this.state.currentLocation === 'tech'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='server' />
-                                <span color={this.state.colors[0]}>Tech</span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='reviews'
-                                active={this.state.currentLocation === 'use'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='circle notched' />
-                                <span color={this.state.colors[0]}>Reviews</span>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
                     {
                         (!this.state.loggedin) ?
                             <Button
