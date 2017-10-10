@@ -49,7 +49,7 @@ export default class WelcomePage extends React.Component {
                 {
                     (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
                         <div >
-                            <Header style={{alignment:'center'}} color={this.props.color} as='h1'>
+                            <Header color={this.props.color} as='h1'>
                                 Welcome To ZemuldO.COM
                             </Header>
                             <hr color="green"/>
