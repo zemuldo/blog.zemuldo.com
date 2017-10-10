@@ -11,15 +11,28 @@ class LoginForm extends React.Component {
            user:this.props.user,
             currentUser:null,
             password:null,
+            confirmPass:null,
             userName:null,
+            firstName:null,
+            lastName:null,
+            email:null,
             avatar:null,
+            warning:true,
+            success:false,
             creatAvatarOpen:false,
             imagePreviewUrl:'',
             file:'',
+            error:false,
+            errorDetails:null,
             signUp:false
         };
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleUnameChange = this.handleUnameChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handleFNameChange = this.handleFNameChange.bind(this);
+        this.handleLNameChange = this.handleLNameChange.bind(this);
+        this.handleConPassChange = this.handleConPassChange.bind(this);
+        this.handleSignUp=this.handleSignUp.bind(this)
         this.onLoginClick = this.onLoginClick.bind(this);
         this.handSwichReg = this.handSwichReg.bind(this)
         this._handleFileChange = this._handleFileChange.bind(this);
@@ -28,8 +41,79 @@ class LoginForm extends React.Component {
         this.showCreateAvatar = this.showCreateAvatar.bind(this)
         this.setAvatar=this.setAvatar.bind(this)
     };
+    handleSignUp(){
+        if(!this.state.userName || this.state.userName.length<4){
+            this.setState({error:true,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
+            return
+        }
+        if(!this.state.firstName || this.state.firstName.length<3){
+            this.setState({error:true,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
+            return
+        }
+        if(!this.state.lastName || this.state.lastName.length<3){
+            this.setState({error:true,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
+            return
+        }
+        if(!this.state.email){
+            this.setState({error:true,errorDetails:{field:'Last Name',message:"Email Address is required"}})
+            return
+        }
+        if(typeof this.state.imagePreviewUrl !=='object'){
+            this.setState({error:true,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
+            return
+        }
+        if(!this.state.password || !this.state.confirmPass){
+            this.setState({error:true,errorDetails:{field:'Password',message:"Password is required"}})
+            return
+        }
+        if(this.state.password !== this.state.confirmPass){
+            this.setState({error:true,errorDetails:{field:'Password',message:"Passwords don't match"}})
+            return
+        }
+        let userData ={
+            name: this.state.firstName+''+this.state.lastName,
+            userName:this.state.userName,
+            email:this.state.email,
+            password:this.state.password,
+            avatar:this.state.imagePreviewUrl
+        }
+        this.setState({error:true,errorDetails:{field:'Success',message:"Account Created"}})
+        this.setState({success:true,warning:true})
+        setTimeout(function () {
+            this.setState({error:false})
+        }.bind(this),4000)
+    }
+    handlePasswordChange(e) {
+        e.preventDefault();
+        this.setState({password:e.target.value})
+
+    }
+    handleUnameChange(e) {
+        e.preventDefault();
+        this.setState({userName:e.target.value})
+
+    }
+    handleEmailChange(e) {
+        e.preventDefault();
+        this.setState({email:e.target.value})
+
+    }
+    handleFNameChange(e) {
+        e.preventDefault();
+        this.setState({firstName:e.target.value})
+
+    }
+    handleLNameChange(e) {
+        e.preventDefault();
+        this.setState({lastName:e.target.value})
+
+    }
+    handleConPassChange(e) {
+        e.preventDefault();
+        this.setState({confirmPass:e.target.value})
+
+    }
     setAvatar(img){
-        console.log(img)
         this.setState({imagePreviewUrl:img})
     }
     showCreateAvatar=()=>{
@@ -55,17 +139,6 @@ class LoginForm extends React.Component {
         else {
 
         }
-
-    }
-
-    handlePasswordChange(e) {
-        e.preventDefault();
-        this.setState({password:e.target.value})
-
-    }
-    handleUnameChange(e) {
-        e.preventDefault();
-        this.setState({userName:e.target.value})
 
     }
     handSwichReg = function (state){
@@ -204,14 +277,14 @@ class LoginForm extends React.Component {
                                                         fluid
                                                         type="text"
                                                         placeholder='First Name'
-                                                        onChange={this.handleUnameChange}
+                                                        onChange={this.handleFNameChange}
                                                     />
                                                     <Form.Input
                                                         label='Last Name'
                                                         fluid
                                                         type="text"
                                                         placeholder='Last Name'
-                                                        onChange={this.handleUnameChange}
+                                                        onChange={this.handleLNameChange}
                                                     />
                                                 </Form.Group>
                                                 <Form.Input
@@ -219,7 +292,7 @@ class LoginForm extends React.Component {
                                                     fluid
                                                     type="email"
                                                     placeholder='E-mail address'
-                                                    onChange={this.handleUnameChange}
+                                                    onChange={this.handleEmailChange}
                                                 />
                                                 <Form.Group widths='equal'>
                                                     <Form.Input
@@ -236,18 +309,28 @@ class LoginForm extends React.Component {
                                                         fluid
                                                         type="password"
                                                         placeholder='Password'
-                                                        onChange={this.handleUnameChange}
+                                                        onChange={this.handlePasswordChange}
                                                     />
                                                     <Form.Input
                                                         label='Confirm Password'
                                                         fluid
                                                         type="password"
                                                         placeholder='Confirm Password'
-                                                        onChange={this.handleUnameChange}
+                                                        onChange={this.handleConPassChange}
                                                     />
                                                 </Form.Group>
-                                                <Button color='green' type='submit'>Submit</Button>
+
+                                                <Button onClick={()=>this.handleSignUp()} color='green' type='submit'>Submit</Button>
                                             </Form>
+                                            <Message
+                                                hidden={!this.state.error}
+                                               warning={this.state.warning}
+                                                success={this.state.success}
+                                            >
+                                                <Message.Header>
+                                                    {this.state.errorDetails?this.state.errorDetails.message:'There are errors in your Input'}
+                                                    </Message.Header>
+                                            </Message>
                                             <Message>
                                                 Have an Account?  <button onClick={()=>this.handSwichReg(false)}> Login</button>
                                             </Message>
