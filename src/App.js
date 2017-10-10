@@ -235,7 +235,14 @@ class App extends Component {
                     <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                <Menu secondary style={{border:'none'}} fixed='top' size='small' color="green" borderless>
+                <Menu
+                    secondary
+                    style={{backgroundColor:'white',opacity:'0.9'}}
+                    fixed='top'
+                    size='mini'
+                    color={this.state.colors[0]}
+                    borderless
+                >
                     <Menu.Item
                     >
                         <Icon size="large" color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
@@ -292,7 +299,7 @@ class App extends Component {
                             <Dropdown
                                 style={{position: 'fixed',top: '1%',right: '1%'}}
                                 floated='right'
-                                pointing='top left'
+                                pointing='top right'
                                 item
                                 text={toTitleCase(this.state.user[this.state.currentUserLocation])}>
                                 <Dropdown.Menu
