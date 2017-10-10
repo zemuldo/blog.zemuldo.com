@@ -4,15 +4,9 @@ import axios from 'axios';
 import WelcomePage from './welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
-/*import TwitterProf from '../partials/twitterProf'*/
+import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-const userText ={
-    "20":"Featured in ",
-    "21":"Popular Reads in ",
-    "22":"Popular in ",
-    "23":"Good reads in "
-}
 function rand () {
     return Math.floor(Math.random() * (23 - 20 + 1)) + 20;
 }
@@ -177,7 +171,6 @@ class HomePage extends Component {
         this.setState({bodySize:size})
     }
     resize = () => this.forceUpdate();
-
     componentDidMount() {
         console.log(window.location.pathname);
         let url = window.location.pathname.split('/').join('')
@@ -256,7 +249,6 @@ class HomePage extends Component {
                 });
         }
     }
-
     setTopicPosts(topicBlogs,topic){
         if(topicBlogs[0]){
             this.setState({blogs:topicBlogs,topic:topic});
@@ -343,9 +335,7 @@ class HomePage extends Component {
                                             {
                                                 (window.innerWidth>1030) ?
                                                     <Grid.Column  width={3}>
-                                                        {
-                                                            //<TwitterProf/>
-                                                        }
+                                                        <TwitterProf/>
                                                     </Grid.Column>:
                                                     <p>Hello</p>
                                             }

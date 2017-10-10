@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Header,Icon} from 'semantic-ui-react'
+import {Button, Header,Icon,Grid, Image} from 'semantic-ui-react'
 import BlogEditor from '../editor/renderBlog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
@@ -50,19 +50,43 @@ export default class WelcomePage extends React.Component {
                     (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
                         <div >
                             <Header color={this.props.color} as='h1'>
-                                Welcome To ZemuldO.COM
+                                Great Articles and Blogs
                             </Header>
                             <hr color="green"/>
                             <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
                                 <p>
-                                    We share content on trending technologies like Artificial Intelligence and BlockChain.
-                                    You are definitely in the right place. Here you acn get very good content on business, development
-                                    and technology.
+                                    Here you find great articles on tech related topics.
+                                    Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
+                                    You can signup and share your content with us. Become part of the movement.
                                 </p>
-                                <p>
-                                    We also offer Business and Tech Consultancy. If you are looking for ways to grow your business,
-                                    We are the choice you are looking for. Reach us for insights and growth.
-                                </p>
+                            </div>
+                            <div>
+                                <Grid columns={3} divided>
+                                    <Grid.Row>
+                                        <Grid.Column>
+                                            <Image size='3em' src='/img/login/login.png' />
+                                        </Grid.Column>
+                                        <Grid.Column>
+                                            <Image src='/img/login/login.png' />
+                                        </Grid.Column>
+                                        <Grid.Column>
+                                            <Image src='/img/login/login.png' />
+                                        </Grid.Column>
+                                    </Grid.Row>
+
+                                    <Grid.Row>
+                                        <Grid.Column>
+                                            <Image src='/img/login/login.png' />
+                                        </Grid.Column>
+                                        <Grid.Column>
+                                            <Image src='/img/login/login.png' />
+                                        </Grid.Column>
+                                        <Grid.Column>
+                                            <Image src='/img/login/login.png' />
+                                        </Grid.Column>
+                                    </Grid.Row>
+                                </Grid>
+
                             </div>
 
                         </div>:
