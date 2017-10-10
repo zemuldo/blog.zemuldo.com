@@ -64,7 +64,7 @@ export default class WelcomePage extends React.Component {
                                 <Grid columns={3} divided>
                                     <Grid.Row>
                                         <Grid.Column>
-                                            <Image size='3em' src='/img/login/login.png' />
+                                            <Image src='/img/login/login.png' />
                                         </Grid.Column>
                                         <Grid.Column>
                                             <Image src='/img/login/login.png' />
