@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Header,Icon} from 'semantic-ui-react'
-import BlogEditor from '../editor/renderBlog'
+import BlogEditor from '../blogEditor/renderBlog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
 export default class WelcomePage extends React.Component {
