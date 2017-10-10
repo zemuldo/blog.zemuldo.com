@@ -333,11 +333,11 @@ class HomePage extends Component {
 
                                             </Grid.Column>
                                             {
-                                                (window.innerWidth>1030) ?
-                                                    <Grid.Column  width={3}>
-                                                        <TwitterProf/>
-                                                    </Grid.Column>:
-                                                    <p>Hello</p>
+                                                // (window.innerWidth>1030) ?
+                                                //     <Grid.Column  width={3}>
+                                                //         <TwitterProf/>
+                                                //     </Grid.Column>:
+                                                //     <p>Hello</p>
                                             }
                                         </Grid.Row>
                                     </Grid>:
