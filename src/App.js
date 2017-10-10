@@ -42,9 +42,13 @@ const pages = {
         name:'Home',
         icon:'home'
     },
-    login:{
+    profile:{
         name:'Profile',
         icon:'user circle'
+    },
+    login:{
+        name:'Login',
+        icon:'lock'
     }
 }
 class App extends Component {
@@ -65,7 +69,7 @@ class App extends Component {
             createNew:false,
             editingMode:false,
             secondMenu:true,
-            colors:['green','blue','orange','violet','pink'],
+            colors:['green','blue','orange','violet','green'],
             currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ?
                 window.location.pathname.slice(1,window.location.pathname.length):'home'
         };
@@ -191,7 +195,7 @@ class App extends Component {
     }
     successLogin = (user)=>{
         this.setState({user:user})
-        this.setState({loggedin:true})
+        this.setState({loggedin:true,currentLocation:'profile'})
     }
     handleLoginButton = (e)=>{
         this.setState({ currentLocation: 'login'})
@@ -211,7 +215,7 @@ class App extends Component {
         this.setState({createNew:true})
     }
     _handleSwitchToProfile = () =>{
-        this.setState({currentLocation:'login',createNew:false})
+        this.setState({currentLocation:'profile',createNew:false})
     }
     _goToEditor(){
         this.setState({editingMode:true})
@@ -247,6 +251,7 @@ class App extends Component {
                     >
                         <Icon size="large" color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
                         <Dropdown
+                            style={{color:this.state.colors[0]}}
                             pointing='top'
                             item
                             text={(this.state.currentLocation==='home')?'Home':pages[this.state.currentLocation].name}
@@ -290,53 +295,56 @@ class App extends Component {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Menu.Item>
-                    {
-                        (!this.state.loggedin) ?
-                            <Button
-                                style={{position: 'fixed',top: '1%',right: '0%'}} floated='right'
-                                onClick={() => { this.handleLoginButton() }}
-                                color={this.state.colors[0]}  size='mini'>Login</Button>:
-                            <Dropdown
-                                style={{position: 'fixed',top: '1%',right: '1%'}}
-                                floated='right'
-                                pointing='top right'
-                                item
-                                text={toTitleCase(this.state.user[this.state.currentUserLocation])}>
-                                <Dropdown.Menu
-                                    style={{margin:'1% 1% 1% 1%',border:'none'}}
-                                >
-                                    <Dropdown.Item onClick={this._handleSwitchToProfile}>
-                                        <Icon color={this.state.colors[0]} name='user circle' />
-                                        <span color={this.state.colors[1]} >Your Profile</span>
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        <Icon color={this.state.colors[0]} name='users' />
-                                        <span color={this.state.colors[2]} >Followers</span>
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        <Icon color={this.state.colors[0]} name='help' />
-                                        <span color={this.state.colors[0]} >Help</span>
-                                    </Dropdown.Item>
-                                    <Dropdown.Item onClick={this._handleCreateNew}>
-                                        <Icon color={this.state.colors[0]} name='plus'  />
-                                        <span color={this.state.colors[0]} >New Article</span>
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        <Icon color={this.state.colors[0]} name='setting' />
-                                        <span color={this.state.colors[1]} >Settings</span>
-                                    </Dropdown.Item>
-                                    <Dropdown.Item onClick={this.handleLogoutinButton}>
-                                        <Icon color={this.state.colors[0]} name='sign out' />
-                                        <span color={this.state.colors[0]} >Sign Out</span>
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                    }
+                   <Menu.Item
+                       position="right"
+                   >
+                       {
+                           (!this.state.loggedin) ?
+                               <Button
+                                   onClick={() => { this.handleLoginButton() }}
+                                   color={this.state.colors[0]}  size='mini'>Login</Button>:
+                               <Dropdown
+                                   style={{color:this.state.colors[0]}}
+                                   floated='right'
+                                   pointing='top right'
+                                   item
+                                   text={toTitleCase(this.state.user[this.state.currentUserLocation])}>
+                                   <Dropdown.Menu
+                                       style={{margin:'1% 1% 1% 1%',border:'none'}}
+                                   >
+                                       <Dropdown.Item onClick={this._handleSwitchToProfile}>
+                                           <Icon color={this.state.colors[0]} name='user circle' />
+                                           <span color={this.state.colors[1]} >Your Profile</span>
+                                       </Dropdown.Item>
+                                       <Dropdown.Item>
+                                           <Icon color={this.state.colors[0]} name='users' />
+                                           <span color={this.state.colors[2]} >Followers</span>
+                                       </Dropdown.Item>
+                                       <Dropdown.Item>
+                                           <Icon color={this.state.colors[0]} name='help' />
+                                           <span color={this.state.colors[0]} >Help</span>
+                                       </Dropdown.Item>
+                                       <Dropdown.Item onClick={this._handleCreateNew}>
+                                           <Icon color={this.state.colors[0]} name='plus'  />
+                                           <span color={this.state.colors[0]} >New Article</span>
+                                       </Dropdown.Item>
+                                       <Dropdown.Item>
+                                           <Icon color={this.state.colors[0]} name='setting' />
+                                           <span color={this.state.colors[1]} >Settings</span>
+                                       </Dropdown.Item>
+                                       <Dropdown.Item onClick={this.handleLogoutinButton}>
+                                           <Icon color={this.state.colors[0]} name='sign out' />
+                                           <span color={this.state.colors[0]} >Sign Out</span>
+                                       </Dropdown.Item>
+                                   </Dropdown.Menu>
+                               </Dropdown>
+                       }
 
+                   </Menu.Item>
                 </Menu>
                 <div style={{marginTop:'3em'}}>
                     {
-                        (this.state.currentLocation ==='login') ?
+                        (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
                             <Login
                                 _exitEditMode={this._exitEditMode}
                                 _goToEditor = {this._goToEditor}
