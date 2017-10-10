@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactAvatarEditor from '../avatarEditor'
+import ReactAvatarEditor from './avatarEditor'
 import { Button,Grid} from 'semantic-ui-react'
 
 class AvaratEditor extends React.Component {
