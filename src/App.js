@@ -69,7 +69,7 @@ class App extends Component {
             createNew:false,
             editingMode:false,
             secondMenu:true,
-            colors:['green','blue','orange','violet','green'],
+            colors:['green','blue','orange','violet','blue'],
             currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ?
                 window.location.pathname.slice(1,window.location.pathname.length):'home'
         };
@@ -301,16 +301,16 @@ class App extends Component {
                        {
                            (!this.state.loggedin) ?
                                <Button
+                                   circular={true}
                                    onClick={() => { this.handleLoginButton() }}
                                    color={this.state.colors[0]}  size='mini'>Login</Button>:
                                <Dropdown
                                    style={{color:this.state.colors[0]}}
-                                   floated='right'
                                    pointing='top right'
                                    item
                                    text={toTitleCase(this.state.user[this.state.currentUserLocation])}>
                                    <Dropdown.Menu
-                                       style={{margin:'1% 1% 1% 1%',border:'none'}}
+                                       style={{margin:'2% 1% 1% 1%',border:'none'}}
                                    >
                                        <Dropdown.Item onClick={this._handleSwitchToProfile}>
                                            <Icon color={this.state.colors[0]} name='user circle' />
