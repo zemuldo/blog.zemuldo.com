@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Label, Header,Form,Select,Dropdown} from 'semantic-ui-react'
-import Creator from '../editor/createBlog'
+import Creator from '../blogEditor/createBlog'
 const categories = [
     { key: 'dev', value: 'Development', text: 'Development',name:'development' },
     { key: 'tech', value: 'Technology', text: 'Technology' ,name:'technology'},
