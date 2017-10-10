@@ -309,9 +309,7 @@ class App extends Component {
                                    pointing='top right'
                                    item
                                    text={toTitleCase(this.state.user[this.state.currentUserLocation])}>
-                                   <Dropdown.Menu
-                                       style={{margin:'2% 1% 1% 1%',border:'none'}}
-                                   >
+                                   <Dropdown.Menu>
                                        <Dropdown.Item onClick={this._handleSwitchToProfile}>
                                            <Icon color={this.state.colors[0]} name='user circle' />
                                            <span color={this.state.colors[1]} >Your Profile</span>

@@ -317,7 +317,6 @@ class HomePage extends Component {
                                                                     <div style={{ position:'center', margin: '20em 0em 0em 0em'}} >
                                                                         <Loader active inline='centered' />
                                                                     </div>
-
                                                             }
                                                         </div>
                                                     </Grid.Column>:
