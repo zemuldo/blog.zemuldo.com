@@ -5,6 +5,10 @@ import Pofile from './profile'
 import axios from 'axios';
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 class LoginForm extends React.Component {
     constructor(props){
         super(props);
@@ -90,10 +94,10 @@ class LoginForm extends React.Component {
             return
         }
         let userData ={
-            firstName: this.state.firstName,
-            lastName:this.state.lastName,
-            userName:this.state.userName,
-            email:this.state.email,
+            firstName: toTitleCase(this.state.firstName.toLowerCase()),
+            lastName:toTitleCase(this.state.lastName.toLowerCase()),
+            userName:this.state.userName.toLowerCase(),
+            email:this.state.email.toLowerCase(),
             password:this.state.password,
             avatar:this.state.imagePreviewUrl
         }
@@ -167,7 +171,6 @@ class LoginForm extends React.Component {
             .then(function (success) {
                 if(!success.data.error){
                     success.data.name = success.data.userName
-                    console.log(success.data)
                     this.setState({currentUser:success.data})
                     this.props.successLogin(success.data)
                     this.setState({loggedin:true})

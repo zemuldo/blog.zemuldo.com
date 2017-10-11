@@ -366,6 +366,7 @@ class App extends Component {
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
                             <Login
+                                user={this.state.user}
                                 _exitEditMode={this._exitEditMode}
                                 _goToEditor = {this._goToEditor}
                                 editingMode={this.state.editingMode}

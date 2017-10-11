@@ -52,7 +52,7 @@ class EditorsForm extends Component {
         this._handleGoBackToPrifile = this._handleGoBackToPrifile.bind(this)
     };
     componentDidMount() {
-        console.log(this.props.editingMode)
+        console.log(this.props.currentUser)
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
