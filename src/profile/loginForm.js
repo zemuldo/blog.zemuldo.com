@@ -45,14 +45,23 @@ class LoginForm extends React.Component {
     handleSignUp(){
         if(!this.state.userName || this.state.userName.length<4){
             this.setState({error:true,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
             return
         }
         if(!this.state.firstName || this.state.firstName.length<3){
             this.setState({error:true,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
             return
         }
         if(!this.state.lastName || this.state.lastName.length<3){
             this.setState({error:true,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
             return
         }
         if(!this.state.email){
@@ -61,14 +70,23 @@ class LoginForm extends React.Component {
         }
         if(typeof this.state.imagePreviewUrl !=='object'){
             this.setState({error:true,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
             return
         }
         if(!this.state.password || !this.state.confirmPass){
             this.setState({error:true,errorDetails:{field:'Password',message:"Password is required"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
             return
         }
         if(this.state.password !== this.state.confirmPass){
             this.setState({error:true,errorDetails:{field:'Password',message:"Passwords don't match"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
             return
         }
         let userData ={
