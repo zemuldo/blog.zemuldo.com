@@ -61,31 +61,7 @@ export default class WelcomePage extends React.Component {
                                 </p>
                             </div>
                             <div>
-                                <Grid columns={3} divided>
-                                    <Grid.Row>
-                                        <Grid.Column>
-                                            <Image src='/img/login/login.png' />
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            <Image src='/img/login/login.png' />
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            <Image src='/img/login/login.png' />
-                                        </Grid.Column>
-                                    </Grid.Row>
 
-                                    <Grid.Row>
-                                        <Grid.Column>
-                                            <Image src='/img/login/login.png' />
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            <Image src='/img/login/login.png' />
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            <Image src='/img/login/login.png' />
-                                        </Grid.Column>
-                                    </Grid.Row>
-                                </Grid>
 
                             </div>
 
