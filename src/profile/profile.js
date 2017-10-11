@@ -1,5 +1,5 @@
 import React from 'react'
-import {Header, Grid } from 'semantic-ui-react'
+import {Header, Grid,Image } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Welcome from '../partials/welCome'
 /*import config from '../environments/conf'

@@ -2,8 +2,9 @@ import React from 'react'
 import { Button,Modal, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import AvatarEditor from '../avatarEditor/creatAvatar'
 import Pofile from './profile'
-/*import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'*/
+import axios from 'axios';
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 class LoginForm extends React.Component {
     constructor(props){
         super(props);
@@ -71,7 +72,8 @@ class LoginForm extends React.Component {
             return
         }
         let userData ={
-            name: this.state.firstName+''+this.state.lastName,
+            firstName: this.state.firstName,
+            lastName:this.state.lastName,
             userName:this.state.userName,
             email:this.state.email,
             password:this.state.password,
@@ -82,6 +84,16 @@ class LoginForm extends React.Component {
         setTimeout(function () {
             this.setState({error:false})
         }.bind(this),4000)
+        axios.post(env.httpURL,{
+            "queryMethod":"registerUser",
+            "queryData":userData
+        })
+            .then(function (success) {
+                console.log(success.data)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
     handlePasswordChange(e) {
         e.preventDefault();
@@ -127,18 +139,28 @@ class LoginForm extends React.Component {
     componentWillUnmount() {
     }
     onLoginClick= () => {
-        if(this.state.userName==='zemuldo' && this.state.password==='omera'){
-            let user = {
-                id:"123456789",
-                name:"zemuldo"
-            }
-            this.setState({currentUser:user})
-            this.props.successLogin(user)
-            this.setState({loggedin:true})
+        let userData = {
+            userName:this.state.userName,
         }
-        else {
+        axios.post(env.httpURL,{
+            "queryMethod":"loginUser",
+            "queryData":userData
+        })
+            .then(function (success) {
+                if(!success.data.error){
+                    success.data.name = success.data.userName
+                    console.log(success.data)
+                    this.setState({currentUser:success.data})
+                    this.props.successLogin(success.data)
+                    this.setState({loggedin:true})
+                }
+                else {
 
-        }
+                }
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error)
+            }.bind(this))
 
     }
     handSwichReg = function (state){

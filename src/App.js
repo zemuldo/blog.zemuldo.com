@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Menu, Button,Icon, Dropdown} from 'semantic-ui-react'
+import {Menu, Button,Icon, Dropdown,Image} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
 import Login from './profile/loginForm'
 import TechSummary from './tech/techSummary'
@@ -194,6 +194,7 @@ class App extends Component {
         }
     }
     successLogin = (user)=>{
+        console.log(user)
         this.setState({user:user})
         this.setState({loggedin:true,currentLocation:'profile'})
     }
@@ -337,6 +338,27 @@ class App extends Component {
                                    </Dropdown.Menu>
                                </Dropdown>
                        }
+                       {
+                           this.state.loggedin ?
+
+                               <Image
+                                   size='mini'
+                                   floated="right"
+                                   src={this.state.user.avatar.img}
+                                   style={{
+                                       borderRadius: `${(Math.min(
+                                           this.state.user.avatar.height,
+                                           this.state.user.avatar.width
+                                           ) +
+                                           10) *
+                                       (this.state.user.avatar.borderRadius / 2 / 100)}px`
+                                   }}
+                               /> :
+                               <div>
+
+                               </div>
+                       }
+
 
                    </Menu.Item>
                 </Menu>
