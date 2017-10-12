@@ -194,14 +194,15 @@ class App extends Component {
         }
     }
     successLogin = (user)=>{
-        console.log(user)
         this.setState({user:user})
+        localStorage.setItem('user',JSON.stringify(user))
         this.setState({loggedin:true,currentLocation:'profile'})
     }
     handleLoginButton = (e)=>{
         this.setState({ currentLocation: 'login'})
     }
     handleLogoutinButton = ()=>{
+        localStorage.removeItem('user')
         this.setState({ currentLocation: 'home' ,loggedin:false})
     }
     _handleCreateNew = () =>{
