@@ -70,8 +70,7 @@ class App extends Component {
             editingMode:false,
             secondMenu:true,
             colors:['green','blue','orange','violet','blue'],
-            currentLocation:(pages[window.location.pathname.slice(1,window.location.pathname.length)]) ?
-                window.location.pathname.slice(1,window.location.pathname.length):'home'
+            currentLocation:'home'
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -88,9 +87,13 @@ class App extends Component {
         this._goToEditor = this._goToEditor.bind(this)
         this._exitEditMode = this._exitEditMode.bind(this)
         this.handleScroll = this.handleScroll.bind(this)
+        this.handleNavigation = this.handleNavigation.bind(this)
 
 
     };
+    handleNavigation(location){
+        this.setState({currentLocation:location})
+    }
     _handleChangeBodySize(size){
         this.setState({windowSize:size})
     }
@@ -127,6 +130,13 @@ class App extends Component {
             else {
                 localStorage.removeItem('user')
             }
+        }
+        let location = window.location.pathname.slice(1,window.location.pathname.length)
+        if(pages[location] && location==='login'){
+            window.location='/';
+        }
+        else if(pages[location] && location!=='login'){
+           this.setState({currentLocation:location})
         }
         window.addEventListener('scroll', this.handleScroll);
         this.shuffle()
