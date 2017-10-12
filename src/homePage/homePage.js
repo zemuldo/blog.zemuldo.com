@@ -172,7 +172,6 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
-        console.log(window.location.pathname);
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
             let id = url.split('_')[2];
@@ -215,6 +214,7 @@ class HomePage extends Component {
             .catch(function (err) {
                 console.log(err)
                 this.setState({blogs:[]});
+                this.homePageIsLoading(false);
                 this.blogsAreLoading(false)
             }.bind(this))
     }
