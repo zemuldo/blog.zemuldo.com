@@ -140,7 +140,7 @@ class HomePage extends Component {
                     twtC:0,
                     gplsC:0
                 }})
-            })
+            }.bind(this))
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true});
