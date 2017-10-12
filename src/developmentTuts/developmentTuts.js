@@ -140,7 +140,6 @@ class HomePage extends Component {
             });
     }
     componentDidMount() {
-        console.log(this.props.richViewerState)
         let url = window.location.pathname.split('/').join('')
         if(url.indexOf('-')!==-1){
             url = url.split('-').join(' ')
@@ -183,7 +182,6 @@ class HomePage extends Component {
                 }
             }.bind(this))
             .catch(function (err) {
-                console.log(err)
                 this.setState({blogs:[]})
                 this.homePageIsLoading(false)
                 this.blogsAreLoading(false)
