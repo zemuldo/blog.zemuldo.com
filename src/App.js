@@ -118,6 +118,10 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
+        let user = localStorage.getItem('user')
+        if(user){
+            this.setState({loggedin:true,user:JSON.parse(user)})
+        }
         window.addEventListener('scroll', this.handleScroll);
         this.shuffle()
         this.forceUpdate()
@@ -162,6 +166,7 @@ class App extends Component {
                    else {
                        return{error:'user at localhost'}
                    }
+
                 })
                 .then(function (final) {
                    if(!final.error){
