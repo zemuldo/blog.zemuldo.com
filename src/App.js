@@ -122,7 +122,7 @@ class App extends Component {
         if(known){
             let user = JSON.parse(known)
             if(user.firstName && user.lastName && user.userName){
-                this.setState({user:user})
+                this.setState({user:user,loggedin:true})
             }
             else {
                 localStorage.removeItem('user')
