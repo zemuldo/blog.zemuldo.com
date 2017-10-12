@@ -9,6 +9,26 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+function dataURItoBlob(dataURI, callback) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    let byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    // write the bytes of the string to an ArrayBuffer
+    let ab = new ArrayBuffer(byteString.length);
+    let ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    let bb = new Blob([ab]);
+    console.log(bb)
+    return bb;
+}
 class LoginForm extends React.Component {
     constructor(props){
         super(props);
@@ -101,21 +121,44 @@ class LoginForm extends React.Component {
             password:this.state.password,
             avatar:this.state.imagePreviewUrl
         }
-        this.setState({error:true,errorDetails:{field:'Success',message:"Account Created"}})
-        this.setState({success:true,warning:true})
-        setTimeout(function () {
-            this.setState({error:false})
-        }.bind(this),4000)
+        dataURItoBlob(this.state.imagePreviewUrl.img)
         axios.post(env.httpURL,{
             "queryMethod":"registerUser",
             "queryData":userData
         })
             .then(function (success) {
-                console.log(success.data)
-            })
+                if(!success.data){
+                    this.setState({error:true,errorDetails:{field:'Failed',message:"An error occured. Check your Internet"}})
+                    this.setState({success:false,warning:false})
+                    setTimeout(function () {
+                        this.setState({error:false})
+                    }.bind(this),4000)
+                    return false
+                }
+                if(success.data.code===200){
+                    this.setState({error:false,errorDetails:{field:'Success',message:"Success"}})
+                    this.setState({success:true,warning:false})
+                    setTimeout(function () {
+                        this.props.handleNavigation('profile')
+                    }.bind(this),2000)
+                }
+                else {
+                    this.setState({error:true,errorDetails:{field:'Failed',message:success.data.error}})
+                    this.setState({success:true,warning:false})
+                    setTimeout(function () {
+                        this.setState({error:false})
+                    }.bind(this),4000)
+
+                }
+            }.bind(this))
             .catch(function (error) {
-                console.log(error)
-            })
+                this.setState({error:true,errorDetails:{field:'Failed',message:error.message}})
+                this.setState({success:true,warning:false})
+                setTimeout(function () {
+                    this.setState({error:false})
+                }.bind(this),4000)
+                return false
+            }.bind(this))
     }
     handlePasswordChange(e) {
         e.preventDefault();
@@ -157,30 +200,64 @@ class LoginForm extends React.Component {
         this.setState({ creatAvatarOpen: false })
     }
     componentDidMount() {
+        if(!this.state.user){
+            let known = localStorage.getItem('user')
+            if(known){
+                let user = JSON.parse(known)
+                if(user.firstName && user.lastName && user.userName){
+                    this.setState({user:user})
+                    this.props.successLogin(user)
+                }
+                else {
+                    localStorage.removeItem('user')
+                }
+            }
+        }
     }
     componentWillUnmount() {
     }
     onLoginClick= () => {
+        if(!this.state.userName || !this.state.password){
+            this.setState({error:true,errorDetails:{field:'Login',message:"Invalid login details"}})
+            setTimeout(function () {
+                this.setState({error:false})
+            }.bind(this),4000)
+            return false
+        }
         let userData = {
             userName:this.state.userName,
+            password:this.state.password,
         }
         axios.post(env.httpURL,{
             "queryMethod":"loginUser",
             "queryData":userData
         })
             .then(function (success) {
-                if(!success.data.error){
+                if(!success.data){
+                    this.setState({error:true,errorDetails:{field:'Login',message:"An rror occured, Check your Internet"}})
+                    setTimeout(function () {
+                        this.setState({error:false})
+                    }.bind(this),4000)
+                    return false
+                }
+                if(success.data.id){
                     success.data.name = success.data.userName
                     this.setState({currentUser:success.data})
                     this.props.successLogin(success.data)
                     this.setState({loggedin:true})
                 }
                 else {
-
+                    this.setState({error:true,errorDetails:{field:'Login',message:success.data.error}})
+                    setTimeout(function () {
+                        this.setState({error:false})
+                    }.bind(this),4000)
                 }
             }.bind(this))
             .catch(function (error) {
-                console.log(error)
+                this.setState({error:true,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}})
+                setTimeout(function () {
+                    this.setState({error:false})
+                }.bind(this),4000)
             }.bind(this))
 
     }
@@ -266,6 +343,7 @@ class LoginForm extends React.Component {
                 this.props.loggedin?
                     <div>
                         <Pofile
+                            user={this.state.user}
                             currentUser={this.state.currentUser}
                             _goToEditor = {this.props._goToEditor}
                             _exitEditMode={this.props._exitEditMode}
@@ -411,6 +489,15 @@ class LoginForm extends React.Component {
                                                     <Button  type="button" onClick={this.onLoginClick}  color={this.props.color} fluid size='large'>Login</Button>
                                                 </Segment>
                                             </Form>
+                                            <Message
+                                                hidden={!this.state.error}
+                                                warning={this.state.warning}
+                                                success={this.state.success}
+                                            >
+                                                <Message.Header>
+                                                    {this.state.errorDetails?this.state.errorDetails.message:'Something happened. Please check your Internet'}
+                                                </Message.Header>
+                                            </Message>
                                             <Message>
                                                 Want to Join Us?  <button onClick={()=>this.handSwichReg(true)}> Sign Up</button>
                                             </Message>

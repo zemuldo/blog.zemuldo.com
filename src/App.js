@@ -155,28 +155,58 @@ class App extends Component {
                         return{error:'user at localhost'}
                     }
                     else {
-                        return axios.get('http://ip-api.com/json/'+response.data.ip, {})
+                        return axios.get('http://ip-api.com/json/'+'197.232.39.171', {})
 
                     }
 
                 })
-                .then(function (visitorData) {
-                   if(!visitorData.error){
-                       if(localStorage.getItem('visitor')){
-                           let user = JSON.parse(localStorage.getItem('visitor'))
-                           let o = visitorData.data;
-                           o.sessionID = user.sessionID
-                           o.query = 'addNewVisitor'
-                           o.known = true
-                           visitorData.data.query = 'addNewVisitor'
-                           return axios.post(env.httpURL, o)
+                .then(function (response) {
+                    let knownUser = {userName:'hasNoAccount',id:0}
+                    if(localStorage.getItem('user')){
+                        let t = JSON.parse(localStorage.getItem('user'))
+                        if(t.id){
+                            knownUser = {
+                                userName:t.userName,
+                                id:t.id
+                            }
+                        }
+                    }
+                    let o = response.data;
+                    console.log(o);
+                   if(!o.error){
+                       let knownVisitor = localStorage.getItem('visitor')
+                       if(knownVisitor){
+                           let visitor = JSON.parse(localStorage.getItem('visitor'));
+                           if(!visitor.sessionID){
+                               localStorage.removeItem('visitor')
+                               let visitorData = {};
+                               visitorData.queryData = o;
+                               visitorData.queryData.user = knownUser
+                               visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
+                               visitorData.queryMethod = 'addVisitor';
+                               console.log(visitorData);
+                               return axios.post(env.httpURL, visitorData)
+                           }
+                           else {
+                               let visitorData = {};
+                               visitorData.queryData = o;
+                               visitorData.queryData.user = knownUser
+                               visitorData.queryData.sessionID = visitor.sessionID
+                               visitorData.queryMethod = 'addVisitor';
+                               visitorData.known = true;
+                               console.log(visitorData);
+                               return axios.post(env.httpURL, visitorData)
+                           }
+
                        }
                        else {
-                           let o = visitorData.data;
-                           o.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName
-                           o.query = 'addNewVisitor'
-                           visitorData.data.query = 'addNewVisitor'
-                           return axios.post(env.httpURL, o)
+                           let visitorData = {};
+                           visitorData.queryData = o;
+                           visitorData.queryData.user = knownUser
+                           visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
+                           visitorData.queryMethod = 'addVisitor';
+                           console.log(visitorData);
+                           return axios.post(env.httpURL, visitorData)
                        }
                    }
                    else {
@@ -223,6 +253,7 @@ class App extends Component {
         this.setState({ currentLocation: 'login'})
     }
     handleLogoutinButton = ()=>{
+        localStorage.removeItem('user')
         localStorage.removeItem('user')
         this.setState({ currentLocation: 'home' ,loggedin:false})
     }
@@ -388,6 +419,7 @@ class App extends Component {
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
                             <Login
+                                handleNavigation={this.handleNavigation}
                                 user={this.state.user}
                                 _exitEditMode={this._exitEditMode}
                                 _goToEditor = {this._goToEditor}

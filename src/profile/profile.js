@@ -41,6 +41,7 @@ class RichEditorExample extends React.Component {
         this.blogIsLoading = this.blogIsLoading.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
         this.setBlogCounts = this.setBlogCounts.bind(this);
+        this.setBlogs = this.setBlogs.bind(this)
 
     }
     blogsAreLoading(state){
@@ -51,8 +52,8 @@ class RichEditorExample extends React.Component {
     }
     setCurrentBlog(thisBlog){
         return axios.post(env.httpURL, {
-            "query":"getPost",
-            "queryParam":{
+            "queryMethod":"getPost",
+            "queryData":{
                 id:thisBlog.id
             }
         })
@@ -75,44 +76,70 @@ class RichEditorExample extends React.Component {
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
-        let known = localStorage.getItem('user')
-        if(known){
-            let user = JSON.parse(known)
-            if(user.firstName && user.lastName && user.userName){
-                this.setState({user:user})
-            }
-            else {
-                localStorage.removeItem('user')
-            }
-        }
-        this.blogsAreLoading(true);
+        console.log(this.state.blogsLoaded)
         window.addEventListener('resize', this.resize)
-        return axios.post(env.httpURL, {
+        console.log(this.state.blogsLoaded);
+        this.blogsAreLoading(true);
+        console.log(this.state.blogsLoaded);
+        axios.post(env.httpURL, {
             "queryMethod":"getPosts",
             "queryData":{
-                userName:this.state.user.userName
+                userName:this.props.user.userName
             }
         })
             .then(function (response) {
+                console.log(response)
                 if(response.data[0]){
-                    this.setState({blogs:response.data})
-                    this.blogsAreLoading(false);
+                    this.setState({blogs:response.data,blogsLoaded:true})
+                    console.log(this.state.blogsLoaded)
+
                 }
                 else {
-                    this.setState({blogs:[]});
-                    this.blogsAreLoading(false);
+                    this.setState({blogs:[],blogsLoaded:true});
+                    console.log(this.state.blogsLoaded)
+
                 }
-                console.log(this.state.blogs)
             }.bind(this))
             .catch(function (err) {
                 console.log(err)
-                this.setState({blogs:[]});
-                this.blogsAreLoading(false)
+                this.setState({blogs:[],blogsLoaded:true});
+                console.log(this.state.blogsLoaded)
             }.bind(this))
+        console.log(this.state.blogsLoaded);
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     }
+    setBlogs(){
+        console.log(this.state.blogsLoaded)
+        this.blogsAreLoading(true);
+        console.log(this.state.blogsLoaded)
+        axios.post(env.httpURL, {
+            "queryMethod":"getAllPosts",
+            "queryData":{
+                userName:this.props.user.userName
+            }
+        })
+            .then(function (response) {
+                if(response.data[0]){
+                    this.setState({blogs:response.data,blogsLoaded:true})
+                    console.log(this.state.blogsLoaded)
+
+                }
+                else {
+                    this.setState({blogs:[],blogsLoaded:true});
+                    console.log(this.state.blogsLoaded)
+
+                }
+            }.bind(this))
+            .catch(function (err) {
+                console.log(err)
+                this.setState({blogs:[],blogsLoaded:true});
+                console.log(this.state.blogsLoaded)
+            }.bind(this))
+
+    }
+
     setBlogCounts(){
         let gplusPost = {
             "method": "pos.plusones.get",
