@@ -33,19 +33,27 @@ export default class ReviewPortal extends Component {
     handleSubmit= (e)=>{
         this.setState({ checked: false});
         e.preventDefault();
-        let review = {
-            body:this.state.message,
-            user:JSON.parse(sessionStorage.getItem('user')).sessionID,
-            query:"addNewReview"
-        }
-        this.setState({ checked: true });
-        setTimeout(function() { this.setState({portalOpen: false}); }.bind(this),1500);
-        return axios.post(env.httpURL, review)
-            .then(function (success) {
-            })
-            .catch(function (err) {
+        let review = null;
+        let visitor = JSON.parse(sessionStorage.getItem('visitor'))
+        if(visitor && visitor.sessionID){
+            review = {
+                queryData:{ body:this.state.message,
+                    user:visitor.sessionID
+                },
+                queryMethod:"newReview"
+            }
+            this.setState({ checked: true });
+            setTimeout(function() { this.setState({portalOpen: false}); }.bind(this),1500);
+            return axios.post(env.httpURL, review)
+                .then(function (success) {
+                })
+                .catch(function (err) {
 
-            })
+                })
+        }
+        else {
+            setTimeout(function() { this.setState({portalOpen: false}); }.bind(this),1500);
+        }
     }
     handleTextChange(event) {
         this.setState({message: event.target.value});
