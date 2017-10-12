@@ -1,7 +1,11 @@
 import React from 'react'
-import {Header, Grid,Image } from 'semantic-ui-react'
+import axios from 'axios'
+import {Header,Loader, Grid,Image } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Welcome from '../partials/welCome'
+import Blogs from '../posts/blogs'
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -11,22 +15,57 @@ const cats = {
     Technology:'tech'
 }
 */
+
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             user:this.props.currentUser,
             createNew:false,
-            posts:null,
-            post:null
+            blogs:null,
+            blog:null,
+            blogsLoaded:false,
+            blogLoaded:false,
+            blogIsLoading:false,
         };
         this.componentDidMount=this.componentDidMount.bind(this)
         this.componentWillUnmount=this.componentWillUnmount.bind(this)
+        this.blogsAreLoading = this.blogsAreLoading.bind(this);
+        this.blogIsLoading = this.blogIsLoading.bind(this);
 
+    }
+    blogsAreLoading(state){
+        this.setState({blogsLoaded:!state})
+    }
+    blogIsLoading(state){
+        this.setState({blogLoaded:!state})
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
+        this.blogsAreLoading(true);
         window.addEventListener('resize', this.resize)
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPosts",
+            "queryData":{
+                userName:this.state.user.userName
+            }
+        })
+            .then(function (response) {
+                if(response.data[0]){
+                    this.setState({blogs:response.data})
+                    this.blogsAreLoading(false);
+                }
+                else {
+                    this.setState({blogs:[]});
+                    this.blogsAreLoading(false);
+                }
+                console.log(this.state.blogs)
+            }.bind(this))
+            .catch(function (err) {
+                console.log(err)
+                this.setState({blogs:[]});
+                this.blogsAreLoading(false)
+            }.bind(this))
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
@@ -48,11 +87,35 @@ class RichEditorExample extends React.Component {
                         {
                             (window.innerWidth>600)?
                                 <Grid.Column  width={3}>
+                                    <Header color='green' as='h3' >
+                                        Published by you
+                                    </Header>
                                     <div>
-                                        Good Stuff will be here
+                                        {
+                                            this.state.blogsLoaded?
+                                              <div>
+                                                  {
+                                                      this.state.blogs[0]?
+                                                          <Blogs
+                                                              color={this.props.color}
+                                                              onReadMore = {this.onReadMore}
+                                                              blogs ={this.state.blogs}
+                                                              blog ={this.state.blog}/>:
+                                                          <div>
+                                                              You haven't published anything yet
+                                                          </div>
+                                                  }
+                                              </div>:
+                                                <div style={{ position:'center', margin: '2em 0em 0em 0em'}} >
+                                                    <Loader active inline='centered' />
+                                                </div>
+                                        }
+
                                     </div>
                                 </Grid.Column>:
-                                <div></div>
+                                <div>
+
+                                </div>
                         }
                         {
                             window.innerWidth>600?
