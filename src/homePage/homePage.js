@@ -306,7 +306,7 @@ class HomePage extends Component {
                                                                                 </div>
                                                                         }
                                                                     </div>:
-                                                                    <div style={{ position:'center', margin: '20em 0em 0em 0em'}} >
+                                                                    <div style={{ position:'center', margin: '2em 0em 0em 0em'}} >
                                                                         <Loader active inline='centered' />
                                                                     </div>
                                                             }
