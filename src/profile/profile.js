@@ -20,7 +20,7 @@ class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user:JSON.parse(localStorage.getItem('user')),
+            user:null,
             createNew:false,
             blogs:null,
             blog:null,
@@ -75,6 +75,16 @@ class RichEditorExample extends React.Component {
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
+        let known = localStorage.getItem('user')
+        if(known){
+            let user = JSON.parse(known)
+            if(user.firstName && user.lastName && user.userName){
+                this.setState({user:user})
+            }
+            else {
+                localStorage.removeItem('user')
+            }
+        }
         this.blogsAreLoading(true);
         window.addEventListener('resize', this.resize)
         return axios.post(env.httpURL, {

@@ -118,9 +118,15 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
-        let user = localStorage.getItem('user')
-        if(user){
-            this.setState({loggedin:true,user:JSON.parse(user)})
+        let known = localStorage.getItem('user')
+        if(known){
+            let user = JSON.parse(known)
+            if(user.firstName && user.lastName && user.userName){
+                this.setState({user:user})
+            }
+            else {
+                localStorage.removeItem('user')
+            }
         }
         window.addEventListener('scroll', this.handleScroll);
         this.shuffle()
@@ -146,8 +152,8 @@ class App extends Component {
                 })
                 .then(function (visitorData) {
                    if(!visitorData.error){
-                       if(localStorage.getItem('user')){
-                           let user = JSON.parse(localStorage.getItem('user'))
+                       if(localStorage.getItem('visitor')){
+                           let user = JSON.parse(localStorage.getItem('visitor'))
                            let o = visitorData.data;
                            o.sessionID = user.sessionID
                            o.query = 'addNewVisitor'
@@ -170,9 +176,9 @@ class App extends Component {
                 })
                 .then(function (final) {
                    if(!final.error){
-                       sessionStorage.setItem('user',JSON.stringify(final.data))
-                       if(!localStorage.getItem('user')){
-                           localStorage.setItem('user',JSON.stringify(final.data))
+                       sessionStorage.setItem('visitor',JSON.stringify(final.data))
+                       if(!localStorage.getItem('visitor')){
+                           localStorage.setItem('visitor',JSON.stringify(final.data))
                        }
                    }
                 })
