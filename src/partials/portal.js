@@ -45,12 +45,22 @@ export default class ReviewPortal extends Component {
             }
 
         }
-        let visitor = JSON.parse(sessionStorage.getItem('visitor'))
+        let visitor = null;
+        if(localStorage.getItem('visitor')){
+            visitor = JSON.parse(sessionStorage.getItem('visitor'))
+        }
+        else {
+            visitor = {
+                sessionID:'unknownUser'
+            }
+
+        }
         if(visitor && visitor.sessionID){
             review = {
                 queryData:{
                     message:this.state.message,
                     user:{
+                        sessionID:visitor.sessionID,
                         userName:user.userName,
                         id:user.id
                     }
