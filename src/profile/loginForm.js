@@ -49,8 +49,11 @@ class LoginForm extends React.Component {
             file:'',
             error:false,
             errorDetails:null,
-            signUp:false
+            signUp:false,
+            userBlogs:null
         };
+        this.componentDidMount=this.componentDidMount.bind(this)
+        this.componentWillUnmount=this.componentWillUnmount.bind(this)
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleUnameChange = this.handleUnameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -65,6 +68,7 @@ class LoginForm extends React.Component {
         this.closeCreateAvatar = this.closeCreateAvatar.bind(this)
         this.showCreateAvatar = this.showCreateAvatar.bind(this)
         this.setAvatar=this.setAvatar.bind(this)
+        this.setBlogs = this.setBlogs.bind(this)
     };
     handleSignUp(){
         if(!this.state.userName || this.state.userName.length<4){
@@ -119,7 +123,7 @@ class LoginForm extends React.Component {
             userName:this.state.userName.toLowerCase(),
             email:this.state.email.toLowerCase(),
             password:this.state.password,
-            avatar:this.state.imagePreviewUrl
+            avatar:JSON.stringify(this.state.imagePreviewUrl)
         }
         dataURItoBlob(this.state.imagePreviewUrl.img)
         axios.post(env.httpURL,{
@@ -200,6 +204,7 @@ class LoginForm extends React.Component {
         this.setState({ creatAvatarOpen: false })
     }
     componentDidMount() {
+        console.log("_______at login now")
         if(!this.state.user){
             let known = localStorage.getItem('user')
             if(known){
@@ -207,6 +212,7 @@ class LoginForm extends React.Component {
                 if(user.firstName && user.lastName && user.userName){
                     this.setState({user:user})
                     this.props.successLogin(user)
+                    this.setBlogs(user.userName)
                 }
                 else {
                     localStorage.removeItem('user')
@@ -244,7 +250,6 @@ class LoginForm extends React.Component {
                     success.data.name = success.data.userName
                     this.setState({currentUser:success.data})
                     this.props.successLogin(success.data)
-                    this.setState({loggedin:true})
                 }
                 else {
                     this.setState({error:true,errorDetails:{field:'Login',message:success.data.error}})
@@ -261,6 +266,35 @@ class LoginForm extends React.Component {
             }.bind(this))
 
     }
+    setBlogs(userName){
+        console.log('+++++++++starting fetch blogs by you')
+        axios.post(env.httpURL, {
+            "queryMethod":"getPosts",
+            "queryData":{
+                userName:userName
+            }
+        })
+            .then(function (response) {
+                console.log('+++++++++got some blogs by u')
+                console.log(response.data)
+                if(response.data[0]){
+                    this.setState({userBlogs:response.data})
+                    console.log(this.state.blogsLoaded)
+
+                }
+                else {
+                    this.setState({userBlogs:[]});
+
+                }
+                console.log(this.state.userBlogs)
+            }.bind(this))
+            .catch(function (err) {
+                console.log('+++++++++got go nothing')
+                this.setState({userBlogs:[]})
+                console.log(err)
+            }.bind(this))
+    }
+
     handSwichReg = function (state){
         this.setState({signUp:state})
     }
@@ -343,7 +377,8 @@ class LoginForm extends React.Component {
                 this.props.loggedin?
                     <div>
                         <Pofile
-                            user={this.state.user}
+                            userBlogs ={this.state.userBlogs}
+                            user={this.props.user}
                             currentUser={this.state.currentUser}
                             _goToEditor = {this.props._goToEditor}
                             _exitEditMode={this.props._exitEditMode}

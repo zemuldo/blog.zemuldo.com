@@ -17,6 +17,26 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+function dataURItoBlob(dataURI, callback) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    let byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    // write the bytes of the string to an ArrayBuffer
+    let ab = new ArrayBuffer(byteString.length);
+    let ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    let bb = new Blob([ab]);
+    console.log(bb)
+    return bb;
+}
 const pages = {
     dev:{
         name:'Development',
@@ -70,7 +90,8 @@ class App extends Component {
             editingMode:false,
             secondMenu:true,
             colors:['green','blue','orange','violet','blue'],
-            currentLocation:'home'
+            currentLocation:'home',
+            profilePic:null
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -124,8 +145,12 @@ class App extends Component {
         let known = localStorage.getItem('user')
         if(known){
             let user = JSON.parse(known)
+            console.log(user)
             if(user.firstName && user.lastName && user.userName){
                 this.setState({user:user,loggedin:true})
+                let urlCreator = window.URL || window.webkitURL;
+                let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
+                this.setState({profilePic:imageUrl})
             }
             else {
                 localStorage.removeItem('user')
@@ -245,9 +270,13 @@ class App extends Component {
         }
     }
     successLogin = (user)=>{
+        console.log("loging in.................")
         this.setState({user:user})
         localStorage.setItem('user',JSON.stringify(user))
-        this.setState({loggedin:true,currentLocation:'profile'})
+        this.setState({loggedin:true,currentLocation:'home'})
+        let urlCreator = window.URL || window.webkitURL;
+        let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img) );
+        this.setState({profilePic:imageUrl})
     }
     handleLoginButton = (e)=>{
         this.setState({ currentLocation: 'login'})
@@ -283,7 +312,6 @@ class App extends Component {
     }
 
     render() {
-
         return (
             <div onScroll={this.handleScroll}>
                 <div>
@@ -395,24 +423,23 @@ class App extends Component {
                            this.state.loggedin ?
 
                                <Image
+                                   id="photo"
                                    size='mini'
                                    floated="right"
-                                   src={this.state.user.avatar.img}
+                                   src={this.state.profilePic}
                                    style={{
                                        borderRadius: `${(Math.min(
-                                           this.state.user.avatar.height,
-                                           this.state.user.avatar.width
+                                           JSON.parse(this.state.user.avatar).height,
+                                           JSON.parse(this.state.user.avatar).width
                                            ) +
                                            10) *
-                                       (this.state.user.avatar.borderRadius / 2 / 100)}px`
+                                       (JSON.parse(this.state.user.avatar).borderRadius / 2 / 100)}px`
                                    }}
                                /> :
                                <div>
 
                                </div>
                        }
-
-
                    </Menu.Item>
                 </Menu>
                 <div style={{marginTop:'3em'}}>

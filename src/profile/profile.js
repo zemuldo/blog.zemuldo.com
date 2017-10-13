@@ -76,35 +76,14 @@ class RichEditorExample extends React.Component {
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
+        console.log("___profile now ")
+        console.log(this.props.user)
         console.log(this.state.blogsLoaded)
         window.addEventListener('resize', this.resize)
         console.log(this.state.blogsLoaded);
         this.blogsAreLoading(true);
         console.log(this.state.blogsLoaded);
-        axios.post(env.httpURL, {
-            "queryMethod":"getPosts",
-            "queryData":{
-                userName:this.props.user.userName
-            }
-        })
-            .then(function (response) {
-                console.log(response)
-                if(response.data[0]){
-                    this.setState({blogs:response.data,blogsLoaded:true})
-                    console.log(this.state.blogsLoaded)
-
-                }
-                else {
-                    this.setState({blogs:[],blogsLoaded:true});
-                    console.log(this.state.blogsLoaded)
-
-                }
-            }.bind(this))
-            .catch(function (err) {
-                console.log(err)
-                this.setState({blogs:[],blogsLoaded:true});
-                console.log(this.state.blogsLoaded)
-            }.bind(this))
+        this.setBlogs()
         console.log(this.state.blogsLoaded);
     }
     componentWillUnmount() {
@@ -114,13 +93,15 @@ class RichEditorExample extends React.Component {
         console.log(this.state.blogsLoaded)
         this.blogsAreLoading(true);
         console.log(this.state.blogsLoaded)
+        console.log('+++++++++starting fetch blogs by '+this.props.user.userName)
         axios.post(env.httpURL, {
-            "queryMethod":"getAllPosts",
+            "queryMethod":"getPosts",
             "queryData":{
                 userName:this.props.user.userName
             }
         })
             .then(function (response) {
+                console.log('+++++++++got some blogs by u')
                 if(response.data[0]){
                     this.setState({blogs:response.data,blogsLoaded:true})
                     console.log(this.state.blogsLoaded)
@@ -133,6 +114,7 @@ class RichEditorExample extends React.Component {
                 }
             }.bind(this))
             .catch(function (err) {
+                console.log('+++++++++got go nothing')
                 console.log(err)
                 this.setState({blogs:[],blogsLoaded:true});
                 console.log(this.state.blogsLoaded)
@@ -252,7 +234,7 @@ class RichEditorExample extends React.Component {
                                     {
                                         this.props.createNew?
                                             <EditorsForm
-                                                currentUser={this.props.currentUser}
+                                                currentUser={this.props.user}
                                                 _goToEditor = {this.props._goToEditor}
                                                 _exitEditMode={this.props._exitEditMode}
                                                 editingMode = {this.props.editingMode}
@@ -274,7 +256,7 @@ class RichEditorExample extends React.Component {
                                     {
                                         this.props.createNew?
                                             <EditorsForm
-                                                currentUser={this.props.currentUser}
+                                                currentUser={this.props.user}
                                                 _goToEditor = {this.props._goToEditor}
                                                 _exitEditMode={this.props._exitEditMode}
                                                 editingMode = {this.props.editingMode}
