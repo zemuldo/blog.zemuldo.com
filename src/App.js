@@ -188,8 +188,14 @@ class App extends Component {
                         return{error:'user at localhost'}
                     }
                     else {
-                        return axios.get('http://ip-api.com/json/'+response.data.ip, {})
-
+                        if(localStorage.getItem('locationData')){
+                            let res = {}
+                            res.data = JSON.parse(localStorage.getItem('locationData'))
+                            return res
+                        }
+                        else {
+                            return axios.get('http://ip-api.com/json/'+response.data.ip, {})
+                        }
                     }
 
                 })
@@ -207,6 +213,7 @@ class App extends Component {
                     let o = response.data;
                     console.log(o);
                    if(!o.error){
+                       localStorage.setItem('locationData',JSON.stringify(o))
                        let knownVisitor = localStorage.getItem('visitor')
                        if(knownVisitor){
                            let visitor = JSON.parse(localStorage.getItem('visitor'));
