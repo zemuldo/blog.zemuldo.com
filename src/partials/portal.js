@@ -37,7 +37,8 @@ export default class ReviewPortal extends Component {
         let visitor = JSON.parse(sessionStorage.getItem('visitor'))
         if(visitor && visitor.sessionID){
             review = {
-                queryData:{ body:this.state.message,
+                queryData:{
+                    message:this.state.message,
                     user:visitor.sessionID
                 },
                 queryMethod:"newReview"
