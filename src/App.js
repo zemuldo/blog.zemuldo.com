@@ -187,7 +187,7 @@ class App extends Component {
                         return{error:'user at localhost'}
                     }
                     else {
-                        return axios.get('http://ip-api.com/json/'+'197.232.39.171', {})
+                        return axios.get('http://ip-api.com/json/'+response.data.ip, {})
 
                     }
 
