@@ -44,6 +44,7 @@ class LoginForm extends React.Component {
             avatar:null,
             warning:true,
             success:false,
+            hideMessage:true,
             creatAvatarOpen:false,
             imagePreviewUrl:'',
             file:'',
@@ -72,49 +73,52 @@ class LoginForm extends React.Component {
     };
     handleSignUp(){
         if(!this.state.userName || this.state.userName.length<4){
-            this.setState({error:true,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         if(!this.state.firstName || this.state.firstName.length<3){
-            this.setState({error:true,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         if(!this.state.lastName || this.state.lastName.length<3){
-            this.setState({error:true,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         if(!this.state.email){
-            this.setState({error:true,errorDetails:{field:'Last Name',message:"Email Address is required"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Email',message:"Email Address is required"}})
+            setTimeout(function () {
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         if(typeof this.state.imagePreviewUrl !=='object'){
-            this.setState({error:true,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         if(!this.state.password || !this.state.confirmPass){
-            this.setState({error:true,errorDetails:{field:'Password',message:"Password is required"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Password',message:"Password is required"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         if(this.state.password !== this.state.confirmPass){
-            this.setState({error:true,errorDetails:{field:'Password',message:"Passwords don't match"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Password',message:"Passwords don't match"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({hideMessage:true,error:false})
+            }.bind(this),2000)
             return
         }
         let userData ={
@@ -132,34 +136,30 @@ class LoginForm extends React.Component {
         })
             .then(function (success) {
                 if(!success.data){
-                    this.setState({error:true,errorDetails:{field:'Failed',message:"An error occured. Check your Internet"}})
-                    this.setState({success:false,warning:false})
+                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Failed',message:"An error occured. Check your Internet"}})
                     setTimeout(function () {
-                        this.setState({error:false})
+                        this.setState({hideMessage:true})
                     }.bind(this),4000)
                     return false
                 }
                 if(success.data.code===200){
-                    this.setState({error:false,errorDetails:{field:'Success',message:"Success"}})
-                    this.setState({success:true,warning:false})
+                    this.setState({success:true,hideMessage:false,errorDetails:{field:'Success',message:"Success"}})
                     setTimeout(function () {
-                        this.props.handleNavigation('profile')
+                        this.setState({signUp:false,success:false,hideMessage:true})
                     }.bind(this),2000)
                 }
                 else {
-                    this.setState({error:true,errorDetails:{field:'Failed',message:success.data.error}})
-                    this.setState({success:true,warning:false})
+                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Failed',message:success.data.error}})
                     setTimeout(function () {
-                        this.setState({error:false})
+                        this.setState({hideMessage:true})
                     }.bind(this),4000)
 
                 }
             }.bind(this))
             .catch(function (error) {
-                this.setState({error:true,errorDetails:{field:'Failed',message:error.message}})
-                this.setState({success:true,warning:false})
+                this.setState({error:true,hideMessage:false,errorDetails:{field:'Failed',message:error.message}})
                 setTimeout(function () {
-                    this.setState({error:false})
+                    this.setState({hideMessage:true})
                 }.bind(this),4000)
                 return false
             }.bind(this))
@@ -204,6 +204,7 @@ class LoginForm extends React.Component {
         this.setState({ creatAvatarOpen: false })
     }
     componentDidMount() {
+        this.setState({hideMessage:true})
         console.log("_______at login now")
         if(!this.state.user){
             let known = localStorage.getItem('user')
@@ -224,10 +225,10 @@ class LoginForm extends React.Component {
     }
     onLoginClick= () => {
         if(!this.state.userName || !this.state.password){
-            this.setState({error:true,errorDetails:{field:'Login',message:"Invalid login details"}})
+            this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:"Invalid login details"}})
             setTimeout(function () {
-                this.setState({error:false})
-            }.bind(this),4000)
+                this.setState({error:false,hideMessage:true})
+            }.bind(this),2000)
             return false
         }
         let userData = {
@@ -240,10 +241,10 @@ class LoginForm extends React.Component {
         })
             .then(function (success) {
                 if(!success.data){
-                    this.setState({error:true,errorDetails:{field:'Login',message:"An rror occured, Check your Internet"}})
+                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:"An error occurred, Check your Internet"}})
                     setTimeout(function () {
-                        this.setState({error:false})
-                    }.bind(this),4000)
+                        this.setState({error:false,hideMessage:true})
+                    }.bind(this),2000)
                     return false
                 }
                 if(success.data.id){
@@ -252,17 +253,17 @@ class LoginForm extends React.Component {
                     this.props.successLogin(success.data)
                 }
                 else {
-                    this.setState({error:true,errorDetails:{field:'Login',message:success.data.error}})
+                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:success.data.error}})
                     setTimeout(function () {
-                        this.setState({error:false})
-                    }.bind(this),4000)
+                        this.setState({error:false,hideMessage:true})
+                    }.bind(this),2000)
                 }
             }.bind(this))
             .catch(function (error) {
-                this.setState({error:true,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}})
+                this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}})
                 setTimeout(function () {
-                    this.setState({error:false})
-                }.bind(this),4000)
+                    this.setState({error:false,hideMessage:true})
+                }.bind(this),2000)
             }.bind(this))
 
     }
@@ -479,8 +480,8 @@ class LoginForm extends React.Component {
                                                 <Button onClick={()=>this.handleSignUp()} color='green' type='submit'>Submit</Button>
                                             </Form>
                                             <Message
-                                                hidden={!this.state.error}
-                                               warning={this.state.warning}
+                                                hidden={this.state.hideMessage}
+                                                error={this.state.error}
                                                 success={this.state.success}
                                             >
                                                 <Message.Header>
@@ -520,13 +521,12 @@ class LoginForm extends React.Component {
                                                         type='password'
                                                         onChange={this.handlePasswordChange}
                                                     />
-
                                                     <Button  type="button" onClick={this.onLoginClick}  color={this.props.color} fluid size='large'>Login</Button>
                                                 </Segment>
                                             </Form>
                                             <Message
-                                                hidden={!this.state.error}
-                                                warning={this.state.warning}
+                                                hidden={this.state.hideMessage}
+                                                error={this.state.error}
                                                 success={this.state.success}
                                             >
                                                 <Message.Header>
@@ -541,7 +541,6 @@ class LoginForm extends React.Component {
                                 </div>
                         }
                     </div>
-
             }
         </div>
 
