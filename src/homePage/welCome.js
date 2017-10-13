@@ -45,7 +45,7 @@ export default class WelcomePage extends React.Component {
 
     render() {
         return (
-            <div style={{margin: '2em 1em 3em 1em'}}>
+            <div style={{margin: '2em 0em 3em 0em'}}>
                 {
                     (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
                         <div >
@@ -53,7 +53,7 @@ export default class WelcomePage extends React.Component {
                                 Great Articles and Blogs
                             </Header>
                             <hr color="green"/>
-                            <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
+                            <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
                                 <p>
                                     Here you find great articles on tech related topics.
                                     Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
@@ -100,7 +100,7 @@ export default class WelcomePage extends React.Component {
                                 Published on:  {this.props.blogDetails.date}  By {this.props.blogDetails.author}
                             </div>
                             <hr color="green"/>
-                            <div style={{margin: '2em 1em 3em 1em',fontSize:"16px",fontFamily:"georgia", padding: '0em 3em 2em 1em'}}>
+                            <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>
                                 <br/>
                                 <BlogEditor body={this.props.richViewerState}/>
                             </div>
