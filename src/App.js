@@ -277,7 +277,6 @@ class App extends Component {
         }
     }
     successLogin = (user)=>{
-        console.log("loging in.................")
         this.setState({user:user})
         localStorage.setItem('user',JSON.stringify(user))
         this.setState({loggedin:true,currentLocation:'home'})
@@ -294,15 +293,13 @@ class App extends Component {
         this.setState({ currentLocation: 'home' ,loggedin:false})
     }
     _handleCreateNew = () =>{
-        console.log("you can now create a new artivle")
-        console.log(window.localStorage.getItem('draftContent'))
         let editorState = window.localStorage.getItem('draftContent')
         let blogData = window.localStorage.getItem('blogData')
         if(editorState && blogData){
             console.log("directt to edit mode")
             this.setState({editingMode:true})
         }
-        this.setState({createNew:true})
+        this.setState({createNew:true,currentLocation:'profile'})
     }
     _handleSwitchToProfile = () =>{
         this.setState({currentLocation:'profile',createNew:false})
