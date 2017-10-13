@@ -34,12 +34,26 @@ export default class ReviewPortal extends Component {
         this.setState({ checked: false});
         e.preventDefault();
         let review = null;
+        let user = null;
+        if(localStorage.getItem('user')){
+            user = JSON.parse(localStorage.getItem('user'))
+        }
+        else {
+            user = {
+                id:0,
+                userName:'unknown-not no account'
+            }
+
+        }
         let visitor = JSON.parse(sessionStorage.getItem('visitor'))
         if(visitor && visitor.sessionID){
             review = {
                 queryData:{
                     message:this.state.message,
-                    user:visitor.sessionID
+                    user:{
+                        userName:user.userName,
+                        id:user.id
+                    }
                 },
                 queryMethod:"newReview"
             }
