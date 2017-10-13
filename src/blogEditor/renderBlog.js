@@ -565,9 +565,8 @@ class RichEditorExample extends React.Component {
                     customStyleMap={styleMap}
                     editorState={editorState}
                     handleKeyCommand={this.handleKeyCommand}
-                    onChange={this.onChange}
                     onTab={this.onTab}
-                    placeholder="Start putting it down..."
+                    placeholder="Error fetching content..."
                     ref="editor"
                     spellCheck={true}
                 />

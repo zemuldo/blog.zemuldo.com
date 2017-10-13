@@ -199,7 +199,7 @@ class RichEditorExample extends React.Component {
                             (window.innerWidth>600)?
                                 <Grid.Column  width={3}>
                                     <Header color='green' as='h3' >
-                                        Published by you
+                                        Your Articles
                                     </Header>
                                     <div>
                                         {
