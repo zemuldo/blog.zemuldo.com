@@ -181,8 +181,9 @@ class App extends Component {
         }
         window.addEventListener('resize', this.resize)
         if(!this.state.iKnowYou){
-            return axios.post(env.httpURL, {"query":"getIp"})
+            return axios.post(env.httpURL, {"queryMethod":"getIp"})
                 .then(response => {
+                    console.log(response)
                     if(response.data.ip==='::1' || response.data.ip==='127.0.0.1'){
                         return{error:'user at localhost'}
                     }
