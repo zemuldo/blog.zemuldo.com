@@ -39,6 +39,17 @@ class AvaratEditor extends React.Component {
 
     handleNewImage = e => {
         this.setState({ image: e.target.files[0] })
+        const img = this.editor.getImageScaledToCanvas().toDataURL()
+        const rect = this.editor.getCroppingRect()
+        dataURItoBlob(img)
+        this.props.setAvatar({
+            img,
+            rect,
+            scale: this.state.scale,
+            width: this.state.width,
+            height: this.state.height,
+            borderRadius: this.state.borderRadius
+        })
     }
 
     handleSave = data => {
@@ -222,7 +233,7 @@ class AvaratEditor extends React.Component {
                         Rotate:
                         <Button onClick={this.rotateLeft}>Left</Button>
                         <Button onClick={this.rotateRight}>Right</Button>
-                        <Button onClick={this.handleSave}>See Preview</Button>
+                        <Button onClick={this.handleSave}>Finish</Button>
                 </Grid.Column>
                     <Grid.Column width={8}>
                         {!!this.state.preview &&
