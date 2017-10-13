@@ -142,10 +142,17 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentDidMount() {
-        let known = localStorage.getItem('user')
+        let known = localStorage.getItem('user');
         if(known){
             let user = JSON.parse(known)
-            console.log(user)
+            if(typeof user.avatar==='string'){
+                console.log("user details right")
+            }
+            if(typeof user.avatar!=='string'){
+                console.log("user details wrong");
+                localStorage.removeItem('user');
+                return false
+            }
             if(user.firstName && user.lastName && user.userName){
                 this.setState({user:user,loggedin:true})
                 let urlCreator = window.URL || window.webkitURL;
@@ -153,7 +160,7 @@ class App extends Component {
                 this.setState({profilePic:imageUrl})
             }
             else {
-                localStorage.removeItem('user')
+                localStorage.removeItem('user');
             }
         }
         let location = window.location.pathname.slice(1,window.location.pathname.length)
