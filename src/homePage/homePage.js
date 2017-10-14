@@ -154,13 +154,11 @@ class HomePage extends Component {
             .then(response => {
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogIsLoading:false,richViewerState:response.data.body});
-                //window.scrollTo(0,0);
                 this.setBlogCounts()
             })
             .catch(function (err) {
                 this.setState({blog:null,blogDetails:thisBlog});
                 this.setState({blogIsLoading:false});
-                //window.scrollTo(0,0);
                 return err;
             }.bind(this))
 
