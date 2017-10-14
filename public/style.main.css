@@ -138,7 +138,11 @@
     margin-bottom: 10%;
     margin-top: 6%;
 }
-.clearElem{
+.clearElem button{
     border: none;
     background-color: transparent;
+}
+.shareIcon sup{
+    color: green;
+    font-size: small;
 }
