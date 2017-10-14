@@ -1,6 +1,7 @@
 import React from 'react'
 import {Button, Header,Icon,Grid, Image} from 'semantic-ui-react'
 import BlogEditor from '../blogEditor/renderBlog'
+import Blog from '../posts/blog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
 export default class WelcomePage extends React.Component {
@@ -60,51 +61,14 @@ export default class WelcomePage extends React.Component {
                                     You can signup and share your content with us. Become part us.
                                 </p>
                             </div>
-                            <div>
-
-
-                            </div>
-
                         </div>:
                         <div>
-                            <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
-                                {
-                                    this.props.blogDetails.title
-                                }
-                            </Header>
-                            <div style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                                <Icon size="large" color='green' name='external share' />
-                                Share this on: {  }
-                                {'  '}
-                                <Button
-                                    onClick={() => {this.tweetShare();}}
-                                    circular color='twitter' icon='twitter' />
-                                <sup>{this.props.counts.twtC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {this.fbShare();}}
-                                    circular color='facebook' icon='facebook' />
-                                <sup>{this.props.counts.fbC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {this.linkdnShare();}}
-                                    circular color='linkedin' icon='linkedin' />
-                                <sup>{this.props.counts.gplsC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {this.gplusShare();}}
-                                    circular color='google plus' icon='google plus' />
-                                <sup>{this.props.counts.gplsC}</sup>
-                                <br/>
-                                <br/>
-                                Published on:  {this.props.blogDetails.date}  By {this.props.blogDetails.author}
-                            </div>
-                            <hr color="green"/>
-                            <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>
-                                <br/>
-                                <BlogEditor body={this.props.richViewerState}/>
-                            </div>
-
+                            <Blog
+                                color={this.props.color}
+                                blogDetails={this.props.blogDetails}
+                                counts ={this.props.counts}
+                                richViewerState={this.props.richViewerState}
+                            />
                         </div>
                 }
             </div>
