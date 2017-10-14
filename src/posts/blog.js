@@ -8,13 +8,46 @@ export default class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            youLike:false,
+            youLike:true,
+            userLoggedIn:false,
             likes:this.props.blogDetails?this.props.blogDetails.likes:0
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
     }
     componentDidMount() {
+        if(localStorage.getItem('user')){
+            this.setState({userLoggedIn:true})
+            axios.post(env.httpURL, {
+                "queryMethod":"getLike",
+                "queryData":{
+                    postID:this.props.blogDetails.id,
+                    title:this.props.blogDetails.title,
+                    userID:JSON.parse(localStorage.getItem('user')).id
+                }
+            })
+                .then(function (response) {
+                    console.log(response)
+                    if(response.data){
+                        return
+                    }
+                    if(response.data.state){
+                        return
+                    }
+                    if(response.data.state===false){
+                        console.log(response.data)
+                        return
+                    }
+                    if(response.data.state===true){
+                        if(response.data.n){
+                            this.setState({youLike:true})
+                        }
+                    }
+                }.bind(this))
+                .catch(function (err) {
+                    console.log(err)
+                }.bind(this));
+        }
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -62,7 +95,7 @@ export default class WelcomePage extends React.Component {
                     }
                     if(response.data.n){
                         if(response.data.n){
-                            this.setState({likes:this.state.likes+1})
+                            this.setState({likes:this.state.likes+1,youLike:true})
                         }
                     }
                 }.bind(this))
@@ -84,11 +117,24 @@ export default class WelcomePage extends React.Component {
                                 }
                             </Header>
                             <div className="shareIcon clearElem" style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
-                                <button onClick={()=>this.updateLikes(this.props.blogDetails.id)}>
-                                    <Icon color='green' name="thumbs up"/>
-                                </button>
+                                {
+                                    this.state.userLoggedIn?
+                                        <div>
+                                            {
+                                                this.state.youLike?
+                                                    <Icon color={this.props.color} name ="like"/>:
+                                                    <button onClick={()=>this.updateLikes(this.props.blogDetails.id)}>
+                                                        <Icon color='green' name="thumbs up"/>
+                                                    </button>
+                                            }
+                                        </div>:
+                                        <span>
+                                            Likes: 
+                                        </span>
+                                }
+
                                 <span>
-                                    <i style={{color:'orange'}}>
+                                    <i style={{color:this.props.color}}>
                                         ~{' '}{this.state.likes}
                                     </i>
                                 </span>
