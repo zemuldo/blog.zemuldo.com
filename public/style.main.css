@@ -138,3 +138,7 @@
     margin-bottom: 10%;
     margin-top: 6%;
 }
+.clearElem{
+    border: none;
+    background-color: transparent;
+}
