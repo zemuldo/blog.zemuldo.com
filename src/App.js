@@ -113,6 +113,7 @@ class App extends Component {
 
     };
     handleNavigation(location){
+        window.scrollTo(0,0);
         this.setState({currentLocation:location})
     }
     _handleChangeBodySize(size){
@@ -272,6 +273,7 @@ class App extends Component {
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
+        window.scrollTo(0,0);
         this.setState({ currentLocation:'home',})
         this.setState({blog:null})
     }
