@@ -8,14 +8,13 @@ export default class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            youLike:false,
             likes:this.props.blogDetails?this.props.blogDetails.likes:0
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
     }
     componentDidMount() {
-        console.log(this.props.blogDetails)
-        console.log(this.props.counts)
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -47,22 +46,31 @@ export default class WelcomePage extends React.Component {
         window.open('https://www.linkedin.com/cws/share?url=http%3A%2F%2Fzemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),"","height=550,width=525,left=100,top=100,menubar=0");
     }
     updateLikes=(id)=>{
-        return axios.post(env.httpURL, {
-            "queryMethod":"updateBlogLikes",
-            "queryData":{
-                "id":id
-            }
-        })
-            .then(function (response) {
-                if(response.data){
-                    if(response.data.n){
-                        this.setState({likes:this.state.likes+1})
-                    }
+        if(localStorage.getItem('user')){
+            return axios.post(env.httpURL, {
+                "queryMethod":"updateBlogLikes",
+                "queryData":{
+                    id:id,
+                    title:this.props.blogDetails.title,
+                    userID:JSON.parse(localStorage.getItem('user')).id
                 }
-            }.bind(this))
-            .catch(function (err) {
+            })
+                .then(function (response) {
+                    if(response.data.state===false){
+                        console.log(response.data)
+                        return
+                    }
+                    if(response.data.n){
+                        if(response.data.n){
+                            this.setState({likes:this.state.likes+1})
+                        }
+                    }
+                }.bind(this))
+                .catch(function (err) {
+                    console.log(err)
+                }.bind(this));
+        }
 
-            }.bind(this));
     }
     render() {
         return (
