@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button,Modal, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Button,Modal,Loader, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import AvatarEditor from '../avatarEditor/creatAvatar'
 import Pofile from './profile'
 import axios from 'axios';
@@ -34,6 +34,7 @@ class LoginForm extends React.Component {
         super(props);
         this.state = {
            user:this.props.user,
+            logingin:false,
             currentUser:null,
             password:null,
             confirmPass:null,
@@ -224,8 +225,9 @@ class LoginForm extends React.Component {
     componentWillUnmount() {
     }
     onLoginClick= () => {
+        this.setState({logingin:true})
         if(!this.state.userName || !this.state.password){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:"Invalid login details"}})
+            this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:"Invalid login details"}})
             setTimeout(function () {
                 this.setState({error:false,hideMessage:true})
             }.bind(this),2000)
@@ -249,18 +251,18 @@ class LoginForm extends React.Component {
                 }
                 if(success.data.id){
                     success.data.name = success.data.userName
-                    this.setState({currentUser:success.data})
+                    this.setState({currentUser:success.data,logingin:false})
                     this.props.successLogin(success.data)
                 }
                 else {
-                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:success.data.error}})
+                    this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:success.data.error}})
                     setTimeout(function () {
                         this.setState({error:false,hideMessage:true})
                     }.bind(this),2000)
                 }
             }.bind(this))
             .catch(function (error) {
-                this.setState({error:true,hideMessage:false,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}})
+                this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}})
                 setTimeout(function () {
                     this.setState({error:false,hideMessage:true})
                 }.bind(this),2000)
@@ -521,7 +523,17 @@ class LoginForm extends React.Component {
                                                         type='password'
                                                         onChange={this.handlePasswordChange}
                                                     />
-                                                    <Button  type="button" onClick={this.onLoginClick}  color={this.props.color} fluid size='large'>Login</Button>
+                                                    {
+                                                        !this.state.logingin?
+                                                            <Button
+                                                                type="button"
+                                                                onClick={this.onLoginClick}
+                                                                color={this.props.color}
+                                                                fluid size='large'>
+                                                                Login
+                                                            </Button>:
+                                                            <Loader active inline='centered' />
+                                                    }
                                                 </Segment>
                                             </Form>
                                             <Message
