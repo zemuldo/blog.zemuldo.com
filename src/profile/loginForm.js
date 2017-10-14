@@ -35,6 +35,7 @@ class LoginForm extends React.Component {
         this.state = {
            user:this.props.user,
             logingin:false,
+            registering:false,
             currentUser:null,
             password:null,
             confirmPass:null,
@@ -73,50 +74,51 @@ class LoginForm extends React.Component {
         this.setBlogs = this.setBlogs.bind(this)
     };
     handleSignUp(){
+        this.setState({registering:true})
         if(!this.state.userName || this.state.userName.length<4){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
             return
         }
         if(!this.state.firstName || this.state.firstName.length<3){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
             return
         }
         if(!this.state.lastName || this.state.lastName.length<3){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
             return
         }
         if(!this.state.email){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Email',message:"Email Address is required"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Email',message:"Email Address is required"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
             return
         }
         if(typeof this.state.imagePreviewUrl !=='object'){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
             return
         }
         if(!this.state.password || !this.state.confirmPass){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Password',message:"Password is required"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Password',message:"Password is required"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
             return
         }
         if(this.state.password !== this.state.confirmPass){
-            this.setState({error:true,hideMessage:false,errorDetails:{field:'Password',message:"Passwords don't match"}})
+            this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Password',message:"Passwords don't match"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
             }.bind(this),2000)
@@ -137,20 +139,20 @@ class LoginForm extends React.Component {
         })
             .then(function (success) {
                 if(!success.data){
-                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Failed',message:"An error occured. Check your Internet"}})
+                    this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Failed',message:"An error occured. Check your Internet"}})
                     setTimeout(function () {
                         this.setState({hideMessage:true})
                     }.bind(this),4000)
                     return false
                 }
                 if(success.data.code===200){
-                    this.setState({success:true,hideMessage:false,errorDetails:{field:'Success',message:"Success"}})
+                    this.setState({success:true,hideMessage:false,registering:false,errorDetails:{field:'Success',message:"Success"}})
                     setTimeout(function () {
                         this.setState({signUp:false,success:false,hideMessage:true})
                     }.bind(this),2000)
                 }
                 else {
-                    this.setState({error:true,hideMessage:false,errorDetails:{field:'Failed',message:success.data.error}})
+                    this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Failed',message:success.data.error}})
                     setTimeout(function () {
                         this.setState({hideMessage:true})
                     }.bind(this),4000)
@@ -158,7 +160,7 @@ class LoginForm extends React.Component {
                 }
             }.bind(this))
             .catch(function (error) {
-                this.setState({error:true,hideMessage:false,errorDetails:{field:'Failed',message:error.message}})
+                this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Failed',message:error.message}})
                 setTimeout(function () {
                     this.setState({hideMessage:true})
                 }.bind(this),4000)
@@ -478,8 +480,15 @@ class LoginForm extends React.Component {
                                                         onChange={this.handleConPassChange}
                                                     />
                                                 </Form.Group>
-
-                                                <Button onClick={()=>this.handleSignUp()} color='green' type='submit'>Submit</Button>
+                                                {
+                                                    !this.state.registering?
+                                                        <Button
+                                                            onClick={()=>this.handleSignUp()}
+                                                            color='green' type='submit'>
+                                                            Submit
+                                                        </Button>:
+                                                        <Loader active inline='centered' />
+                                                }
                                             </Form>
                                             <Message
                                                 hidden={this.state.hideMessage}
