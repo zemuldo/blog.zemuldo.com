@@ -380,11 +380,6 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
-        console.log("----++++++saving state")
-        const contentState = editorState.getCurrentContent();
-        this.setState({editorState});
-        this.saveContent(contentState)
-        this.setState({hasSavedContent:false})
 
     }
     focus = () => this.refs.editor.focus();
@@ -559,12 +554,13 @@ class RichEditorExample extends React.Component {
         return (
             <div className={className} onClick={this.focus}>
                 <Editor
-                    readOnly
+                    readOnly={true}
                     blockRendererFn={mediaBlockRenderer}
                     blockStyleFn={getBlockStyle}
                     customStyleMap={styleMap}
                     editorState={editorState}
                     handleKeyCommand={this.handleKeyCommand}
+                    onChange={this.onChange}
                     onTab={this.onTab}
                     placeholder="Error fetching content..."
                     ref="editor"

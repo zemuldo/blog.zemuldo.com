@@ -380,12 +380,6 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
-        console.log("----++++++saving state")
-        const contentState = editorState.getCurrentContent();
-        this.setState({editorState});
-        this.saveContent(contentState)
-        this.setState({hasSavedContent:false})
-
     }
     focus = () => this.refs.editor.focus();
     _handleKeyCommand(command, editorState) {
