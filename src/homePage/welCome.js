@@ -57,7 +57,7 @@ export default class WelcomePage extends React.Component {
                                 <p>
                                     Here you find great articles on tech related topics.
                                     Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                    You can signup and share your content with us. Become part of the movement.
+                                    You can signup and share your content with us. Become part us.
                                 </p>
                             </div>
                             <div>
