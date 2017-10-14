@@ -8,7 +8,7 @@ export default class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            youLike:true,
+            youLike:false,
             userLoggedIn:false,
             likes:this.props.blogDetails?this.props.blogDetails.likes:0
         }
@@ -16,6 +16,7 @@ export default class WelcomePage extends React.Component {
         this.updateLikes=this.updateLikes.bind(this)
     }
     componentDidMount() {
+        this.setState({youLike:true})
         if(localStorage.getItem('user')){
             this.setState({userLoggedIn:true})
             axios.post(env.httpURL, {
@@ -28,13 +29,16 @@ export default class WelcomePage extends React.Component {
             })
                 .then(function (response) {
                     console.log(response)
-                    if(response.data){
+                    if(!response.data){
+                        this.setState({youLike:false})
                         return
                     }
-                    if(response.data.state){
+                    if(!response.data.state){
+                        this.setState({youLike:false})
                         return
                     }
                     if(response.data.state===false){
+                        this.setState({youLike:false})
                         console.log(response.data)
                         return
                     }
@@ -119,7 +123,7 @@ export default class WelcomePage extends React.Component {
                             <div className="shareIcon clearElem" style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
                                 {
                                     this.state.userLoggedIn?
-                                        <div>
+                                        <span>
                                             {
                                                 this.state.youLike?
                                                     <Icon color={this.props.color} name ="like"/>:
@@ -127,7 +131,7 @@ export default class WelcomePage extends React.Component {
                                                         <Icon color='green' name="thumbs up"/>
                                                     </button>
                                             }
-                                        </div>:
+                                        </span>:
                                         <span>
                                             Likes: 
                                         </span>
