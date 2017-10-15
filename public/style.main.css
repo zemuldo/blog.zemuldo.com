@@ -146,3 +146,16 @@
     color: green;
     font-size: small;
 }
+.info{
+    color: green;
+    font-size: medium;
+}
+.authorImage{
+    width: 400px;
+    background: yellow;
+}
+.authorImage img{
+    float: left;
+    width: 150px;
+    background: red;
+}

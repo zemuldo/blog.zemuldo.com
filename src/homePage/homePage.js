@@ -16,7 +16,7 @@ class HomePage extends Component {
             blogDetails:null,
             homePageLoaded:false,
             blogsLoaded:false,
-            blogLoaded:true,
+            blogLoaded:false,
             blogIsLoading:false,
             bodySize:(window.innerWidth<503)?16:12,
             fbC:null,
@@ -37,8 +37,6 @@ class HomePage extends Component {
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
         this.getBlogDetails = this.getBlogDetails.bind(this)
-
-
     };
     homePageIsLoading(value){
         this.setState({homePageLoaded:!value})
@@ -61,33 +59,35 @@ class HomePage extends Component {
                 }
                 else {
                     this.setState({blogDetails:response.data,isHome:false});
-                    this.blogIsLoading(false);
+                    this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
                     this.setBlogCounts();
                 }
 
-        }.bind(this))
+            }
+            .bind(this))
             .catch(function (err) {
-                this.setState({blog:null});
-                this.blogIsLoading(false);
+                console.log(err)
+                this.setState({blogLoaded:true})
                 return err
-            });
+            }.bind(this));
     }
     setCurrentBlog(url){
-        this.blogIsLoading(true);
+        this.setState({blogLoaded:false})
+        console.log(this.state.blogLoaded)
         let id = null
-        if(url.indexOf('-')!==-1){
-             id = url.split('_')[2];
+        if(url.indexOf('-')>0){
+             id = Number(url.split('_')[2]);
         }
-        else if(url.indexOf('%20')!==-1){
-             id = url.split('_')[2];
-            this.setCurrentBlog(id)
+        else if(url.indexOf('%20')>0){
+            id = Number(url.split('_')[2]);
         }
-        else if(url.indexOf('%2520')!==-1){
-             id = url.split('_')[2];
-            this.setCurrentBlog(id)
+        else if(url.indexOf('%2520')>0){
+            id = Number(url.split('_')[2]);
         }
-        if(id){
+        console.log(id)
+        if(id && id.toString()!=='NaN'){
+            console.log(this.state.blogLoaded)
             return axios.post(env.httpURL, {
                 "queryMethod":"getPost",
                 "queryData":{
@@ -95,33 +95,44 @@ class HomePage extends Component {
                 }
             })
                 .then(function (response) {
+                    console.log(this.state.blogLoaded)
+                    console.log(response)
                     if(!response.data){
-
-                    }
-                    if(!response.data.body){
                         this.setState({blog:null});
-                        this.blogIsLoading(false);
-                        window.scrollTo(0,0)
-
+                        this.setState({blogLoaded:true})
+                        console.log(this.state.blogLoaded)
+                        return false
                     }
                     if(response.data.error){
                         this.setState({blog:null});
-                        this.blogIsLoading(false);
+                        this.setState({blogLoaded:true})
+                        console.log(this.state.blogLoaded)
                         window.scrollTo(0,0)
+                        return false
+                    }
+                    if(response.data.body){
+                        this.setState({blog:response.data,richViewerState:response.data.body});
+                        this.getBlogDetails(id);
+                        window.scrollTo(0,0)
+                        return false
 
                     }
                     else {
-                        this.setState({blog:response.data,richViewerState:response.data.body});
-                        this.getBlogDetails(id);
-                        this.blogIsLoading(false);
+                        this.setState({blog:null});
+                        this.setState({blogLoaded:true})
                         window.scrollTo(0,0)
+                        return false
                     }
                 }.bind(this))
                 .catch(function (err) {
                     this.setState({blog:null});
-                    this.blogIsLoading(false);
+                    this.setState({blogLoaded:true})
                     return err
                 }.bind(this));
+        }
+        else{
+            this.setState({blog:null});
+            this.setState({blogLoaded:true})
         }
     }
     setBlogCounts(){
@@ -190,9 +201,10 @@ class HomePage extends Component {
     resize = () => this.forceUpdate();
     componentDidMount() {
         this.blogIsLoading(true);
-        let url = window.location.pathname.split('/').join('')
+        let url = window.location.pathname.split('/').join('');
         this.setCurrentBlog(url);
-        this.forceUpdate()
+        this.forceUpdate();
+        console.log(this.state.blogLoaded);
         if(window.innerWidth<503){
             this._handleChangeBodySize(16);
         }
@@ -200,7 +212,7 @@ class HomePage extends Component {
             this._handleChangeBodySize(16);
         }
 
-        window.addEventListener('resize', this.resize)
+        window.addEventListener('resize', this.resize);
         return axios.post(env.httpURL, {
             "queryMethod":"getAllPosts",
             "queryData":{
@@ -208,7 +220,7 @@ class HomePage extends Component {
         })
             .then(function (response) {
                 if(response.data[0]){
-                    this.setState({blogs:response.data})
+                    this.setState({blogs:response.data});
                     this.homePageIsLoading(false);
                     this.blogsAreLoading(false);
                 }

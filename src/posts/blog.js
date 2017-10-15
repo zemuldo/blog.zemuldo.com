@@ -10,12 +10,38 @@ export default class WelcomePage extends React.Component {
         this.state = {
             youLike:false,
             userLoggedIn:false,
-            likes:this.props.blogDetails?this.props.blogDetails.likes:0
+            likes:this.props.blogDetails?this.props.blogDetails.likes:0,
+            authorAvatar:null
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
+        this.getAauthorAvatar = this.getAauthorAvatar.bind(this)
+    }
+    getAauthorAvatar(){
+        axios.post(env.httpURL,{
+            "queryMethod":"getAvatar",
+            "queryData":{
+                "id":this.props.blogDetails.authorID
+            }
+        })
+            .then(function (res) {
+                console.log(res.data)
+                if(!res){
+                    return false
+                }
+                if(!res.data){
+                    return false
+                }
+                if(res.data.imageURL){
+                    this.setState({authorAvatar:JSON.parse(res.data.imageURL)})
+                }
+            }.bind(this))
+            .catch(function (err) {
+
+            })
     }
     componentDidMount() {
+        this.getAauthorAvatar()
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
             this.setState({userLoggedIn:true})
@@ -163,7 +189,40 @@ export default class WelcomePage extends React.Component {
                                 <sup>{this.props.counts.gplsC}</sup>
                                 <br/>
                                 <br/>
-                                Published on:  {this.props.blogDetails.date}  By {this.props.blogDetails.author}
+                                <span>
+                                    {
+                                        this.state.authorAvatar ?
+
+                                            <Image
+                                                floated="left"
+                                                avatar={true}
+                                                id="photo"
+                                                size='tiny'
+                                                src={this.state.authorAvatar.img}
+                                                style={{
+                                                    borderRadius: `${(Math.min(
+                                                        this.state.authorAvatar.height,
+                                                        this.state.authorAvatar.width
+                                                        ) +
+                                                        10) *
+                                                    this.state.authorAvatar.borderRadius / 2 / 100}px`
+                                                }}
+                                            /> :
+                                            <span>
+                                            </span>
+                                    }
+                                </span>
+                               <span className="info">
+                                   Published on:
+                                   <br/>
+                                   {this.props.blogDetails.date}
+                               </span>
+                                <br/>
+                                <br/>
+                                <span className="info">
+                                    {this.props.blogDetails.author}
+                                </span>
+
                             </div>
                             <hr color="green"/>
                             <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>

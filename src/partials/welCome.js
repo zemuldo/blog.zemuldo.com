@@ -46,41 +46,43 @@ export default class WelcomePage extends React.Component {
 
     render() {
         return (
-            <div style={{margin: '2em 1em 3em 1em'}}>
-                {
-                    (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
-                        <div>
-                            {
-                                !this.props.blogLoaded?
-                                    <div >
-                                        <Header color={this.props.color} as='h1'>
-                                            Great Articles and Blogs
-                                        </Header>
-                                        <hr color="green"/>
-                                        <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
-                                            <p>
-                                                Here you find great articles on tech related topics.
-                                                Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                                You can signup and share your content with us. Become part us.
-                                            </p>
-                                        </div>
-                                    </div>:
-                                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                                            <Loader active inline='centered' />
-                                        </div>
+           <div>
+               {
+                   !this.props.blogLoaded?
+                       <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                           <Loader active inline='centered' />
+                       </div>:
+                       <div style={{margin: '2em 1em 3em 1em'}}>
+                           {
+                               (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
+                                   <div>
+                                       <div >
+                                           <Header color={this.props.color} as='h1'>
+                                               Great Articles and Blogs
+                                           </Header>
+                                           <hr color="green"/>
+                                           <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
+                                               <p>
+                                                   Here you find great articles on tech related topics.
+                                                   Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
+                                                   You can signup and share your content with us. Become part us.
+                                               </p>
+                                           </div>
+                                       </div>
+                                   </div>:
+                                   <div>
+                                       <Blog
+                                           color={this.props.color}
+                                           blogDetails={this.props.blogDetails}
+                                           counts ={this.props.counts}
+                                           richViewerState={this.props.richViewerState}
+                                       />
+                                   </div>
+                           }
+                       </div>
+               }
 
-                            }
-                        </div>:
-                        <div>
-                            <Blog
-                                color={this.props.color}
-                                blogDetails={this.props.blogDetails}
-                                counts ={this.props.counts}
-                                richViewerState={this.props.richViewerState}
-                            />
-                        </div>
-                }
-            </div>
+           </div>
         )
     }
 }
