@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import 'semantic-ui-css/semantic.min.css';
 import {Menu, Button,Icon, Dropdown,Image} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
+import axios from 'axios'
 import Login from './profile/loginForm'
 import TechSummary from './tech/techSummary'
 import BusinessSummary from './business/businessSummary'
@@ -8,8 +10,6 @@ import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
 import GeoLocator from './partials/geoLocator'
 import Footer from './partials/footer'
-import 'semantic-ui-css/semantic.min.css';
-import axios from 'axios'
 import config from './environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -78,14 +78,10 @@ class App extends Component {
             user:null,
             iKnowYou:false,
             visitorInfo:null,
-            windowSize:window.innerWidth,
             geoAllowed:false,
-            log: [],
             currentUserLocation:'name',
-            open: false,
             createNew:false,
             editingMode:false,
-            secondMenu:true,
             colors:['green','blue','orange','violet','blue'],
             currentLocation:'home',
             profilePic:null
@@ -96,7 +92,6 @@ class App extends Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.handleHomeClick = this.handleHomeClick.bind(this);
-        this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.shuffle = this.shuffle.bind(this);
         this.successLogin = this.successLogin.bind(this);
         this._handleCreateNew = this._handleCreateNew.bind(this)
@@ -104,14 +99,10 @@ class App extends Component {
         this._goToEditor = this._goToEditor.bind(this)
         this._exitEditMode = this._exitEditMode.bind(this)
         this.handleNavigation = this.handleNavigation.bind(this)
-
     };
     handleNavigation(location){
         window.scrollTo(0,0);
         this.setState({currentLocation:location})
-    }
-    _handleChangeBodySize(size){
-        this.setState({windowSize:size})
     }
     shuffle() {
         let array = this.state.colors
@@ -158,12 +149,6 @@ class App extends Component {
         }
         this.shuffle()
         this.forceUpdate()
-        if(window.innerWidth<503){
-            this._handleChangeBodySize(503)
-        }
-        if(window.innerWidth>503){
-            this._handleChangeBodySize(503)
-        }
         window.addEventListener('resize', this.resize)
         if(!this.state.iKnowYou){
             return axios.post(env.httpURL, {"queryMethod":"getIp"})
@@ -252,7 +237,6 @@ class App extends Component {
         this.setState({ currentLocation:'home',})
         this.setState({blog:null})
     }
-
     handleMenuItemClick = (e, { name }) => {
         if(name === 'home'){
             this.setState({ currentLocation:name,})
@@ -274,14 +258,12 @@ class App extends Component {
     }
     handleLogoutinButton = ()=>{
         localStorage.removeItem('user')
-        localStorage.removeItem('user')
         this.setState({ currentLocation: 'home' ,loggedin:false})
     }
     _handleCreateNew = () =>{
         let editorState = window.localStorage.getItem('draftContent')
         let blogData = window.localStorage.getItem('blogData')
         if(editorState && blogData){
-            console.log("directt to edit mode")
             this.setState({editingMode:true})
         }
         this.setState({createNew:true,currentLocation:'profile'})
@@ -295,7 +277,6 @@ class App extends Component {
     _exitEditMode(){
         this.setState({editingMode:false,createNew:false})
     }
-
     render() {
         return (
             <div>
@@ -316,7 +297,11 @@ class App extends Component {
                 >
                     <Menu.Item
                     >
-                        <Icon size="large" color={this.state.colors[0]} name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon} />
+                        <Icon
+                            size="large"
+                            color={this.state.colors[0]}
+                            name={(this.state.currentLocation==='home')?'home':pages[this.state.currentLocation].icon}
+                        />
                         <Dropdown
                             style={{color:this.state.colors[0]}}
                             pointing='top'
