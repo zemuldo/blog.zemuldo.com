@@ -141,14 +141,10 @@ class RichEditorExample extends React.Component {
         };
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.onTab = this.onTab.bind(this);
-        this.toggleBlockType = this.toggleBlockType.bind(this);
-        this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
-        this.saveContent = this.saveContent.bind(this);
         this.handleEditorState = this.handleEditorState.bind(this);
         this.publish = this.publish.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.reinInitEditorState=this.reinInitEditorState.bind(this)
-        this.onURLChange = (e) => this.setState({urlValue: e.target.value});
     }
     isLoading(value){
         this.setState({ isLoaded: value });
@@ -157,35 +153,11 @@ class RichEditorExample extends React.Component {
     }
     focus = () => this.refs.editor.focus();
     handleKeyCommand(command, editorState) {
-        console.log('key presed'+command)
-        const newState = RichUtils.handleKeyCommand(editorState, command);
-        if (newState) {
-            this.onChange(newState);
-            return true;
-        }
-        return false;
     }
     onTab(e) {
         console.log('tab presed'+e)
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
-    }
-    toggleBlockType(blockType) {
-        console.log('toglle presed'+blockType)
-        this.onChange(
-            RichUtils.toggleBlockType(
-                this.state.editorState,
-                blockType
-            )
-        );
-    }
-    toggleInlineStyle(inlineStyle) {
-        this.onChange(
-            RichUtils.toggleInlineStyle(
-                this.state.editorState,
-                inlineStyle
-            )
-        );
     }
     publish = () => {
         this.setState({ open: true })
@@ -229,10 +201,6 @@ class RichEditorExample extends React.Component {
 
         }
     };
-    saveContent = debounce((content) => {
-        console.log("localstoring....")
-        window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
-    }, 1000);
     componentDidMount() {
         this.handleEditorState()
     }
