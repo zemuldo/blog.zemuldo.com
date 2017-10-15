@@ -24,7 +24,6 @@ function dataURItoBlob(dataURI, callback) {
 
     // write the ArrayBuffer to a blob, and you're done
     let bb = new Blob([ab]);
-    console.log(bb)
     return bb;
 }
 class LoginForm extends React.Component {
@@ -244,8 +243,6 @@ class LoginForm extends React.Component {
                 let user = JSON.parse(known)
                 if(user.firstName && user.lastName && user.userName){
                     let valid = await this.validateUser()
-                    console.log("++++++++++++++Ddddd")
-                    console.log(valid)
                     if(valid!==true){
                         localStorage.removeItem('user')
                         this.setState({loggedin:false})
@@ -308,31 +305,24 @@ class LoginForm extends React.Component {
 
     }
     setBlogs(userName){
-        console.log('+++++++++starting fetch blogs by you')
-        axios.post(env.httpURL, {
+;        axios.post(env.httpURL, {
             "queryMethod":"getPosts",
             "queryData":{
                 userName:userName
             }
         })
             .then(function (response) {
-                console.log('+++++++++got some blogs by u')
-                console.log(response.data)
-                if(response.data[0]){
+;                if(response.data[0]){
                     this.setState({userBlogs:response.data})
-                    console.log(this.state.blogsLoaded)
-
+;
                 }
                 else {
                     this.setState({userBlogs:[]});
 
                 }
-                console.log(this.state.userBlogs)
             }.bind(this))
             .catch(function (err) {
-                console.log('+++++++++got go nothing')
                 this.setState({userBlogs:[]})
-                console.log(err)
             }.bind(this))
     }
 
@@ -369,18 +359,7 @@ class LoginForm extends React.Component {
             }
         })
     }
-    onClickSave = () => {
-        if (this.editor) {
-            // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
-            // drawn on another canvas, or added to the DOM.
-            const canvas = this.editor.getImage()
-
-            // If you want the image resized to the canvas size (also a HTMLCanvasElement)
-            const canvasScaled = this.editor.getImageScaledToCanvas()
-        }
-    }
-
-    setEditorRef = (editor) => this.editor = editor
+    setEditorRef = (editor) => this.editor = editor;
 
     render(){
       let $imagePreview = null;

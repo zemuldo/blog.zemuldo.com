@@ -28,11 +28,6 @@ class RichEditorExample extends React.Component {
             blogDetails:null,
             blogLoaded:false,
             blogIsLoading:false,
-            counts:{
-                fbC:null,
-                twtC:null,
-                gplsC:null
-            },
             richViewerState:null
         };
         this.componentDidMount=this.componentDidMount.bind(this)
@@ -40,7 +35,6 @@ class RichEditorExample extends React.Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
-        this.setBlogCounts = this.setBlogCounts.bind(this);
         this.setBlogs = this.setBlogs.bind(this)
 
     }
@@ -63,37 +57,28 @@ class RichEditorExample extends React.Component {
                 else {
                     this.setState({blog:response.data,blogDetails:thisBlog})
                     this.setState({blogIsLoading:false,richViewerState:response.data.body})
-                    this.blogIsLoading(false)
+                    this.setState({blogLoaded:true})
                     window.scrollTo(0,0)
                 }
 
             })
             .catch(exception => {
                 this.setState({blog:null})
-                this.blogIsLoading(false)
+                this.setState({blogLoaded:true})
                 return exception
             });
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
-        console.log("___profile now ")
-        console.log(this.props.user)
-        console.log(this.state.blogsLoaded)
         window.addEventListener('resize', this.resize)
-        console.log(this.state.blogsLoaded);
         this.blogsAreLoading(true);
-        console.log(this.state.blogsLoaded);
         this.setBlogs()
-        console.log(this.state.blogsLoaded);
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     }
     setBlogs(){
-        console.log(this.state.blogsLoaded)
         this.blogsAreLoading(true);
-        console.log(this.state.blogsLoaded)
-        console.log('+++++++++starting fetch blogs by '+this.props.user.userName)
         axios.post(env.httpURL, {
             "queryMethod":"getPosts",
             "queryData":{
@@ -101,62 +86,22 @@ class RichEditorExample extends React.Component {
             }
         })
             .then(function (response) {
-                console.log('+++++++++got some blogs by u')
                 if(response.data[0]){
                     this.setState({blogs:response.data,blogsLoaded:true})
-                    console.log(this.state.blogsLoaded)
+                    this.setState({blogLoaded:true})
 
                 }
                 else {
                     this.setState({blogs:[],blogsLoaded:true});
-                    console.log(this.state.blogsLoaded)
+                    this.setState({blogLoaded:true})
 
                 }
             }.bind(this))
             .catch(function (err) {
-                console.log('+++++++++got go nothing')
-                console.log(err)
                 this.setState({blogs:[],blogsLoaded:true});
-                console.log(this.state.blogsLoaded)
+                this.setState({blogLoaded:true})
             }.bind(this))
 
-    }
-
-    setBlogCounts(){
-        let gplusPost = {
-            "method": "pos.plusones.get",
-            "id": "p",
-            "params": {
-                "nolog": true,
-                "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
-                "source": "widget",
-                "userId": "@viewer",
-                "groupId": "@self"
-            },
-            "jsonrpc": "2.0",
-            "key": "p",
-            "apiVersion": "v1"
-        }
-        window.scrollTo(0,0);
-        return Promise.all([
-            axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
-            axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
-            axios.post(' https://clients6.google.com/rpc',gplusPost),
-        ])
-            .then(function (res) {
-                this.setState({counts:{
-                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
-                    twtC:(res[1].data.count)?res[1].data.count:0,
-                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
-                }})
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({counts:{
-                    fbC:0,
-                    twtC:0,
-                    gplsC:0
-                }})
-            }.bind(this))
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true});
@@ -244,8 +189,8 @@ class RichEditorExample extends React.Component {
                                                 handleTopicChange={this.handleTopicChange} />:
                                             <Welcome
                                                 richViewerState={this.state.richViewerState}
-                                                counts={this.state.counts}
                                                 color={this.props.colors[1]}
+                                                blogIsLoading={this.state.blogIsLoading}
                                                 blogDetails={this.state.blogDetails}
                                                 blog={this.state.blog}
                                                 blogs={this.state.blogs}
@@ -266,9 +211,9 @@ class RichEditorExample extends React.Component {
                                                 handleTopicChange={this.handleTopicChange} />:
                                             <Welcome
                                                 richViewerState={this.state.richViewerState}
-                                                counts={this.state.counts}
                                                 color={this.props.colors[1]}
-                                                blogDetails={this.state.blogDetails}
+                                                blogIsLoading={this.state.blogIsLoading}
+                                                blogDetails={this.props.blogDetails}
                                                 blog={this.state.blog}
                                                 blogs={this.state.blogs}
                                                 blogLoaded={this.state.blogLoaded}/>
