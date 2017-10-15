@@ -10,8 +10,6 @@ function toTitleCase(str)
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 function dataURItoBlob(dataURI, callback) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
     let byteString = atob(dataURI.split(',')[1]);
 
     // separate out the mime component

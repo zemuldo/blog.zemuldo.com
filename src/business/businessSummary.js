@@ -234,134 +234,11 @@ class HomePage extends Component {
                 {
                     this.state.homePageLoaded ?
                         <div>
-                            {
-                                (window.innerWidth>503) ?
-                                    <Grid columns={2}>
-                                        <Grid.Row>
-                                            {
-                                                (window.innerWidth>600) ?
-                                                    <Grid.Column  width={4}>
-                                                        <Topics
-                                                            blogsAreLoading={this.blogsAreLoading}
-                                                            setTopicPosts={this.setTopicPosts}
-                                                            onReadMore = {this.onReadMore}
-                                                            blog ={this.state.blog}
-                                                            color={this.props.color}
-                                                            blogs={this.state.blogs}/>
-                                                        <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
-                                                            <Header
-                                                                style={{marginLeft:'10px'}}
-                                                                color='blue' as='h3'>Search for it
-                                                            </Header>
-                                                            <Input
-                                                                icon={<Icon name='search' inverted circular link />}
-                                                                placeholder='Search...'
-                                                                onChange={this.handleFilterChange}
-                                                            />
-                                                            <Header
-                                                                color={this.props.colors[2]} as='h2'>Featured in Business</Header>
-                                                            {
-                                                                this.state.blogsLoaded?
-                                                                    <div>
-                                                                        {
-                                                                            (this.state.blogs[0]) ?
-                                                                                <Blogs
-                                                                                    color={this.props.color}
-                                                                                    onReadMore = {this.onReadMore}
-                                                                                    blogs ={this.state.blogs}
-                                                                                    blog ={this.state.blog}/>:
-                                                                                <div>
-                                                                                    No matching content on this Topic
-                                                                                </div>
-                                                                        }
-                                                                    </div>:
-                                                                    <div style={{ position:'center', margin: '20em 0em 0em 0em'}} >
-                                                                        <Loader active inline='centered' />
-                                                                    </div>
-
-                                                            }
-                                                        </div>
-                                                    </Grid.Column>:
-                                                    <p>Hello</p>
-
-                                            }
-                                            <Grid.Column  width={9}>
-                                                {
-                                                    this.state.blogIsLoading?
-                                                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                                                            <Loader active inline='centered' />
-                                                        </div>:
-                                                        <WelcomePage
-                                                            richViewerState={this.state.richViewerState}
-                                                            counts={this.state.counts}
-                                                            color={this.props.colors[1]}
-                                                            blogDetails={this.state.blogDetails}
-                                                            blog={this.state.blog}
-                                                            blogs={this.state.blogs}
-                                                            blogLoaded={this.state.blogLoaded}/>
-                                                }
-
-                                            </Grid.Column>
-                                            {
-                                                (window.innerWidth>1030) ?
-                                                    <Grid.Column  width={3}>
-                                                        {
-                                                            //<TwitterProf/>
-                                                        }
-                                                    </Grid.Column>:
-                                                    <p>Hello</p>
-                                            }
-                                        </Grid.Row>
-                                    </Grid>:
-                                    <Grid columns={2} divided>
-                                        <Grid.Row>
-                                            {
-                                                (window.innerWidth>600) ?
-                                                    <Grid.Column  width={4}>
-                                                        <Topics
-                                                            blogsAreLoading={this.blogsAreLoading}
-                                                            setTopicPosts={this.setTopicPosts}
-                                                            onReadMore = {this.onReadMore}
-                                                            blog ={this.state.blog}
-                                                            color={this.props.color}
-                                                            blogs={this.state.blogs}/>
-                                                        <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
-                                                            <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Search for it</Header>
-                                                            <Input
-                                                                icon={<Icon name='search' inverted circular link />}
-                                                                placeholder='Search...'
-                                                                onChange={this.handleFilterChange}
-                                                            />
-                                                            <Header
-                                                                color={this.props.colors[2]} as='h2'>
-                                                                Most Popular
-                                                            </Header>
-                                                            {
-                                                                this.state.blogsLoaded?
-                                                                    <div>
-                                                                        {
-                                                                            (this.state.blogs[0]) ?
-                                                                                <Blogs
-                                                                                    color={this.props.color}
-                                                                                    onReadMore = {this.onReadMore}
-                                                                                    blogs ={this.state.blogs} blog ={this.state.blog}/>:
-                                                                                <div>
-                                                                                    No matching content on this Topic
-                                                                                </div>
-                                                                        }
-                                                                    </div>:
-                                                                    <div style={{ position:'center', margin: '4em 0em 0em 0em'}} >
-                                                                        <Loader active inline='centered' />
-                                                                    </div>
-
-                                                            }
-                                                        </div>
-                                                    </Grid.Column>:
-                                                    <p>Hello</p>
-
-                                            }
-                                            <Grid.Column  width={16}>
-                                                <div style={{margin: '2em 1em 3em 1em'}}>
+                            <Grid columns={2}>
+                                <Grid.Row>
+                                    {
+                                        (window.innerWidth>600) ?
+                                            <Grid.Column computer={4}>
                                                 <Topics
                                                     blogsAreLoading={this.blogsAreLoading}
                                                     setTopicPosts={this.setTopicPosts}
@@ -369,37 +246,88 @@ class HomePage extends Component {
                                                     blog ={this.state.blog}
                                                     color={this.props.color}
                                                     blogs={this.state.blogs}/>
+                                                <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
+                                                    <Header
+                                                        style={{marginLeft:'10px'}}
+                                                        color='blue' as='h3'>Search for it
+                                                    </Header>
+                                                    <Input
+                                                        icon={<Icon name='search' inverted circular link />}
+                                                        placeholder='Search...'
+                                                        onChange={this.handleFilterChange}
+                                                    />
+                                                    <Header
+                                                        color={this.props.colors[2]} as='h2'>Popular in Tech</Header>
                                                     {
-                                                        this.state.blogIsLoading?
-                                                            <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                                                                <Loader active inline='centered' />
-                                                            </div>:
-                                                            <WelcomePage
-                                                                richViewerState={this.state.richViewerState}
-                                                                counts={this.state.counts}
-                                                                color={this.props.colors[1]}
-                                                                blogDetails={this.state.blogDetails}
-                                                                blog={this.state.blog}
-                                                                blogs={this.state.blogs}
-                                                                blogLoaded={this.state.blogLoaded}/>
-                                                    }
-                                                    {
-                                                        (this.state.blogs[0]) ?
-                                                            <Blogs
-                                                                color={this.props.color}
-                                                                onReadMore = {this.onReadMore}
-                                                                blogs ={this.state.blogs}
-                                                                blog ={this.state.blog}/>:
+                                                        this.state.blogsLoaded?
                                                             <div>
-                                                                No matching content on this Topic
+                                                                {
+                                                                    (this.state.blogs[0]) ?
+                                                                        <Blogs
+                                                                            color={this.props.color}
+                                                                            onReadMore = {this.onReadMore}
+                                                                            blogs ={this.state.blogs}
+                                                                            blog ={this.state.blog}/>:
+                                                                        <div>
+                                                                            No matching content on this Topic
+                                                                        </div>
+                                                                }
+                                                            </div>:
+                                                            <div style={{ position:'center', margin: '2em 0em 0em 0em'}} >
+                                                                <Loader active inline='centered' />
                                                             </div>
                                                     }
                                                 </div>
-                                            </Grid.Column>
-                                        </Grid.Row>
-                                    </Grid>
-                            }
+                                            </Grid.Column>:
+                                            <div>
 
+                                            </div>
+
+                                    }
+                                    <Grid.Column mobile = {window.innerWidth<600?16:9} computer={window.innerWidth<600?16:9}  width={9}>
+                                        {
+
+                                            this.state.blogIsLoading?
+                                                <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                                                    <Loader active inline='centered' />
+                                                </div>:
+                                                <div>
+                                                    {
+                                                        window.innerWidth<600?
+                                                            <Topics
+                                                                blogsAreLoading={this.blogsAreLoading}
+                                                                setTopicPosts={this.setTopicPosts}
+                                                                onReadMore = {this.onReadMore}
+                                                                blog ={this.state.blog}
+                                                                color={this.props.color}
+                                                                blogs={this.state.blogs}/>:
+                                                            <div>
+
+                                                            </div>
+                                                    }
+                                                    <WelcomePage
+                                                        richViewerState={this.state.richViewerState}
+                                                        counts={this.state.counts}
+                                                        color={this.props.colors[1]}
+                                                        blogDetails={this.state.blogDetails}
+                                                        blog={this.state.blog}
+                                                        blogs={this.state.blogs}
+                                                        blogLoaded={this.state.blogLoaded}/>
+                                                </div>
+
+                                        }
+
+                                    </Grid.Column>
+                                    {
+                                        (window.innerWidth>1030) ?
+                                            <Grid.Column  width={3}>
+                                            </Grid.Column>:
+                                            <div>
+
+                                            </div>
+                                    }
+                                </Grid.Row>
+                            </Grid>
                         </div>:
                         <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                             <Loader active inline='centered' />
