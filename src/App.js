@@ -89,11 +89,13 @@ class App extends Component {
             blogs:[],
             blogsLoaded:false,
             blogIsLoading:true,
+            blogsAreLoading:true,
             homePageIsLoading:true,
             blogDetails:null,
             richViewerState:null,
             pageText:'Most Popular',
             blogLoade:false,
+            homePageLoaded:false
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -291,28 +293,40 @@ class App extends Component {
             .then(function (response) {
                 console.log(response.data)
                 if(!response.data){
+                    this.setState({blogs:[],blog:null,blogDetails:null});
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
+                    this.setState({blogsAreLoading:false})
                     return false
                 }
                 if(!response.data[0]){
+                    this.setState({blogs:[],blog:null,blogDetails:null});
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
+                    this.setState({blogsAreLoading:false})
                     return false
                 }
                 if(response.data[0]){
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogs:response.data});
-                    this.setState({blogsLoaded:true})
+                    this.setState({blogsAreLoading:false})
                     this.onReadMore(response.data[0])
                 }
                 else {
+                    this.setState({blogs:[],blog:null,blogDetails:null});
+                    this.setState({homePageLoaded:true})
                     this.setState({blogs:[]});
                     this.setState({blogsLoaded:true})
+                    this.setState({blogsAreLoading:false})
                 }
             }.bind(this))
             .catch(function (err) {
+                this.setState({blogs:[],blog:null,blogDetails:null});
+                this.setState({homePageLoaded:true})
                 this.setState({blogs:[]});
                 this.setState({blogsLoaded:true})
+                this.setState({blogsAreLoading:false})
             }.bind(this))
     }
     setHomeBlogs(){
-        this.setState({blogsLoaded:false})
         return axios.post(env.httpURL, {
             "queryMethod":"getAllPosts",
             "queryData":{
@@ -321,23 +335,30 @@ class App extends Component {
             .then(function (response) {
                 console.log(response.data)
                 if(!response.data){
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
+                    this.setState({blogsAreLoading:false})
                     return false
                 }
                 if(!response.data[0]){
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
+                    this.setState({blogsAreLoading:false})
                     return false
                 }
                 if(response.data[0]){
                     this.setState({blogs:response.data});
                     this.setState({blogsLoaded:true,homePageLoaded:true})
+                    this.setState({blogsAreLoading:false})
                 }
                 else {
                     this.setState({blogs:[]});
                     this.setState({blogsLoaded:true,homePageLoaded:true})
+                    this.setState({blogsAreLoading:false})
                 }
             }.bind(this))
             .catch(function (err) {
                 this.setState({blogs:[]});
                 this.setState({blogsLoaded:true,homePageLoaded:true})
+                this.setState({blogsAreLoading:false})
             }.bind(this))
     }
     handleNavigation(location){
@@ -385,6 +406,7 @@ class App extends Component {
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
                 this.setState({profilePic:imageUrl})
+                this.setState({blogLoaded:true,homePageLoaded:true})
             }
             else {
                 localStorage.removeItem('user');
@@ -480,12 +502,15 @@ class App extends Component {
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
+        this.setState({blogsAreLoading:true})
         window.scrollTo(0,0);
+        this.setHomeBlogs()
         this.setState({ currentLocation:'home',})
     }
     handleMenuItemClick = (e, { name }) => {
-        this.setState({blogsLoaded:false})
+        this.setState({blogsAreLoading:true})
         if(name === 'home' || name ==='login'){
+            this.setHomeBlogs()
             this.setState({ currentLocation:name,})
         }
         else {
@@ -686,6 +711,7 @@ class App extends Component {
                                       blogLoaded={this.state.blogLoaded}
                                       homePageLoaded={this.state.homePageLoaded}
                                       richViewerState={this.state.richViewerState}
+                                      blogsAreLoading={this.state.blogsAreLoading}
                                       onReadMore={this.onReadMore}
                                       colors={this.state.colors}
                                       current={this.state.currentLocation} />

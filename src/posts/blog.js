@@ -81,8 +81,10 @@ export default class WelcomePage extends React.Component {
             })
     }
     componentDidMount() {
-        this.props.blogDetails?this.setBlogCounts():
-        this.getAauthorAvatar()
+        if(this.props.blogDetails){
+            this.getAauthorAvatar()
+            this.setBlogCounts()
+        }
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
             this.setState({userLoggedIn:true})
@@ -97,24 +99,29 @@ export default class WelcomePage extends React.Component {
                 .then(function (response) {
                     if(!response.data){
                         this.setState({youLike:false})
-                        return
+                        return false
                     }
                     if(!response.data.state){
                         this.setState({youLike:false})
-                        return
+                        return false
                     }
                     if(response.data.state===false){
                         this.setState({youLike:false})
-                        console.log(response.data)
-                        return
+                        return false
                     }
                     if(response.data.state===true){
                         if(response.data.n){
                             this.setState({youLike:true})
+                            return true
+                        }
+                        else {
+                            return false
                         }
                     }
                 }.bind(this))
                 .catch(function (err) {
+                    this.setState({youLike:false})
+                    return false
                 }.bind(this));
         }
     }

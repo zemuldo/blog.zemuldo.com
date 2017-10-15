@@ -87,7 +87,7 @@ class HomePage extends Component {
         return(
             <div>
                 {
-                    this.props.blogsLoaded && this.props.homePageLoaded ?
+                    this.props.blogsLoaded && this.props.homePageLoaded?
                         <div>
                             <Grid columns={2}>
                                 <Grid.Row>
@@ -114,7 +114,7 @@ class HomePage extends Component {
                                                     <Header
                                                         color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                     {
-                                                        this.props.blogsLoaded?
+                                                        !this.props.blogsAreLoading?
                                                             <div>
                                                                 {
                                                                     (this.props.blogs[0]) ?
