@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
 import axios from 'axios';
-import WelcomePage from './welCome'
+import WelcomePage from '../partials/welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
 import TwitterProf from '../partials/twitterProf'
