@@ -204,6 +204,7 @@ class App extends Component {
         }
     }
     handleFilterChange(e) {
+        this.setState({blogsAreLoading:true})
         e.preventDefault();
         if(e.target.value===''){
             return axios.post(env.httpURL, {
@@ -212,8 +213,10 @@ class App extends Component {
             })
                 .then(response => {
                     this.setState({blogs:response.data});
+                    this.setState({blogsAreLoading:false})
                 })
                 .catch(exception => {
+                    this.setState({blogsAreLoading:false})
                 });
         }
         else {
@@ -225,9 +228,11 @@ class App extends Component {
             })
                 .then(response => {
                     this.setState({blogs:response.data});
+                    this.setState({blogsAreLoading:false})
                 })
                 .catch(exception => {
                     this.setState({blogs:[]});
+                    this.setState({blogsAreLoading:false})
                 });
         }
     }
@@ -694,6 +699,7 @@ class App extends Component {
                                 colors={this.state.colors}
                             /> :
                             <PagesComponent
+                                handleFilterChange={this.handleFilterChange}
                                 color={this.state.colors[1]}
                                 blogs={this.state.blogs}
                                 blog={this.state.blog}

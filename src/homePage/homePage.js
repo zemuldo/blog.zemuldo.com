@@ -13,7 +13,6 @@ class PagesComponent extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
-
     };
     _handleChangeBodySize(size){
         this.setState({bodySize:size})
@@ -25,8 +24,6 @@ class PagesComponent extends Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize);
     }
-
-
     render(){
         return(
             <div>
