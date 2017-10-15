@@ -114,7 +114,6 @@ class App extends Component {
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
         }
-
         this.setState({colors:array});
     }
     resize = () => this.forceUpdate()
@@ -155,9 +154,7 @@ class App extends Component {
                     }
                     else {
                         return axios.get('http://ip-api.com/json/'+response.data.ip, {})
-
                     }
-
                 })
                 .then(function (response) {
                     let knownUser = {userName:'hasNoAccount',id:0}
