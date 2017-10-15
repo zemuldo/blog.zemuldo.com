@@ -110,7 +110,6 @@ class App extends Component {
         this.handleScroll = this.handleScroll.bind(this)
         this.handleNavigation = this.handleNavigation.bind(this)
 
-
     };
     handleNavigation(location){
         window.scrollTo(0,0);
@@ -142,7 +141,7 @@ class App extends Component {
         this.setState({colors:array});
     }
     resize = () => this.forceUpdate()
-    componentDidMount() {
+    async componentDidMount() {
         let known = localStorage.getItem('user');
         if(known){
             let user = JSON.parse(known)
@@ -155,12 +154,10 @@ class App extends Component {
                 return false
             }
             if(user.firstName && user.lastName && user.userName){
-                let valid = this.validateUser();
-                if(valid){
-                    this.setState({user:user,loggedin:true});
-                    let urlCreator = window.URL || window.webkitURL;
-                    let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
-                    this.setState({profilePic:imageUrl})
+                this.setState({user:user,loggedin:true})
+                let urlCreator = window.URL || window.webkitURL;
+                let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
+                this.setState({profilePic:imageUrl})
             }
             else {
                 localStorage.removeItem('user');
@@ -171,7 +168,7 @@ class App extends Component {
             window.location='/';
         }
         else if(pages[location] && location!=='login'){
-           this.setState({currentLocation:location})
+            this.setState({currentLocation:location})
         }
         window.addEventListener('scroll', this.handleScroll);
         this.shuffle()
@@ -191,14 +188,8 @@ class App extends Component {
                         return{error:'user at localhost'}
                     }
                     else {
-                        if(localStorage.getItem('locationData')){
-                            let res = {}
-                            res.data = JSON.parse(localStorage.getItem('locationData'))
-                            return res
-                        }
-                        else {
-                            return axios.get('http://ip-api.com/json/'+response.data.ip, {})
-                        }
+                        return axios.get('http://ip-api.com/json/'+response.data.ip, {})
+
                     }
 
                 })
@@ -214,88 +205,59 @@ class App extends Component {
                         }
                     }
                     let o = response.data;
-                   if(!o.error){
-                       localStorage.setItem('locationData',JSON.stringify(o))
-                       let knownVisitor = localStorage.getItem('visitor')
-                       if(knownVisitor){
-                           let visitor = JSON.parse(localStorage.getItem('visitor'));
-                           if(!visitor.sessionID){
-                               localStorage.removeItem('visitor')
-                               let visitorData = {};
-                               visitorData.queryData = o;
-                               visitorData.queryData.user = knownUser
-                               visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
-                               visitorData.queryMethod = 'addVisitor';
-                               console.log(visitorData);
-                               return axios.post(env.httpURL, visitorData)
-                           }
-                           else {
-                               let visitorData = {};
-                               visitorData.queryData = o;
-                               visitorData.queryData.user = knownUser
-                               visitorData.queryData.sessionID = visitor.sessionID
-                               visitorData.queryMethod = 'addVisitor';
-                               visitorData.known = true;
-                               console.log(visitorData);
-                               return axios.post(env.httpURL, visitorData)
-                           }
+                    console.log(o);
+                    if(!o.error){
+                        let knownVisitor = localStorage.getItem('visitor')
+                        if(knownVisitor){
+                            let visitor = JSON.parse(localStorage.getItem('visitor'));
+                            if(!visitor.sessionID){
+                                localStorage.removeItem('visitor')
+                                let visitorData = {};
+                                visitorData.queryData = o;
+                                visitorData.queryData.user = knownUser
+                                visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
+                                visitorData.queryMethod = 'addVisitor';
+                                console.log(visitorData);
+                                return axios.post(env.httpURL, visitorData)
+                            }
+                            else {
+                                let visitorData = {};
+                                visitorData.queryData = o;
+                                visitorData.queryData.user = knownUser
+                                visitorData.queryData.sessionID = visitor.sessionID
+                                visitorData.queryMethod = 'addVisitor';
+                                visitorData.known = true;
+                                console.log(visitorData);
+                                return axios.post(env.httpURL, visitorData)
+                            }
 
-                       }
-                       else {
-                           let visitorData = {};
-                           visitorData.queryData = o;
-                           visitorData.queryData.user = knownUser
-                           visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
-                           visitorData.queryMethod = 'addVisitor';
-                           console.log(visitorData);
-                           return axios.post(env.httpURL, visitorData)
-                       }
-                   }
-                   else {
-                       return{error:'user at localhost'}
-                   }
+                        }
+                        else {
+                            let visitorData = {};
+                            visitorData.queryData = o;
+                            visitorData.queryData.user = knownUser
+                            visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
+                            visitorData.queryMethod = 'addVisitor';
+                            console.log(visitorData);
+                            return axios.post(env.httpURL, visitorData)
+                        }
+                    }
+                    else {
+                        return{error:'user at localhost'}
+                    }
 
                 })
                 .then(function (final) {
-                   if(!final.error){
-                       sessionStorage.setItem('visitor',JSON.stringify(final.data))
-                       if(!localStorage.getItem('visitor')){
-                           localStorage.setItem('visitor',JSON.stringify(final.data))
-                       }
-                   }
+                    if(!final.error){
+                        sessionStorage.setItem('visitor',JSON.stringify(final.data))
+                        if(!localStorage.getItem('visitor')){
+                            localStorage.setItem('visitor',JSON.stringify(final.data))
+                        }
+                    }
                 })
                 .catch(exception => {
                 });
-            }
         }
-
-    }
-    validateUser() {
-        let user = JSON.parse(localStorage.getItem('user'))
-        axios.post(env.httpURL, {
-            "queryMethod": "validateUser",
-            "queryData": {
-                "_id": user._id,
-                "id": user.id,
-                "userName": user.userName
-            }
-        })
-            .then(function (success) {
-                if (success.data.state) {
-                    if (success.data.state === true) {
-                        return true
-                    }
-                    else {
-                        return false
-                    }
-                }
-                else {
-                    return false
-                }
-            })
-            .catch(function (err) {
-                return false
-            })
     }
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
@@ -489,6 +451,7 @@ class App extends Component {
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
                             <Login
+                                handleLogoutinButton={this.handleLogoutinButton}
                                 handleNavigation={this.handleNavigation}
                                 user={this.state.user}
                                 _exitEditMode={this._exitEditMode}

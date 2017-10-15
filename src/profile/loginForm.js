@@ -72,7 +72,39 @@ class LoginForm extends React.Component {
         this.showCreateAvatar = this.showCreateAvatar.bind(this)
         this.setAvatar=this.setAvatar.bind(this)
         this.setBlogs = this.setBlogs.bind(this)
+        this.validateUser = this.validateUser.bind(this)
     };
+    validateUser() {
+        let user = JSON.parse(localStorage.getItem('user'))
+        return axios.post(env.httpURL, {
+            "queryMethod": "validateUser",
+            "queryData": {
+                "_id": user._id,
+                "id": user.id,
+                "userName": user.userName
+            }
+        })
+            .then(function (success) {
+                if (success.data.state) {
+                    if (success.data.state === true) {
+                        return true
+                    }
+                    else {
+                        localStorage.removeItem('user');
+                        return false
+                    }
+                }
+                else {
+                    localStorage.removeItem('user');
+                    return false
+                }
+            }.bind(this))
+            .catch(function (err) {
+                localStorage.removeItem('user');
+                console.log(err)
+                return false
+            }.bind(this))
+    }
     handleSignUp(){
         this.setState({registering:true})
         if(!this.state.userName || this.state.userName.length<4){
@@ -206,20 +238,26 @@ class LoginForm extends React.Component {
     closeCreateAvatar=()=>{
         this.setState({ creatAvatarOpen: false })
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({hideMessage:true})
-        console.log("_______at login now")
-        if(!this.state.user){
+        if(this.state.user){
             let known = localStorage.getItem('user')
             if(known){
                 let user = JSON.parse(known)
                 if(user.firstName && user.lastName && user.userName){
-                    this.setState({user:user})
-                    this.props.successLogin(user)
-                    this.setBlogs(user.userName)
+                    let valid = await this.validateUser()
+                    console.log("++++++++++++++Ddddd")
+                    console.log(valid)
+                    if(valid!==true){
+                        localStorage.removeItem('user')
+                        this.setState({loggedin:false})
+                        this.props.handleLogoutinButton()
+                    }
                 }
                 else {
                     localStorage.removeItem('user')
+                    this.setState({loggedin:false})
+                    this.props.handleLogoutinButton()
                 }
             }
         }
