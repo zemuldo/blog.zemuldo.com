@@ -122,11 +122,7 @@ class App extends Component {
         let known = localStorage.getItem('user');
         if(known){
             let user = JSON.parse(known)
-            if(typeof user.avatar==='string'){
-                console.log("user details right")
-            }
             if(typeof user.avatar!=='string'){
-                console.log("user details wrong");
                 localStorage.removeItem('user');
                 return false
             }
@@ -175,7 +171,6 @@ class App extends Component {
                         }
                     }
                     let o = response.data;
-                    console.log(o);
                     if(!o.error){
                         let knownVisitor = localStorage.getItem('visitor')
                         if(knownVisitor){
@@ -235,7 +230,6 @@ class App extends Component {
     handleHomeClick = () => {
         window.scrollTo(0,0);
         this.setState({ currentLocation:'home',})
-        this.setState({blog:null})
     }
     handleMenuItemClick = (e, { name }) => {
         if(name === 'home'){
