@@ -28,7 +28,6 @@ export default class WelcomePage extends React.Component {
                 }
             })
                 .then(function (response) {
-                    console.log(response)
                     if(!response.data){
                         this.setState({youLike:false})
                         return
@@ -49,7 +48,6 @@ export default class WelcomePage extends React.Component {
                     }
                 }.bind(this))
                 .catch(function (err) {
-                    console.log(err)
                 }.bind(this));
         }
     }
@@ -94,7 +92,6 @@ export default class WelcomePage extends React.Component {
             })
                 .then(function (response) {
                     if(response.data.state===false){
-                        console.log(response.data)
                         return
                     }
                     if(response.data.n){
@@ -104,7 +101,6 @@ export default class WelcomePage extends React.Component {
                     }
                 }.bind(this))
                 .catch(function (err) {
-                    console.log(err)
                 }.bind(this));
         }
 

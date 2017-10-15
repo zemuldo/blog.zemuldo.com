@@ -311,7 +311,7 @@ class HomePage extends Component {
                                             </div>
 
                                     }
-                                    <Grid.Column mobile = {window.innerWidth<503?16:9} computer={9}  width={9}>
+                                    <Grid.Column mobile = {window.innerWidth<600?16:9} computer={window.innerWidth<600?16:9}  width={9}>
                                         {
 
                                             this.state.blogIsLoading?
@@ -320,7 +320,7 @@ class HomePage extends Component {
                                                 </div>:
                                                 <div>
                                                     {
-                                                        window.innerWidth<503?
+                                                        window.innerWidth<600?
                                                             <Topics
                                                                 blogsAreLoading={this.blogsAreLoading}
                                                                 setTopicPosts={this.setTopicPosts}
@@ -346,11 +346,13 @@ class HomePage extends Component {
 
                                     </Grid.Column>
                                     {
-                                        // (window.innerWidth>1030) ?
-                                        //     <Grid.Column  width={3}>
-                                        //         <TwitterProf/>
-                                        //     </Grid.Column>:
-                                        //     <p>Hello</p>
+                                        (window.innerWidth>1030) ?
+                                            <Grid.Column  width={3}>
+                                                <TwitterProf/>
+                                            </Grid.Column>:
+                                            <div>
+
+                                            </div>
                                     }
                                 </Grid.Row>
                             </Grid>
