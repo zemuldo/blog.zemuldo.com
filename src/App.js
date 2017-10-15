@@ -4,9 +4,6 @@ import {Menu, Button,Icon, Dropdown,Image} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
 import axios from 'axios'
 import Login from './profile/loginForm'
-import TechSummary from './tech/techSummary'
-import BusinessSummary from './business/businessSummary'
-import DevArticles from './developmentTuts/developmentTuts'
 import HomePage from './homePage/homePage'
 import GeoLocator from './partials/geoLocator'
 import Footer from './partials/footer'
@@ -38,15 +35,18 @@ function dataURItoBlob(dataURI, callback) {
 const pages = {
     dev:{
         name:'Development',
-        icon:'code'
+        icon:'code',
+        topTitle:"Dev articles"
     },
     tech:{
         name:'Technology',
-        icon:'server'
+        icon:'server',
+        topTitle:" Featured in Technology"
     },
     business:{
         name:'Business',
-        icon:'creative commons'
+        icon:'creative commons',
+        topTitle:" Popular in Bsuness"
     },
     reviews:{
         name:'Reviews',
@@ -54,7 +54,8 @@ const pages = {
     },
     tuts:{
         name:'Tutorials',
-        icon:'code'
+        icon:'code',
+        topTitle:" Popular Tutorials"
     },
     home:{
         name:'Home',
@@ -86,6 +87,13 @@ class App extends Component {
             currentLocation:'home',
             profilePic:null,
             blogs:[],
+            blogsLoaded:false,
+            blogIsLoading:true,
+            homePageIsLoading:true,
+            blogDetails:null,
+            richViewerState:null,
+            pageText:'Most Popular',
+            blogLoade:false,
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -95,12 +103,243 @@ class App extends Component {
         this.handleHomeClick = this.handleHomeClick.bind(this);
         this.shuffle = this.shuffle.bind(this);
         this.successLogin = this.successLogin.bind(this);
-        this._handleCreateNew = this._handleCreateNew.bind(this)
-        this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
-        this._goToEditor = this._goToEditor.bind(this)
-        this._exitEditMode = this._exitEditMode.bind(this)
-        this.handleNavigation = this.handleNavigation.bind(this)
+        this._handleCreateNew = this._handleCreateNew.bind(this);
+        this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this);
+        this._goToEditor = this._goToEditor.bind(this);
+        this._exitEditMode = this._exitEditMode.bind(this);
+        this.handleNavigation = this.handleNavigation.bind(this);
+        this.setHomeBlogs = this.setHomeBlogs.bind(this);
+        this.setPageBlogs = this.setPageBlogs.bind(this);
+        this.getBlogDetails = this.getBlogDetails.bind(this)
+        this.onReadMore = this.onReadMore.bind(this)
+        this.setCurrentBlog = this.setCurrentBlog.bind(this)
+        this.blogsAreLoading = this.blogsAreLoading.bind(this);
+        this.homePageIsLoading = this.homePageIsLoading.bind(this);
+        this.blogIsLoading = this.blogIsLoading.bind(this);
+        this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.setTopicPosts = this.setTopicPosts.bind(this);
+        this.setBlogHere = this.setBlogHere.bind(this)
     };
+    homePageIsLoading(value){
+        this.setState({homePageLoaded:!value})
+    }
+    blogsAreLoading(state){
+        this.setState({blogsLoaded:!state})
+    }
+    blogIsLoading(state){
+        this.setState({blogLoaded:!state})
+    }
+    _handleChangeBodySize(size){
+        this.setState({bodySize:size})
+    }
+    setTopicPosts(topicBlogs,topic){
+        if(topicBlogs[0]){
+            this.setState({blogs:topicBlogs,topic:topic});
+            this.blogsAreLoading(false)
+        }
+        else {
+            this.setState({blogs:[],topic:topic});
+            this.blogsAreLoading(false)
+        }
+    }
+    setBlogHere(id){
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPost",
+            "queryData":{
+                id:id
+            }
+        })
+            .then(function (response) {
+                console.log(this.state.blogLoaded)
+                console.log(response)
+                if(!response.data){
+                    this.setState({blog:null});
+                    this.setState({blogLoaded:true})
+                    console.log(this.state.blogLoaded)
+                    return false
+                }
+                if(response.data.error){
+                    this.setState({blog:null});
+                    this.setState({blogLoaded:true})
+                    console.log(this.state.blogLoaded)
+                    window.scrollTo(0,0)
+                    return false
+                }
+                if(response.data.body){
+                    this.setState({blog:response.data,richViewerState:response.data.body});
+                    this.getBlogDetails(id);
+                    window.scrollTo(0,0)
+                    return false
+
+                }
+                else {
+                    this.setState({blog:null});
+                    this.setState({blogLoaded:true})
+                    window.scrollTo(0,0)
+                    return false
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({blog:null});
+                this.setState({blogLoaded:true})
+                return err
+            }.bind(this));
+    }
+    setCurrentBlog(url){
+        this.setState({blogLoaded:false})
+        console.log(this.state.blogLoaded)
+        let id = null
+        if(url.indexOf('-')>0){
+            id = Number(url.split('_')[2]);
+        }
+        else if(url.indexOf('%20')>0){
+            id = Number(url.split('_')[2]);
+        }
+        else if(url.indexOf('%2520')>0){
+            id = Number(url.split('_')[2]);
+        }
+        if(id && id.toString()!=='NaN'){
+            this.setBlogHere(id)
+        }
+        else{
+            this.setState({blog:null});
+            this.setState({blogLoaded:true})
+        }
+    }
+    handleFilterChange(e) {
+        e.preventDefault();
+        if(e.target.value===''){
+            return axios.post(env.httpURL, {
+                "queryMethod":"getAllPosts",
+                "queryData":{}
+            })
+                .then(response => {
+                    this.setState({blogs:response.data});
+                })
+                .catch(exception => {
+                });
+        }
+        else {
+            return axios.post(env.httpURL, {
+                "queryMethod":"getFiltered",
+                "queryData":{
+                    "filter":e.target.value,
+                }
+            })
+                .then(response => {
+                    this.setState({blogs:response.data});
+                })
+                .catch(exception => {
+                    this.setState({blogs:[]});
+                });
+        }
+    }
+    onReadMore(thisBlog){
+        window.scrollTo(0,0);
+        this.setState({blogIsLoading:true,blogLoaded:false});
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPost",
+            "queryData":{
+                "id":thisBlog.id
+            }
+        })
+            .then(response => {
+                console.log(response.data.id)
+                this.setState({blog:response.data,blogDetails:thisBlog});
+                this.setState({blogIsLoading:false,blog:response.data});
+                this.setState({blogIsLoading:false,blogLoaded:true});
+            })
+            .catch(function (err) {
+                this.setState({blog:null,blogDetails:thisBlog});
+                this.setState({blogIsLoading:false,blogLoaded:true});
+                return err;
+            }.bind(this))
+
+    }
+    getBlogDetails(id){
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPostDetails",
+            "queryData":{
+                "id":id
+            }
+        })
+            .then(function (response) {
+                if(response.data.error){
+                }
+                else {
+                    this.setState({blogDetails:response.data,isHome:false});
+                    this.setState({blogLoaded:true})
+                    window.scrollTo(0,0);
+                }
+
+            }
+                .bind(this))
+            .catch(function (err) {
+                console.log(err)
+                this.setState({blogLoaded:true})
+                return err
+            }.bind(this));
+    }
+    setPageBlogs(name){
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPosts",
+            "queryData":{
+                "type":name
+            }
+        })
+            .then(function (response) {
+                console.log(response.data)
+                if(!response.data){
+                    return false
+                }
+                if(!response.data[0]){
+                    return false
+                }
+                if(response.data[0]){
+                    this.setState({blogs:response.data});
+                    this.setState({blogsLoaded:true})
+                    this.onReadMore(response.data[0])
+                }
+                else {
+                    this.setState({blogs:[]});
+                    this.setState({blogsLoaded:true})
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({blogs:[]});
+                this.setState({blogsLoaded:true})
+            }.bind(this))
+    }
+    setHomeBlogs(){
+        this.setState({blogsLoaded:false})
+        return axios.post(env.httpURL, {
+            "queryMethod":"getAllPosts",
+            "queryData":{
+            }
+        })
+            .then(function (response) {
+                console.log(response.data)
+                if(!response.data){
+                    return false
+                }
+                if(!response.data[0]){
+                    return false
+                }
+                if(response.data[0]){
+                    this.setState({blogs:response.data});
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
+                }
+                else {
+                    this.setState({blogs:[]});
+                    this.setState({blogsLoaded:true,homePageLoaded:true})
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({blogs:[]});
+                this.setState({blogsLoaded:true,homePageLoaded:true})
+            }.bind(this))
+    }
     handleNavigation(location){
         window.scrollTo(0,0);
         this.setState({currentLocation:location})
@@ -118,7 +357,22 @@ class App extends Component {
         this.setState({colors:array});
     }
     resize = () => this.forceUpdate()
-    async componentDidMount() {
+    componentDidMount() {
+        this.setState({blogsLoaded:false})
+        this.blogIsLoading(true);
+        let url = window.location.pathname.split('/').join('');
+        this.setCurrentBlog(url);
+        this.forceUpdate();
+        console.log(this.state.blogLoaded);
+        if(window.innerWidth<503){
+            this._handleChangeBodySize(16);
+        }
+        if(window.innerWidth>503){
+            this._handleChangeBodySize(16);
+        }
+
+        window.addEventListener('resize', this.resize);
+        this.setHomeBlogs()
         let known = localStorage.getItem('user');
         if(known){
             let user = JSON.parse(known)
@@ -230,10 +484,14 @@ class App extends Component {
         this.setState({ currentLocation:'home',})
     }
     handleMenuItemClick = (e, { name }) => {
-        if(name === 'home'){
+        this.setState({blogsLoaded:false})
+        if(name === 'home' || name ==='login'){
             this.setState({ currentLocation:name,})
         }
         else {
+            if(pages[name]){
+                this.setPageBlogs(name)
+            }
             this.setState({ currentLocation:name,})
         }
     }
@@ -420,29 +678,18 @@ class App extends Component {
                                 successLogin={this.successLogin}
                                 color={this.state.colors[0]}
                                 colors={this.state.colors} /> :
-                        (this.state.currentLocation === 'ZemuldO-Home') ?
-                            <HomePage
-                                color={this.state.colors[2]}
-                                colors={this.state.colors}
-                                current={this.state.currentLocation} /> :
-                        (this.state.currentLocation === 'tech') ?
-                            <TechSummary
-                                color={this.state.colors[1]}
-                                colors={this.state.colors}
-                                current={this.state.currentLocation} /> :
-                        (this.state.currentLocation === 'business') ?
-                            <BusinessSummary
-                                color={this.state.colors[2]}
-                                colors={this.state.colors}
-                                current={this.state.currentLocation} /> :
-                        (this.state.currentLocation === 'dev') ?
-                            <DevArticles
-                                color={this.state.colors[0]}
-                                colors={this.state.colors}
-                                current={this.state.currentLocation} /> :
-                        <HomePage color={this.state.colors[1]}
-                                  colors={this.state.colors}
-                                  current={this.state.currentLocation} />
+                            <HomePage color={this.state.colors[1]}
+                                      blogs={this.state.blogs}
+                                      blog={this.state.blog}
+                                      blogDetails={this.state.blogDetails}
+                                      blogsLoaded={this.state.blogsLoaded}
+                                      blogLoaded={this.state.blogLoaded}
+                                      homePageLoaded={this.state.homePageLoaded}
+                                      richViewerState={this.state.richViewerState}
+                                      onReadMore={this.onReadMore}
+                                      colors={this.state.colors}
+                                      current={this.state.currentLocation} />
+
                     }
                 </div>
                 <Footer color={this.state.colors[0]} corrent={this.state.current}/>

@@ -26,13 +26,10 @@ class HomePage extends Component {
             richViewerState:null
         };
         this.goToHome = this.goToHome.bind(this);
-        this.onReadMore = this.onReadMore.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.handleFilterChange = this.handleFilterChange.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
-        this.setCurrentBlog = this.setCurrentBlog.bind(this);
-        this.setTopicPosts = this.setTopicPosts.bind(this);
+
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
@@ -61,7 +58,6 @@ class HomePage extends Component {
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
-                    this.setBlogCounts();
                 }
 
             }
@@ -72,124 +68,6 @@ class HomePage extends Component {
                 return err
             }.bind(this));
     }
-    setCurrentBlog(url){
-        this.setState({blogLoaded:false})
-        console.log(this.state.blogLoaded)
-        let id = null
-        if(url.indexOf('-')>0){
-             id = Number(url.split('_')[2]);
-        }
-        else if(url.indexOf('%20')>0){
-            id = Number(url.split('_')[2]);
-        }
-        else if(url.indexOf('%2520')>0){
-            id = Number(url.split('_')[2]);
-        }
-        if(id && id.toString()!=='NaN'){
-            return axios.post(env.httpURL, {
-                "queryMethod":"getPost",
-                "queryData":{
-                    id:id
-                }
-            })
-                .then(function (response) {
-                    console.log(this.state.blogLoaded)
-                    console.log(response)
-                    if(!response.data){
-                        this.setState({blog:null});
-                        this.setState({blogLoaded:true})
-                        console.log(this.state.blogLoaded)
-                        return false
-                    }
-                    if(response.data.error){
-                        this.setState({blog:null});
-                        this.setState({blogLoaded:true})
-                        console.log(this.state.blogLoaded)
-                        window.scrollTo(0,0)
-                        return false
-                    }
-                    if(response.data.body){
-                        this.setState({blog:response.data,richViewerState:response.data.body});
-                        this.getBlogDetails(id);
-                        window.scrollTo(0,0)
-                        return false
-
-                    }
-                    else {
-                        this.setState({blog:null});
-                        this.setState({blogLoaded:true})
-                        window.scrollTo(0,0)
-                        return false
-                    }
-                }.bind(this))
-                .catch(function (err) {
-                    this.setState({blog:null});
-                    this.setState({blogLoaded:true})
-                    return err
-                }.bind(this));
-        }
-        else{
-            this.setState({blog:null});
-            this.setState({blogLoaded:true})
-        }
-    }
-    setBlogCounts(){
-        let gplusPost = {
-            "method": "pos.plusones.get",
-            "id": "p",
-            "params": {
-                "nolog": true,
-                "id": "https://zemuldo/"+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),
-                "source": "widget",
-                "userId": "@viewer",
-                "groupId": "@self"
-            },
-            "jsonrpc": "2.0",
-            "key": "p",
-            "apiVersion": "v1"
-        }
-        window.scrollTo(0,0);
-        return Promise.all([
-            axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
-            axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('-')+'_'+this.state.blogDetails.date.split(' ').join('-')+'_'+this.state.blogDetails.id.toString(),{}),
-            axios.post(' https://clients6.google.com/rpc',gplusPost),
-        ])
-            .then(function (res) {
-                this.setState({
-                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
-                    twtC:(res[1].data.count)?res[1].data.count:0,
-                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
-                })
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({counts:{
-                    fbC:0,
-                    twtC:0,
-                    gplsC:0
-                }})
-            }.bind(this))
-    }
-    onReadMore(thisBlog){
-        window.scrollTo(0,0);
-        this.setState({blogIsLoading:true});
-        return axios.post(env.httpURL, {
-            "queryMethod":"getPost",
-            "queryData":{
-                "id":thisBlog.id
-            }
-        })
-            .then(response => {
-                this.setState({blog:response.data,blogDetails:thisBlog});
-                this.setState({blogIsLoading:false,richViewerState:response.data.body});
-                this.setBlogCounts()
-            })
-            .catch(function (err) {
-                this.setState({blog:null,blogDetails:thisBlog});
-                this.setState({blogIsLoading:false});
-                return err;
-            }.bind(this))
-
-    }
     goToHome(){
         this.setState({current:'ZemuldO-Home'})
     }
@@ -198,89 +76,18 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
-        this.blogIsLoading(true);
-        let url = window.location.pathname.split('/').join('');
-        this.setCurrentBlog(url);
-        this.forceUpdate();
-        console.log(this.state.blogLoaded);
-        if(window.innerWidth<503){
-            this._handleChangeBodySize(16);
-        }
-        if(window.innerWidth>503){
-            this._handleChangeBodySize(16);
-        }
 
-        window.addEventListener('resize', this.resize);
-        return axios.post(env.httpURL, {
-            "queryMethod":"getAllPosts",
-            "queryData":{
-            }
-        })
-            .then(function (response) {
-                if(response.data[0]){
-                    this.setState({blogs:response.data});
-                    this.homePageIsLoading(false);
-                    this.blogsAreLoading(false);
-                }
-                else {
-                    this.setState({blogs:[]});
-                    this.homePageIsLoading(false);
-                    this.blogsAreLoading(false);
-                }
-            }.bind(this))
-            .catch(function (err) {
-                console.log(err)
-                this.setState({blogs:[]});
-                this.homePageIsLoading(false);
-                this.blogsAreLoading(false)
-            }.bind(this))
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize);
     }
-    handleFilterChange(e) {
-        e.preventDefault();
-        if(e.target.value===''){
-            return axios.post(env.httpURL, {
-                "queryMethod":"getAllPosts",
-                "queryData":{}
-            })
-                .then(response => {
-                    this.setState({blogs:response.data});
-                })
-                .catch(exception => {
-                });
-        }
-        else {
-            return axios.post(env.httpURL, {
-                "queryMethod":"getFiltered",
-                "queryData":{
-                    "filter":e.target.value,
-                }
-            })
-                .then(response => {
-                    this.setState({blogs:response.data});
-                })
-                .catch(exception => {
-                    this.setState({blogs:[]});
-                });
-        }
-    }
-    setTopicPosts(topicBlogs,topic){
-        if(topicBlogs[0]){
-            this.setState({blogs:topicBlogs,topic:topic});
-            this.blogsAreLoading(false)
-        }
-        else {
-            this.setState({blogs:[],topic:topic});
-            this.blogsAreLoading(false)
-        }
-    }
+
+
     render(){
         return(
             <div>
                 {
-                    this.state.homePageLoaded ?
+                    this.props.blogsLoaded && this.props.homePageLoaded ?
                         <div>
                             <Grid columns={2}>
                                 <Grid.Row>
@@ -288,12 +95,12 @@ class HomePage extends Component {
                                         (window.innerWidth>600) ?
                                             <Grid.Column computer={4}>
                                                 <Topics
-                                                    blogsAreLoading={this.blogsAreLoading}
-                                                    setTopicPosts={this.setTopicPosts}
-                                                    onReadMore = {this.onReadMore}
-                                                    blog ={this.state.blog}
+                                                    blogsAreLoading={this.props.blogsAreLoading}
+                                                    setTopicPosts={this.props.setTopicPosts}
+                                                    onReadMore = {this.props.onReadMore}
+                                                    blog ={this.props.blog}
                                                     color={this.props.color}
-                                                    blogs={this.state.blogs}/>
+                                                    blogs={this.props.blogs}/>
                                                 <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
                                                     <Header
                                                         style={{marginLeft:'10px'}}
@@ -302,20 +109,20 @@ class HomePage extends Component {
                                                     <Input
                                                         icon={<Icon name='search' inverted circular link />}
                                                         placeholder='Search...'
-                                                        onChange={this.handleFilterChange}
+                                                        onChange={this.props.handleFilterChange}
                                                     />
                                                     <Header
                                                         color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                     {
-                                                        this.state.blogsLoaded?
+                                                        this.props.blogsLoaded?
                                                             <div>
                                                                 {
-                                                                    (this.state.blogs[0]) ?
+                                                                    (this.props.blogs[0]) ?
                                                                         <Blogs
                                                                             color={this.props.color}
-                                                                            onReadMore = {this.onReadMore}
-                                                                            blogs ={this.state.blogs}
-                                                                            blog ={this.state.blog}/>:
+                                                                            onReadMore = {this.props.onReadMore}
+                                                                            blogs ={this.props.blogs}
+                                                                            blog ={this.props.blog}/>:
                                                                         <div>
                                                                             No matching content on this Topic
                                                                         </div>
@@ -343,34 +150,29 @@ class HomePage extends Component {
                                                     {
                                                         window.innerWidth<600?
                                                             <Topics
-                                                                blogsAreLoading={this.blogsAreLoading}
-                                                                setTopicPosts={this.setTopicPosts}
-                                                                onReadMore = {this.onReadMore}
-                                                                blog ={this.state.blog}
+                                                                blogsAreLoading={this.props.blogsAreLoading}
+                                                                setTopicPosts={this.props.setTopicPosts}
+                                                                onReadMore = {this.props.onReadMore}
+                                                                blog ={this.props.blog}
                                                                 color={this.props.color}
-                                                                blogs={this.state.blogs}/>:
+                                                                blogs={this.props.blogs}/>:
                                                             <div>
                                                             </div>
                                                     }
                                                     <WelcomePage
-                                                        richViewerState={this.state.richViewerState}
-                                                        counts={{
-                                                            fbC:this.state.fbC,
-                                                            twtC:this.state.twtC,
-                                                            gplsC:this.state.gplsC
-                                                        }}
+                                                        richViewerState={this.props.richViewerState}
                                                         color={this.props.colors[1]}
-                                                        blogDetails={this.state.blogDetails}
-                                                        blog={this.state.blog}
-                                                        blogs={this.state.blogs}
-                                                        blogLoaded={this.state.blogLoaded}/>
+                                                        blogDetails={this.props.blogDetails}
+                                                        blog={this.props.blog}
+                                                        blogs={this.props.blogs}
+                                                        blogLoaded={this.props.blogLoaded}/>
                                                 </div>
                                         }
                                     </Grid.Column>
                                     {
                                         (window.innerWidth>1030) ?
                                             <Grid.Column  width={3}>
-                                                <TwitterProf/>
+                                                {/*<TwitterProf/>*/}
                                             </Grid.Column>:
                                             <div>
 

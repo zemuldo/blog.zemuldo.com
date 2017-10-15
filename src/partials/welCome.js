@@ -72,10 +72,11 @@ export default class WelcomePage extends React.Component {
                                    </div>:
                                    <div>
                                        <Blog
+                                           blogLoaded={this.props.blogLoaded}
+                                           blog={this.props.blog}
                                            color={this.props.color}
                                            blogDetails={this.props.blogDetails}
                                            counts ={this.props.counts}
-                                           richViewerState={this.props.richViewerState}
                                        />
                                    </div>
                            }

@@ -176,7 +176,7 @@ export default class WelcomePage extends React.Component {
         return (
             <div>
                 {
-                    this.props.blogDetails?
+                    this.props.blogDetails && this.props.blogLoaded?
                         <div>
                             <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                 {
@@ -268,7 +268,7 @@ export default class WelcomePage extends React.Component {
                             <hr color="green"/>
                             <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>
                                 <br/>
-                                <BlogEditor body={this.props.richViewerState}/>
+                                <BlogEditor body={this.props.blog.body}/>
                             </div>
                         </div>:
                         <div>
