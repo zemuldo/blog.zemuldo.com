@@ -11,12 +11,52 @@ export default class WelcomePage extends React.Component {
             youLike:false,
             userLoggedIn:false,
             likes:this.props.blogDetails?this.props.blogDetails.likes:0,
-            authorAvatar:null
+            authorAvatar:null,
+            fbC:null,
+            twtC:null,
+            gplsC:null,
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
         this.getAauthorAvatar = this.getAauthorAvatar.bind(this)
     }
+    setBlogCounts(){
+        let gplusPost = {
+            "method": "pos.plusones.get",
+            "id": "p",
+            "params": {
+                "nolog": true,
+                "id": "https://zemuldo/"+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),
+                "source": "widget",
+                "userId": "@viewer",
+                "groupId": "@self"
+            },
+            "jsonrpc": "2.0",
+            "key": "p",
+            "apiVersion": "v1"
+        }
+        window.scrollTo(0,0);
+        return Promise.all([
+            axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.post(' https://clients6.google.com/rpc',gplusPost),
+        ])
+            .then(function (res) {
+                this.setState({
+                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
+                    twtC:(res[1].data.count)?res[1].data.count:0,
+                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
+                })
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({counts:{
+                    fbC:0,
+                    twtC:0,
+                    gplsC:0
+                }})
+            }.bind(this))
+    }
+
     getAauthorAvatar(){
         axios.post(env.httpURL,{
             "queryMethod":"getAvatar",
@@ -41,6 +81,7 @@ export default class WelcomePage extends React.Component {
             })
     }
     componentDidMount() {
+        this.props.blogDetails?this.setBlogCounts():
         this.getAauthorAvatar()
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
@@ -171,22 +212,22 @@ export default class WelcomePage extends React.Component {
                                 <Button
                                     onClick={() => {this.tweetShare();}}
                                     circular color='twitter' icon='twitter' />
-                                <sup>{this.props.counts.twtC}</sup>
+                                <sup>{this.state.twtC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {this.fbShare();}}
                                     circular color='facebook' icon='facebook' />
-                                <sup>{this.props.counts.fbC}</sup>
+                                <sup>{this.state.fbC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {this.linkdnShare();}}
                                     circular color='linkedin' icon='linkedin' />
-                                <sup>{this.props.counts.gplsC}</sup>
+                                <sup>{this.state.gplsC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {this.gplusShare();}}
                                     circular color='google plus' icon='google plus' />
-                                <sup>{this.props.counts.gplsC}</sup>
+                                <sup>{this.state.gplsC}</sup>
                                 <br/>
                                 <br/>
                                 <span>
