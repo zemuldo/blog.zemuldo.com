@@ -7,9 +7,6 @@ import Topics from '../partials/topics'
 import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-function rand () {
-    return Math.floor(Math.random() * (23 - 20 + 1)) + 20;
-}
 class HomePage extends Component {
     constructor(props){
         super(props);
@@ -19,14 +16,12 @@ class HomePage extends Component {
             blogDetails:null,
             homePageLoaded:false,
             blogsLoaded:false,
-            blogLoaded:false,
+            blogLoaded:true,
             blogIsLoading:false,
             bodySize:(window.innerWidth<503)?16:12,
-            counts:{
-                fbC:null,
-                twtC:null,
-                gplsC:null
-            },
+            fbC:null,
+            twtC:null,
+            gplsC:null,
             topic:null,
             richViewerState:null
         };
@@ -62,7 +57,6 @@ class HomePage extends Component {
             }
         })
             .then(function (response) {
-                console.log(response);
                 if(response.data.error){
                 }
                 else {
@@ -79,29 +73,56 @@ class HomePage extends Component {
                 return err
             });
     }
-    setCurrentBlog(id){
+    setCurrentBlog(url){
         this.blogIsLoading(true);
-        return axios.post(env.httpURL, {
-            "queryMethod":"getPost",
-            "queryData":{
-                id:id
-            }
-        })
-            .then(function (response) {
-                if(response.data.error){
+        let id = null
+        if(url.indexOf('-')!==-1){
+             id = url.split('_')[2];
+        }
+        else if(url.indexOf('%20')!==-1){
+             id = url.split('_')[2];
+            this.setCurrentBlog(id)
+        }
+        else if(url.indexOf('%2520')!==-1){
+             id = url.split('_')[2];
+            this.setCurrentBlog(id)
+        }
+        if(id){
+            return axios.post(env.httpURL, {
+                "queryMethod":"getPost",
+                "queryData":{
+                    id:id
                 }
-                else {
-                    this.setState({blog:response.data,richViewerState:response.data.body});
-                    this.getBlogDetails(id);
+            })
+                .then(function (response) {
+                    if(!response.data){
+
+                    }
+                    if(!response.data.body){
+                        this.setState({blog:null});
+                        this.blogIsLoading(false);
+                        window.scrollTo(0,0)
+
+                    }
+                    if(response.data.error){
+                        this.setState({blog:null});
+                        this.blogIsLoading(false);
+                        window.scrollTo(0,0)
+
+                    }
+                    else {
+                        this.setState({blog:response.data,richViewerState:response.data.body});
+                        this.getBlogDetails(id);
+                        this.blogIsLoading(false);
+                        window.scrollTo(0,0)
+                    }
+                }.bind(this))
+                .catch(function (err) {
+                    this.setState({blog:null});
                     this.blogIsLoading(false);
-                    window.scrollTo(0,0)
-                }
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({blog:null});
-                this.blogIsLoading(false);
-                return err
-            }.bind(this));
+                    return err
+                }.bind(this));
+        }
     }
     setBlogCounts(){
         let gplusPost = {
@@ -125,11 +146,11 @@ class HomePage extends Component {
             axios.post(' https://clients6.google.com/rpc',gplusPost),
         ])
             .then(function (res) {
-                this.setState({counts:{
+                this.setState({
                     fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
                     twtC:(res[1].data.count)?res[1].data.count:0,
                     gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
-                }})
+                })
             }.bind(this))
             .catch(function (err) {
                 this.setState({counts:{
@@ -168,19 +189,9 @@ class HomePage extends Component {
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
+        this.blogIsLoading(true);
         let url = window.location.pathname.split('/').join('')
-        if(url.indexOf('-')!==-1){
-            let id = url.split('_')[2];
-            this.setCurrentBlog(id);
-        }
-        else if(url.indexOf('%20')!==-1){
-            let id = url.split('_')[2];
-            this.setCurrentBlog(id)
-        }
-        else if(url.indexOf('%2520')!==-1){
-            let id = url.split('_')[2];
-            this.setCurrentBlog(id)
-        }
+        this.setCurrentBlog(url);
         this.forceUpdate()
         if(window.innerWidth<503){
             this._handleChangeBodySize(16);
@@ -334,7 +345,11 @@ class HomePage extends Component {
                                                     }
                                                     <WelcomePage
                                                         richViewerState={this.state.richViewerState}
-                                                        counts={this.state.counts}
+                                                        counts={{
+                                                            fbC:this.state.fbC,
+                                                            twtC:this.state.twtC,
+                                                            gplsC:this.state.gplsC
+                                                        }}
                                                         color={this.props.colors[1]}
                                                         blogDetails={this.state.blogDetails}
                                                         blog={this.state.blog}

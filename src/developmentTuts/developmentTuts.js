@@ -29,11 +29,9 @@ class HomePage extends Component {
             blogLoaded:false,
             blogIsLoading:false,
             bodySize:(window.innerWidth<503)?16:12,
-            counts:{
-                fbC:null,
-                twtC:null,
-                gplsC:null
-            },
+            fbC:null,
+            twtC:null,
+            gplsC:null,
             topic:null,
             richViewerState:null,
             isHome:true,
@@ -95,11 +93,11 @@ class HomePage extends Component {
                 ])
             })
             .then(function (res) {
-                this.setState({counts:{
+                this.setState({
                     fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
                     twtC:(res[1].data.count)?res[1].data.count:0,
                     gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
-                }})
+                })
             }.bind(this))
             .catch(function (err) {
                 this.setState({blog:null,blogDetails:thisBlog})
@@ -308,7 +306,11 @@ class HomePage extends Component {
                                                     }
                                                     <WelcomePage
                                                         richViewerState={this.state.richViewerState}
-                                                        counts={this.state.counts}
+                                                        counts={{
+                                                            fbC:this.state.fbC,
+                                                            twtC:this.state.twtC,
+                                                            gplsC:this.state.gplsC
+                                                        }}
                                                         color={this.props.colors[1]}
                                                         blogDetails={this.state.blogDetails}
                                                         blog={this.state.blog}

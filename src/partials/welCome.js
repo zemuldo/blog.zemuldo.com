@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Header,Icon,Grid, Image} from 'semantic-ui-react'
+import {Header,Loader} from 'semantic-ui-react'
 import BlogEditor from '../blogEditor/renderBlog'
 import Blog from '../posts/blog'
 /*import config from '../environments/conf'
@@ -49,18 +49,27 @@ export default class WelcomePage extends React.Component {
             <div style={{margin: '2em 1em 3em 1em'}}>
                 {
                     (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
-                        <div >
-                            <Header color={this.props.color} as='h1'>
-                                Great Articles and Blogs
-                            </Header>
-                            <hr color="green"/>
-                            <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
-                                <p>
-                                    Here you find great articles on tech related topics.
-                                    Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                    You can signup and share your content with us. Become part us.
-                                </p>
-                            </div>
+                        <div>
+                            {
+                                !this.props.blogLoaded?
+                                    <div >
+                                        <Header color={this.props.color} as='h1'>
+                                            Great Articles and Blogs
+                                        </Header>
+                                        <hr color="green"/>
+                                        <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
+                                            <p>
+                                                Here you find great articles on tech related topics.
+                                                Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
+                                                You can signup and share your content with us. Become part us.
+                                            </p>
+                                        </div>
+                                    </div>:
+                                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                                            <Loader active inline='centered' />
+                                        </div>
+
+                            }
                         </div>:
                         <div>
                             <Blog
