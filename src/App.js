@@ -18,8 +18,6 @@ function toTitleCase(str)
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 function dataURItoBlob(dataURI, callback) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
     let byteString = atob(dataURI.split(',')[1]);
 
     // separate out the mime component
@@ -75,7 +73,6 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            activeItem: 'ZemuldO-Home',
             current:'ZemuldO-Home',
             loggedin:false,
             user:null,
@@ -102,12 +99,10 @@ class App extends Component {
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.shuffle = this.shuffle.bind(this);
         this.successLogin = this.successLogin.bind(this);
-        this.handleUserLogged = this.handleUserLogged.bind(this);
         this._handleCreateNew = this._handleCreateNew.bind(this)
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
         this._goToEditor = this._goToEditor.bind(this)
         this._exitEditMode = this._exitEditMode.bind(this)
-        this.handleScroll = this.handleScroll.bind(this)
         this.handleNavigation = this.handleNavigation.bind(this)
 
     };
@@ -118,21 +113,12 @@ class App extends Component {
     _handleChangeBodySize(size){
         this.setState({windowSize:size})
     }
-    handleUserLogged(user){
-        this.setState({user:user})
-    }
     shuffle() {
         let array = this.state.colors
         let currentIndex = array.length, temporaryValue, randomIndex;
-
-        // While there remain elements to shuffle...
         while (0 !== currentIndex) {
-
-            // Pick a remaining element...
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex -= 1;
-
-            // And swap it with the current element.
             temporaryValue = array[currentIndex];
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
@@ -170,7 +156,6 @@ class App extends Component {
         else if(pages[location] && location!=='login'){
             this.setState({currentLocation:location})
         }
-        window.addEventListener('scroll', this.handleScroll);
         this.shuffle()
         this.forceUpdate()
         if(window.innerWidth<503){
@@ -260,7 +245,6 @@ class App extends Component {
         }
     }
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
@@ -311,19 +295,15 @@ class App extends Component {
     _exitEditMode(){
         this.setState({editingMode:false,createNew:false})
     }
-    handleScroll = function(event) {
-        //console.log(window.pageYOffset)
-        this.setState({secondMenu:false})
-    }
 
     render() {
         return (
-            <div onScroll={this.handleScroll}>
+            <div>
                 <div>
                     <GeoLocator geoAllowed={this.state.geoAllowed}/>
                 </div>
                 <Helmet>
-                    <title>{'ZemuldO-'+toTitleCase(this.state.current)}</title>
+                    <title>{'ZemuldO-'+toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <Menu
@@ -459,11 +439,9 @@ class App extends Component {
                                 editingMode={this.state.editingMode}
                                 createNew = {this.state.createNew}
                                 _handleCreateNew={this._handleCreateNew}
-                                handleUserLogged={this.handleUserLogged}
                                 loggedin={this.state.loggedin}
                                 successLogin={this.successLogin}
                                 color={this.state.colors[0]}
-                                current={this.state.currentLocation}
                                 colors={this.state.colors} /> :
                         (this.state.currentLocation === 'ZemuldO-Home') ?
                             <HomePage
