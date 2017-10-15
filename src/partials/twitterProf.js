@@ -7,28 +7,23 @@ class TwitterProf extends Component {
         super(props);
         this.state = {
             modalOpen:false
-
         };
-
     };
-
     render() {
         return (
-            <div>
-                <div style={{textAlign:'centre',margin:'2em 0em 0em 0em'}}>
-                    <Header color='blue' as='h3'>On Twitter</Header>
-                    <Timeline
-                        dataSource={{
-                            sourceType: 'profile',
-                            screenName: 'zemuldo'
-                        }}
-                        options={{
-                            username: 'zemuldo',
-                            height: '300',
-                            width: '30'
-                        }}
-                    />
-                </div>
+            <div style={{textAlign:'centre',margin:'2em 0em 0em 0em'}}>
+                <Header color='blue' as='h3'>On Twitter</Header>
+                <Timeline
+                    dataSource={{
+                        sourceType: 'profile',
+                        screenName: 'zemuldo'
+                    }}
+                    options={{
+                        username: 'zemuldo',
+                        height: '300',
+                        width: '30'
+                    }}
+                />
             </div>
         )
     }

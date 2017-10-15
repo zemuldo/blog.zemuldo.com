@@ -79,24 +79,22 @@ class Topics extends Component {
 
     render() {
         return (
-            <div>
-                <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
-                    <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
-                    { _.times(topics.length, i =>
-                        <button
-                            key={topics[i].key}
-                            className="topicButton"
-                            onClick={ this.onTopicClick.bind(this,topics[i].text)}
-                            name={topics[i].name} style={{backgroundColor:'transparent',border:'none'} }
-                        >
+            <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
+                <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
+                { _.times(topics.length, i =>
+                    <button
+                        key={topics[i].key}
+                        className="topicButton"
+                        onClick={ this.onTopicClick.bind(this,topics[i].text)}
+                        name={topics[i].name} style={{backgroundColor:'transparent',border:'none'} }
+                    >
                             <span>
                                 {toTitleCase(topics[i].name)}
                             </span>
-                            |
-                        </button>
-                    )
-                    }
-                    </div>
+                        |
+                    </button>
+                )
+                }
             </div>
         )
     }
