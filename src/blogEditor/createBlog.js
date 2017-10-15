@@ -431,6 +431,7 @@ class RichEditorExample extends React.Component {
                     query:"publish",
                     topics:blogData.topics,
                     images:["blogs_pic.jpg"],
+                    authorID:this.props.currentUser.id,
                     author:this.props.currentUser.firstName+' '+this.props.currentUser.lastName,
                     userName:this.props.currentUser.userName,
                     body:JSON.stringify(obj)}

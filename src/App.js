@@ -212,7 +212,6 @@ class App extends Component {
                         }
                     }
                     let o = response.data;
-                    console.log(o);
                    if(!o.error){
                        localStorage.setItem('locationData',JSON.stringify(o))
                        let knownVisitor = localStorage.getItem('visitor')
