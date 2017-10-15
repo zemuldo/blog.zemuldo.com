@@ -4,7 +4,7 @@ import {Menu, Button,Icon, Dropdown,Image} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
 import axios from 'axios'
 import Login from './profile/loginForm'
-import HomePage from './homePage/homePage'
+import PagesComponent from './homePage/homePage'
 import GeoLocator from './partials/geoLocator'
 import Footer from './partials/footer'
 import config from './environments/conf'
@@ -29,7 +29,6 @@ function dataURItoBlob(dataURI, callback) {
 
     // write the ArrayBuffer to a blob, and you're done
     let bb = new Blob([ab]);
-    console.log(bb)
     return bb;
 }
 const pages = {
@@ -153,18 +152,14 @@ class App extends Component {
             }
         })
             .then(function (response) {
-                console.log(this.state.blogLoaded)
-                console.log(response)
                 if(!response.data){
                     this.setState({blog:null});
                     this.setState({blogLoaded:true})
-                    console.log(this.state.blogLoaded)
                     return false
                 }
                 if(response.data.error){
                     this.setState({blog:null});
                     this.setState({blogLoaded:true})
-                    console.log(this.state.blogLoaded)
                     window.scrollTo(0,0)
                     return false
                 }
@@ -190,7 +185,6 @@ class App extends Component {
     }
     setCurrentBlog(url){
         this.setState({blogLoaded:false})
-        console.log(this.state.blogLoaded)
         let id = null
         if(url.indexOf('-')>0){
             id = Number(url.split('_')[2]);
@@ -247,7 +241,6 @@ class App extends Component {
             }
         })
             .then(response => {
-                console.log(response.data.id)
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogIsLoading:false,blog:response.data});
                 this.setState({blogIsLoading:false,blogLoaded:true});
@@ -291,7 +284,6 @@ class App extends Component {
             }
         })
             .then(function (response) {
-                console.log(response.data)
                 if(!response.data){
                     this.setState({blogs:[],blog:null,blogDetails:null});
                     this.setState({blogsLoaded:true,homePageLoaded:true})
@@ -333,7 +325,6 @@ class App extends Component {
             }
         })
             .then(function (response) {
-                console.log(response.data)
                 if(!response.data){
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogsAreLoading:false})
@@ -384,7 +375,6 @@ class App extends Component {
         let url = window.location.pathname.split('/').join('');
         this.setCurrentBlog(url);
         this.forceUpdate();
-        console.log(this.state.blogLoaded);
         if(window.innerWidth<503){
             this._handleChangeBodySize(16);
         }
@@ -425,7 +415,6 @@ class App extends Component {
         if(!this.state.iKnowYou){
             return axios.post(env.httpURL, {"queryMethod":"getIp"})
                 .then(response => {
-                    console.log(response)
                     if(response.data.ip==='::1' || response.data.ip==='127.0.0.1'){
                         return{error:'user at localhost'}
                     }
@@ -702,19 +691,22 @@ class App extends Component {
                                 loggedin={this.state.loggedin}
                                 successLogin={this.successLogin}
                                 color={this.state.colors[0]}
-                                colors={this.state.colors} /> :
-                            <HomePage color={this.state.colors[1]}
-                                      blogs={this.state.blogs}
-                                      blog={this.state.blog}
-                                      blogDetails={this.state.blogDetails}
-                                      blogsLoaded={this.state.blogsLoaded}
-                                      blogLoaded={this.state.blogLoaded}
-                                      homePageLoaded={this.state.homePageLoaded}
-                                      richViewerState={this.state.richViewerState}
-                                      blogsAreLoading={this.state.blogsAreLoading}
-                                      onReadMore={this.onReadMore}
-                                      colors={this.state.colors}
-                                      current={this.state.currentLocation} />
+                                colors={this.state.colors}
+                            /> :
+                            <PagesComponent
+                                color={this.state.colors[1]}
+                                blogs={this.state.blogs}
+                                blog={this.state.blog}
+                                blogDetails={this.state.blogDetails}
+                                blogsLoaded={this.state.blogsLoaded}
+                                blogLoaded={this.state.blogLoaded}
+                                homePageLoaded={this.state.homePageLoaded}
+                                richViewerState={this.state.richViewerState}
+                                blogsAreLoading={this.state.blogsAreLoading}
+                                onReadMore={this.onReadMore}
+                                colors={this.state.colors}
+                                current={this.state.currentLocation}
+                            />
 
                     }
                 </div>

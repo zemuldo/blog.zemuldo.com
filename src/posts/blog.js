@@ -65,7 +65,6 @@ export default class WelcomePage extends React.Component {
             }
         })
             .then(function (res) {
-                console.log(res.data)
                 if(!res){
                     return false
                 }
