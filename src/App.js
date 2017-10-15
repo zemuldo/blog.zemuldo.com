@@ -84,7 +84,8 @@ class App extends Component {
             editingMode:false,
             colors:['green','blue','orange','violet','blue'],
             currentLocation:'home',
-            profilePic:null
+            profilePic:null,
+            blogs:[],
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);

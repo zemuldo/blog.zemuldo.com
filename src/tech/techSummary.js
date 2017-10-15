@@ -16,7 +16,7 @@ const userText ={
 function rand () {
     return Math.floor(Math.random() * (23 - 20 + 1)) + 20;
 }
-class HomePage extends Component {
+class TechSummary extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -46,6 +46,8 @@ class HomePage extends Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
+
+
     };
     homePageIsLoading(value){
         this.setState({homePageLoaded:!value})
@@ -81,7 +83,7 @@ class HomePage extends Component {
                     "jsonrpc": "2.0",
                     "key": "p",
                     "apiVersion": "v1"
-                }
+                };
                 window.scrollTo(0,0)
                 return Promise.all([
                     axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.state.blogDetails.title.split(' ').join('%2520')+'_'+this.state.blogDetails.date.split(' ').join('%2520')+'_'+this.state.blogDetails.id.toString(),{}),
@@ -95,13 +97,16 @@ class HomePage extends Component {
                     twtC:(res[1].data.count)?res[1].data.count:0,
                     gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
                 })
+                this.setState({blogLoaded:true})
             }.bind(this))
             .catch(function (err) {
                 this.setState({blog:null,blogDetails:thisBlog})
+                this.setState({blogLoaded:true})
                 this.setState({blogIsLoading:false})
                 window.scrollTo(0,0)
                 return err
             }.bind(this))
+
     }
     goToHome(){
         this.setState({current:'ZemuldO-Home'})
@@ -121,31 +126,18 @@ class HomePage extends Component {
                 if(response.data.error){
                 }
                 else {
-                    this.setState({blog:response.data,blogDetails:thisBlog})
+                    this.setState({blog:response.data,blogDetails:thisBlog,blogLoaded:true})
                     this.blogIsLoading(false)
                     window.scrollTo(0,0)
                 }
             })
             .catch(exception => {
-                this.setState({blog:null})
+                this.setState({blog:null,blogLoaded:true})
                 this.blogIsLoading(false)
                 return exception
             });
     }
     componentDidMount() {
-        let url = window.location.pathname.split('/').join('')
-        if(url.indexOf('-')!==-1){
-            url = url.split('-').join(' ')
-            this.setCurrentBlog(url.split('-').join(' '))
-        }
-        if(url.indexOf('%20')!==-1){
-            url = url.split('%20').join(' ')
-            this.setCurrentBlog(url.split('%20').join(' '))
-        }
-        if(url.indexOf('%2520')!==-1){
-            url = url.split('%2520').join(' ')
-            this.setCurrentBlog(url.split('%2520').join(' '))
-        }
         this.forceUpdate()
         if(window.innerWidth<503){
             this._handleChangeBodySize(16)
@@ -171,13 +163,14 @@ class HomePage extends Component {
                     this.setState({blogs:[]})
                     this.homePageIsLoading(false)
                     this.blogsAreLoading(false)
+                    this.setState({blogLoaded:true})
                 }
             }.bind(this))
             .catch(function (err) {
-                console.log(err)
                 this.setState({blogs:[]})
                 this.homePageIsLoading(false)
                 this.blogsAreLoading(false)
+                this.setState({blogLoaded:true})
             }.bind(this))
     }
     componentWillUnmount() {
@@ -275,6 +268,7 @@ class HomePage extends Component {
                                             <div>
 
                                             </div>
+
                                     }
                                     <Grid.Column mobile = {window.innerWidth<600?16:9} computer={window.innerWidth<600?16:9}  width={9}>
                                         {
@@ -310,6 +304,7 @@ class HomePage extends Component {
                                                         blogs={this.state.blogs}
                                                         blogLoaded={this.state.blogLoaded}/>
                                                 </div>
+
                                         }
 
                                     </Grid.Column>
@@ -331,4 +326,4 @@ class HomePage extends Component {
             </div>)
     }
 }
-export default HomePage
+export default TechSummary

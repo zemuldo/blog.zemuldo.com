@@ -85,9 +85,7 @@ class HomePage extends Component {
         else if(url.indexOf('%2520')>0){
             id = Number(url.split('_')[2]);
         }
-        console.log(id)
         if(id && id.toString()!=='NaN'){
-            console.log(this.state.blogLoaded)
             return axios.post(env.httpURL, {
                 "queryMethod":"getPost",
                 "queryData":{
@@ -352,7 +350,6 @@ class HomePage extends Component {
                                                                 color={this.props.color}
                                                                 blogs={this.state.blogs}/>:
                                                             <div>
-
                                                             </div>
                                                     }
                                                     <WelcomePage
@@ -368,9 +365,7 @@ class HomePage extends Component {
                                                         blogs={this.state.blogs}
                                                         blogLoaded={this.state.blogLoaded}/>
                                                 </div>
-
                                         }
-
                                     </Grid.Column>
                                     {
                                         (window.innerWidth>1030) ?
