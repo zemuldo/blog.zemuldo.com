@@ -46,7 +46,7 @@ export default class WelcomePage extends React.Component {
 
     render() {
         return (
-            <div style={{margin: '2em 0em 3em 0em'}}>
+            <div style={{margin: '2em 1em 3em 1em'}}>
                 {
                     (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
                         <div >
