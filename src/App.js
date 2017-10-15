@@ -155,10 +155,12 @@ class App extends Component {
                 return false
             }
             if(user.firstName && user.lastName && user.userName){
-                this.setState({user:user,loggedin:true})
-                let urlCreator = window.URL || window.webkitURL;
-                let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
-                this.setState({profilePic:imageUrl})
+                let valid = this.validateUser();
+                if(valid){
+                    this.setState({user:user,loggedin:true});
+                    let urlCreator = window.URL || window.webkitURL;
+                    let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
+                    this.setState({profilePic:imageUrl})
             }
             else {
                 localStorage.removeItem('user');
@@ -264,9 +266,37 @@ class App extends Component {
                 })
                 .catch(exception => {
                 });
+            }
         }
-    }
 
+    }
+    validateUser() {
+        let user = JSON.parse(localStorage.getItem('user'))
+        axios.post(env.httpURL, {
+            "queryMethod": "validateUser",
+            "queryData": {
+                "_id": user._id,
+                "id": user.id,
+                "userName": user.userName
+            }
+        })
+            .then(function (success) {
+                if (success.data.state) {
+                    if (success.data.state === true) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+                else {
+                    return false
+                }
+            })
+            .catch(function (err) {
+                return false
+            })
+    }
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
         window.removeEventListener('resize', this.resize)
