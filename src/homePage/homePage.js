@@ -28,7 +28,7 @@ class PagesComponent extends Component {
         return(
             <div>
                 {
-                    this.props.blogsLoaded && this.props.homePageLoaded?
+                    this.props.homePageLoaded?
                         <div>
                             <Grid columns={2}>
                                 <Grid.Row>
@@ -55,7 +55,7 @@ class PagesComponent extends Component {
                                                     <Header
                                                         color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                     {
-                                                        !this.props.blogsAreLoading?
+                                                        this.props.blogsLoaded?
                                                             <div>
                                                                 {
                                                                     (this.props.blogs[0]) ?
@@ -82,24 +82,24 @@ class PagesComponent extends Component {
                                     }
                                     <Grid.Column mobile = {window.innerWidth<600?16:9} computer={window.innerWidth<600?16:9}  width={9}>
                                         {
+                                            window.innerWidth<600?
+                                                <Topics
+                                                    blogsAreLoading={this.props.blogsAreLoading}
+                                                    setTopicPosts={this.props.setTopicPosts}
+                                                    onReadMore = {this.props.onReadMore}
+                                                    blog ={this.props.blog}
+                                                    color={this.props.color}
+                                                    blogs={this.props.blogs}/>:
+                                                <div>
+                                                </div>
+                                        }
+                                        {
 
                                             this.state.blogIsLoading?
                                                 <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                                     <Loader active inline='centered' />
                                                 </div>:
                                                 <div>
-                                                    {
-                                                        window.innerWidth<600?
-                                                            <Topics
-                                                                blogsAreLoading={this.props.blogsAreLoading}
-                                                                setTopicPosts={this.props.setTopicPosts}
-                                                                onReadMore = {this.props.onReadMore}
-                                                                blog ={this.props.blog}
-                                                                color={this.props.color}
-                                                                blogs={this.props.blogs}/>:
-                                                            <div>
-                                                            </div>
-                                                    }
                                                     <WelcomePage
                                                         richViewerState={this.props.richViewerState}
                                                         color={this.props.colors[1]}

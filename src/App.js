@@ -708,10 +708,11 @@ class App extends Component {
                                 blogLoaded={this.state.blogLoaded}
                                 homePageLoaded={this.state.homePageLoaded}
                                 richViewerState={this.state.richViewerState}
-                                blogsAreLoading={this.state.blogsAreLoading}
+                                blogsAreLoading={this.blogsAreLoading}
                                 onReadMore={this.onReadMore}
                                 colors={this.state.colors}
                                 current={this.state.currentLocation}
+                                setTopicPosts={this.setTopicPosts}
                             />
 
                     }
