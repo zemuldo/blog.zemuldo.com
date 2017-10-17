@@ -120,7 +120,8 @@ class App extends Component {
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
-        this.setBlogHere = this.setBlogHere.bind(this)
+        this.setBlogHere = this.setBlogHere.bind(this);
+        this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
     };
     homePageIsLoading(value){
         this.setState({homePageLoaded:!value})
@@ -141,6 +142,16 @@ class App extends Component {
         }
         else {
             this.setState({blogs:[],topic:topic});
+            this.blogsAreLoading(false)
+        }
+    }
+    setTopicNextPosts(topicBlogs){
+        if(topicBlogs[0]){
+            this.setState({blogs:topicBlogs});
+            this.blogsAreLoading(false)
+        }
+        else {
+            this.setState({blogs:[]});
             this.blogsAreLoading(false)
         }
     }
@@ -713,6 +724,7 @@ class App extends Component {
                                 colors={this.state.colors}
                                 current={this.state.currentLocation}
                                 setTopicPosts={this.setTopicPosts}
+                                setTopicNextPosts={this.setTopicNextPosts}
                             />
 
                     }

@@ -52,14 +52,16 @@ const topics = [
     { key: 'pentesting', value: 'pentesting', text: 'pentesting' ,name: 'pentesting'},
     { key: 'security', value: 'security', text: 'security' ,name: 'security'}
 ];
-
+let x =0
 class Topics extends Component {
     constructor(props){
         super(props);
         this.state = {
-
+            next:true
         };
         this.onTopicClick = this.onTopicClick.bind(this);
+        this.setNextBlogs = this.setNextBlogs.bind(this)
+        this.setPreviousBlogs = this.setPreviousBlogs.bind(this)
     };
     onTopicClick = (e) => {
         this.props.blogsAreLoading(true)
@@ -76,7 +78,53 @@ class Topics extends Component {
                 this.props.setTopicPosts([],e)
             }.bind(this))
     }
+    setNextBlogs(e){
+       if(this.state.next){
+           this.setState({next:this.state.next+10})
+           x+=2
+           return axios.post(env.httpURL,{
+               "queryMethod":"getPagedPosts",
+               "queryData":{
+                   "start":x.toString()
+               }
+           })
+               .then(function (blogs) {
+                   console.log(blogs.data)
+                   console.log(x)
+                   if(blogs.data.length<2){
+                       this.setState({next:false})
+                   }
+                   else {
+                       this.setState({next:true})
+                   }
+                   this.props.setTopicNextPosts(blogs.data);
+               }.bind(this))
+               .catch(function (err) {
+                   this.props.setTopicNextPosts([])
+               }.bind(this))
+       }
 
+    }
+    setPreviousBlogs(e){
+        x-=2
+        this.setState({next:this.state.next-10})
+        return axios.post(env.httpURL,{
+            "queryMethod":"getPagedPosts",
+            "queryData":{
+                "start":x.toString()
+            }
+        })
+            .then(function (blogs) {
+                console.log(blogs.data)
+                console.log(x)
+                this.setState({next:true})
+                this.props.setTopicNextPosts(blogs.data);
+            }.bind(this))
+            .catch(function (err) {
+                this.props.setTopicNextPosts([])
+            }.bind(this))
+
+    }
     render() {
         return (
             <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
@@ -86,7 +134,8 @@ class Topics extends Component {
                         key={topics[i].key}
                         className="topicButton"
                         onClick={ this.onTopicClick.bind(this,topics[i].text)}
-                        name={topics[i].name} style={{backgroundColor:'transparent',border:'none'} }
+                        name={topics[i].name}
+                        style={{backgroundColor:'transparent',border:'none'} }
                     >
                             <span>
                                 {toTitleCase(topics[i].name)}
@@ -94,6 +143,32 @@ class Topics extends Component {
                         |
                     </button>
                 )
+                }
+                <hr/>
+                {
+                    <button
+                        disabled={!this.state.next}
+                        className="topicButton"
+                        onClick={ this.setNextBlogs.bind(this,'next')}
+                        name="next"
+                        style={{backgroundColor:'transparent',border:'none'} }>
+                        <span>
+                            Next
+                        </span>
+                    </button>
+
+                }
+                {
+                    <button
+                        disabled={x===0}
+                        className="topicButton"
+                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
+                        name="previous"
+                        style={{float:"right",backgroundColor:'transparent',border:'none'} }>
+                        <span>
+                            Previous
+                        </span>
+                    </button>
                 }
             </div>
         )

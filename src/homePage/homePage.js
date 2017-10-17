@@ -38,6 +38,7 @@ class PagesComponent extends Component {
                                                 <Topics
                                                     blogsAreLoading={this.props.blogsAreLoading}
                                                     setTopicPosts={this.props.setTopicPosts}
+                                                    setTopicNextPosts={this.props.setTopicNextPosts}
                                                     onReadMore = {this.props.onReadMore}
                                                     blog ={this.props.blog}
                                                     color={this.props.color}
@@ -86,6 +87,7 @@ class PagesComponent extends Component {
                                                 <Topics
                                                     blogsAreLoading={this.props.blogsAreLoading}
                                                     setTopicPosts={this.props.setTopicPosts}
+                                                    setTopicNextPosts={this.props.setTopicNextPosts}
                                                     onReadMore = {this.props.onReadMore}
                                                     blog ={this.props.blog}
                                                     color={this.props.color}
