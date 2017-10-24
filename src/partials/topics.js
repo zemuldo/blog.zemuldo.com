@@ -8,6 +8,7 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+let x =5
 const topics = [
     { key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata'},
     { key: 'iot', value: 'iot', text: 'iot' ,name: 'iot'},
@@ -52,23 +53,25 @@ const topics = [
     { key: 'pentesting', value: 'pentesting', text: 'pentesting' ,name: 'pentesting'},
     { key: 'security', value: 'security', text: 'security' ,name: 'security'}
 ];
-let x =0
 class Topics extends Component {
     constructor(props){
         super(props);
         this.state = {
-            next:true
+            next:true,
+            topic:'all',
+            queryMethod:'getAllPosts'
         };
         this.onTopicClick = this.onTopicClick.bind(this);
-        this.setNextBlogs = this.setNextBlogs.bind(this)
-        this.setPreviousBlogs = this.setPreviousBlogs.bind(this)
     };
     onTopicClick = (e) => {
-        this.props.blogsAreLoading(true)
+        this.props.resetNav('getPostsTopic',e)
+        this.props.resetNav();
+        this.props.blogsAreLoading(true);
         return axios.post(env.httpURL,{
             "queryMethod":"getPostsTopic",
             "queryData":{
-                "topic":e
+                "topic":e,
+                "start":x.toString()
             }
         })
             .then(function (blogs) {
@@ -78,57 +81,38 @@ class Topics extends Component {
                 this.props.setTopicPosts([],e)
             }.bind(this))
     }
-    setNextBlogs(e){
-       if(this.state.next){
-           this.setState({next:this.state.next+10})
-           x+=2
-           return axios.post(env.httpURL,{
-               "queryMethod":"getPagedPosts",
-               "queryData":{
-                   "start":x.toString()
-               }
-           })
-               .then(function (blogs) {
-                   console.log(blogs.data)
-                   console.log(x)
-                   if(blogs.data.length<2){
-                       this.setState({next:false})
-                   }
-                   else {
-                       this.setState({next:true})
-                   }
-                   this.props.setTopicNextPosts(blogs.data);
-               }.bind(this))
-               .catch(function (err) {
-                   this.props.setTopicNextPosts([])
-               }.bind(this))
-       }
-
-    }
-    setPreviousBlogs(e){
-        x-=2
-        this.setState({next:this.state.next-10})
+    onAllcClick = (e) => {
+        this.props.resetNav('getAllPosts',e)
+        this.props.resetNav();
+        this.props.blogsAreLoading(true)
         return axios.post(env.httpURL,{
-            "queryMethod":"getPagedPosts",
+            "queryMethod":"getAllPosts",
             "queryData":{
                 "start":x.toString()
             }
         })
             .then(function (blogs) {
-                console.log(blogs.data)
-                console.log(x)
-                this.setState({next:true})
-                this.props.setTopicNextPosts(blogs.data);
+                this.props.setTopicPosts(blogs.data,e)
             }.bind(this))
             .catch(function (err) {
-                this.props.setTopicNextPosts([])
+                this.props.setTopicPosts([],e)
             }.bind(this))
-
     }
     render() {
         return (
             <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
                 <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
+                <button
+                    className="topicButton"
+                    onClick={ this.onAllcClick.bind('all')}
+                    name='all'
+                    style={{backgroundColor:'transparent',border:'none'} }
+                >
+                            <span>
+                                All
+                            </span>
+                    |
+                </button>
                 { _.times(topics.length, i =>
                     <button
                         key={topics[i].key}
@@ -143,32 +127,6 @@ class Topics extends Component {
                         |
                     </button>
                 )
-                }
-                <hr/>
-                {
-                    <button
-                        disabled={!this.state.next}
-                        className="topicButton"
-                        onClick={ this.setNextBlogs.bind(this,'next')}
-                        name="next"
-                        style={{backgroundColor:'transparent',border:'none'} }>
-                        <span>
-                            Next
-                        </span>
-                    </button>
-
-                }
-                {
-                    <button
-                        disabled={x===0}
-                        className="topicButton"
-                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
-                        name="previous"
-                        style={{float:"right",backgroundColor:'transparent',border:'none'} }>
-                        <span>
-                            Previous
-                        </span>
-                    </button>
                 }
             </div>
         )
