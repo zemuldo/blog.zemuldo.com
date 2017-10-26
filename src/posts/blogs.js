@@ -78,6 +78,7 @@ class Blogs extends React.Component {
                                                 </i>
                                             </span>
                                         <Button
+                                            circular
                                             size="mini"
                                             disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i].post_ID}
                                             className="redMoreButton"

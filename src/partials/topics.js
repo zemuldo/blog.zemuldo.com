@@ -71,9 +71,8 @@ class Topics extends Component {
                     style={{backgroundColor:'transparent',border:'none'} }
                 >
                             <span>
-                                All
+                                {'All '+ '|'}
                             </span>
-                    |
                 </button>
                 { _.times(topics.length, i =>
                     <button
@@ -86,8 +85,8 @@ class Topics extends Component {
                     >
                             <span>
                                 {toTitleCase(topics[i].name)}
+                                {' '+ '|'}
                             </span>
-                        |
                     </button>
                 )
                 }

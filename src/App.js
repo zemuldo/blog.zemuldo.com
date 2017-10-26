@@ -568,7 +568,7 @@ class App extends Component {
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <Menu
-                    style={{backgroundColor:'black',opacity:'0.9'}}
+                    style={{backgroundColor:'white',opacity:'0.9',marginTop:'2px'}}
                     secondary={true}
                     fixed='top'
                     size='mini'
