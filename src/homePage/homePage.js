@@ -49,21 +49,17 @@ class PagesComponent extends Component {
             }.bind(this))
     }
     onAllcClick = (e) => {
-        this.setState({next:true})
-        this.resetNav('getAllPosts',e)
+        this.setState({topic:'all'})
+        x=0
         this.props.blogsAreLoading(true)
         return axios.post(env.httpURL,{
-            "queryMethod":"getAllPosts",
+            "queryMethod":"getPagedPosts",
             "queryData":{
-                "start":x.toString()
             }
         })
             .then(function (blogs) {
                 if(blogs.data.length<5){
                     this.setState({next:false})
-                }
-                else {
-                    this.setState({next:true})
                 }
                 this.props.setTopicPosts(blogs.data,e)
             }.bind(this))
@@ -85,7 +81,7 @@ class PagesComponent extends Component {
         if(this.state.next){
             x+=5;
             return axios.post(env.httpURL,{
-                "queryMethod":"getPagedPosts",
+                "queryMethod":'getPagedPosts',
                 "queryData":{
                     "start":x.toString(),
                     "topics":this.state.topic
@@ -114,7 +110,7 @@ class PagesComponent extends Component {
            x-=5;
        }
         return axios.post(env.httpURL,{
-            "queryMethod":"getPagedPosts",
+            "queryMethod":'getPagedPosts',
             "queryData":{
                 "start":x.toString(),
                 "topics":this.state.topic
