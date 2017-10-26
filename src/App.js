@@ -467,7 +467,6 @@ class App extends Component {
                                 visitorData.queryData.user = knownUser
                                 visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
                                 visitorData.queryMethod = 'addVisitor';
-                                console.log(visitorData);
                                 return axios.post(env.httpURL, visitorData)
                             }
                             else {
@@ -477,7 +476,6 @@ class App extends Component {
                                 visitorData.queryData.sessionID = visitor.sessionID
                                 visitorData.queryMethod = 'addVisitor';
                                 visitorData.known = true;
-                                console.log(visitorData);
                                 return axios.post(env.httpURL, visitorData)
                             }
 
@@ -488,7 +486,6 @@ class App extends Component {
                             visitorData.queryData.user = knownUser
                             visitorData.queryData.sessionID = o.countryCode+(o.lat+o.lon)+o.query+o.regionName;
                             visitorData.queryMethod = 'addVisitor';
-                            console.log(visitorData);
                             return axios.post(env.httpURL, visitorData)
                         }
                     }

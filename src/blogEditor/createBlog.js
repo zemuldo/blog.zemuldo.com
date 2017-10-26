@@ -438,7 +438,6 @@ class RichEditorExample extends React.Component {
 
             })
                 .then(function (response) {
-                    console.log(response)
                     if(response.data.state===true){
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');

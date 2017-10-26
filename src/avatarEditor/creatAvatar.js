@@ -19,7 +19,6 @@ function dataURItoBlob(dataURI, callback) {
 
     // write the ArrayBuffer to a blob, and you're done
     let bb = new Blob([ab]);
-    console.log(bb)
     return bb;
 }
 class AvaratEditor extends React.Component {
@@ -127,7 +126,6 @@ class AvaratEditor extends React.Component {
     }
 
     logCallback (e) {
-        console.log('callback', e)
     }
 
     setEditorRef = editor => {
@@ -135,7 +133,6 @@ class AvaratEditor extends React.Component {
     }
 
     handlePositionChange = position => {
-        console.log('Position set to', position)
         this.setState({ position })
     }
 

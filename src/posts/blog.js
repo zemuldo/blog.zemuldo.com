@@ -198,7 +198,6 @@ export default class WelcomePage extends React.Component {
                 .then(function (response) {
                     this.closeDelete()
                     this.props.deletedBlog()
-                    console.log(response.data)
                 }.bind(this))
                 .catch(function (err) {
                     this.closeDelete()

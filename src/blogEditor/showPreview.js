@@ -155,7 +155,6 @@ class RichEditorExample extends React.Component {
     handleKeyCommand(command, editorState) {
     }
     onTab(e) {
-        console.log('tab presed'+e)
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
@@ -180,7 +179,6 @@ class RichEditorExample extends React.Component {
                     body:JSON.stringify(obj)}
             })
                 .then(function (response) {
-                    console.log(response)
                     if(response.data.state===true){
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');
