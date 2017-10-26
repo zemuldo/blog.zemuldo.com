@@ -260,6 +260,7 @@ class PagesComponent extends Component {
                                                         blogs={this.props.blogs}
                                                         blogLoaded={this.props.blogLoaded}
                                                         deletedBlog={this.props.deletedBlog}
+                                                        user={this.props.user}
                                                     />
                                                 </div>
                                         }

@@ -720,6 +720,7 @@ class App extends Component {
                                 setTopicPosts={this.setTopicPosts}
                                 setTopicNextPosts={this.setTopicNextPosts}
                                 deletedBlog={this.deletedBlog}
+                                user={this.state.user}
                             />
 
                     }

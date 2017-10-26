@@ -329,14 +329,16 @@ export default class WelcomePage extends React.Component {
                                     {this.props.blogDetails.author} {' '}
                                 </span>
                                 {
-                                    this.state.userLoggedIn?
-                                        <Dropdown style={{margin:'0em 0em 0em 3em'}} text='Manage' pointing className='link item info'>
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
-                                                <Dropdown.Item>Edit</Dropdown.Item>
-                                                <Dropdown.Item>Hide</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>:
+                                    this.props.user.userName === this.props.blogDetails.userName?
+                                        <div>
+                                            <Dropdown text='Manage' pointing className='link item info'>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
+                                                    <Dropdown.Item>Edit</Dropdown.Item>
+                                                    <Dropdown.Item>Hide</Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </div>:
                                         <span>
                                         </span>
                                 }

@@ -78,6 +78,7 @@ export default class WelcomePage extends React.Component {
                                            blogDetails={this.props.blogDetails}
                                            counts ={this.props.counts}
                                            deletedBlog={this.props.deletedBlog}
+                                           user={this.props.user}
                                        />
                                    </div>
                            }
