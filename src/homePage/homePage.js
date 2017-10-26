@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { Header, Icon, Grid ,Loader,Input} from 'semantic-ui-react'
+import { Header, Icon,Button, Grid ,Loader,Input} from 'semantic-ui-react'
 import WelcomePage from '../partials/welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
@@ -13,16 +13,64 @@ class PagesComponent extends Component {
         super(props);
         this.state = {
             next:true,
-            topic:null,
+            topic:'all',
             queryMethod:'getPagedPosts',
         };
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.setNextBlogs = this.setNextBlogs.bind(this)
-        this.setPreviousBlogs = this.setPreviousBlogs.bind(this)
-        this.resetNav = this.resetNav.bind(this)
+        this.setPreviousBlogs = this.setPreviousBlogs.bind(this);
+        this.resetNav = this.resetNav.bind(this);
+        this.onTopicClick = this.onTopicClick.bind(this);
     };
+    onTopicClick = (e) => {
+        this.setState({next:true})
+        this.resetNav('getPostsTopic',e);
+        this.props.blogsAreLoading(true);
+        return axios.post(env.httpURL,{
+            "queryMethod":"getPagedPosts",
+            "queryData":{
+                "start":x.toString(),
+                "topics":e.toLowerCase()
+            }
+        })
+            .then(function (blogs) {
+                if(blogs.data.length<5){
+                    this.setState({next:false})
+                }
+                else {
+                    this.setState({next:true})
+                }
+                this.props.setTopicPosts(blogs.data,e)
+            }.bind(this))
+            .catch(function (err) {
+                this.props.setTopicPosts([],e)
+            }.bind(this))
+    }
+    onAllcClick = (e) => {
+        this.setState({next:true})
+        this.resetNav('getAllPosts',e)
+        this.props.blogsAreLoading(true)
+        return axios.post(env.httpURL,{
+            "queryMethod":"getAllPosts",
+            "queryData":{
+                "start":x.toString()
+            }
+        })
+            .then(function (blogs) {
+                if(blogs.data.length<5){
+                    this.setState({next:false})
+                }
+                else {
+                    this.setState({next:true})
+                }
+                this.props.setTopicPosts(blogs.data,e)
+            }.bind(this))
+            .catch(function (err) {
+                this.props.setTopicPosts([],e)
+            }.bind(this))
+    }
     _handleChangeBodySize(size){
         this.setState({bodySize:size})
     }
@@ -40,17 +88,20 @@ class PagesComponent extends Component {
                 "queryMethod":"getPagedPosts",
                 "queryData":{
                     "start":x.toString(),
-                    "topic":this.state.topic
+                    "topics":this.state.topic
                 }
             })
                 .then(function (blogs) {
-                    if(blogs.data.length<2){
+                    if(blogs.data.length<5){
                         this.setState({next:false})
+                        x-=5;
                     }
                     else {
                         this.setState({next:true})
                     }
-                    this.props.setTopicNextPosts(blogs.data);
+                    if(blogs.data[0]){
+                        this.props.setTopicNextPosts(blogs.data);
+                    }
                 }.bind(this))
                 .catch(function (err) {
                     this.props.setTopicNextPosts([])
@@ -59,18 +110,22 @@ class PagesComponent extends Component {
 
     }
     setPreviousBlogs(e){
-        x-=5;
+       if(x!==0){
+           x-=5;
+       }
         return axios.post(env.httpURL,{
             "queryMethod":"getPagedPosts",
             "queryData":{
                 "start":x.toString(),
-                "topic":this.state.topic
+                "topics":this.state.topic
 
             }
         })
             .then(function (blogs) {
-                this.setState({next:true})
-                this.props.setTopicNextPosts(blogs.data);
+              if(blogs.data[0]){
+                  this.setState({next:true})
+                  this.props.setTopicNextPosts(blogs.data);
+              }
             }.bind(this))
             .catch(function (err) {
                 this.props.setTopicNextPosts([])
@@ -93,6 +148,8 @@ class PagesComponent extends Component {
                                         (window.innerWidth>600) ?
                                             <Grid.Column computer={4}>
                                                 <Topics
+                                                    onTopicClick = {this.onTopicClick}
+                                                    onAllcClick = {this.onAllcClick}
                                                     blogsAreLoading={this.props.blogsAreLoading}
                                                     setTopicPosts={this.props.setTopicPosts}
                                                     setTopicNextPosts={this.props.setTopicNextPosts}
@@ -119,38 +176,40 @@ class PagesComponent extends Component {
                                                         this.props.blogsLoaded?
                                                             <div>
                                                                 <br/>
-                                                                {
-                                                                    <button
-                                                                        disabled={!this.state.next}
-                                                                        className="topicButton"
-                                                                        onClick={ this.setNextBlogs.bind(this,'next')}
-                                                                        name="next"
-                                                                        style={{backgroundColor:'transparent',border:'none'} }>
-                                                                <span>
-                                                                    Next
-                                                                </span>
-                                                                        </button>
-
-                                                                    }
-                                                                    {
-                                                                        <button
-                                                                            disabled={x===0}
-                                                                            className="topicButton"
-                                                                            onClick={ this.setPreviousBlogs.bind(this,'previous')}
-                                                                            name="previous"
-                                                                            style={{float:"right",backgroundColor:'transparent',border:'none'} }>
-                                                                <span>
-                                                                    Previous
-                                                                </span>
-                                                                        </button>
-                                                                    }
                                                                     {
                                                                         (this.props.blogs[0]) ?
-                                                                            <Blogs
-                                                                                color={this.props.color}
-                                                                                onReadMore = {this.props.onReadMore}
-                                                                                blogs ={this.props.blogs}
-                                                                                blog ={this.props.blog}/>:
+                                                                            <div>
+                                                                                <Blogs
+                                                                                    color={this.props.color}
+                                                                                    onReadMore = {this.props.onReadMore}
+                                                                                    blogs ={this.props.blogs}
+                                                                                    blog ={this.props.blog}/>
+                                                                                <div>
+                                                                                    <br/>
+                                                                                    <Button
+                                                                                        color={this.props.color}
+                                                                                        circular={true}
+                                                                                        size='mini'
+                                                                                        floated='left'
+                                                                                        disabled={!this.state.next}
+                                                                                        onClick={ this.setNextBlogs.bind(this,'next')}
+                                                                                        name="next"
+                                                                                    >
+                                                                                        Next
+                                                                                    </Button>
+                                                                                    <Button
+                                                                                        color={this.props.color}
+                                                                                        circular={true}
+                                                                                        size='mini'
+                                                                                        floated='right'
+                                                                                        disabled={x===0}
+                                                                                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
+                                                                                        name="previous"
+                                                                                    >
+                                                                                        Prev
+                                                                                    </Button>
+                                                                                </div>
+                                                                            </div>:
                                                                             <div>
                                                                                 No matching content on this Topic
                                                                             </div>

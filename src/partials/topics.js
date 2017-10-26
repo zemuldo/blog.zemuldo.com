@@ -61,50 +61,14 @@ class Topics extends Component {
             topic:'all',
             queryMethod:'getAllPosts'
         };
-        this.onTopicClick = this.onTopicClick.bind(this);
     };
-    onTopicClick = (e) => {
-        this.props.resetNav('getPostsTopic',e)
-        this.props.resetNav();
-        this.props.blogsAreLoading(true);
-        return axios.post(env.httpURL,{
-            "queryMethod":"getPostsTopic",
-            "queryData":{
-                "topic":e,
-                "start":x.toString()
-            }
-        })
-            .then(function (blogs) {
-                this.props.setTopicPosts(blogs.data,e)
-            }.bind(this))
-            .catch(function (err) {
-                this.props.setTopicPosts([],e)
-            }.bind(this))
-    }
-    onAllcClick = (e) => {
-        this.props.resetNav('getAllPosts',e)
-        this.props.resetNav();
-        this.props.blogsAreLoading(true)
-        return axios.post(env.httpURL,{
-            "queryMethod":"getAllPosts",
-            "queryData":{
-                "start":x.toString()
-            }
-        })
-            .then(function (blogs) {
-                this.props.setTopicPosts(blogs.data,e)
-            }.bind(this))
-            .catch(function (err) {
-                this.props.setTopicPosts([],e)
-            }.bind(this))
-    }
     render() {
         return (
             <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
                 <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
                 <button
                     className="topicButton"
-                    onClick={ this.onAllcClick.bind('all')}
+                    onClick={ this.props.onAllcClick.bind('all')}
                     name='all'
                     style={{backgroundColor:'transparent',border:'none'} }
                 >
@@ -117,7 +81,7 @@ class Topics extends Component {
                     <button
                         key={topics[i].key}
                         className="topicButton"
-                        onClick={ this.onTopicClick.bind(this,topics[i].text)}
+                        onClick={ this.props.onTopicClick.bind(this,topics[i].text)}
                         name={topics[i].name}
                         style={{backgroundColor:'transparent',border:'none'} }
                     >
