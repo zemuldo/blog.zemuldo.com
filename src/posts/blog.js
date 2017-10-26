@@ -207,9 +207,9 @@ export default class WelcomePage extends React.Component {
                                 }
 
                                 <span>
-                                    <i style={{color:this.props.color}}>
-                                        ~{' '}{this.state.likes}
-                                    </i>
+                                    <span style={{color:this.props.color}}>
+                                        {' '}{this.state.likes}
+                                    </span>
                                 </span>
                                 <br/>
                                 <Icon size="large" color='green' name='external share' />
