@@ -57,9 +57,6 @@ class Topics extends Component {
     constructor(props){
         super(props);
         this.state = {
-            next:true,
-            topic:'all',
-            queryMethod:'getAllPosts'
         };
     };
     render() {
@@ -67,6 +64,7 @@ class Topics extends Component {
             <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
                 <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
                 <button
+                    disabled={this.props.topic==='all'}
                     className="topicButton"
                     onClick={ this.props.onAllcClick.bind('all')}
                     name='all'
@@ -79,6 +77,7 @@ class Topics extends Component {
                 </button>
                 { _.times(topics.length, i =>
                     <button
+                        disabled={this.props.topic===topics[i].name}
                         key={topics[i].key}
                         className="topicButton"
                         onClick={ this.props.onTopicClick.bind(this,topics[i].text)}

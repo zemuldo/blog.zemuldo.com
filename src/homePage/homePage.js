@@ -146,6 +146,7 @@ class PagesComponent extends Component {
                                         (window.innerWidth>600) ?
                                             <Grid.Column computer={4}>
                                                 <Topics
+                                                    topic={this.state.topic}
                                                     onTopicClick = {this.onTopicClick}
                                                     onAllcClick = {this.onAllcClick}
                                                     blogsAreLoading={this.props.blogsAreLoading}
