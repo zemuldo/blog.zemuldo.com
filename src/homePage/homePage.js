@@ -12,7 +12,7 @@ class PagesComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            next:true,
+            next:this.props.blogs.length>4,
             topic:'all',
             queryMethod:'getPagedPosts',
         };
