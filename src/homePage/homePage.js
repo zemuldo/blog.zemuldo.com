@@ -7,7 +7,7 @@ import axios from 'axios'
 import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-let x =5
+let x =0
 class PagesComponent extends Component {
     constructor(props){
         super(props);
