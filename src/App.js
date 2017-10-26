@@ -126,6 +126,7 @@ class App extends Component {
     };
     deletedBlog(){
         this.setState({blog:null})
+        this.setHomeBlogs()
     }
     homePageIsLoading(value){
         this.setState({homePageLoaded:!value})
@@ -339,6 +340,7 @@ class App extends Component {
             }.bind(this))
     }
     setHomeBlogs(){
+        this.setState({blogsAreLoading:true})
         return axios.post(env.httpURL, {
             "queryMethod":"getAllPosts",
             "queryData":{
