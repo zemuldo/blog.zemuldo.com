@@ -229,13 +229,17 @@ class PagesComponent extends Component {
                                         {
                                             window.innerWidth<600?
                                                 <Topics
+                                                    topic={this.state.topic}
+                                                    onTopicClick = {this.onTopicClick}
+                                                    onAllcClick = {this.onAllcClick}
                                                     blogsAreLoading={this.props.blogsAreLoading}
                                                     setTopicPosts={this.props.setTopicPosts}
                                                     setTopicNextPosts={this.props.setTopicNextPosts}
                                                     onReadMore = {this.props.onReadMore}
                                                     blog ={this.props.blog}
                                                     color={this.props.color}
-                                                    blogs={this.props.blogs}/>:
+                                                    blogs={this.props.blogs}
+                                                    resetNav={this.resetNav}/>:
                                                 <div>
                                                 </div>
                                         }
