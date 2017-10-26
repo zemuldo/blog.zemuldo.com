@@ -14,7 +14,6 @@ const topics = [
     { key: 'iot', value: 'iot', text: 'iot' ,name: 'iot'},
     { key: 'ml', value: 'ml', text: 'ml' ,name: 'ml'},
     { key: 'ai', value: 'ai', text: 'ai' ,name: 'ai'},
-    { key: 'java', value: 'java', text: 'java' ,name: 'java'},
     { key: 'python', value: 'python', text: 'python' ,name: 'python'},
     { key: 'javascript', value: 'javascript', text: 'javascript' ,name: 'javascript'},
     { key: 'r', value: 'r', text: 'r' ,name: 'r'},
@@ -24,7 +23,7 @@ const topics = [
     { key: 'bot', value: 'bot', text: 'bot' ,name: 'bot'},
     { key: 'linux', value: 'linux', text: 'linux' ,name: 'linux'},
     { key: 'go', value: 'go', text: 'go' ,name: 'go'},
-    { key: 'growth haking', value: 'growth haking', text: 'growth haking' ,name: 'growth haking'},
+    { key: 'growthhack', value: 'growthhack', text: 'growthhack' ,name: 'growthhack'},
     { key: 'cloud', value: 'cloud', text: 'cloud' ,name: 'cloud'},
     { key: 'nodejs', value: 'nodejs', text: 'nodejs' ,name: 'nodejs'},
     { key: 'express', value: 'express', text: 'express' ,name: 'express'},
@@ -51,6 +50,7 @@ const topics = [
     { key: 'html-css', value: 'html-css', text: 'html-css' ,name: 'html-css'},
     { key: 'oracle', value: 'oracle', text: 'oracle' ,name: 'oracle'},
     { key: 'pentesting', value: 'pentesting', text: 'pentesting' ,name: 'pentesting'},
+    { key: 'java', value: 'java', text: 'java' ,name: 'java'},
     { key: 'security', value: 'security', text: 'security' ,name: 'security'}
 ];
 class Topics extends Component {

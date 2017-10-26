@@ -25,7 +25,6 @@ class PagesComponent extends Component {
         this.onTopicClick = this.onTopicClick.bind(this);
     };
     onTopicClick = (e) => {
-        this.setState({next:true})
         this.resetNav('getPostsTopic',e);
         this.props.blogsAreLoading(true);
         return axios.post(env.httpURL,{
@@ -60,6 +59,9 @@ class PagesComponent extends Component {
             .then(function (blogs) {
                 if(blogs.data.length<5){
                     this.setState({next:false})
+                }
+                else {
+                    this.setState({next:true})
                 }
                 this.props.setTopicPosts(blogs.data,e)
             }.bind(this))
