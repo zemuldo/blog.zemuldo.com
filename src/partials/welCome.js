@@ -77,6 +77,7 @@ export default class WelcomePage extends React.Component {
                                            color={this.props.color}
                                            blogDetails={this.props.blogDetails}
                                            counts ={this.props.counts}
+                                           deletedBlog={this.props.deletedBlog}
                                        />
                                    </div>
                            }

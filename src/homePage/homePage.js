@@ -12,7 +12,7 @@ class PagesComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            next:this.props.blogs.length>4,
+            next:true,
             topic:'all',
             queryMethod:'getPagedPosts',
         };
@@ -80,8 +80,8 @@ class PagesComponent extends Component {
         window.removeEventListener('resize', this.resize);
     }
     setNextBlogs(e){
+        x+=5;
         if(this.state.next){
-            x+=5;
             return axios.post(env.httpURL,{
                 "queryMethod":'getPagedPosts',
                 "queryData":{
@@ -92,13 +92,15 @@ class PagesComponent extends Component {
                 .then(function (blogs) {
                     if(blogs.data.length<5){
                         this.setState({next:false})
-                        x-=5;
                     }
                     else {
                         this.setState({next:true})
                     }
                     if(blogs.data[0]){
                         this.props.setTopicNextPosts(blogs.data);
+                    }
+                    if(!blogs.data[0]){
+                        x-=5;
                     }
                 }.bind(this))
                 .catch(function (err) {
@@ -256,7 +258,9 @@ class PagesComponent extends Component {
                                                         blogDetails={this.props.blogDetails}
                                                         blog={this.props.blog}
                                                         blogs={this.props.blogs}
-                                                        blogLoaded={this.props.blogLoaded}/>
+                                                        blogLoaded={this.props.blogLoaded}
+                                                        deletedBlog={this.props.deletedBlog}
+                                                    />
                                                 </div>
                                         }
                                     </Grid.Column>

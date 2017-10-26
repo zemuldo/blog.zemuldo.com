@@ -122,7 +122,11 @@ class App extends Component {
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
+        this.deletedBlog=this.deletedBlog.bind(this)
     };
+    deletedBlog(){
+        this.setState({blog:null})
+    }
     homePageIsLoading(value){
         this.setState({homePageLoaded:!value})
     }
@@ -715,6 +719,7 @@ class App extends Component {
                                 current={this.state.currentLocation}
                                 setTopicPosts={this.setTopicPosts}
                                 setTopicNextPosts={this.setTopicNextPosts}
+                                deletedBlog={this.deletedBlog}
                             />
 
                     }

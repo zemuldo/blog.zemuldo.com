@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Header,Icon,Grid, Image} from 'semantic-ui-react'
+import {Button,Modal,Dropdown, Header,Icon,Grid, Image} from 'semantic-ui-react'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'
@@ -9,6 +9,7 @@ export default class WelcomePage extends React.Component {
         super(props)
         this.state = {
             youLike:false,
+            showDelete:false,
             userLoggedIn:false,
             likes:this.props.blogDetails?this.props.blogDetails.likes:0,
             authorAvatar:null,
@@ -19,6 +20,14 @@ export default class WelcomePage extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
         this.getAauthorAvatar = this.getAauthorAvatar.bind(this)
+        this.closeDelete = this.closeDelete.bind(this)
+        this.openDelete = this.openDelete.bind(this)
+    }
+    closeDelete(){
+        this.setState({showDelete:false})
+    }
+    openDelete(){
+        this.setState({showDelete:true})
     }
     setBlogCounts(){
         let gplusPost = {
@@ -178,9 +187,60 @@ export default class WelcomePage extends React.Component {
         }
 
     }
+    deletBlog=(id)=>{
+        if(localStorage.getItem('user')){
+            return axios.post(env.httpURL, {
+                "queryMethod":"deleteBlog",
+                "queryData":{
+                    id:id
+                }
+            })
+                .then(function (response) {
+                    this.closeDelete()
+                    this.props.deletedBlog()
+                    console.log(response.data)
+                }.bind(this))
+                .catch(function (err) {
+                    this.closeDelete()
+                }.bind(this));
+        }
+
+    }
     render() {
         return (
             <div>
+                <Modal dimmer={true} open={this.state.showDelete}>
+                    <Modal.Header>This Post will be deleted</Modal.Header>
+                    <Modal.Content image>
+                        <Modal.Description>
+                            <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
+                                {
+                                    this.props.blogDetails.title
+                                }
+                            </Header>
+                            <span className="info">
+                                   Published on:
+                                   <br/>
+                                {this.props.blogDetails.date}
+                               </span>
+                            <br/>
+                            <br/>
+                            <span className="info">
+                                    {this.props.blogDetails.author} {' '}
+                                </span>
+                            <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>
+                                <br/>
+                                <BlogEditor body={this.props.blog.body}/>
+                            </div>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button color='black' onClick={()=>this.closeDelete()}>
+                            Cancel
+                        </Button>
+                        <Button color='red' positive icon='checkmark' labelPosition='right' content="Delete" onClick={()=>this.deletBlog(this.props.blogDetails.id)} />
+                    </Modal.Actions>
+                </Modal>
                 {
                     this.props.blogDetails && this.props.blogLoaded?
                         <div>
@@ -205,7 +265,6 @@ export default class WelcomePage extends React.Component {
                                             Likes: 
                                         </span>
                                 }
-
                                 <span>
                                     <span style={{color:this.props.color}}>
                                         {' '}{this.state.likes}
@@ -267,9 +326,20 @@ export default class WelcomePage extends React.Component {
                                 <br/>
                                 <br/>
                                 <span className="info">
-                                    {this.props.blogDetails.author}
+                                    {this.props.blogDetails.author} {' '}
                                 </span>
-
+                                {
+                                    this.state.userLoggedIn?
+                                        <Dropdown style={{margin:'0em 0em 0em 3em'}} text='Manage' pointing className='link item info'>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
+                                                <Dropdown.Item>Edit</Dropdown.Item>
+                                                <Dropdown.Item>Hide</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>:
+                                        <span>
+                                        </span>
+                                }
                             </div>
                             <hr color="green"/>
                             <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>
