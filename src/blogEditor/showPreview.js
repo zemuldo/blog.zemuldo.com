@@ -1,7 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import debounce from 'lodash/debounce';
-import {CompositeDecorator,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
+import {CompositeDecorator,convertFromRaw, Editor, EditorState,RichUtils} from 'draft-js';
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
@@ -155,8 +154,7 @@ class RichEditorExample extends React.Component {
     handleKeyCommand(command, editorState) {
     }
     onTab(e) {
-        const maxDepth = 4;
-        this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
+       
     }
     publish = () => {
         this.setState({ open: true })

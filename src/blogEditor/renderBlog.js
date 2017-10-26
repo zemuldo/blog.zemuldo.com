@@ -1,17 +1,6 @@
 import React from 'react'
-import axios from 'axios'
-import ShowPreview from './showPreview'
-import debounce from 'lodash/debounce';
-import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Header, Icon,Modal } from 'semantic-ui-react'
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
-const cats = {
-    Development:'dev',
-    Business:'business',
-    Technology:'tech'
-}
-// Custom overrides for "code" style.
+import {CompositeDecorator,convertFromRaw, Editor, EditorState} from 'draft-js';
+
 const styleMap = {
     CODE: {
         backgroundColor: 'red',

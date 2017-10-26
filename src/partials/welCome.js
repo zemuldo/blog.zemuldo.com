@@ -1,6 +1,5 @@
 import React from 'react'
 import {Header,Loader} from 'semantic-ui-react'
-import BlogEditor from '../blogEditor/renderBlog'
 import Blog from '../posts/blog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/

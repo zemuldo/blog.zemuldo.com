@@ -1,10 +1,7 @@
 import React from 'react';
-import {Button, Icon,List,Header} from 'semantic-ui-react'
+import {Button,List,Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import _ from 'lodash'
-import axios from 'axios';
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development';
 class Blogs extends React.Component {
     constructor(props){
         super(props);

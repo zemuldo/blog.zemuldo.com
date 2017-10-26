@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button,Modal,Dropdown, Header,Icon,Grid, Image} from 'semantic-ui-react'
+import {Button,Modal,Dropdown, Header,Icon, Image} from 'semantic-ui-react'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'

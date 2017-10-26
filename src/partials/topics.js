@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Header} from 'semantic-ui-react'
 import _ from 'lodash'
-import axios from 'axios'
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
 function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
