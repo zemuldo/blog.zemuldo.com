@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon,List,Header} from 'semantic-ui-react'
+import {Button, Icon,List,Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import _ from 'lodash'
 import axios from 'axios';
@@ -41,7 +41,7 @@ class Blogs extends React.Component {
                                                 </i>
                                             </span>
                                         </span>
-                                        <button
+                                        <Button
                                             className="redMoreButton"
                                             ref={this.props.blogs[i]._id}
                                             onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
@@ -49,7 +49,7 @@ class Blogs extends React.Component {
                                             style={{color:'blue',backgroundColor:'transparent',border:'none'}}
                                         >
                                             <span>Read</span>
-                                        </button>
+                                        </Button>
                                         <hr/>
                                     </List.Item>
                                 )
@@ -74,17 +74,20 @@ class Blogs extends React.Component {
                                         </span>
                                             <span>
                                                 <i style={{color:'orange'}}>
-                                                    ~{this.props.blogs[i].likes}
+                                                    {this.props.blogs[i].likes}
                                                 </i>
                                             </span>
-                                        <button
+                                        <Button
+                                            size="mini"
+                                            disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i].post_ID}
                                             className="redMoreButton"
                                             ref={this.props.blogs[i]._id}
                                             onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
-                                            name="all" style={{color:'blue',backgroundColor:'transparent',border:'none'}}
+                                            name="all"
+                                            style={{color:'blue',backgroundColor:'transparent',border:'none'}}
                                         >
                                             <span>Read</span>
-                                        </button>
+                                        </Button>
                                         <hr/>
                                     </List.Item>
                                 )
