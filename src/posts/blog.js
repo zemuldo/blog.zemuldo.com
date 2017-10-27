@@ -30,11 +30,40 @@ export default class WelcomePage extends React.Component {
         this.setState({showDelete:true})
     }
     setBlogCounts(){
-        this.setState({counts:{
-            fbC:0,
-            twtC:0,
-            gplsC:0
-        }})
+        let gplusPost = {
+            "method": "pos.plusones.get",
+            "id": "p",
+            "params": {
+                "nolog": true,
+                "id": "https://zemuldo/"+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),
+                "source": "widget",
+                "userId": "@viewer",
+                "groupId": "@self"
+            },
+            "jsonrpc": "2.0",
+            "key": "p",
+            "apiVersion": "v1"
+        }
+        window.scrollTo(0,0);
+        return Promise.all([
+            axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.post(' https://clients6.google.com/rpc',gplusPost),
+        ])
+            .then(function (res) {
+                this.setState({
+                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
+                    twtC:(res[1].data.count)?res[1].data.count:0,
+                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
+                })
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({counts:{
+                    fbC:0,
+                    twtC:0,
+                    gplsC:0
+                }})
+            }.bind(this))
     }
 
     getAauthorAvatar(){
@@ -232,7 +261,7 @@ export default class WelcomePage extends React.Component {
                                             }
                                         </span>:
                                         <span>
-                                            Likes: 
+                                            Likes:
                                         </span>
                                 }
                                 <span>
@@ -299,18 +328,18 @@ export default class WelcomePage extends React.Component {
                                     {this.props.blogDetails.author} {' '}
                                 </span>
                                 {
-                                    this.props.user.userName === this.props.blogDetails.userName?
-                                        <div>
-                                            <Dropdown text='Manage' pointing className='link item info'>
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
-                                                    <Dropdown.Item>Edit</Dropdown.Item>
-                                                    <Dropdown.Item>Hide</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                        </div>:
-                                        <span>
-                                        </span>
+                                    // this.props.user.userName === this.props.blogDetails.userName?
+                                    //     <div>
+                                    //         <Dropdown text='Manage' pointing className='link item info'>
+                                    //             <Dropdown.Menu>
+                                    //                 <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
+                                    //                 <Dropdown.Item>Edit</Dropdown.Item>
+                                    //                 <Dropdown.Item>Hide</Dropdown.Item>
+                                    //             </Dropdown.Menu>
+                                    //         </Dropdown>
+                                    //     </div>:
+                                    //     <span>
+                                    //     </span>
                                 }
                             </div>
                             <hr color="green"/>
