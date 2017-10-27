@@ -46,8 +46,8 @@ export default class WelcomePage extends React.Component {
         }
         window.scrollTo(0,0);
         return Promise.all([
-            axios.get('https://graph.facebook.com/?id=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
-            axios.get('http://public.newsharecounts.com/count.json?url=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
             axios.post(' https://clients6.google.com/rpc',gplusPost),
         ])
             .then(function (res) {
