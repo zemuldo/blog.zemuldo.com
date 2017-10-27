@@ -16,6 +16,7 @@ export default class WelcomePage extends React.Component {
             fbC:null,
             twtC:null,
             gplsC:null,
+            linkdCont:null
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
@@ -48,7 +49,7 @@ export default class WelcomePage extends React.Component {
         return Promise.all([
             axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
             axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
-            axios.post(' https://clients6.google.com/rpc',gplusPost),
+            axios.post(' https://clients6.google.com/rpc',gplusPost)
         ])
             .then(function (res) {
                 this.setState({
