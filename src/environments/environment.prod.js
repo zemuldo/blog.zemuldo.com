@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    wsUrl: 'wss://zemuldo.com:8090/'
+    wsUrl: 'wss://api.zemuldo.com/'
 };
