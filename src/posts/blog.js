@@ -30,40 +30,11 @@ export default class WelcomePage extends React.Component {
         this.setState({showDelete:true})
     }
     setBlogCounts(){
-        let gplusPost = {
-            "method": "pos.plusones.get",
-            "id": "p",
-            "params": {
-                "nolog": true,
-                "id": "https://zemuldo/"+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),
-                "source": "widget",
-                "userId": "@viewer",
-                "groupId": "@self"
-            },
-            "jsonrpc": "2.0",
-            "key": "p",
-            "apiVersion": "v1"
-        }
-        window.scrollTo(0,0);
-        return Promise.all([
-            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
-            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
-            axios.post(' https://clients6.google.com/rpc',gplusPost),
-        ])
-            .then(function (res) {
-                this.setState({
-                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
-                    twtC:(res[1].data.count)?res[1].data.count:0,
-                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
-                })
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({counts:{
-                    fbC:0,
-                    twtC:0,
-                    gplsC:0
-                }})
-            }.bind(this))
+        this.setState({counts:{
+            fbC:0,
+            twtC:0,
+            gplsC:0
+        }})
     }
 
     getAauthorAvatar(){
