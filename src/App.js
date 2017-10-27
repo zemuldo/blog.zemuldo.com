@@ -123,6 +123,7 @@ class App extends Component {
         this.setBlogHere = this.setBlogHere.bind(this);
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
         this.deletedBlog=this.deletedBlog.bind(this)
+        this.handleMenuItemClickFooter=this.handleMenuItemClickFooter.bind(this)
     };
     deletedBlog(){
         this.setState({blog:null})
@@ -442,9 +443,22 @@ class App extends Component {
         this.setState({blogsAreLoading:true})
         window.scrollTo(0,0);
         this.setHomeBlogs()
-        this.setState({ currentLocation:'home',})
+        this.setState({ currentLocation:'home',blog:null})
     }
     handleMenuItemClick = (e, { name }) => {
+        this.setState({blogsAreLoading:true})
+        if(name === 'home' || name ==='login'){
+            this.setHomeBlogs()
+            this.setState({ currentLocation:name,})
+        }
+        else {
+            if(pages[name]){
+                this.setPageBlogs(name)
+            }
+            this.setState({ currentLocation:name,})
+        }
+    }
+    handleMenuItemClickFooter = (name) => {
         this.setState({blogsAreLoading:true})
         if(name === 'home' || name ==='login'){
             this.setHomeBlogs()
@@ -653,7 +667,17 @@ class App extends Component {
 
                     }
                 </div>
-                <Footer color={this.state.colors[0]} corrent={this.state.current}/>
+                {
+                    this.state.blogsLoaded?
+                        <Footer
+                            handleMenuItemClickFooter={this.handleMenuItemClickFooter}
+                            handleHomeClick={this.handleHomeClick}
+                            color={this.state.colors[0]} corrent={this.state.current}
+                        />:
+                        <div>
+
+                        </div>
+                }
             </div>
         )
     }
