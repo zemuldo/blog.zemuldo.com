@@ -1,5 +1,5 @@
 import React from 'react'
-import {Header,Loader} from 'semantic-ui-react'
+import {Header,Loader,Segment,List,Grid,Divider,Image,Container} from 'semantic-ui-react'
 import Blog from '../posts/blog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
@@ -64,7 +64,7 @@ export default class WelcomePage extends React.Component {
                                                <p>
                                                    Here you find great articles on tech related topics.
                                                    Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                                   You can signup and share your content with us. Become part us.
+                                                   You can signup and share your content with us. Become part of us.
                                                </p>
                                            </div>
                                        </div>
