@@ -1,12 +1,12 @@
-module.exports = {
+export default {
     live:{
         httpPort:8080,
-        wsURL:'ws://zemuldo.com:8090',
+        wsURL:'ws://api.zemuldo.com',
         httpURL:'https://api.zemuldo.com'
     },
     production:{
         httpPort:8080,
-        wsURL:'ws://zemuldo.com:8090',
+        wsURL:'ws://api.zemuldo.com',
         httpURL:'https://api.zemuldo.com'
     },
     dev:{
