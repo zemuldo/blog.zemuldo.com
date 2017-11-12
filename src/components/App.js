@@ -12,18 +12,29 @@ class App extends React.Component {
         };
     };
     componentDidMount(){
-        this.props.dispatch(addTodo({
+        let todos = [
+            {
             id:1,
             name: 'test1',
             date:234762384623,
             completed: false
-        }))
-        this.props.dispatch(addTodo({
-            id:2,
-            name: 'test2',
-            date:76876878768,
-            completed: false
-        }))
+        },
+            {
+                id:1,
+                name: 'test1',
+                date:234762384623,
+                completed: false
+            },
+            {
+                id:1,
+                name: 'test1',
+                date:234762384623,
+                completed: false
+            }
+        ]
+        for (let i = 0;i<todos.length;i++){
+            this.props.dispatch(addTodo(todos[i]))
+        }
     }
     render() {
         return (
