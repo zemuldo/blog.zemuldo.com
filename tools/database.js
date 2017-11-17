@@ -12,7 +12,7 @@ const Server=server.Server
 
 let dbName = process.env.DB_NAME || 'Zemuldo-Main-Site';
 let dbHost = process.env.DB_HOST || 'localhost'
-let dbPort = process.env.DB_PORT || 27017
+let dbPort = process.env.DB_PORT || 9010
 
 let db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1})
 db.open((e, d)=>{

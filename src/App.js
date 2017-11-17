@@ -1,6 +1,5 @@
 import React from 'react'
 import Main from './routes'
-import NavBar from './partials/navBar'
 
 class App extends React.Component {
     constructor(props){
@@ -11,7 +10,6 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <NavBar/>
                 <Main />
             </div>
         )

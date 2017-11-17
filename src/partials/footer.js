@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom'
 import {  Menu, Button,Icon,Header,Modal,List,Grid,Divider,Container,Segment,Image} from 'semantic-ui-react'
 import ReviewPortal from './portal'
 import config from '../environments/conf'
@@ -9,7 +8,9 @@ class Footer extends Component {
         super(props);
         this.state = {
             modalOpen:false
+
         };
+
     };
     handleCookieOpen = () => this.setState({ modalOpen: true })
 
@@ -45,7 +46,7 @@ class Footer extends Component {
                                         <List.Item>
                                             <a href="https://facebook.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='facebook' />
-                                                <span color={this.props.color}>FaceBook</span>
+                                                <span color={this.props.color}>GitHub</span>
                                             </a>
                                         </List.Item>
                                     </List>
@@ -54,34 +55,28 @@ class Footer extends Component {
                                     <Header color='green' inverted as='h4' content='Navigation' />
                                     <List link>
                                         <List.Item>
-                                            <Link to="/" onClick={()=>this.props.handleHomeClick()}>
+                                            <a onClick={()=>this.props.handleHomeClick()}>
                                                 <Icon color='blue' name='home' />
                                                 <span color={this.props.color}>Home</span>
-                                            </Link>
+                                            </a>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="/tutorials" onClick={()=>this.props.handleMenuItemClickFooter('tuts')}>
+                                            <a onClick={()=>this.props.handleMenuItemClickFooter('tuts')}>
                                                 <Icon color='blue' name='code' />
                                                 <span color={this.props.color}>Tutorials</span>
-                                            </Link>
+                                            </a>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="tech" onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
+                                            <a onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
                                                 <Icon color='blue' name='server' />
                                                 <span color={this.props.color}>Tech</span>
-                                            </Link>
+                                            </a>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="/business" onClick={()=>this.props.handleMenuItemClickFooter('business')}>
+                                            <a onClick={()=>this.props.handleMenuItemClickFooter('business')}>
                                                 <Icon color='blue' name='book' />
                                                 <span color={this.props.color}>Business</span>
-                                            </Link>
-                                        </List.Item>
-                                        <List.Item>
-                                            <Link to="/reviews" onClick={()=>this.props.handleMenuItemClickFooter('reviews')}>
-                                                <Icon color='blue' name='star' />
-                                                <span color={this.props.color}>Reviews</span>
-                                            </Link>
+                                            </a>
                                         </List.Item>
                                         <List.Item>
                                         <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
@@ -89,6 +84,7 @@ class Footer extends Component {
                                             <span color={this.props.color}>About</span>
                                         </a>
                                     </List.Item>
+
                                     </List>
                                 </Grid.Column>
                                 <Grid.Column width={3}>
