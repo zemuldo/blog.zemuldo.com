@@ -15,6 +15,7 @@
     "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.31",
     "npm": "^5.4.1",
+    "preact": "^8.2.6",
     "prop-types": "^15.6.0",
     "queueing-subject": "^0.1.1",
     "react": "^15.6.2",
