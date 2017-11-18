@@ -2,21 +2,25 @@ module.exports = {
     live:{
         httpPort:8080,
         wsURL:'ws://zemuldo.com:8090',
-        httpURL:'https://api.zemuldo.com'
+        httpURL:'https://api.zemuldo.com',
+        serverURL:'https://zemuldo.com'
     },
     production:{
         httpPort:8080,
         wsURL:'ws://zemuldo.com:8090',
-        httpURL:'https://api.zemuldo.com'
+        httpURL:'https://api.zemuldo.com',
+        serverURL:'https://zemuldo.com'
     },
     dev:{
         httpPort:8080,
         wsURL:'ws://localhost:8090',
-        httpURL:'http://localhost:8090'
+        httpURL:'http://localhost:8090',
+        serverURL:'https://localhost:8080'
     },
     development:{
         httpPort:8080,
         wsURL:'ws://localhost:8090',
-        httpURL:'http://localhost:8090'
+        httpURL:'http://localhost:8090',
+        serverURL:'https://localhost:8080'
     }
 }

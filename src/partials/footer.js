@@ -92,7 +92,7 @@ class Footer extends Component {
                                         <List.Item>
                                             <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='user' />
-                                                <span color={this.props.color}>About the Creator</span>
+                                                <span color={this.props.color}>The Creator</span>
                                             </a>
                                         </List.Item>
                                     </List>
@@ -112,9 +112,24 @@ class Footer extends Component {
                             src='/logo.png'
                         />
                         <List horizontal  divided link>
-                            <List.Item as='a' href={env.httpURL+'/sitemap.xml'} rel="noreferrer noopener" target="_blank">Site Map</List.Item>
-                            <List.Item>Contact Us</List.Item>
-                            <List.Item>Terms and Conditions</List.Item>
+                            <List.Item>
+                                <a href={env.serverURL+'/sitemap.xml'} rel="noreferrer noopener" target="_blank">
+                                    <Icon color={this.props.color} name='map' />
+                                    <span color={this.props.color}>Site Map</span>
+                                </a>
+                            </List.Item>
+                            <List.Item>
+                                <a >
+                                    <Icon color={this.props.color} name='phone' />
+                                    <span color={this.props.color}>Contact</span>
+                                </a>
+                            </List.Item>
+                            <List.Item>
+                                <a href={env.serverURL+'/sitemap.xml'} rel="noreferrer noopener" target="_blank">
+                                    <Icon color={this.props.color} name='law' />
+                                    <span color={this.props.color}>Terms and Conditions</span>
+                                </a>
+                            </List.Item>
                             <List.Item>
                                 <Modal
                                     trigger={
