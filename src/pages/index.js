@@ -80,7 +80,6 @@ class App extends Component {
             iKnowYou:false,
             visitorInfo:null,
             geoAllowed:false,
-            currentUserLocation:'name',
             createNew:false,
             editingMode:false,
             colors:['green','blue','orange','violet','blue'],
@@ -93,7 +92,6 @@ class App extends Component {
             homePageIsLoading:true,
             blogDetails:null,
             richViewerState:null,
-            pageText:'Most Popular',
             blogLoade:false,
             homePageLoaded:false
         };
