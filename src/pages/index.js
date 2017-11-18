@@ -65,6 +65,10 @@ const pages = {
         name:'Profile',
         icon:'user circle'
     },
+    about:{
+        name:'About',
+        icon:'info'
+    },
     login:{
         name:'Login',
         icon:'lock'
