@@ -8,6 +8,7 @@ import Login from '../profile/loginForm'
 import PagesComponent from '../pages/homePage'
 import GeoLocator from '../partials/geoLocator'
 import Footer from '../partials/footer'
+import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -97,7 +98,8 @@ class App extends Component {
             blogDetails:null,
             richViewerState:null,
             blogLoade:false,
-            homePageLoaded:false
+            homePageLoaded:false,
+            loadFooter:false
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -371,6 +373,7 @@ class App extends Component {
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogsAreLoading:false})
                 }
+                this.setState({loadFooter:true})
             }.bind(this))
             .catch(function (err) {
                 this.setState({blogs:[]});
@@ -671,7 +674,7 @@ class App extends Component {
                     }
                 </div>
                 {
-                    this.state.blogsLoaded?
+                    this.state.loadFooter?
                         <Footer
                             handleMenuItemClickFooter={this.handleMenuItemClickFooter}
                             handleHomeClick={this.handleHomeClick}
@@ -681,6 +684,7 @@ class App extends Component {
 
                         </div>
                 }
+                <ReviewPortal/>
             </div>
         )
     }
