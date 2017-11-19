@@ -379,6 +379,7 @@ class App extends Component {
                 this.setState({blogs:[]});
                 this.setState({blogsLoaded:true,homePageLoaded:true})
                 this.setState({blogsAreLoading:false})
+                this.setState({loadFooter:true})
             }.bind(this))
     }
     handleNavigation(location){
