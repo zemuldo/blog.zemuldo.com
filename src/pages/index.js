@@ -373,13 +373,12 @@ class App extends Component {
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogsAreLoading:false})
                 }
-                this.setState({loadFooter:true})
             }.bind(this))
             .catch(function (err) {
                 this.setState({blogs:[]});
                 this.setState({blogsLoaded:true,homePageLoaded:true})
                 this.setState({blogsAreLoading:false})
-                this.setState({loadFooter:true})
+
             }.bind(this))
     }
     handleNavigation(location){
@@ -442,6 +441,7 @@ class App extends Component {
         this.shuffle()
         this.forceUpdate()
         window.addEventListener('resize', this.resize)
+        this.setState({loadFooter:true})
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
