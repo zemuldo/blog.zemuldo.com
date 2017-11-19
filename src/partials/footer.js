@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import {  Menu, Button,Icon,Header,Modal,List,Grid,Divider,Container,Segment,Image} from 'semantic-ui-react'
-import ReviewPortal from './portal'
+import {  Menu, Button,Icon,Header,Modal,List,Grid,Container,Segment,Image} from 'semantic-ui-react'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class Footer extends Component {
     constructor(props){
         super(props);
         this.state = {
-            modalOpen:false
+            cookieModalOpen:false,
+            ulerModalaOpen:false
         };
     };
-    handleCookieOpen = () => this.setState({ modalOpen: true })
-
-    handleCookieClose = () => this.setState({ modalOpen: false })
+    handleCookieOpen = () => this.setState({ cookieModalOpen: true })
+    handleCookieClose = () => this.setState({ cookieModalOpen: false })
+    handleUlerOpen = () => this.setState({ ulerModalaOpen: true })
+    handleUlerClose = () => this.setState({ ulerModalaOpen: false })
     render() {
         return (
             <div>
@@ -125,12 +126,6 @@ class Footer extends Component {
                                 </a>
                             </List.Item>
                             <List.Item>
-                                <a href={env.serverURL+'/sitemap.xml'} rel="noreferrer noopener" target="_blank">
-                                    <Icon color={this.props.color} name='law' />
-                                    <span color={this.props.color}>Terms and Conditions</span>
-                                </a>
-                            </List.Item>
-                            <List.Item>
                                 <Modal
                                     trigger={
                                         <Menu.Item name='Cookie Policy' onClick={this.handleCookieOpen} >
@@ -138,12 +133,12 @@ class Footer extends Component {
                                             <span color={this.props.color}>Cookie Policy</span>
                                         </Menu.Item>
                                     }
-                                    open={this.state.modalOpen}
+                                    open={this.state.cookieModalOpen}
                                     onClose={this.handleCookieClose}
                                     basic
                                     size='small'
                                 >
-                                    <Header icon='browser' content='Cookies policy' />
+                                    <Header icon='privacy' content='Cookies policy' />
                                     <Modal.Content>
                                         <h3>This website uses cookies to ensure the best user experience.</h3>
                                         <p>Cookies help you have better experience. The full Policy is here
@@ -161,6 +156,36 @@ class Footer extends Component {
                                 </Modal>
                             </List.Item>
                             <List.Item>
+                                <Modal
+                                    trigger={
+                                        <Menu.Item name='Terms and Conditions' onClick={this.handleUlerOpen} >
+                                            <Icon color={this.props.color} name='law' />
+                                            <span color={this.props.color}>Terms and Conditions</span>
+                                        </Menu.Item>
+                                    }
+                                    open={this.state.ulerModalaOpen}
+                                    onClose={this.handleUlerClose}
+                                    basic
+                                    size='small'
+                                >
+                                    <Header icon='law' content='Terms and Conditions' />
+                                    <Modal.Content>
+                                        <h3>This website uses cookies to ensure the best user experience.</h3>
+                                        <p>Cookies help you have better experience. The full Policy is here.
+                                            <a href="https://policy.zemuldo.com/terms" rel="noreferrer noopener" target="_blank">
+                                                <Icon color={this.props.color} name='law' />
+                                                <span color={this.props.color}> Zemuldo.COM Terms and Conditions</span>
+                                            </a>
+                                        </p>
+                                    </Modal.Content>
+                                    <Modal.Actions>
+                                        <Button color={this.props.color} onClick={this.handleUlerClose} inverted>
+                                            <Icon name='checkmark' /> OK
+                                        </Button>
+                                    </Modal.Actions>
+                                </Modal>
+                            </List.Item>
+                            <List.Item>
                                 <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
                                     <Icon color={this.props.color} name='copyright' />
                                     <span color={this.props.color}>CopyRight {" Zemuldo "+new Date().getFullYear()}</span>
@@ -170,7 +195,6 @@ class Footer extends Component {
                     </Container>
                     <br/>
                 </Segment>
-                <ReviewPortal/>
             </div>
         )
     }
