@@ -20,7 +20,9 @@ class Routes extends React.Component {
                     <Route path='/reviews/:loadedDetails' component={Page}/>
                     <Route path='/tutorials/:loadedDetails' component={Page}/>
                     <Route path='/about' component={Page}/>
+                    <Route path='/:user/:details' component={Page}/>
                     <Route path='/login' component={Page}/>
+                    <Route exact path='/*' component={Page}/>
                 </Switch>
             </main>
         )

@@ -483,7 +483,8 @@ class App extends Component {
         }
     }
     successLogin = (user)=>{
-        this.setState({user:user})
+        this.props.history.push('/'+user.userName+'/'+user.id+'_session_'+new Date().toDateString())
+        this.setState({user:user,current:'profile'})
         localStorage.setItem('user',JSON.stringify(user))
         this.setState({loggedin:true,currentLocation:'home'})
         let urlCreator = window.URL || window.webkitURL;
@@ -506,6 +507,7 @@ class App extends Component {
         this.setState({createNew:true,currentLocation:'profile'})
     }
     _handleSwitchToProfile = () =>{
+        this.props.history.push('/'+this.state.user.userName+'/'+this.state.user.id+'_session_'+new Date().toDateString())
         this.setState({currentLocation:'profile',createNew:false})
     }
     _goToEditor(){
