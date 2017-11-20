@@ -16,13 +16,14 @@ class Footer extends Component {
     handleUlerOpen = () => this.setState({ ulerModalaOpen: true })
     handleUlerClose = () => this.setState({ ulerModalaOpen: false })
     render() {
+        let urlDetails = 'info@all';
         return (
             <div>
                 <Segment
                     vertical
                     style={{margin: '0em 0em 0em 0em', padding: '0em 0em 0em 0em' }}
                 >
-                    <Container textAlign='center'>
+                    <Container textAlign='left'>
                         <Grid divided stackable>
                             <Grid.Row>
                                 <Grid.Column width={3}>
@@ -51,41 +52,41 @@ class Footer extends Component {
                                         </List.Item>
                                     </List>
                                 </Grid.Column>
-                                <Grid.Column width={3}>
+                                <Grid.Column  width={3}>
                                     <Header color='green' inverted as='h4' content='Navigation' />
-                                    <List link>
+                                    <List link >
                                         <List.Item>
-                                            <Link to="/" onClick={()=>this.props.handleHomeClick()}>
+                                            <Link  to="/" onClick={()=>this.props.handleHomeClick()}>
                                                 <Icon color='blue' name='home' />
                                                 <span color={this.props.color}>Home Page</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="/tutorials" onClick={()=>this.props.handleMenuItemClickFooter('tuts')}>
+                                            <Link to={"/tutorials/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tuts')}>
                                                 <Icon color='blue' name='code' />
                                                 <span color={this.props.color}>Tutorials</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="tech" onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
+                                            <Link to={"/tech"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
                                                 <Icon color='blue' name='server' />
                                                 <span color={this.props.color}>Tech Articles</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="/business" onClick={()=>this.props.handleMenuItemClickFooter('business')}>
+                                            <Link to={"/business/"+urlDetails}onClick={()=>this.props.handleMenuItemClickFooter('business')}>
                                                 <Icon color='blue' name='book' />
                                                 <span color={this.props.color}>Business Articles</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="/reviews" onClick={()=>this.props.handleMenuItemClickFooter('reviews')}>
+                                            <Link to={"/reviews/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('reviews')}>
                                                 <Icon color='blue' name='star' />
                                                 <span color={this.props.color}>Reviews</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to="/about" onClick={()=>this.props.handleMenuItemClickFooter('about')}>
+                                            <Link to={"/about/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('about')}>
                                                 <Icon color='blue' name='info' />
                                                 <span color={this.props.color}>About</span>
                                             </Link>

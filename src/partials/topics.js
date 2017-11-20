@@ -65,7 +65,7 @@ class Topics extends Component {
                     className="topicButton"
                     onClick={ this.props.onAllcClick.bind('all')}
                     name='all'
-                    style={{backgroundColor:'transparent',border:'none'} }
+                    style={{cursor:'pointer',backgroundColor:'transparent',border:'none'} }
                 >
                             <span>
                                 {'All '+ '|'}
@@ -78,7 +78,7 @@ class Topics extends Component {
                         className="topicButton"
                         onClick={ this.props.onTopicClick.bind(this,topics[i].text)}
                         name={topics[i].name}
-                        style={{backgroundColor:'transparent',border:'none'} }
+                        style={{cursor:'pointer',backgroundColor:'transparent',border:'none'} }
                     >
                             <span>
                                 {toTitleCase(topics[i].name)}

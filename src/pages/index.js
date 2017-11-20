@@ -268,6 +268,8 @@ class App extends Component {
             }
         })
             .then(response => {
+                let url = '/'+thisBlog.type+'/'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                this.props.history.push(url)
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogIsLoading:false,blog:response.data});
                 this.setState({blogIsLoading:false,blogLoaded:true});
@@ -290,6 +292,8 @@ class App extends Component {
                 if(response.data.error){
                 }
                 else {
+                    let o = response.data
+                    this.props.history.push('/'+response.data.type+'/'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
@@ -373,12 +377,13 @@ class App extends Component {
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogsAreLoading:false})
                 }
+                this.setState({loadFooter:true})
             }.bind(this))
             .catch(function (err) {
                 this.setState({blogs:[]});
                 this.setState({blogsLoaded:true,homePageLoaded:true})
                 this.setState({blogsAreLoading:false})
-
+                this.setState({loadFooter:true})
             }.bind(this))
     }
     handleNavigation(location){
@@ -441,7 +446,6 @@ class App extends Component {
         this.shuffle()
         this.forceUpdate()
         window.addEventListener('resize', this.resize)
-        this.setState({loadFooter:true})
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
@@ -511,6 +515,7 @@ class App extends Component {
         this.setState({editingMode:false,createNew:false})
     }
     render() {
+        let urlDetails = 'info@all';
         return (
             <div>
                 <div>
@@ -547,28 +552,28 @@ class App extends Component {
                                 active={this.state.currentLocation === 'dev'}
                                 onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='code' />
-                                <span color={this.state.colors[0]}><Link to="/dev">Dev</Link></span>
+                                <span color={this.state.colors[0]}><Link to={"/dev/"+urlDetails}>Dev</Link></span>
                             </Dropdown.Item>
                             <Dropdown.Item
                                 name='business'
                                 active={this.state.currentLocation === 'business'}
                                 onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='creative commons' />
-                                <span color={this.state.colors[0]}><Link to="/business">Business</Link></span>
+                                <span color={this.state.colors[0]}><Link to={"/business/"+urlDetails}>Business</Link></span>
                             </Dropdown.Item>
                             <Dropdown.Item
                                 name='tech'
                                 active={this.state.currentLocation === 'tech'}
                                 onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='server' />
-                                <span color={this.state.colors[0]}><Link to="/tech">Tech</Link></span>
+                                <span color={this.state.colors[0]}><Link to={"/tech/"+urlDetails}>Tech</Link></span>
                             </Dropdown.Item>
                             <Dropdown.Item
                                 name='reviews'
                                 active={this.state.currentLocation === 'use'}
                                 onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='circle notched' />
-                                <span color={this.state.colors[0]}><Link to="/reviews">Reviews</Link></span>
+                                <span color={this.state.colors[0]}><Link to={"/reviews"+urlDetails}>Reviews</Link></span>
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

@@ -14,12 +14,11 @@ class Routes extends React.Component {
             <main>
                 <Switch>
                     <Route exact path='/' component={Page}/>
-                    <Route path='/dev' component={Page}/>
-                    <Route path='/tutorials' component={Page}/>
-                    <Route path='/tech' component={Page}/>
-                    <Route path='/business' component={Page}/>
-                    <Route path='/reviews' component={Page}/>
-                    <Route path='/tutorials' component={Page}/>
+                    <Route path='/dev/:loadedDetails' component={Page}/>
+                    <Route path='/tech/:loadedDetails' component={Page}/>
+                    <Route path='/business/:loadedDetails' component={Page}/>
+                    <Route path='/reviews/:loadedDetails' component={Page}/>
+                    <Route path='/tutorials/:loadedDetails' component={Page}/>
                     <Route path='/about' component={Page}/>
                     <Route path='/login' component={Page}/>
                 </Switch>
