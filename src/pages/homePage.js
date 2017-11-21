@@ -247,7 +247,7 @@ class PagesComponent extends Component {
                                         }
                                         {
 
-                                            this.state.blogIsLoading?
+                                            !this.props.blogLoaded?
                                                 <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                                     <Loader active inline='centered' />
                                                 </div>:

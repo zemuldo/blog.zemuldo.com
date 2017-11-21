@@ -92,7 +92,6 @@ class App extends Component {
             profilePic:null,
             blogs:[],
             blogsLoaded:false,
-            blogIsLoading:true,
             blogsAreLoading:true,
             homePageIsLoading:true,
             blogDetails:null,
@@ -206,16 +205,15 @@ class App extends Component {
             }.bind(this));
     }
     setCurrentBlog(url){
-        this.setState({blogLoaded:false})
         let id = null
         if(url.indexOf('-')>0){
-            id = Number(url.split('_')[2]);
+            id = Number(url.split('_')[url.split('_').length-1]);
         }
         else if(url.indexOf('%20')>0){
-            id = Number(url.split('_')[2]);
+            id = Number(url.split('_')[url.split('_').length-1]);
         }
         else if(url.indexOf('%2520')>0){
-            id = Number(url.split('_')[2]);
+            id = Number(url.split('_')[url.split('_').length-1]);
         }
         if(id && id.toString()!=='NaN'){
             this.setBlogHere(id)
@@ -260,7 +258,7 @@ class App extends Component {
     }
     onReadMore(thisBlog){
         window.scrollTo(0,0);
-        this.setState({blogIsLoading:true,blogLoaded:false});
+        this.setState({blogLoaded:false});
         return axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
@@ -268,15 +266,14 @@ class App extends Component {
             }
         })
             .then(response => {
-                let url = '/'+thisBlog.type+'/'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/@'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
                 this.props.history.push(url)
                 this.setState({blog:response.data,blogDetails:thisBlog});
-                this.setState({blogIsLoading:false,blog:response.data});
-                this.setState({blogIsLoading:false,blogLoaded:true});
+                this.setState({blogLoaded:true,blog:response.data});
             })
             .catch(function (err) {
                 this.setState({blog:null,blogDetails:thisBlog});
-                this.setState({blogIsLoading:false,blogLoaded:true});
+                this.setState({blogLoaded:true});
                 return err;
             }.bind(this))
 
@@ -293,7 +290,7 @@ class App extends Component {
                 }
                 else {
                     let o = response.data
-                    this.props.history.push('/'+response.data.type+'/'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
+                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/@'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
@@ -406,8 +403,8 @@ class App extends Component {
     resize = () => this.forceUpdate()
     componentDidMount() {
         this.setState({blogsLoaded:false})
-        this.blogIsLoading(true);
         let url = window.location.pathname.split('/').join('');
+        console.log(url)
         this.setCurrentBlog(url);
         this.forceUpdate();
         if(window.innerWidth<503){
@@ -431,7 +428,7 @@ class App extends Component {
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
                 this.setState({profilePic:imageUrl})
-                this.setState({blogLoaded:true,homePageLoaded:true})
+                this.setState({homePageLoaded:true})
             }
             else {
                 localStorage.removeItem('user');
@@ -518,7 +515,7 @@ class App extends Component {
         this.setState({editingMode:false,createNew:false})
     }
     render() {
-        let urlDetails = 'info@all';
+        let urlDetails = 'all';
         return (
             <div>
                 <div>
