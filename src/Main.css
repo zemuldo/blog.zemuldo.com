@@ -4,8 +4,15 @@
     Author : Danstan Otieno Onyango
     Website : http://www.zemuldo.com/
 
-
 */
+
+/*
+    Navigation Bar
+ */
+
+
+
+
 /*
     Buttons
  */
@@ -35,31 +42,10 @@
     right: 0;
 }
 
+/*
+    Rich Text Editor
+*/
 
-.topicButton span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-}
-
-.topicButton span:after {
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -5px;
-    transition: 1s;
-}
-
-.topicButton:hover span {
-    color: orange;
-    padding-right: 3px;
-}
-
-.topicButton:hover span:after {
-    opacity: 1;
-    right: 0;
-}
 .RichEditor-root {
     background: #fff;
     font-family: 'Georgia', serif;
@@ -158,4 +144,48 @@
     float: left;
     width: 150px;
     background: red;
+}
+
+/*
+    TOPICS
+    Styling for the Topics Navigation Component.
+*/
+
+.topicsWrapper{
+    color:blue;
+    margin: 2em 0em 0em 1em;
+}
+.topicsWrapper h3{
+  margin-left:10px;
+}
+.topicsWrapper button{
+    color: blue;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+.topicButton span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+.topicButton span:after {
+    color: orange;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -5px;
+    transition: 1s;
+}
+.topicButton:hover span {
+    color: orange;
+    padding-right: 3px;
+}
+.topicButton:disabled{
+    color: orange;
+}
+.topicButton:hover span:after {
+    opacity: 1;
+    right: 0;
 }

@@ -5,7 +5,6 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
-let x =5
 const topics = [
     { key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata'},
     { key: 'iot', value: 'iot', text: 'iot' ,name: 'iot'},
@@ -58,14 +57,14 @@ class Topics extends Component {
     };
     render() {
         return (
-            <div  style={{color:'blue',textAlign:'centre',margin:'2em 0em 0em 1em'}}>
-                <Header style={{marginLeft:'10px'}} color='blue' as='h3'>Topics</Header>
+            <div className='topicsWrapper'>
+                <Header color='blue' as='h3'>Topics</Header>
                 <button
                     disabled={this.props.topic==='all'}
                     className="topicButton"
                     onClick={ this.props.onAllcClick.bind('all')}
                     name='all'
-                    style={{cursor:'pointer',backgroundColor:'transparent',border:'none'} }
+
                 >
                             <span>
                                 {'All '+ '|'}
@@ -78,7 +77,6 @@ class Topics extends Component {
                         className="topicButton"
                         onClick={ this.props.onTopicClick.bind(this,topics[i].text)}
                         name={topics[i].name}
-                        style={{cursor:'pointer',backgroundColor:'transparent',border:'none'} }
                     >
                             <span>
                                 {toTitleCase(topics[i].name)}
