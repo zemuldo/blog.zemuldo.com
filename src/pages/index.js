@@ -357,6 +357,7 @@ class App extends Component {
             }
         })
             .then(function (response) {
+                this.setState({loadFooter:true})
                 if(!response.data){
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogsAreLoading:false})
@@ -377,9 +378,9 @@ class App extends Component {
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogsAreLoading:false})
                 }
-                this.setState({loadFooter:true})
             }.bind(this))
             .catch(function (err) {
+                this.setState({loadFooter:true})
                 this.setState({blogs:[]});
                 this.setState({blogsLoaded:true,homePageLoaded:true})
                 this.setState({blogsAreLoading:false})
