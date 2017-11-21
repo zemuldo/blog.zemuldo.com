@@ -575,7 +575,7 @@ class App extends Component {
                                 active={this.state.currentLocation === 'use'}
                                 onClick={this.handleMenuItemClick}>
                                 <Icon color={this.state.colors[0]} name='circle notched' />
-                                <span color={this.state.colors[0]}><Link to={"/reviews"+urlDetails}>Reviews</Link></span>
+                                <span color={this.state.colors[0]}><Link to={"/reviews/"+urlDetails}>Reviews</Link></span>
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
