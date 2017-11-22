@@ -189,3 +189,16 @@
     opacity: 1;
     right: 0;
 }
+
+/*
+             Loaders
+*/
+.center-loader{
+    left: 50%;
+    position: fixed;
+    z-index: -1;
+    bottom: 50%;
+}
+.small-loader{
+    margin: 2em 0em 0em 0em;
+}

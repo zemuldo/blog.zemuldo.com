@@ -216,7 +216,7 @@ class PagesComponent extends Component {
                                                                             </div>
                                                                     }
                                                             </div>:
-                                                            <div style={{ position:'center', margin: '2em 0em 0em 0em'}} >
+                                                            <div className='small-loader' >
                                                                 <Loader active inline='centered' />
                                                             </div>
                                                     }
@@ -248,7 +248,7 @@ class PagesComponent extends Component {
                                         {
 
                                             !this.props.blogLoaded?
-                                                <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                                                <div className='margin-5050'>
                                                     <Loader active inline='centered' />
                                                 </div>:
                                                 <div>
@@ -277,7 +277,7 @@ class PagesComponent extends Component {
                                 </Grid.Row>
                             </Grid>
                         </div>:
-                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                        <div className='center-loader'>
                             <Loader active inline='centered' />
                         </div>
                 }
