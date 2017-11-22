@@ -165,7 +165,10 @@ class App extends Component {
             this.blogsAreLoading(false)
         }
     }
-    setBlogHere(id){
+    setBlogHere(id,page){
+        if(!pages[page]){
+            window.location ='/'
+        }
         return axios.post(env.httpURL, {
             "queryMethod":"getPost",
             "queryData":{
@@ -174,11 +177,13 @@ class App extends Component {
         })
             .then(function (response) {
                 if(!response.data){
+                    window.history.push('/'+page+'/all')
                     this.setState({blog:null});
                     this.setState({blogLoaded:true})
                     return false
                 }
                 if(response.data.error){
+                    window.history.push('/'+page+'/all')
                     this.setState({blog:null});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0)
@@ -192,6 +197,7 @@ class App extends Component {
 
                 }
                 else {
+                    window.history.push('/'+page+'/all')
                     this.setState({blog:null});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0)
@@ -199,12 +205,14 @@ class App extends Component {
                 }
             }.bind(this))
             .catch(function (err) {
+                window.history.push('/'+page+'/all')
                 this.setState({blog:null});
                 this.setState({blogLoaded:true})
                 return err
             }.bind(this));
     }
-    setCurrentBlog(url){
+    setCurrentBlog(url,page){
+        console.log(url)
         let id = null
         if(url.indexOf('-')>0){
             id = Number(url.split('_')[url.split('_').length-1]);
@@ -216,7 +224,7 @@ class App extends Component {
             id = Number(url.split('_')[url.split('_').length-1]);
         }
         if(id && id.toString()!=='NaN'){
-            this.setBlogHere(id)
+            this.setBlogHere(id,page)
         }
         else{
             this.setState({blog:null});
@@ -266,7 +274,7 @@ class App extends Component {
             }
         })
             .then(response => {
-                let url = '/'+thisBlog.type+'/'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/@'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
                 this.props.history.push(url)
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogLoaded:true,blog:response.data});
@@ -290,7 +298,7 @@ class App extends Component {
                 }
                 else {
                     let o = response.data
-                    this.props.history.push('/'+response.data.type+'/'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
+                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/@'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
@@ -404,8 +412,10 @@ class App extends Component {
     componentDidMount() {
         this.setState({blogsLoaded:false})
         let url = window.location.pathname.split('/').join('');
+        let page = window.location.pathname.split('/')[1];
+        console.log(page)
         console.log(url)
-        this.setCurrentBlog(url);
+        this.setCurrentBlog(url,page);
         this.forceUpdate();
         if(window.innerWidth<503){
             this._handleChangeBodySize(16);
