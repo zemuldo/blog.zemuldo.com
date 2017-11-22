@@ -266,7 +266,7 @@ class App extends Component {
             }
         })
             .then(response => {
-                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/@'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                let url = '/'+thisBlog.type+'/'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
                 this.props.history.push(url)
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogLoaded:true,blog:response.data});
@@ -290,7 +290,7 @@ class App extends Component {
                 }
                 else {
                     let o = response.data
-                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/@'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
+                    this.props.history.push('/'+response.data.type+'/'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
