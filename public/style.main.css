@@ -1,0 +1,161 @@
+/*
+
+    CopyRight: Danstan Onyango@ZEMULDO.COM
+    Author : Danstan Otieno Onyango
+    Website : http://www.zemuldo.com/
+
+
+*/
+/*
+    Buttons
+ */
+.redMoreButton span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.redMoreButton span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.redMoreButton:hover span {
+    color:orange;
+    padding-right: 25px;
+}
+
+.redMoreButton:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+
+.topicButton span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.topicButton span:after {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -5px;
+    transition: 1s;
+}
+
+.topicButton:hover span {
+    color: orange;
+    padding-right: 3px;
+}
+
+.topicButton:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+.RichEditor-root {
+    background: #fff;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    padding: 15px;
+}
+
+.RichEditor-editor {
+    cursor: text;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10%;
+}
+
+.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-editor .public-DraftEditor-content {
+    margin: 0 -15px -15px;
+    padding: 15px;
+}
+
+.RichEditor-editor .public-DraftEditor-content {
+    min-height: 100px;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+    display: none;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+    color: darkslategrey;
+    font-family: 'Hoefler Text', 'Georgia', serif;
+    font-style: italic;
+    margin: 16px 0;
+    padding: 10px 20px;
+    border-radius: 7px;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+    font-size: 16px;
+    padding: 20px;
+}
+
+.RichEditor-controls {
+    font-family: 'Helvetica', sans-serif;
+    font-size: 14px;
+    margin-bottom: 5px;
+    user-select: none;
+}
+
+.RichEditor-styleButton {
+    color: #999;
+    cursor: pointer;
+    margin-right: 16px;
+    padding: 2px 0;
+    display: inline-block;
+}
+
+.RichEditor-activeButton {
+    color: #5890ff;
+}
+
+.TextEditTools{
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding:3px
+}
+.RichEditor-root-preview {
+    background: #fff;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    padding: 15px;
+}
+.login-form{
+    margin-bottom: 10%;
+    margin-top: 6%;
+}
+.clearElem button{
+    border: none;
+    background-color: transparent;
+}
+.shareIcon sup{
+    color: green;
+    font-size: small;
+}
+.info{
+    color: green;
+    font-size: medium;
+}
+.authorImage{
+    width: 400px;
+    background: yellow;
+}
+.authorImage img{
+    float: left;
+    width: 150px;
+    background: red;
+}
