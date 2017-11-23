@@ -98,7 +98,8 @@ class App extends Component {
             richViewerState:null,
             blogLoade:false,
             homePageLoaded:false,
-            loadFooter:false
+            loadFooter:false,
+            xyy:true
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -115,6 +116,7 @@ class App extends Component {
         this.handleNavigation = this.handleNavigation.bind(this);
         this.setHomeBlogs = this.setHomeBlogs.bind(this);
         this.setPageBlogs = this.setPageBlogs.bind(this);
+        this.navigateBlogs = this.navigateBlogs.bind(this)
         this.getBlogDetails = this.getBlogDetails.bind(this)
         this.onReadMore = this.onReadMore.bind(this)
         this.setCurrentBlog = this.setCurrentBlog.bind(this)
@@ -274,7 +276,7 @@ class App extends Component {
             }
         })
             .then(response => {
-                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/@'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
                 this.props.history.push(url)
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogLoaded:true,blog:response.data});
@@ -298,7 +300,7 @@ class App extends Component {
                 }
                 else {
                     let o = response.data
-                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
+                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/@'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
@@ -311,6 +313,27 @@ class App extends Component {
                 this.setState({blogLoaded:true})
                 return err
             }.bind(this));
+    }
+    navigateBlogs(name){
+        this.setState({blogsLoaded:false})
+        return axios.post(env.httpURL, {
+            "queryMethod":"getPosts",
+            "queryData":{
+                "type":name
+            }
+        })
+            .then(function (response) {
+                if(!response.data){
+                    this.setState({blogs:[],blog:null,blogsLoaded:true});
+                    return false
+                }
+                else {
+                    this.setState({blogs:response.data,blogsLoaded:true});
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.setState({blogs:[],blog:null,blogsLoaded:true});
+            }.bind(this))
     }
     setPageBlogs(name){
         return axios.post(env.httpURL, {
@@ -409,6 +432,13 @@ class App extends Component {
         this.setState({colors:array});
     }
     resize = () => this.forceUpdate()
+    componentWillReceiveProps() {
+        let page = window.location.pathname.split('/')[1];
+        if(pages[page]){
+            this.setState({currentLocation:page})
+            this.navigateBlogs(page)
+        }
+    }
     componentDidMount() {
         this.setState({blogsLoaded:false})
         let url = window.location.pathname.split('/').join('');
@@ -705,4 +735,4 @@ class App extends Component {
         )
     }
 }
-export default App;
+export default  App
