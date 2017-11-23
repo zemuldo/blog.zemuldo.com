@@ -12,6 +12,13 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const urls =
+    {
+  development:'http://localhost:8070',
+  production:'https://zemuldo.com',
+  dev:'http://localhost:8070',
+  live:'https://zemuldo.com'
+}
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -33,7 +40,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
+const cssFilename = urls[process.env.NODE_ENV]+'/static/css/[name].app.css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -61,8 +68,8 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/[name].[chunkhash:20].js',
-    chunkFilename: 'static/js/[name].[chunkhash:20].chunk.js',
+    filename: urls[process.env.NODE_ENV]+'/static/js/[name].app.js',
+    chunkFilename: urls[process.env.NODE_ENV]+'/static/js/[name].app.chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location
@@ -153,7 +160,7 @@ module.exports = {
         loader: require.resolve('url-loader'),
         options: {
           limit: 10000,
-          name: 'static/css/media/media/[name].[hash:8].[ext]',
+          name: urls[process.env.NODE_ENV]+'/static/css/media/media/[name].[hash:8].[ext]',
         },
       },
       // Process JS with Babel.

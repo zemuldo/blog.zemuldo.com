@@ -3,6 +3,13 @@
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
+const urls =
+    {
+        development:'http://localhost:8070',
+        production:'https://zemuldo.com',
+        dev:'http://localhost:8070',
+        live:'https://zemuldo.com'
+    }
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
@@ -34,7 +41,7 @@ const getPublicUrl = appPackageJson =>
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
   const servedUrl = envPublicUrl ||
-    (publicUrl ? url.parse(publicUrl).pathname : '/');
+    (publicUrl ? url.parse(publicUrl).pathname : urls[process.env.NODE_ENV]);
   return ensureSlash(servedUrl, true);
 }
 
