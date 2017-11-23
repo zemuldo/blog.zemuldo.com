@@ -10,7 +10,8 @@ import GeoLocator from '../partials/geoLocator'
 import Footer from '../partials/footer'
 import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
+import {pages} from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development';
 
 function toTitleCase(str)
 {
@@ -33,48 +34,7 @@ function dataURItoBlob(dataURI, callback) {
     let bb = new Blob([ab]);
     return bb;
 }
-const pages = {
-    dev:{
-        name:'Development',
-        icon:'code',
-        topTitle:"Dev articles"
-    },
-    tech:{
-        name:'Technology',
-        icon:'server',
-        topTitle:" Featured in Technology"
-    },
-    business:{
-        name:'Business',
-        icon:'creative commons',
-        topTitle:" Popular in Bsuness"
-    },
-    reviews:{
-        name:'Reviews',
-        icon:'circle notched'
-    },
-    tuts:{
-        name:'Tutorials',
-        icon:'code',
-        topTitle:" Popular Tutorials"
-    },
-    home:{
-        name:'Home',
-        icon:'home'
-    },
-    profile:{
-        name:'Profile',
-        icon:'user circle'
-    },
-    about:{
-        name:'About',
-        icon:'info'
-    },
-    login:{
-        name:'Login',
-        icon:'lock'
-    }
-}
+
 class App extends Component {
     constructor(props){
         super(props);
@@ -276,7 +236,7 @@ class App extends Component {
             }
         })
             .then(response => {
-                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/@'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
                 this.props.history.push(url)
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogLoaded:true,blog:response.data});
@@ -300,7 +260,7 @@ class App extends Component {
                 }
                 else {
                     let o = response.data
-                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/@'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
+                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
                     this.setState({blogDetails:response.data,isHome:false});
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
@@ -359,7 +319,6 @@ class App extends Component {
                     this.setState({blogsLoaded:true,homePageLoaded:true})
                     this.setState({blogs:response.data});
                     this.setState({blogsAreLoading:false})
-                    this.onReadMore(response.data[0])
                 }
                 else {
                     this.setState({blogs:[],blog:null,blogDetails:null});

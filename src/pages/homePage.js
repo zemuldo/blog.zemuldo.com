@@ -6,6 +6,7 @@ import Topics from '../partials/topics'
 import axios from 'axios'
 import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
+import {pages} from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 let x =0
 class PagesComponent extends Component {
@@ -25,14 +26,19 @@ class PagesComponent extends Component {
         this.onTopicClick = this.onTopicClick.bind(this);
     };
     onTopicClick = (e) => {
+        let query = {
+            "start":x.toString(),
+            "topics":e.toLowerCase(),
+        }
+        let page = window.location.pathname.split('/')[1];
+        if(pages[page]){
+            query.type = page
+        }
         this.resetNav('getPostsTopic',e);
         this.props.blogsAreLoading(true);
         return axios.post(env.httpURL,{
             "queryMethod":"getPagedPosts",
-            "queryData":{
-                "start":x.toString(),
-                "topics":e.toLowerCase()
-            }
+            "queryData":query
         })
             .then(function (blogs) {
                 if(blogs.data.length<5){
