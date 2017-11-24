@@ -7,6 +7,7 @@ import axios from 'axios'
 import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 import {pages} from '../environments/conf'
+import {topicsOBJ} from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 let x =0
 class PagesComponent extends Component {
@@ -45,13 +46,22 @@ class PagesComponent extends Component {
     }
     setNextBlogs(e){
         x+=5;
+        let page = window.location.pathname.split('/')[1];
+        let topic = window.location.pathname.split('/')[2];
+        let query = {
+            "start":x.toString(),
+        }
+        if(topicsOBJ[topic]){
+            query.topics = topic
+        }
+        if(pages[page] && pages[page].name!=='Home' ){
+            query.type = page;
+            this.setState({currentLocation:page})
+        }
         if(this.state.next){
             return axios.post(env.httpURL,{
                 "queryMethod":'getPagedPosts',
-                "queryData":{
-                    "start":x.toString(),
-                    "topics":this.state.topic
-                }
+                "queryData":query
             })
                 .then(function (blogs) {
                     if(blogs.data.length<5){
@@ -77,13 +87,21 @@ class PagesComponent extends Component {
        if(x!==0){
            x-=5;
        }
+        let page = window.location.pathname.split('/')[1];
+        let topic = window.location.pathname.split('/')[2];
+        let query = {
+            "start":x.toString(),
+        }
+        if(topicsOBJ[topic]){
+            query.topics = topic
+        }
+        if(pages[page] && pages[page].name!=='Home' ){
+            query.type = page;
+            this.setState({currentLocation:page})
+        }
         return axios.post(env.httpURL,{
             "queryMethod":'getPagedPosts',
-            "queryData":{
-                "start":x.toString(),
-                "topics":this.state.topic
-
-            }
+            "queryData":query
         })
             .then(function (blogs) {
               if(blogs.data[0]){
