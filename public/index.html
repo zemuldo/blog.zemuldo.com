@@ -29,10 +29,46 @@
     <meta property="og:image" content="https://zemuldo.com/img/icons/NN.png">
     <meta property="og:description" content="Best Place for your reading, Tech and Business articles. Here you find featured content on current technologies: BigData, AI,IoT and Much more">
     <title>ZemuldO.COM</title>
+    <style>
+        .center{
 
+            z-index: -1;
+            position:absolute;
+            top: 45%;
+            left: 45%;
+            width:18em;
+            height:18em;
+            margin-top: -0em; /*set to a negative number 1/2 of your height*/
+            margin-left: -0em; /*set to a negative number 1/2 of your width*/
+            border: 1px solid #ccc;
+            background-color: white;
+            opacity: 0.7;
+        }
+        .preLoader {
+            border-radius: 50%;
+            border: 5px solid blue;
+            border-right: 5px solid green;
+            border-left: 5px solid orange;
+            width: 60px;
+            height: 60px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-<div id="root"></div>
-<!--This is the main entry point to this project-->
+    <div id="zemuldo.com">
+        <div class="preLoader center"></div>
+    </div>
 </body>
 </html>
