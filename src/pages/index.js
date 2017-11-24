@@ -531,18 +531,60 @@ class App extends Component {
     }
     render() {
         const FixedMenu = () => (
-            <Menu fixed='top' size='large'>
+            <Menu fixed='top' size='tiny' borderless color={this.state.colors[0]}>
                 <Container>
-                    <Menu.Item as='a' active>Home</Menu.Item>
-                    <Menu.Item as='a'>Work</Menu.Item>
-                    <Menu.Item as='a'>Company</Menu.Item>
-                    <Menu.Item as='a'>Careers</Menu.Item>
+                    <Menu.Item
+                        as='a'
+                        active={this.state.currentLocation === 'home'}
+                        onClick={this.handleHomeClick}
+                    >
+                        <Icon color={this.state.colors[0]} name='home' />
+                        <span color={this.state.colors[0]}><Link to="/">Home</Link></span>
+                    </Menu.Item>
+                    <Menu.Item as='a'>
+                        <Icon color={this.state.colors[0]} name='write square' />
+                        <span color={this.state.colors[0]}><Link to="/about">Authors</Link></span>
+                    </Menu.Item>
+                    <Menu.Item as='a'>
+                        <Icon color={this.state.colors[0]} name='info' />
+                        <span color={this.state.colors[0]}><Link to="/authors">About</Link></span>
+                    </Menu.Item>
                     <Menu.Menu position='right'>
-                        <Menu.Item className='item'>
-                            <Button as='a'>Log in</Button>
-                        </Menu.Item>
                         <Menu.Item>
-                            <Button as='a' primary>Sign Up</Button>
+                            <Dropdown
+                                trigger={toTitleCase(this.state.user.userName)}
+                                style={{color:this.state.colors[0]}}
+                                pointing='top right'
+                                item
+                                icon={null}
+                            >
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={this._handleSwitchToProfile}>
+                                        <Icon color={this.state.colors[0]} name='user circle' />
+                                        <span color={this.state.colors[1]} >Your Profile</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>
+                                        <Icon color={this.state.colors[0]} name='users' />
+                                        <span color={this.state.colors[2]} >Followers</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>
+                                        <Icon color={this.state.colors[0]} name='help' />
+                                        <span color={this.state.colors[0]} >Help</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={this._handleCreateNew}>
+                                        <Icon color={this.state.colors[0]} name='plus'  />
+                                        <span color={this.state.colors[0]} >New Article</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>
+                                        <Icon color={this.state.colors[0]} name='setting' />
+                                        <span color={this.state.colors[1]} >Settings</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={this.handleLogoutinButton}>
+                                        <Icon color={this.state.colors[0]} name='sign out' />
+                                        <span color={this.state.colors[0]} ><Link to="/">Sign Out</Link></span>
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </Menu.Item>
                     </Menu.Menu>
                 </Container>
@@ -569,7 +611,7 @@ class App extends Component {
                     <title>{'ZemuldO-'+toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                { this.state.visible ? <FixedMenu /> : null }
+                { this.state.visible && this.state.currentLocation!=='login'? <FixedMenu /> : null }
                 <Visibility
                     onBottomPassed={this.showFixedMenu}
                     onBottomVisible={this.hideFixedMenu}
@@ -577,7 +619,7 @@ class App extends Component {
                 >
                     <Menu
                         className='alignCenter'
-                        size='large'
+                        size='tiny'
                         secondary={true}
                         color={this.state.colors[0]}
                         borderless
@@ -693,7 +735,7 @@ class App extends Component {
                         }
                     </Menu>
                 </Visibility>
-                { !this.state.visible && this.state.currentLocation!=='login' && this.state.currentLocation!=='profile'? <NonFixedMenu /> : null }
+                { !this.state.visible && this.state.currentLocation!=='login'? <NonFixedMenu /> : null }
                 <div style={{marginTop:'3em'}}>
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
@@ -738,6 +780,7 @@ class App extends Component {
                 {
                     this.state.loadFooter && this.state.currentLocation!=='login'?
                         <Footer
+                            colors={this.state.colors}
                             topic = {this.state.topic}
                             handleMenuItemClickFooter={this.handleMenuItemClickFooter}
                             handleHomeClick={this.handleHomeClick}

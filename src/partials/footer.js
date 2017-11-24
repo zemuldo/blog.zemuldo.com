@@ -35,19 +35,19 @@ class Footer extends Component {
                                         <List.Item>
                                             <a href="https://github.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='black' name='github' />
-                                                <span color={this.props.color}>GitHub</span>
+                                                <span style={{color:'black'}} color={this.props.color}>GitHub</span>
                                             </a>
                                         </List.Item>
                                         <List.Item >
                                             <a href="https://twitter.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='twitter' />
-                                                <span color={this.props.color} >Twitter</span>
+                                                <span style={{color:'blue'}} color={this.props.color} >Twitter</span>
                                             </a>
                                         </List.Item>
                                         <List.Item>
                                             <a href="https://facebook.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='facebook' />
-                                                <span color={this.props.color}>FaceBook</span>
+                                                <span style={{color:'blue'}} color={this.props.color}>FaceBook</span>
                                             </a>
                                         </List.Item>
                                     </List>
@@ -58,43 +58,43 @@ class Footer extends Component {
                                         <List.Item>
                                             <Link  to="/" onClick={()=>this.props.handleHomeClick()}>
                                                 <Icon color='blue' name='home' />
-                                                <span color={this.props.color}>Home Page</span>
+                                                <span style={{color:this.props.colors[1]}} color={this.props.color}>Home Page</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <Link to={"/tutorials/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tuts')}>
                                                 <Icon color='blue' name='code' />
-                                                <span color={this.props.color}>Tutorials</span>
+                                                <span style={{color:this.props.colors[2]}} color={this.props.color}>Tutorials</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <Link to={"/tech"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
                                                 <Icon color='blue' name='server' />
-                                                <span color={this.props.color}>Tech Articles</span>
+                                                <span style={{color:this.props.colors[0]}} color={this.props.color}>Tech Articles</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <Link to={"/business/"+urlDetails}onClick={()=>this.props.handleMenuItemClickFooter('business')}>
                                                 <Icon color='blue' name='book' />
-                                                <span color={this.props.color}>Business Articles</span>
+                                                <span style={{color:this.props.colors[4]}} color={this.props.color}>Business Articles</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <Link to={"/reviews/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('reviews')}>
                                                 <Icon color='blue' name='star' />
-                                                <span color={this.props.color}>Reviews</span>
+                                                <span style={{color:this.props.colors[3]}} color={this.props.color}>Reviews</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <Link to={"/about/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('about')}>
                                                 <Icon color='blue' name='info' />
-                                                <span color={this.props.color}>About</span>
+                                                <span style={{color:this.props.colors[0]}} color={this.props.color}>About</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='user' />
-                                                <span color={this.props.color}>The Creator</span>
+                                                <span style={{color:this.props.colors[4]}} color={this.props.color}>The Creator</span>
                                             </a>
                                         </List.Item>
                                     </List>
@@ -108,22 +108,19 @@ class Footer extends Component {
                         <br/>
                         <hr color="green"/>
                         <br/>
-                        <Image
-                            centered
-                            size='mini'
-                            src='/logo.png'
-                        />
+                    </Container>
+                    <div style={{textAlign:'center'}}>
                         <List horizontal  divided link>
                             <List.Item>
                                 <a href={env.serverURL+'/sitemap.xml'} rel="noreferrer noopener" target="_blank">
                                     <Icon color={this.props.color} name='map' />
-                                    <span color={this.props.color}>Site Map</span>
+                                    <span style={{color:this.props.colors[3]}} color={this.props.color}>Site Map</span>
                                 </a>
                             </List.Item>
                             <List.Item>
                                 <a >
                                     <Icon color={this.props.color} name='phone' />
-                                    <span color={this.props.color}>Contact</span>
+                                    <span style={{color:this.props.colors[0]}} color={this.props.color}>Contact</span>
                                 </a>
                             </List.Item>
                             <List.Item>
@@ -131,7 +128,7 @@ class Footer extends Component {
                                     trigger={
                                         <Menu.Item name='Cookie Policy' onClick={this.handleCookieOpen} >
                                             <Icon color={this.props.color} name='privacy' />
-                                            <span color={this.props.color}>Cookie Policy</span>
+                                            <span style={{color:this.props.colors[5]}} color={this.props.color}>Cookie Policy</span>
                                         </Menu.Item>
                                     }
                                     open={this.state.cookieModalOpen}
@@ -145,7 +142,7 @@ class Footer extends Component {
                                         <p>Cookies help you have better experience. The full Policy is here
                                             <a href="https://policy.zemuldo.com/cookie" rel="noreferrer noopener" target="_blank">
                                                 <Icon color={this.props.color} name='privacy' />
-                                                <span color={this.props.color}>Zemuldo.com Cookie Policy</span>
+                                                <span style={{color:this.props.colors[2]}} color={this.props.color}>Zemuldo.com Cookie Policy</span>
                                             </a>
                                         </p>
                                     </Modal.Content>
@@ -161,7 +158,7 @@ class Footer extends Component {
                                     trigger={
                                         <Menu.Item name='Terms and Conditions' onClick={this.handleUlerOpen} >
                                             <Icon color={this.props.color} name='law' />
-                                            <span color={this.props.color}>Terms and Conditions</span>
+                                            <span style={{color:this.props.colors[3]}} color={this.props.color}>Terms and Conditions</span>
                                         </Menu.Item>
                                     }
                                     open={this.state.ulerModalaOpen}
@@ -189,11 +186,11 @@ class Footer extends Component {
                             <List.Item>
                                 <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
                                     <Icon color={this.props.color} name='copyright' />
-                                    <span color={this.props.color}>CopyRight {" Zemuldo "+new Date().getFullYear()}</span>
+                                    <span style={{color:this.props.colors[2]}} color={this.props.color}>CopyRight {" Zemuldo "+new Date().getFullYear()}</span>
                                 </a>
                             </List.Item>
                         </List>
-                    </Container>
+                    </div>
                     <br/>
                 </Segment>
             </div>
