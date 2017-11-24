@@ -690,11 +690,10 @@ class App extends Component {
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Menu.Menu>
-
                         }
                     </Menu>
                 </Visibility>
-                { !this.state.visible ? <NonFixedMenu /> : null }
+                { !this.state.visible && this.state.currentLocation!=='login' && this.state.currentLocation!=='profile'? <NonFixedMenu /> : null }
                 <div style={{marginTop:'3em'}}>
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
@@ -745,7 +744,6 @@ class App extends Component {
                             color={this.state.colors[0]} corrent={this.state.current}
                         />:
                         <div>
-
                         </div>
                 }
                 <ReviewPortal/>

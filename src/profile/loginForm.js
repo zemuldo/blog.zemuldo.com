@@ -370,29 +370,6 @@ class LoginForm extends React.Component {
       }
     return(
         <div>
-            <Modal open ={this.state.creatAvatarOpen}>
-                <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                    Create your Profile Picture.
-                </Header></Modal.Header>
-                <Modal.Content>
-                    <div>
-                        <p>
-                           Click preview to see your picture as it will appear.
-                        </p>
-                    </div>
-                    <hr/>
-                    <Modal.Description>
-                        <AvatarEditor setAvatar = {this.setAvatar}/>
-                    </Modal.Description>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button.Group>
-                        <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
-                        <Button.Or />
-                        <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
-                    </Button.Group>
-                </Modal.Actions>
-            </Modal>
             {
                 this.props.loggedin?
                     <div>
@@ -406,174 +383,178 @@ class LoginForm extends React.Component {
                             createNew={this.props.createNew}
                             _handleCreateNew={this.props._handleCreateNew}
                             colors = {this.props.colors}/>
-                    </div> :
+                    </div>:
                     <div>
                         {
                             this.state.signUp?
                                 <div className='login-form'>
-                                    <Header as='h2' color={this.props.color} textAlign='center'>
-                                        Sign Up to Join Us
+                                    <Header as='h2' color='teal' textAlign='center'>
                                     </Header>
-                                    <Grid
-                                        textAlign='center'
-                                        style={{ height: '100%',marginTop:25 }}
-                                        verticalAlign='middle'
-                                    >
-                                        <Grid.Column style={{ maxWidth: 400 ,border: '2px solid green'}}>
-                                            <Header as='h2' color='teal' textAlign='center'>
-                                            </Header>
-                                            <Form size='large'>
-                                                <Form.Field>
-                                                    {
-                                                        this.state.imagePreviewUrl===''?
-                                                            <Button color='green' onClick={()=>this.showCreateAvatar(false)}> Create Avatar</Button>:
-                                                            <div>
-                                                                {!!this.state.imagePreviewUrl &&
-                                                                <img
-                                                                    src={this.state.imagePreviewUrl.img}
-                                                                    style={{
-                                                                        borderRadius: `${(Math.min(
-                                                                            this.state.imagePreviewUrl.height,
-                                                                            this.state.imagePreviewUrl.width
-                                                                            ) +
-                                                                            10) *
-                                                                        (this.state.imagePreviewUrl.borderRadius / 2 / 100)}px`
-                                                                    }}
-                                                                />}
-                                                                <br/>
-                                                                <Button color='green' onClick={()=>this.showCreateAvatar(false)}> Change Avatar</Button>
-                                                            </div>
-                                                    }
-                                                </Form.Field>
+                                    <Form size='large'>
+                                        <Form.Field>
+                                            {
+                                                this.state.imagePreviewUrl===''?
+                                                    <Button color='green' onClick={()=>this.showCreateAvatar(false)}> Create Avatar</Button>:
+                                                    <div>
+                                                        {!!this.state.imagePreviewUrl &&
+                                                        <img
+                                                            src={this.state.imagePreviewUrl.img}
+                                                            style={{
+                                                                borderRadius: `${(Math.min(
+                                                                    this.state.imagePreviewUrl.height,
+                                                                    this.state.imagePreviewUrl.width
+                                                                    ) +
+                                                                    10) *
+                                                                (this.state.imagePreviewUrl.borderRadius / 2 / 100)}px`
+                                                            }}
+                                                        />}
+                                                        <br/>
+                                                        <Button color='green' onClick={()=>this.showCreateAvatar(false)}> Change Avatar</Button>
+                                                    </div>
+                                            }
+                                        </Form.Field>
 
-                                                <Form.Group widths='equal'>
-                                                    <Form.Input
-                                                        size="small"
-                                                        label='First Name'
-                                                        fluid
-                                                        type="text"
-                                                        placeholder='First Name'
-                                                        onChange={this.handleFNameChange}
-                                                    />
-                                                    <Form.Input
-                                                        label='Last Name'
-                                                        fluid
-                                                        type="text"
-                                                        placeholder='Last Name'
-                                                        onChange={this.handleLNameChange}
-                                                    />
-                                                </Form.Group>
+                                        <Form.Group widths='equal'>
+                                            <Form.Input
+                                                size="small"
+                                                label='First Name'
+                                                fluid
+                                                type="text"
+                                                placeholder='First Name'
+                                                onChange={this.handleFNameChange}
+                                            />
+                                            <Form.Input
+                                                label='Last Name'
+                                                fluid
+                                                type="text"
+                                                placeholder='Last Name'
+                                                onChange={this.handleLNameChange}
+                                            />
+                                        </Form.Group>
+                                        <Form.Input
+                                            label='Email Address'
+                                            fluid
+                                            type="email"
+                                            placeholder='E-mail address'
+                                            onChange={this.handleEmailChange}
+                                        />
+                                        <Form.Group widths='equal'>
+                                            <Form.Input
+                                                label='Username'
+                                                fluid
+                                                type="text"
+                                                placeholder='Username'
+                                                onChange={this.handleUnameChange}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group widths='equal'>
+                                            <Form.Input
+                                                label='Password'
+                                                fluid
+                                                type="password"
+                                                placeholder='Password'
+                                                onChange={this.handlePasswordChange}
+                                            />
+                                            <Form.Input
+                                                label='Confirm Password'
+                                                fluid
+                                                type="password"
+                                                placeholder='Confirm Password'
+                                                onChange={this.handleConPassChange}
+                                            />
+                                        </Form.Group>
+                                        {
+                                            !this.state.registering?
+                                                <Button
+                                                    onClick={()=>this.handleSignUp()}
+                                                    color='green' type='submit'>
+                                                    Submit
+                                                </Button>:
+                                                <Loader active inline='centered' />
+                                        }
+                                    </Form>
+                                    <Message
+                                        hidden={this.state.hideMessage}
+                                        error={this.state.error}
+                                        success={this.state.success}
+                                    >
+                                        <Message.Header>
+                                            {this.state.errorDetails?this.state.errorDetails.message:'There are errors in your Input'}
+                                        </Message.Header>
+                                    </Message>
+                                    <Message>
+                                        Have an Account?  <a onClick={()=>this.handSwichReg(false)}> Login</a>
+                                    </Message>
+                                </div>:
+                                <div >
+                                    <Modal open ={this.state.creatAvatarOpen}>
+                                        <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                            Create your Profile Picture.
+                                        </Header></Modal.Header>
+                                        <Modal.Content>
+                                            <div>
+                                                <p>
+                                                    Click preview to see your picture as it will appear.
+                                                </p>
+                                            </div>
+                                            <hr/>
+                                            <Modal.Description>
+                                                <AvatarEditor setAvatar = {this.setAvatar}/>
+                                            </Modal.Description>
+                                        </Modal.Content>
+                                        <Modal.Actions>
+                                            <Button.Group>
+                                                <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
+                                                <Button.Or />
+                                                <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
+                                            </Button.Group>
+                                        </Modal.Actions>
+                                    </Modal>
+                                    <div className='login-form'>
+                                        <h1 className='alignCenter'>Login</h1>
+                                        <Form size='large'>
+                                            <Segment stacked>
                                                 <Form.Input
-                                                    label='Email Address'
                                                     fluid
-                                                    type="email"
+                                                    icon='user'
+                                                    iconPosition='left'
                                                     placeholder='E-mail address'
-                                                    onChange={this.handleEmailChange}
+                                                    onChange={this.handleUnameChange}
                                                 />
-                                                <Form.Group widths='equal'>
-                                                    <Form.Input
-                                                        label='Username'
-                                                        fluid
-                                                        type="text"
-                                                        placeholder='Username'
-                                                        onChange={this.handleUnameChange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group widths='equal'>
-                                                    <Form.Input
-                                                        label='Password'
-                                                        fluid
-                                                        type="password"
-                                                        placeholder='Password'
-                                                        onChange={this.handlePasswordChange}
-                                                    />
-                                                    <Form.Input
-                                                        label='Confirm Password'
-                                                        fluid
-                                                        type="password"
-                                                        placeholder='Confirm Password'
-                                                        onChange={this.handleConPassChange}
-                                                    />
-                                                </Form.Group>
+                                                <Form.Input
+                                                    fluid
+                                                    icon='lock'
+                                                    iconPosition='left'
+                                                    placeholder='Password'
+                                                    type='password'
+                                                    onChange={this.handlePasswordChange}
+                                                />
                                                 {
-                                                    !this.state.registering?
+                                                    !this.state.logingin?
                                                         <Button
-                                                            onClick={()=>this.handleSignUp()}
-                                                            color='green' type='submit'>
-                                                            Submit
+                                                            type="button"
+                                                            onClick={this.onLoginClick}
+                                                            color={this.props.color}
+                                                            fluid size='large'>
+                                                            Login
                                                         </Button>:
                                                         <Loader active inline='centered' />
                                                 }
-                                            </Form>
-                                            <Message
-                                                hidden={this.state.hideMessage}
-                                                error={this.state.error}
-                                                success={this.state.success}
-                                            >
-                                                <Message.Header>
-                                                    {this.state.errorDetails?this.state.errorDetails.message:'There are errors in your Input'}
-                                                    </Message.Header>
-                                            </Message>
-                                            <Message>
-                                                Have an Account?  <button onClick={()=>this.handSwichReg(false)}> Login</button>
-                                            </Message>
-                                        </Grid.Column>
-                                    </Grid>
-                                </div>:
-                                <div className='login-form'>
-                                    <Grid
-                                        textAlign='center'
-                                        style={{ height: '100%',marginTop:25 }}
-                                        verticalAlign='middle'
-                                    >
-                                        <Grid.Column style={{ maxWidth: 300 }}>
-                                            <Header as='h2' color='teal' textAlign='center'>
-                                                <Image src='/img/login/login.png' />
-                                            </Header>
-                                            <Form size='large'>
-                                                <Segment stacked>
-                                                    <Form.Input
-                                                        fluid
-                                                        icon='user'
-                                                        iconPosition='left'
-                                                        placeholder='E-mail address'
-                                                        onChange={this.handleUnameChange}
-                                                    />
-                                                    <Form.Input
-                                                        fluid
-                                                        icon='lock'
-                                                        iconPosition='left'
-                                                        placeholder='Password'
-                                                        type='password'
-                                                        onChange={this.handlePasswordChange}
-                                                    />
-                                                    {
-                                                        !this.state.logingin?
-                                                            <Button
-                                                                type="button"
-                                                                onClick={this.onLoginClick}
-                                                                color={this.props.color}
-                                                                fluid size='large'>
-                                                                Login
-                                                            </Button>:
-                                                            <Loader active inline='centered' />
-                                                    }
-                                                </Segment>
-                                            </Form>
-                                            <Message
-                                                hidden={this.state.hideMessage}
-                                                error={this.state.error}
-                                                success={this.state.success}
-                                            >
-                                                <Message.Header>
-                                                    {this.state.errorDetails?this.state.errorDetails.message:'Something happened. Please check your Internet'}
-                                                </Message.Header>
-                                            </Message>
-                                            <Message>
-                                                Want to Join Us?  <button onClick={()=>this.handSwichReg(true)}> Sign Up</button>
-                                            </Message>
-                                        </Grid.Column>
-                                    </Grid>
+                                            </Segment>
+                                        </Form>
+                                        <Message
+                                            hidden={this.state.hideMessage}
+                                            error={this.state.error}
+                                            success={this.state.success}
+                                        >
+                                            <Message.Header>
+                                                {this.state.errorDetails?this.state.errorDetails.message:'Something happened. Please check your Internet'}
+                                            </Message.Header>
+                                        </Message>
+                                        <Message>
+                                            Want to Join Us?  <a onClick={()=>this.handSwichReg(true)}> Sign Up</a>
+                                        </Message>
+                                    </div>
                                 </div>
                         }
                     </div>

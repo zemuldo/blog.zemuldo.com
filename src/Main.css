@@ -49,6 +49,16 @@
     background-color: transparent;
     border: none;
 }
+.clearButton{
+    background-color: transparent;
+    border: none;
+}
+button:hover{
+    cursor: pointer;
+}
+a:hover{
+    cursor: pointer;
+}
 
 /*
     Rich Text Editor
@@ -129,6 +139,8 @@
     padding: 15px;
 }
 .login-form{
+    max-width: 30%;
+    margin-left: 35%;
     margin-bottom: 10%;
     margin-top: 6%;
 }
