@@ -41,6 +41,14 @@
     opacity: 1;
     right: 0;
 }
+.cleanButton button{
+    background-color: transparent;
+    border: none;
+}
+.cleanButton button:hover{
+    background-color: transparent;
+    border: none;
+}
 
 /*
     Rich Text Editor
@@ -211,4 +219,14 @@
     height: 60px;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
+}
+
+/*
+    Common
+*/
+.alignCenter{
+    text-align: center;
+}
+.marginLeft35{
+    margin-left: 35%;
 }

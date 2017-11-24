@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Menu, Button,Icon, Dropdown,Image} from 'semantic-ui-react'
+import {Menu, Button,Icon, Dropdown,Image, Visibility,Container} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {Helmet} from "react-helmet";
 import axios from 'axios'
@@ -35,7 +35,6 @@ function dataURItoBlob(dataURI, callback) {
     let bb = new Blob([ab]);
     return bb;
 }
-
 class App extends Component {
     constructor(props){
         super(props);
@@ -48,7 +47,7 @@ class App extends Component {
             geoAllowed:false,
             createNew:false,
             editingMode:false,
-            colors:['green','blue','orange','violet','blue'],
+            colors:['green','blue','orange','violet','blue','orange'],
             currentLocation:'home',
             profilePic:null,
             blogs:[],
@@ -60,7 +59,8 @@ class App extends Component {
             blogLoade:false,
             homePageLoaded:false,
             loadFooter:false,
-            topic:'all'
+            topic:'all',
+            visible:false
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -92,7 +92,11 @@ class App extends Component {
         this.deletedBlog=this.deletedBlog.bind(this)
         this.handleMenuItemClickFooter=this.handleMenuItemClickFooter.bind(this)
         this.setTopic = this.setTopic.bind(this)
+        this.hideFixedMenu = this.hideFixedMenu.bind(this)
+        this.showFixedMenu = this.showFixedMenu.bind(this)
     };
+    hideFixedMenu = () => this.setState({ visible: false })
+    showFixedMenu = () => this.setState({ visible: true })
     setTopic(topic){
         this.setState({topic:topic})
     }
@@ -526,6 +530,35 @@ class App extends Component {
         this.setState({editingMode:false,createNew:false})
     }
     render() {
+        const FixedMenu = () => (
+            <Menu fixed='top' size='large'>
+                <Container>
+                    <Menu.Item as='a' active>Home</Menu.Item>
+                    <Menu.Item as='a'>Work</Menu.Item>
+                    <Menu.Item as='a'>Company</Menu.Item>
+                    <Menu.Item as='a'>Careers</Menu.Item>
+                    <Menu.Menu position='right'>
+                        <Menu.Item className='item'>
+                            <Button as='a'>Log in</Button>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Button as='a' primary>Sign Up</Button>
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Container>
+            </Menu>
+        )
+        const NonFixedMenu = () => (
+            <div className='cleanButton alignCenter'>
+                <Button color={this.state.colors[0]}>Development</Button>
+                <Button color={this.state.colors[4]}>Technology</Button>
+                <Button color={this.state.colors[3]}>Reviews</Button>
+                <Button color={this.state.colors[2]}>Tutorials</Button>
+                <Button color={this.state.colors[5]}>Trending</Button>
+                <Button color={this.state.colors[1]}>Latest</Button>
+                <Button color={this.state.colors[0]}>Futerist</Button>
+            </div>
+        )
         let urlDetails = 'all';
         return (
             <div>
@@ -536,121 +569,132 @@ class App extends Component {
                     <title>{'ZemuldO-'+toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                <Menu
-                    style={{backgroundColor:'white',opacity:'0.9',marginTop:'2px'}}
-                    secondary={true}
-                    fixed='top'
-                    size='mini'
-                    color={this.state.colors[0]}
-                    borderless
+                { this.state.visible ? <FixedMenu /> : null }
+                <Visibility
+                    onBottomPassed={this.showFixedMenu}
+                    onBottomVisible={this.hideFixedMenu}
+                    once={false}
                 >
-                    <Dropdown
-                        style={{color:this.state.colors[0]}}
-                        pointing='top'
-                        item
-                        text={(this.state.currentLocation==='home')?'Home':pages[this.state.currentLocation].name}
+                    <Menu
+                        className='alignCenter'
+                        size='large'
+                        secondary={true}
+                        color={this.state.colors[0]}
+                        borderless
                     >
-                        <Dropdown.Menu>
-                            <Dropdown.Item
-                                name='home'
-                                active={this.state.currentLocation === 'home'}
-                                onClick={this.handleHomeClick}>
-                                <Icon color={this.state.colors[0]} name='home' />
-                                <span color={this.state.colors[0]}><Link to="/">Home</Link></span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='dev'
-                                active={this.state.currentLocation === 'dev'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='code' />
-                                <span color={this.state.colors[0]}><Link to={"/dev/"+urlDetails}>Dev</Link></span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='business'
-                                active={this.state.currentLocation === 'business'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='creative commons' />
-                                <span color={this.state.colors[0]}><Link to={"/business/"+urlDetails}>Business</Link></span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='tech'
-                                active={this.state.currentLocation === 'tech'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='server' />
-                                <span color={this.state.colors[0]}><Link to={"/tech/"+urlDetails}>Tech</Link></span>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                name='reviews'
-                                active={this.state.currentLocation === 'use'}
-                                onClick={this.handleMenuItemClick}>
-                                <Icon color={this.state.colors[0]} name='circle notched' />
-                                <span color={this.state.colors[0]}><Link to={"/reviews/"+urlDetails}>Reviews</Link></span>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    {
-                        (!this.state.loggedin) ?
-                            <Menu.Menu position='right'>
-                                <Button
-                                    circular={true}
-                                    onClick={() => { this.handleLoginButton() }}
-                                    color={this.state.colors[0]}  size='mini'><Link to="/login"><span style={{color:'black'}}>Login</span></Link>
-                                </Button>
-                            </Menu.Menu> :
-                            <Menu.Menu position='right'>
-                                <Dropdown
-                                    trigger={<Image
-                                        avatar={true}
-                                        wrapped={true}
-                                        id="photo"
-                                        size='tiny'
-                                        src={this.state.profilePic}
-                                        style={{
-                                            marginLeft:'50%',
-                                            borderRadius: `${(Math.min(
-                                                JSON.parse(this.state.user.avatar).height,
-                                                JSON.parse(this.state.user.avatar).width
-                                                ) +
-                                                10) *
-                                            (JSON.parse(this.state.user.avatar).borderRadius / 2 / 100)}px`
-                                        }}
-                                    />}
-                                    style={{color:this.state.colors[0]}}
-                                    pointing='top right'
-                                    item
-                                    icon={null}
-                                >
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item onClick={this._handleSwitchToProfile}>
-                                            <Icon color={this.state.colors[0]} name='user circle' />
-                                            <span color={this.state.colors[1]} >Your Profile</span>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <Icon color={this.state.colors[0]} name='users' />
-                                            <span color={this.state.colors[2]} >Followers</span>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <Icon color={this.state.colors[0]} name='help' />
-                                            <span color={this.state.colors[0]} >Help</span>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item onClick={this._handleCreateNew}>
-                                            <Icon color={this.state.colors[0]} name='plus'  />
-                                            <span color={this.state.colors[0]} >New Article</span>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <Icon color={this.state.colors[0]} name='setting' />
-                                            <span color={this.state.colors[1]} >Settings</span>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item onClick={this.handleLogoutinButton}>
-                                            <Icon color={this.state.colors[0]} name='sign out' />
-                                            <span color={this.state.colors[0]} ><Link to="/">Sign Out</Link></span>
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Menu.Menu>
+                        <Dropdown
+                            className='alignCenter'
+                            style={{color:this.state.colors[0]}}
+                            pointing='top'
+                            item
+                            text={(this.state.currentLocation==='home')?'Home':pages[this.state.currentLocation].name}
+                        >
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                    name='home'
+                                    active={this.state.currentLocation === 'home'}
+                                    onClick={this.handleHomeClick}>
+                                    <Icon color={this.state.colors[0]} name='home' />
+                                    <span color={this.state.colors[0]}><Link to="/">Home</Link></span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='dev'
+                                    active={this.state.currentLocation === 'dev'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='code' />
+                                    <span color={this.state.colors[0]}><Link to={"/dev/"+urlDetails}>Dev</Link></span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='business'
+                                    active={this.state.currentLocation === 'business'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='creative commons' />
+                                    <span color={this.state.colors[0]}><Link to={"/business/"+urlDetails}>Business</Link></span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='tech'
+                                    active={this.state.currentLocation === 'tech'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='server' />
+                                    <span color={this.state.colors[0]}><Link to={"/tech/"+urlDetails}>Tech</Link></span>
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    name='reviews'
+                                    active={this.state.currentLocation === 'use'}
+                                    onClick={this.handleMenuItemClick}>
+                                    <Icon color={this.state.colors[0]} name='circle notched' />
+                                    <span color={this.state.colors[0]}><Link to={"/reviews/"+urlDetails}>Reviews</Link></span>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <a className='alignCenter marginLeft35'>
+                            <h1>ZemuldO.Com</h1>
+                        </a>
+                        {
+                            (!this.state.loggedin) ?
+                                <Menu.Menu position='right'>
+                                    <Button
+                                        circular={true}
+                                        onClick={() => { this.handleLoginButton() }}
+                                        color={this.state.colors[0]}  size='mini'><Link to="/login"><span style={{color:'black'}}>Login</span></Link>
+                                    </Button>
+                                </Menu.Menu> :
+                                <Menu.Menu position='right'>
+                                    <Dropdown
+                                        trigger={<Image
+                                            avatar={true}
+                                            wrapped={true}
+                                            id="photo"
+                                            size='tiny'
+                                            src={this.state.profilePic}
+                                            style={{
+                                                marginLeft:'50%',
+                                                borderRadius: `${(Math.min(
+                                                    JSON.parse(this.state.user.avatar).height,
+                                                    JSON.parse(this.state.user.avatar).width
+                                                    ) +
+                                                    10) *
+                                                (JSON.parse(this.state.user.avatar).borderRadius / 2 / 100)}px`
+                                            }}
+                                        />}
+                                        style={{color:this.state.colors[0]}}
+                                        pointing='top right'
+                                        item
+                                        icon={null}
+                                    >
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item onClick={this._handleSwitchToProfile}>
+                                                <Icon color={this.state.colors[0]} name='user circle' />
+                                                <span color={this.state.colors[1]} >Your Profile</span>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item>
+                                                <Icon color={this.state.colors[0]} name='users' />
+                                                <span color={this.state.colors[2]} >Followers</span>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item>
+                                                <Icon color={this.state.colors[0]} name='help' />
+                                                <span color={this.state.colors[0]} >Help</span>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={this._handleCreateNew}>
+                                                <Icon color={this.state.colors[0]} name='plus'  />
+                                                <span color={this.state.colors[0]} >New Article</span>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item>
+                                                <Icon color={this.state.colors[0]} name='setting' />
+                                                <span color={this.state.colors[1]} >Settings</span>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={this.handleLogoutinButton}>
+                                                <Icon color={this.state.colors[0]} name='sign out' />
+                                                <span color={this.state.colors[0]} ><Link to="/">Sign Out</Link></span>
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Menu.Menu>
 
-                    }
-                </Menu>
+                        }
+                    </Menu>
+                </Visibility>
+                { !this.state.visible ? <NonFixedMenu /> : null }
                 <div style={{marginTop:'3em'}}>
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
@@ -690,11 +734,10 @@ class App extends Component {
                                 topic = {this.state.topic}
                                 user={this.state.user}
                             />
-
                     }
                 </div>
                 {
-                    this.state.loadFooter?
+                    this.state.loadFooter && this.state.currentLocation!=='login'?
                         <Footer
                             topic = {this.state.topic}
                             handleMenuItemClickFooter={this.handleMenuItemClickFooter}
