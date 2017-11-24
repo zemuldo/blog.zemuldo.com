@@ -11,6 +11,7 @@ import Footer from '../partials/footer'
 import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
 import {pages} from '../environments/conf'
+import {topicsOBJ} from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development';
 
 function toTitleCase(str)
@@ -59,7 +60,7 @@ class App extends Component {
             blogLoade:false,
             homePageLoaded:false,
             loadFooter:false,
-            xyy:true
+            topic:'all'
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -90,7 +91,11 @@ class App extends Component {
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
         this.deletedBlog=this.deletedBlog.bind(this)
         this.handleMenuItemClickFooter=this.handleMenuItemClickFooter.bind(this)
+        this.setTopic = this.setTopic.bind(this)
     };
+    setTopic(topic){
+        this.setState({topic:topic})
+    }
     deletedBlog(){
         this.setState({blog:null})
         this.setHomeBlogs()
@@ -274,25 +279,23 @@ class App extends Component {
                 return err
             }.bind(this));
     }
-    navigateBlogs(name){
+    navigateBlogs(query){
         this.setState({blogsLoaded:false})
         return axios.post(env.httpURL, {
             "queryMethod":"getPosts",
-            "queryData":{
-                "type":name
-            }
+            "queryData":query
         })
             .then(function (response) {
                 if(!response.data){
-                    this.setState({blogs:[],blog:null,blogsLoaded:true});
+                    this.setState({blogs:[],blog:null,blogsLoaded:true,homePageLoaded:true});
                     return false
                 }
                 else {
-                    this.setState({blogs:response.data,blogsLoaded:true});
+                    this.setState({blogs:response.data,blogsLoaded:true,homePageLoaded:true});
                 }
             }.bind(this))
             .catch(function (err) {
-                this.setState({blogs:[],blog:null,blogsLoaded:true});
+                this.setState({blogs:[],blog:null,blogsLoaded:true,homePageLoaded:true});
             }.bind(this))
     }
     setPageBlogs(name){
@@ -392,18 +395,32 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentWillReceiveProps() {
+        let query = {}
         let page = window.location.pathname.split('/')[1];
-        if(pages[page]){
-            this.setState({currentLocation:page})
-            this.navigateBlogs(page)
+        let topic = window.location.pathname.split('/')[2];
+        if(topicsOBJ[topic]){
+            query.topics = topic
         }
+        if(pages[page] && pages[page].name!=='Home' ){
+            query.type = page
+            this.setState({currentLocation:page})
+        }
+        this.navigateBlogs(query)
     }
     componentDidMount() {
         this.setState({blogsLoaded:false})
         let url = window.location.pathname.split('/').join('');
         let page = window.location.pathname.split('/')[1];
-        console.log(page)
-        console.log(url)
+        let topic = window.location.pathname.split('/')[2];
+        let query = {}
+        if(topicsOBJ[topic]){
+            query.topics = topic
+        }
+        if(pages[page] && pages[page].name!=='Home' ){
+            query.type = page;
+            this.setState({currentLocation:page})
+        }
+        this.navigateBlogs(query)
         this.setCurrentBlog(url,page);
         this.forceUpdate();
         if(window.innerWidth<503){
@@ -414,7 +431,6 @@ class App extends Component {
         }
 
         window.addEventListener('resize', this.resize);
-        this.setHomeBlogs()
         let known = localStorage.getItem('user');
         if(known){
             let user = JSON.parse(known)
@@ -435,7 +451,6 @@ class App extends Component {
         }
         let location = window.location.pathname.slice(1,window.location.pathname.length)
         if(pages[location] && location==='login'){
-            window.location='/';
         }
         else if(pages[location] && location!=='login'){
             this.setState({currentLocation:location})
@@ -443,6 +458,7 @@ class App extends Component {
         this.shuffle()
         this.forceUpdate()
         window.addEventListener('resize', this.resize)
+        this.setState({loadFooter:true})
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
@@ -450,18 +466,15 @@ class App extends Component {
     handleHomeClick = () => {
         this.setState({blogsAreLoading:true})
         window.scrollTo(0,0);
-        this.setHomeBlogs()
         this.setState({ currentLocation:'home',blog:null})
     }
     handleMenuItemClick = (e, { name }) => {
         this.setState({blogsAreLoading:true})
         if(name === 'home' || name ==='login'){
-            this.setHomeBlogs()
             this.setState({ currentLocation:name,})
         }
         else {
             if(pages[name]){
-                this.setPageBlogs(name)
             }
             this.setState({ currentLocation:name,})
         }
@@ -469,15 +482,14 @@ class App extends Component {
     handleMenuItemClickFooter = (name) => {
         this.setState({blogsAreLoading:true})
         if(name === 'home' || name ==='login'){
-            this.setHomeBlogs()
             this.setState({ currentLocation:name,})
         }
         else {
             if(pages[name]){
-                this.setPageBlogs(name)
             }
             this.setState({ currentLocation:name,})
         }
+        window.scrollTo(0,0);
     }
     successLogin = (user)=>{
         this.props.history.push('/'+user.userName+'/'+user.id+'_session_'+new Date().toDateString())
@@ -657,6 +669,7 @@ class App extends Component {
                                 colors={this.state.colors}
                             /> :
                             <PagesComponent
+                                history={this.props.history}
                                 handleFilterChange={this.handleFilterChange}
                                 color={this.state.colors[1]}
                                 blogs={this.state.blogs}
@@ -673,6 +686,8 @@ class App extends Component {
                                 setTopicPosts={this.setTopicPosts}
                                 setTopicNextPosts={this.setTopicNextPosts}
                                 deletedBlog={this.deletedBlog}
+                                setTopic = {this.setTopic}
+                                topic = {this.state.topic}
                                 user={this.state.user}
                             />
 
@@ -681,6 +696,7 @@ class App extends Component {
                 {
                     this.state.loadFooter?
                         <Footer
+                            topic = {this.state.topic}
                             handleMenuItemClickFooter={this.handleMenuItemClickFooter}
                             handleHomeClick={this.handleHomeClick}
                             color={this.state.colors[0]} corrent={this.state.current}

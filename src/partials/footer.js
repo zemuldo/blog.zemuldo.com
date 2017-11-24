@@ -16,7 +16,7 @@ class Footer extends Component {
     handleUlerOpen = () => this.setState({ ulerModalaOpen: true })
     handleUlerClose = () => this.setState({ ulerModalaOpen: false })
     render() {
-        let urlDetails = 'info@all';
+        let urlDetails = '/'+this.props.topic;
         return (
             <div>
                 <Segment

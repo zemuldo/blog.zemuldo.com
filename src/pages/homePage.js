@@ -26,54 +26,12 @@ class PagesComponent extends Component {
         this.onTopicClick = this.onTopicClick.bind(this);
     };
     onTopicClick = (e) => {
-        let query = {
-            "start":x.toString(),
-            "topics":e.toLowerCase(),
-        }
-        let page = window.location.pathname.split('/')[1];
-        if(pages[page]){
-            query.type = page
-        }
-        this.resetNav('getPostsTopic',e);
-        this.props.blogsAreLoading(true);
-        return axios.post(env.httpURL,{
-            "queryMethod":"getPagedPosts",
-            "queryData":query
-        })
-            .then(function (blogs) {
-                if(blogs.data.length<5){
-                    this.setState({next:false})
-                }
-                else {
-                    this.setState({next:true})
-                }
-                this.props.setTopicPosts(blogs.data,e)
-            }.bind(this))
-            .catch(function (err) {
-                this.props.setTopicPosts([],e)
-            }.bind(this))
+        this.props.history.push('/'+this.props.current+'/'+e)
+        this.props.setTopic(e)
     }
     onAllcClick = (e) => {
-        this.setState({topic:'all'})
-        x=0
-        this.props.blogsAreLoading(true)
-        return axios.post(env.httpURL,{
-            "queryMethod":"getPagedPosts",
-            "queryData":{
-            }
-        })
-            .then(function (blogs) {
-                if(blogs.data.length<5){
-                    this.setState({next:false})
-                }
-                else {
-                    this.setState({next:true})
-                }
-                this.props.setTopicPosts(blogs.data,e)
-            }.bind(this))
-            .catch(function (err) {
-                this.props.setTopicPosts([],e)
-            }.bind(this))
+        this.props.history.push('/'+this.props.current+'/all')
+        this.props.setTopic('all')
     }
     _handleChangeBodySize(size){
         this.setState({bodySize:size})
