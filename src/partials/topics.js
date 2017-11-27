@@ -17,7 +17,7 @@ class Topics extends Component {
             <div className='topicsWrapper'>
                 <Header color='blue' as='h3'>Topics</Header>
                 <button
-                    disabled={window.location.pathname.split('/')[2]==='all'}
+                    disabled={window.location.pathname.split('/')[2]==='all' || !window.location.pathname.split('/')[2]}
                     className="topicButton"
                     onClick={ this.props.onAllcClick.bind('all')}
                     name='all'
