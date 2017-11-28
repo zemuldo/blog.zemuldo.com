@@ -1,17 +1,21 @@
 /*
-
-    CopyRight: Danstan Onyango@ZEMULDO.COM
+    CopyRight: Danstan Onyango Zemuldo.Com
     Author : Danstan Otieno Onyango
     Website : http://www.zemuldo.com/
-
 */
 
 /*
     Navigation Bar
  */
 
-
-
+.navBar{
+    background-color: black;
+    opacity: 0.7;
+}
+.navBar span{
+    font-weight: bold;
+    font-size: larger;
+}
 
 /*
     Buttons
@@ -222,7 +226,7 @@ a:hover{
 .small-loader{
     margin: 2em 0em 0em 0em;
 }
-.loader{
+.preloader{
     border-radius: 50%;
     border: 5px solid blue;
     border-right: 5px solid green;
@@ -241,4 +245,7 @@ a:hover{
 }
 .marginLeft35{
     margin-left: 35%;
+}
+.marginTop2{
+    margin-top: 2%;
 }

@@ -16,7 +16,7 @@ class Footer extends Component {
     handleUlerOpen = () => this.setState({ ulerModalaOpen: true })
     handleUlerClose = () => this.setState({ ulerModalaOpen: false })
     render() {
-        let urlDetails = '/'+this.props.topic;
+        let urlDetails = 'all';
         return (
             <div>
                 <Segment
@@ -101,7 +101,7 @@ class Footer extends Component {
                                 </Grid.Column>
                                 <Grid.Column width={3}>
                                     <Header color='green' as='h4' content='Quote of the day' />
-                                    <p>Every complex System no matter how Complex is a combination of many smaller and simpler Systems and Units that operate together Synchronously</p>
+                                    <p>Every complex System no matter how Complex is a combination of many smaller and simpler Systems and Units that operate together Synchronously.</p>
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
