@@ -562,6 +562,8 @@ class App extends Component {
                            colors={this.state.colors}
                            handleLoginButton={this.handleLoginButton}
                            handleLogoutinButton={this.handleLogoutinButton}
+                           _handleSwitchToProfile={this._handleSwitchToProfile}
+                           _handleCreateNew={this._handleCreateNew}
                            loggedin={this.state.loggedin}
                            user={this.state.user}
                            handleFilterChange={this.handleFilterChange}
@@ -569,27 +571,29 @@ class App extends Component {
                            handleHomeClick={this.handleHomeClick}
                        />:null}
                </div>
-                <MainMenu
-                    currentLocation={this.state.currentLocation}
-                    showFixedMenu={this.showFixedMenu}
-                    hideFixedMe={this.hideFixedMenu}
-                    visible={this.state.visible}
-                    colors={this.state.colors}
-                    handleLoginButton={this.handleLoginButton}
-                    handleLogoutinButton={this.handleLogoutinButton}
-                    loggedin={this.state.loggedin}
-                    user={this.state.user}
-                    handleFilterChange={this.handleFilterChange}
-                    handleMenuItemClick={this.handleMenuItemClick}
-                    handleHomeClick={this.handleHomeClick}
-                />
                 <Visibility
                     onBottomPassed={this.showFixedMenu}
                     onBottomVisible={this.hideFixedMenu}
                     once={false}
                 >
-                    { !this.state.visible && this.state.currentLocation!=='login'? <NonFixedMenu /> : null }
+                    <MainMenu
+                        currentLocation={this.state.currentLocation}
+                        showFixedMenu={this.showFixedMenu}
+                        hideFixedMe={this.hideFixedMenu}
+                        visible={this.state.visible}
+                        colors={this.state.colors}
+                        handleLoginButton={this.handleLoginButton}
+                        handleLogoutinButton={this.handleLogoutinButton}
+                        _handleSwitchToProfile={this._handleSwitchToProfile}
+                        _handleCreateNew={this._handleCreateNew}
+                        loggedin={this.state.loggedin}
+                        user={this.state.user}
+                        handleFilterChange={this.handleFilterChange}
+                        handleMenuItemClick={this.handleMenuItemClick}
+                        handleHomeClick={this.handleHomeClick}
+                    />
                 </Visibility>
+                { !this.state.visible && this.state.currentLocation!=='login'? <NonFixedMenu /> : null }
                 <div style={{marginTop:'3em'}}>
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
@@ -640,8 +644,7 @@ class App extends Component {
                             handleHomeClick={this.handleHomeClick}
                             color={this.state.colors[0]} corrent={this.state.current}
                         />:
-                        <div>
-                        </div>
+                        null
                 }
                 <ReviewPortal/>
             </div>

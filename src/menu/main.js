@@ -13,7 +13,7 @@ class MainMenu extends Component {
         let urlDetails = 'all';
         return (
 
-                <div className='navBar'>
+                <div>
                     <Menu
                         stackable={true}
                         className=''
