@@ -204,33 +204,28 @@ class LoginForm extends React.Component {
     handleUnameChange(e) {
         e.preventDefault();
         this.setState({userName:e.target.value})
-
     }
     handleEmailChange(e) {
         e.preventDefault();
         this.setState({email:e.target.value})
-
     }
     handleFNameChange(e) {
         e.preventDefault();
         this.setState({firstName:e.target.value})
-
     }
     handleLNameChange(e) {
         e.preventDefault();
         this.setState({lastName:e.target.value})
-
     }
     handleConPassChange(e) {
         e.preventDefault();
         this.setState({confirmPass:e.target.value})
-
     }
     setAvatar(img){
         this.setState({imagePreviewUrl:img})
     }
-    showCreateAvatar=()=>{
-        this.setState({ creatAvatarOpen: true })
+    showCreateAvatar=(state)=>{
+        this.setState({ creatAvatarOpen: state })
     }
     closeCreateAvatar=()=>{
         this.setState({ creatAvatarOpen: false })
@@ -314,7 +309,7 @@ class LoginForm extends React.Component {
             .then(function (response) {
 ;                if(response.data[0]){
                     this.setState({userBlogs:response.data})
-;
+
                 }
                 else {
                     this.setState({userBlogs:[]});
@@ -325,7 +320,6 @@ class LoginForm extends React.Component {
                 this.setState({userBlogs:[]})
             }.bind(this))
     }
-
     handSwichReg = function (state){
         this.setState({signUp:state})
     }
@@ -360,7 +354,6 @@ class LoginForm extends React.Component {
         })
     }
     setEditorRef = (editor) => this.editor = editor;
-
     render(){
       let $imagePreview = null;
       if (this.state.imagePreviewUrl!=='') {
@@ -385,6 +378,29 @@ class LoginForm extends React.Component {
                             colors = {this.props.colors}/>
                     </div>:
                     <div>
+                        <Modal open ={this.state.creatAvatarOpen}>
+                            <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                Create your Profile Picture.
+                            </Header></Modal.Header>
+                            <Modal.Content>
+                                <div>
+                                    <p>
+                                        Click preview to see your picture as it will appear.
+                                    </p>
+                                </div>
+                                <hr/>
+                                <Modal.Description>
+                                    <AvatarEditor setAvatar = {this.setAvatar}/>
+                                </Modal.Description>
+                            </Modal.Content>
+                            <Modal.Actions>
+                                <Button.Group>
+                                    <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
+                                    <Button.Or />
+                                    <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
+                                </Button.Group>
+                            </Modal.Actions>
+                        </Modal>
                         {
                             this.state.signUp?
                                 <div className='login-form'>
@@ -394,7 +410,7 @@ class LoginForm extends React.Component {
                                         <Form.Field>
                                             {
                                                 this.state.imagePreviewUrl===''?
-                                                    <Button color='green' onClick={()=>this.showCreateAvatar(false)}> Create Avatar</Button>:
+                                                    <Button color='green' onClick={()=>this.showCreateAvatar(true)}> Create Avatar</Button>:
                                                     <div>
                                                         {!!this.state.imagePreviewUrl &&
                                                         <img
@@ -487,29 +503,6 @@ class LoginForm extends React.Component {
                                     </Message>
                                 </div>:
                                 <div >
-                                    <Modal open ={this.state.creatAvatarOpen}>
-                                        <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                            Create your Profile Picture.
-                                        </Header></Modal.Header>
-                                        <Modal.Content>
-                                            <div>
-                                                <p>
-                                                    Click preview to see your picture as it will appear.
-                                                </p>
-                                            </div>
-                                            <hr/>
-                                            <Modal.Description>
-                                                <AvatarEditor setAvatar = {this.setAvatar}/>
-                                            </Modal.Description>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button.Group>
-                                                <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
-                                                <Button.Or />
-                                                <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
-                                            </Button.Group>
-                                        </Modal.Actions>
-                                    </Modal>
                                     <div className='login-form'>
                                         <h1 className='alignCenter'>Login</h1>
                                         <Form size='large'>
