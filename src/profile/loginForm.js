@@ -322,6 +322,12 @@ class LoginForm extends React.Component {
     }
     handSwichReg = function (state){
         this.setState({signUp:state})
+        if(state){
+            this.props.history.push('/signup')
+        }
+        else {
+            this.props.history.push('/login')
+        }
     }
     _handleFileChange(e) {
         e.preventDefault();

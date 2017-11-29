@@ -511,8 +511,7 @@ class App extends Component {
         window.scrollTo(0,0);
     }
     successLogin = (user)=>{
-        this.props.history.push('/'+user.userName+'/'+user.id+'_session_'+new Date().toDateString())
-        this.setState({user:user,current:'profile'})
+        this.setState({user:user})
         localStorage.setItem('user',JSON.stringify(user))
         this.setState({loggedin:true,currentLocation:'home'})
         let urlCreator = window.URL || window.webkitURL;
@@ -611,6 +610,7 @@ class App extends Component {
                     {
                         (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
                             <Login
+                                history={this.props.history}
                                 handleLogoutinButton={this.handleLogoutinButton}
                                 handleNavigation={this.handleNavigation}
                                 user={this.state.user}
