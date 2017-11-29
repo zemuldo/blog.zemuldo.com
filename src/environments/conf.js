@@ -1,122 +1,47 @@
 module.exports = {
-    topicsOBJ:{ bigdata:
-        { key: 'bigdata',
-            value: 'bigdata',
-            text: 'bigdata',
-            name: 'bigdata' },
+    topicsOBJ:{
+        bigdata: { key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata' },
         iot: { key: 'iot', value: 'iot', text: 'iot', name: 'iot' },
         ml: { key: 'ml', value: 'ml', text: 'ml', name: 'ml' },
         ai: { key: 'ai', value: 'ai', text: 'ai', name: 'ai' },
         python: { key: 'python', value: 'python', text: 'python', name: 'python' },
-        javascript:
-            { key: 'javascript',
-                value: 'javascript',
-                text: 'javascript',
-                name: 'javascript' },
+        javascript: { key: 'javascript', value: 'javascript', text: 'javascript', name: 'javascript' },
         r: { key: 'r', value: 'r', text: 'r', name: 'r' },
-        marketing:
-            { key: 'marketing',
-                value: 'marketing',
-                text: 'marketing',
-                name: 'marketing' },
-        fintech:
-            { key: 'fintech',
-                value: 'fintech',
-                text: 'fintech',
-                name: 'fintech' },
-        startup:
-            { key: 'startup',
-                value: 'startup',
-                text: 'startup',
-                name: 'startup' },
+        marketing: { key: 'marketing', value: 'marketing', text: 'marketing', name: 'marketing' },
+        fintech: { key: 'fintech', value: 'fintech', text: 'fintech', name: 'fintech' },
+        startup: { key: 'startup', value: 'startup', text: 'startup', name: 'startup' },
         bot: { key: 'bot', value: 'bot', text: 'bot', name: 'bot' },
         linux: { key: 'linux', value: 'linux', text: 'linux', name: 'linux' },
         go: { key: 'go', value: 'go', text: 'go', name: 'go' },
-        growthhack:
-            { key: 'growthhack',
-                value: 'growthhack',
-                text: 'growthhack',
-                name: 'growthhack' },
+        growthhack: { key: 'growthhack', value: 'growthhack', text: 'growthhack', name: 'growthhack' },
         cloud: { key: 'cloud', value: 'cloud', text: 'cloud', name: 'cloud' },
         nodejs: { key: 'nodejs', value: 'nodejs', text: 'nodejs', name: 'nodejs' },
-        express:
-            { key: 'express',
-                value: 'express',
-                text: 'express',
-                name: 'express' },
-        mongodb:
-            { key: 'mongodb',
-                value: 'mongodb',
-                text: 'mongodb',
-                name: 'mongodb' },
+        express: { key: 'express', value: 'express', text: 'express', name: 'express' },
+        mongodb: { key: 'mongodb', value: 'mongodb', text: 'mongodb', name: 'mongodb' },
         sql: { key: 'sql', value: 'sql', text: 'sql', name: 'sql' },
         adf: { key: 'adf', value: 'adf', text: 'adf', name: 'adf' },
         git: { key: 'git', value: 'git', text: 'git', name: 'git' },
         react: { key: 'react', value: 'react', text: 'react', name: 'react' },
         ui: { key: 'ui', value: 'ui', text: 'ui', name: 'ui' },
         ux: { key: 'ux', value: 'ux', text: 'ux', name: 'ux' },
-        angular:
-            { key: 'angular',
-                value: 'angular',
-                text: 'angular',
-                name: 'angular' },
-        'e-commerce':
-            { key: 'e-commerce',
-                value: 'e-commerce',
-                text: 'e-commerce',
-                name: 'e-commerce' },
+        angular: { key: 'angular', value: 'angular', text: 'angular', name: 'angular' },
+        'e-commerce': { key: 'e-commerce', value: 'e-commerce', text: 'e-commerce', name: 'e-commerce' },
         code: { key: 'code', value: 'code', text: 'code', name: 'code' },
-        programming:
-            { key: 'programming',
-                value: 'programming',
-                text: 'programming',
-                name: 'programming' },
-        wearables:
-            { key: 'wearables',
-                value: 'wearables',
-                text: 'wearables',
-                name: 'wearables' },
-        laptops:
-            { key: 'laptops',
-                value: 'laptops',
-                text: 'laptops',
-                name: 'laptops' },
+        programming: { key: 'programming', value: 'programming', text: 'programming', name: 'programming' },
+        wearables: { key: 'wearables', value: 'wearables', text: 'wearables', name: 'wearables' },
+        laptops: { key: 'laptops', value: 'laptops', text: 'laptops', name: 'laptops' },
         phones: { key: 'phones', value: 'phones', text: 'phones', name: 'phones' },
         hadoop: { key: 'hadoop', value: 'hadoop', text: 'hadoop', name: 'hadoop' },
-        servers:
-            { key: 'servers',
-                value: 'servers',
-                text: 'servers',
-                name: 'servers' },
-        analytics:
-            { key: 'analytics',
-                value: 'analytics',
-                text: 'analytics',
-                name: 'analytics' },
+        servers: { key: 'servers', value: 'servers', text: 'servers', name: 'servers' },
+        analytics: { key: 'analytics', value: 'analytics', text: 'analytics', name: 'analytics' },
         devops: { key: 'devops', value: 'devops', text: 'devops', name: 'devops' },
-        datascience:
-            { key: 'datascience',
-                value: 'datascience',
-                text: 'datascience',
-                name: 'datascience' },
+        datascience: { key: 'datascience', value: 'datascience', text: 'datascience', name: 'datascience' },
         seo: { key: 'seo', value: 'seo', text: 'seo', name: 'seo' },
-        'html-css':
-            { key: 'html-css',
-                value: 'html-css',
-                text: 'html-css',
-                name: 'html-css' },
+        'html-css': { key: 'html-css', value: 'html-css', text: 'html-css', name: 'html-css' },
         oracle: { key: 'oracle', value: 'oracle', text: 'oracle', name: 'oracle' },
-        pentesting:
-            { key: 'pentesting',
-                value: 'pentesting',
-                text: 'pentesting',
-                name: 'pentesting' },
+        pentesting: { key: 'pentesting', value: 'pentesting', text: 'pentesting', name: 'pentesting' },
         java: { key: 'java', value: 'java', text: 'java', name: 'java' },
-        security:
-            { key: 'security',
-                value: 'security',
-                text: 'security',
-                name: 'security' } },
+        security: { key: 'security', value: 'security', text: 'security', name: 'security' } },
     topics:[
         { key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata'},
         { key: 'iot', value: 'iot', text: 'iot' ,name: 'iot'},
@@ -201,6 +126,10 @@ module.exports = {
         login:{
             name:'Login',
             icon:'lock'
+        },
+        user:{
+            name:'Profile',
+            icon:'user'
         }
     },
     live:{

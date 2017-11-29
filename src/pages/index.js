@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Menu, Button,Icon, Dropdown,Image, Visibility,Container,Input} from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import { Button, Visibility} from 'semantic-ui-react'
 import {Helmet} from "react-helmet";
 import axios from 'axios'
 import Login from '../profile/loginForm'
@@ -386,6 +385,11 @@ class App extends Component {
     handleNavigation(location){
         window.scrollTo(0,0);
         this.setState({currentLocation:location})
+        if(location==='home'){
+            this.props.history.push('/')
+        }else {
+            this.props.history.push('/'+location)
+        }
     }
     shuffle() {
         let array = this.state.colors
@@ -417,6 +421,9 @@ class App extends Component {
         this.setState({blogsLoaded:false})
         let url = window.location.pathname.split('/').join('');
         let page = window.location.pathname.split('/')[1];
+        if(!pages[page]){
+            this.props.history.push('/')
+        }
         let topic = window.location.pathname.split('/')[2];
         let query = {}
         if(topicsOBJ[topic]){
@@ -445,6 +452,9 @@ class App extends Component {
                 return false
             }
             if(user.firstName && user.lastName && user.userName){
+                if(page==='login'){
+                    this.props.history.push('/')
+                }
                 this.setState({user:user,loggedin:true})
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
@@ -476,6 +486,9 @@ class App extends Component {
     }
     handleMenuItemClick = (e, { name }) => {
         this.setState({blogsAreLoading:true})
+        if(name==='search'){
+            return
+        }
         if(name === 'home' || name ==='login'){
             this.setState({ currentLocation:name,})
         }
