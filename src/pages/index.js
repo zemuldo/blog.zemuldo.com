@@ -184,7 +184,6 @@ class App extends Component {
             }.bind(this));
     }
     setCurrentBlog(url,page){
-        console.log(url)
         let id = null
         if(url.indexOf('-')>0){
             id = Number(url.split('_')[url.split('_').length-1]);
@@ -275,7 +274,6 @@ class App extends Component {
                     this.setState({blogLoaded:true})
                     window.scrollTo(0,0);
                 }
-
             }
                 .bind(this))
             .catch(function (err) {
