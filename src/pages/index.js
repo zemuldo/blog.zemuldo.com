@@ -575,6 +575,7 @@ class App extends Component {
                            handleLoginButton={this.handleLoginButton}
                            handleLogoutinButton={this.handleLogoutinButton}
                            _handleSwitchToProfile={this._handleSwitchToProfile}
+                           profilePic={this.state.profilePic}
                            _handleCreateNew={this._handleCreateNew}
                            loggedin={this.state.loggedin}
                            user={this.state.user}
@@ -597,6 +598,7 @@ class App extends Component {
                         handleLoginButton={this.handleLoginButton}
                         handleLogoutinButton={this.handleLogoutinButton}
                         _handleSwitchToProfile={this._handleSwitchToProfile}
+                        profilePic={this.state.profilePic}
                         _handleCreateNew={this._handleCreateNew}
                         loggedin={this.state.loggedin}
                         user={this.state.user}

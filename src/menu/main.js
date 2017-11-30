@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Menu,Icon, Dropdown,Input} from 'semantic-ui-react'
+import {Menu,Icon, Dropdown,Input,Image} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
 class MainMenu extends Component {
@@ -80,7 +80,22 @@ class MainMenu extends Component {
                                     </Menu.Item>:
                                     <Menu.Item>
                                         <Dropdown
-                                            trigger={<span>{this.props.user.firstName+' '+this.props.user.lastName}</span>}
+                                            trigger={<Image
+                                                avatar={true}
+                                                wrapped={true}
+                                                id="photo"
+                                                size='tiny'
+                                                src={this.props.profilePic}
+                                                style={{
+                                                    marginLeft:'50%',
+                                                    borderRadius: `${(Math.min(
+                                                        JSON.parse(this.props.user.avatar).height,
+                                                        JSON.parse(this.props.user.avatar).width
+                                                        ) +
+                                                        10) *
+                                                    (JSON.parse(this.props.user.avatar).borderRadius / 2 / 100)}px`
+                                                }}
+                                            />}
                                             style={{color:this.props.colors[0]}}
                                             pointing='top right'
                                             item
