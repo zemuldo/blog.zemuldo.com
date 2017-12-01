@@ -47,6 +47,11 @@ app.get('*.js', function (req, res, next) {
     res.set('Content-Encoding', 'gzip');
     next();
 });
+app.get('*.css', function (req, res, next) {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    next();
+});
 app.use(bodyParser.json());
 app.use(helmet())
 app.set('x-powered-by',false)
