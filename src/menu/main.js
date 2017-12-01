@@ -110,27 +110,27 @@ class MainMenu extends Component {
                                             <Dropdown.Menu>
                                                 <Dropdown.Item as='span' onClick={this.props._handleSwitchToProfile}>
                                                     <Icon color={this.props.colors[0]} name='user circle' />
-                                                    <Link to={'/zemuldo/session'} color={this.props.colors[1]} >Your Profile</Link>
+                                                    <Link to={'/'+this.props.user.userName+'/session-'+this.props.time} color={this.props.colors[1]} >Your Profile</Link>
                                                 </Dropdown.Item>
                                                 <Dropdown.Item as='span'>
                                                     <Icon color={this.props.colors[0]} name='users' />
-                                                    <Link to={'/followers'} color={this.props.colors[2]} >Followers</Link>
+                                                    <Link to={'/'+this.props.user.userName+'/followers'} color={this.props.colors[2]} >Followers</Link>
                                                 </Dropdown.Item>
                                                 <Dropdown.Item as='span'>
                                                     <Icon color={this.props.colors[0]} name='help' />
-                                                    <Link to={'/help'} color={this.props.colors[0]} >Help</Link>
+                                                    <Link to={'/'+this.props.user.userName+'/help'} color={this.props.colors[0]} >Help</Link>
                                                 </Dropdown.Item>
                                                 <Dropdown.Item  as='span' onClick={this.props._handleCreateNew}>
                                                     <Icon color={this.props.colors[0]} name='plus'  />
-                                                    <Link to={'/create'} color={this.props.colors[0]} >New Article</Link>
+                                                    <Link to={'/'+this.props.user.userName+'/editor'} color={this.props.colors[0]} >New Article</Link>
                                                 </Dropdown.Item>
                                                 <Dropdown.Item as='span'>
                                                     <Icon color={this.props.colors[0]} name='setting' />
-                                                    <Link to={'/settings'} color={this.props.colors[1]} >Settings</Link>
+                                                    <Link to={'/'+this.props.user.userName+'/settings'} color={this.props.colors[1]} >Settings</Link>
                                                 </Dropdown.Item>
                                                 <Dropdown.Item as='span' onClick={this.props.handleLogoutinButton}>
                                                     <Icon color={this.props.colors[0]} name='sign out' />
-                                                    <Link color={this.props.colors[0]} to="/">Sign Out</Link>
+                                                    <Link to={'/'} color={this.props.colors[0]}>Sign Out</Link>
                                                 </Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
