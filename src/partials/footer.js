@@ -53,6 +53,10 @@ class Footer extends Component {
                                     </List>
                                 </Grid.Column>
                                 <Grid.Column  width={3}>
+                                    <Header color='green' as='h4' content='Quote of the day' />
+                                    <p>Every complex System no matter how Complex is a combination of many smaller and simpler Systems and Units that operate together Synchronously.</p>
+                                </Grid.Column>
+                                <Grid.Column width={3}>
                                     <Header color='green' inverted as='h4' content='Navigation' />
                                     <List link >
                                         <List.Item>
@@ -98,10 +102,6 @@ class Footer extends Component {
                                             </a>
                                         </List.Item>
                                     </List>
-                                </Grid.Column>
-                                <Grid.Column width={3}>
-                                    <Header color='green' as='h4' content='Quote of the day' />
-                                    <p>Every complex System no matter how Complex is a combination of many smaller and simpler Systems and Units that operate together Synchronously.</p>
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
