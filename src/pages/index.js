@@ -61,7 +61,8 @@ class App extends Component {
             homePageLoaded:false,
             loadFooter:false,
             topic:'all',
-            visible:false
+            visible:false,
+            time:new Date().toDateString()
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -555,9 +556,6 @@ class App extends Component {
         )
         return (
             <div>
-                <div>
-                    <GeoLocator geoAllowed={this.state.geoAllowed}/>
-                </div>
                 <Helmet>
                     <title>{'ZemuldO-'+toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
@@ -580,6 +578,7 @@ class App extends Component {
                            handleFilterChange={this.handleFilterChange}
                            handleMenuItemClick={this.handleMenuItemClick}
                            handleHomeClick={this.handleHomeClick}
+                           time={this.state.time}
                        />:null}
                </div>
                 <Visibility
@@ -603,6 +602,7 @@ class App extends Component {
                         handleFilterChange={this.handleFilterChange}
                         handleMenuItemClick={this.handleMenuItemClick}
                         handleHomeClick={this.handleHomeClick}
+                        time={this.state.time}
                     />
                 </Visibility>
                 { !this.state.visible && this.state.currentLocation!=='login'? <NonFixedMenu /> : null }
