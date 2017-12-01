@@ -23,6 +23,7 @@ class MainMenu extends Component {
                         borderless
                     >
                         <Menu.Item
+                            as='span'
                             className=''
                             name='home'
                             active={this.props.currentLocation === 'home'}
@@ -31,6 +32,7 @@ class MainMenu extends Component {
                             <span color={this.props.colors[0]}><Link to="/">Home</Link></span>
                         </Menu.Item>
                         <Menu.Item
+                            as='span'
                             name='dev'
                             active={this.props.currentLocation === 'dev'}
                             onClick={this.props.handleMenuItemClick}>
@@ -38,6 +40,7 @@ class MainMenu extends Component {
                             <span color={this.props.colors[0]}><Link to={"/dev/"+urlDetails}>Dev</Link></span>
                         </Menu.Item>
                         <Menu.Item
+                            as='span'
                             name='business'
                             active={this.props.currentLocation === 'business'}
                             onClick={this.props.handleMenuItemClick}>
@@ -45,6 +48,7 @@ class MainMenu extends Component {
                             <span color={this.props.colors[0]}><Link to={"/business/"+urlDetails}>Business</Link></span>
                         </Menu.Item>
                         <Menu.Item
+                            as='span'
                             name='tech'
                             active={this.props.currentLocation === 'tech'}
                             onClick={this.props.handleMenuItemClick}>
@@ -52,6 +56,7 @@ class MainMenu extends Component {
                             <span color={this.props.colors[0]}><Link to={"/tech/"+urlDetails}>Tech</Link></span>
                         </Menu.Item>
                         <Menu.Item
+                            as='span'
                             name='reviews'
                             active={this.props.currentLocation === 'reviews'}
                             onClick={this.props.handleMenuItemClick}>
@@ -71,6 +76,7 @@ class MainMenu extends Component {
                             {
                                 (!this.props.loggedin) ?
                                     <Menu.Item
+                                        as='span'
                                         position='right'
                                         name='login'
                                         color={this.props.colors[0]}
@@ -80,6 +86,7 @@ class MainMenu extends Component {
                                     </Menu.Item>:
                                     <Menu.Item>
                                         <Dropdown
+                                            className='dropDown'
                                             trigger={<Image
                                                 avatar={true}
                                                 wrapped={true}
@@ -99,32 +106,31 @@ class MainMenu extends Component {
                                             style={{color:this.props.colors[0]}}
                                             pointing='top right'
                                             item
-                                            icon={null}
                                         >
                                             <Dropdown.Menu>
-                                                <Dropdown.Item onClick={this.props._handleSwitchToProfile}>
+                                                <Dropdown.Item as='span' onClick={this.props._handleSwitchToProfile}>
                                                     <Icon color={this.props.colors[0]} name='user circle' />
-                                                    <span color={this.props.colors[1]} >Your Profile</span>
+                                                    <Link to={'/zemuldo/session'} color={this.props.colors[1]} >Your Profile</Link>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item>
+                                                <Dropdown.Item as='span'>
                                                     <Icon color={this.props.colors[0]} name='users' />
-                                                    <span color={this.props.colors[2]} >Followers</span>
+                                                    <Link to={'/followers'} color={this.props.colors[2]} >Followers</Link>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item>
+                                                <Dropdown.Item as='span'>
                                                     <Icon color={this.props.colors[0]} name='help' />
-                                                    <span color={this.props.colors[0]} >Help</span>
+                                                    <Link to={'/help'} color={this.props.colors[0]} >Help</Link>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={this.props._handleCreateNew}>
+                                                <Dropdown.Item  as='span' onClick={this.props._handleCreateNew}>
                                                     <Icon color={this.props.colors[0]} name='plus'  />
-                                                    <span color={this.props.colors[0]} >New Article</span>
+                                                    <Link to={'/create'} color={this.props.colors[0]} >New Article</Link>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item>
+                                                <Dropdown.Item as='span'>
                                                     <Icon color={this.props.colors[0]} name='setting' />
-                                                    <span color={this.props.colors[1]} >Settings</span>
+                                                    <Link to={'/settings'} color={this.props.colors[1]} >Settings</Link>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={this.props.handleLogoutinButton}>
+                                                <Dropdown.Item as='span' onClick={this.props.handleLogoutinButton}>
                                                     <Icon color={this.props.colors[0]} name='sign out' />
-                                                    <span color={this.props.colors[0]} ><Link to="/">Sign Out</Link></span>
+                                                    <Link color={this.props.colors[0]} to="/">Sign Out</Link>
                                                 </Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>

@@ -13,8 +13,11 @@
     opacity: 0.8;
 }
 .navBar span{
-    font-weight: bold;
-    font-size: larger;
+
+}
+.dropDown{
+    border: none;
+    background-color: white;
 }
 
 /*
