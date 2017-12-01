@@ -79,6 +79,8 @@ self.addEventListener("install", function(e) {
                         return cleanResponse(t).then(function(t) {
                             return e.put(n, t)
                         })
+                    }).catch(function () {
+                        
                     })
                 }
             }))
@@ -96,6 +98,8 @@ self.addEventListener("install", function(e) {
         })
     }).then(function() {
         return self.clients.claim()
+    }).catch(function () {
+        
     }))
 }), self.addEventListener("fetch", function(e) {
     if ("GET" === e.request.method) {
