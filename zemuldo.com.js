@@ -47,7 +47,9 @@ const pages = {
         imgSRC:'img/blogs/blogs_pic.jpg'
     }
 }
-
+app.get('/service-worker.js', function(req, res, next) {
+    res.sendFile(path.join(__dirname, 'build', 'service-worker.js'));
+});
 app.get('*.js', function(req, res, next) {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
