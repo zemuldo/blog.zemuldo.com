@@ -66,28 +66,16 @@ var precacheConfig = [
             a = createCacheKey(r, hashParamName, n, /\.\w{8}\./);
         return [r.toString(), a]
     }));
-self.addEventListener("install", function(e) {
-    e.waitUntil(caches.open(cacheName).then(function(e) {
-        return setOfCachedUrls(e).then(function(t) {
-            return Promise.all(Array.from(urlsToCacheKeys.values()).map(function(n) {
-                if (!t.has(n)) {
-                    var r = new Request(n, {
-                        credentials: "same-origin"
-                    });
-                    return fetch(r).then(function(t) {
-                        if (!t.ok) throw new Error("Request for " + n + " returned a response with status " + t.status);
-                        return cleanResponse(t).then(function(t) {
-                            return e.put(n, t)
-                        })
-                    }).catch(function () {
-                        
-                    })
-                }
-            }))
+self.addEventListener('install', function(event) {
+    // Put `offline.html` page into cache
+    var offlineRequest = new Request('offline.html');
+    event.waitUntil(
+        fetch(offlineRequest).then(function(response) {
+            return caches.open('offline').then(function(cache) {
+                return cache.put(offlineRequest, response);
+            });
         })
-    }).then(function() {
-        return self.skipWaiting()
-    }))
+    );
 }), self.addEventListener("activate", function(e) {
     var t = new Set(urlsToCacheKeys.values());
     e.waitUntil(caches.open(cacheName).then(function(e) {
