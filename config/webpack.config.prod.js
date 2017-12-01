@@ -10,6 +10,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const urls =
@@ -314,6 +315,22 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.DefinePlugin({
+          'process.env': {
+              'NODE_ENV': JSON.stringify('production')
+          }
+      }),
+      //Compression plugin
+      new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.UglifyJsPlugin(),
+      new webpack.optimize.AggressiveMergingPlugin(),
+      new CompressionPlugin({
+        asset: "[path].gz[query]",
+        algorithm: "gzip",
+        test: /\.js$|\.css$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.8
+      })
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
