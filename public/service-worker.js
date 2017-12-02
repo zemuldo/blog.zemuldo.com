@@ -71,9 +71,14 @@ self.addEventListener('install', function(event) {
     var offlineRequest = new Request('offline.html');
     event.waitUntil(
         fetch(offlineRequest).then(function(response) {
-            return caches.open('offline').then(function(cache) {
+            return caches.open('offline')
+                .then(function(cache) {
                 return cache.put(offlineRequest, response);
-            });
+            })
+                .catch(function () {
+
+                })
+
         })
     );
 }), self.addEventListener("activate", function(e) {
