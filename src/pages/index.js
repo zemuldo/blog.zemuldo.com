@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Visibility} from 'semantic-ui-react'
-import {Helmet} from "react-helmet";
+import { Button, Visibility } from 'semantic-ui-react'
+import { Helmet } from "react-helmet";
 import axios from 'axios'
 import Login from '../profile/loginForm'
 import PagesComponent from '../pages/homePage'
@@ -9,15 +9,14 @@ import GeoLocator from '../partials/geoLocator'
 import Footer from '../partials/footer'
 import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
-import {pages} from '../environments/conf'
-import {topicsOBJ} from '../environments/conf'
+import { pages } from '../environments/conf'
+import { topicsOBJ } from '../environments/conf'
 import MainMenu from "../menu/main";
 import FixedMenu from "../menu/fixedMenu";
 const env = config[process.env.NODE_ENV] || 'development';
 
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 }
 function dataURItoBlob(dataURI, callback) {
     let byteString = atob(dataURI.split(',')[1]);
@@ -37,32 +36,32 @@ function dataURItoBlob(dataURI, callback) {
     return bb;
 }
 class App extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            current:'ZemuldO-Home',
-            loggedin:false,
-            user:null,
-            iKnowYou:false,
-            visitorInfo:null,
-            geoAllowed:false,
-            createNew:false,
-            editingMode:false,
-            colors:['green','blue','orange','violet','blue','orange'],
-            currentLocation:'home',
-            profilePic:null,
-            blogs:[],
-            blogsLoaded:false,
-            blogsAreLoading:true,
-            homePageIsLoading:true,
-            blogDetails:null,
-            richViewerState:null,
-            blogLoade:false,
-            homePageLoaded:false,
-            loadFooter:false,
-            topic:'all',
-            visible:false,
-            time:new Date().toDateString()
+            current: 'ZemuldO-Home',
+            loggedin: false,
+            user: null,
+            iKnowYou: false,
+            visitorInfo: null,
+            geoAllowed: false,
+            createNew: false,
+            editingMode: false,
+            colors: ['green', 'blue', 'orange', 'violet', 'blue', 'orange'],
+            currentLocation: 'home',
+            profilePic: null,
+            blogs: [],
+            blogsLoaded: false,
+            blogsAreLoading: true,
+            homePageIsLoading: true,
+            blogDetails: null,
+            richViewerState: null,
+            blogLoade: false,
+            homePageLoaded: false,
+            loadFooter: false,
+            topic: 'all',
+            visible: false,
+            time: new Date().toDateString()
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleLoginButton = this.handleLoginButton.bind(this);
@@ -91,303 +90,303 @@ class App extends Component {
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
-        this.deletedBlog=this.deletedBlog.bind(this)
-        this.handleMenuItemClickFooter=this.handleMenuItemClickFooter.bind(this)
+        this.deletedBlog = this.deletedBlog.bind(this)
+        this.handleMenuItemClickFooter = this.handleMenuItemClickFooter.bind(this)
         this.setTopic = this.setTopic.bind(this)
         this.hideFixedMenu = this.hideFixedMenu.bind(this)
         this.showFixedMenu = this.showFixedMenu.bind(this)
     };
     hideFixedMenu = () => this.setState({ visible: false })
     showFixedMenu = () => this.setState({ visible: true })
-    setTopic(topic){
-        this.setState({topic:topic})
+    setTopic(topic) {
+        this.setState({ topic: topic })
     }
-    deletedBlog(){
-        this.setState({blog:null})
+    deletedBlog() {
+        this.setState({ blog: null })
         this.setHomeBlogs()
     }
-    homePageIsLoading(value){
-        this.setState({homePageLoaded:!value})
+    homePageIsLoading(value) {
+        this.setState({ homePageLoaded: !value })
     }
-    blogsAreLoading(state){
-        this.setState({blogsLoaded:!state})
+    blogsAreLoading(state) {
+        this.setState({ blogsLoaded: !state })
     }
-    blogIsLoading(state){
-        this.setState({blogLoaded:!state})
+    blogIsLoading(state) {
+        this.setState({ blogLoaded: !state })
     }
-    _handleChangeBodySize(size){
-        this.setState({bodySize:size})
+    _handleChangeBodySize(size) {
+        this.setState({ bodySize: size })
     }
-    setTopicPosts(topicBlogs,topic){
-        if(topicBlogs[0]){
-            this.setState({blogs:topicBlogs,topic:topic});
+    setTopicPosts(topicBlogs, topic) {
+        if (topicBlogs[0]) {
+            this.setState({ blogs: topicBlogs, topic: topic });
             this.blogsAreLoading(false)
         }
         else {
-            this.setState({blogs:[],topic:topic});
+            this.setState({ blogs: [], topic: topic });
             this.blogsAreLoading(false)
         }
     }
-    setTopicNextPosts(topicBlogs){
-        if(topicBlogs[0]){
-            this.setState({blogs:topicBlogs});
+    setTopicNextPosts(topicBlogs) {
+        if (topicBlogs[0]) {
+            this.setState({ blogs: topicBlogs });
             this.blogsAreLoading(false)
         }
         else {
-            this.setState({blogs:[]});
+            this.setState({ blogs: [] });
             this.blogsAreLoading(false)
         }
     }
-    setBlogHere(id,page){
-        if(!pages[page]){
-            window.location ='/'
+    setBlogHere(id, page) {
+        if (!pages[page]) {
+            window.location = '/'
         }
         return axios.post(env.httpURL, {
-            "queryMethod":"getPost",
-            "queryData":{
-                id:id
+            "queryMethod": "getPost",
+            "queryData": {
+                id: id
             }
         })
             .then(function (response) {
-                if(!response.data){
-                    window.history.push('/'+page+'/all')
-                    this.setState({blog:null});
-                    this.setState({blogLoaded:true})
+                if (!response.data) {
+                    window.history.push('/' + page + '/all')
+                    this.setState({ blog: null });
+                    this.setState({ blogLoaded: true })
                     return false
                 }
-                if(response.data.error){
-                    window.history.push('/'+page+'/all')
-                    this.setState({blog:null});
-                    this.setState({blogLoaded:true})
-                    window.scrollTo(0,0)
+                if (response.data.error) {
+                    window.history.push('/' + page + '/all')
+                    this.setState({ blog: null });
+                    this.setState({ blogLoaded: true })
+                    window.scrollTo(0, 0)
                     return false
                 }
-                if(response.data.body){
-                    this.setState({blog:response.data,richViewerState:response.data.body});
+                if (response.data.body) {
+                    this.setState({ blog: response.data, richViewerState: response.data.body });
                     this.getBlogDetails(id);
-                    window.scrollTo(0,0)
+                    window.scrollTo(0, 0)
                     return false
 
                 }
                 else {
-                    window.history.push('/'+page+'/all')
-                    this.setState({blog:null});
-                    this.setState({blogLoaded:true})
-                    window.scrollTo(0,0)
+                    window.history.push('/' + page + '/all')
+                    this.setState({ blog: null });
+                    this.setState({ blogLoaded: true })
+                    window.scrollTo(0, 0)
                     return false
                 }
             }.bind(this))
             .catch(function (err) {
-                window.history.push('/'+page+'/all')
-                this.setState({blog:null});
-                this.setState({blogLoaded:true})
+                window.history.push('/' + page + '/all')
+                this.setState({ blog: null });
+                this.setState({ blogLoaded: true })
                 return err
             }.bind(this));
     }
-    setCurrentBlog(url,page){
+    setCurrentBlog(url, page) {
         let id = null
-        if(url.indexOf('-')>0){
-            id = Number(url.split('_')[url.split('_').length-1]);
+        if (url.indexOf('-') > 0) {
+            id = Number(url.split('_')[url.split('_').length - 1]);
         }
-        else if(url.indexOf('%20')>0){
-            id = Number(url.split('_')[url.split('_').length-1]);
+        else if (url.indexOf('%20') > 0) {
+            id = Number(url.split('_')[url.split('_').length - 1]);
         }
-        else if(url.indexOf('%2520')>0){
-            id = Number(url.split('_')[url.split('_').length-1]);
+        else if (url.indexOf('%2520') > 0) {
+            id = Number(url.split('_')[url.split('_').length - 1]);
         }
-        if(id && id.toString()!=='NaN'){
-            this.setBlogHere(id,page)
+        if (id && id.toString() !== 'NaN') {
+            this.setBlogHere(id, page)
         }
-        else{
-            this.setState({blog:null});
-            this.setState({blogLoaded:true})
+        else {
+            this.setState({ blog: null });
+            this.setState({ blogLoaded: true })
         }
     }
     handleFilterChange(e) {
-        this.setState({blogsAreLoading:true})
+        this.setState({ blogsAreLoading: true })
         e.preventDefault();
-        if(e.target.value===''){
+        if (e.target.value === '') {
             return axios.post(env.httpURL, {
-                "queryMethod":"getAllPosts",
-                "queryData":{}
+                "queryMethod": "getAllPosts",
+                "queryData": {}
             })
                 .then(response => {
-                    this.setState({blogs:response.data});
-                    this.setState({blogsAreLoading:false})
+                    this.setState({ blogs: response.data });
+                    this.setState({ blogsAreLoading: false })
                 })
                 .catch(exception => {
-                    this.setState({blogsAreLoading:false})
+                    this.setState({ blogsAreLoading: false })
                 });
         }
         else {
             return axios.post(env.httpURL, {
-                "queryMethod":"getFiltered",
-                "queryData":{
-                    "filter":e.target.value,
+                "queryMethod": "getFiltered",
+                "queryData": {
+                    "filter": e.target.value,
                 }
             })
                 .then(response => {
-                    this.setState({blogs:response.data});
-                    this.setState({blogsAreLoading:false})
+                    this.setState({ blogs: response.data });
+                    this.setState({ blogsAreLoading: false })
                 })
                 .catch(exception => {
-                    this.setState({blogs:[]});
-                    this.setState({blogsAreLoading:false})
+                    this.setState({ blogs: [] });
+                    this.setState({ blogsAreLoading: false })
                 });
         }
     }
-    onReadMore(thisBlog){
-        window.scrollTo(0,0);
-        this.setState({blogLoaded:false});
+    onReadMore(thisBlog) {
+        window.scrollTo(0, 0);
+        this.setState({ blogLoaded: false });
         return axios.post(env.httpURL, {
-            "queryMethod":"getPost",
-            "queryData":{
-                "id":thisBlog.id
+            "queryMethod": "getPost",
+            "queryData": {
+                "id": thisBlog.id
             }
         })
             .then(response => {
-                let url = '/'+thisBlog.type+'/'+thisBlog.topics[0]+'/'+thisBlog.userName+'_'+thisBlog.title.split(' ').join('-')+'_'+thisBlog.date.split(' ').join('-')+'_'+thisBlog.id.toString()
+                let url = '/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
                 this.props.history.push(url)
-                this.setState({blog:response.data,blogDetails:thisBlog});
-                this.setState({blogLoaded:true,blog:response.data});
+                this.setState({ blog: response.data, blogDetails: thisBlog });
+                this.setState({ blogLoaded: true, blog: response.data });
             })
             .catch(function (err) {
-                this.setState({blog:null,blogDetails:thisBlog});
-                this.setState({blogLoaded:true});
+                this.setState({ blog: null, blogDetails: thisBlog });
+                this.setState({ blogLoaded: true });
                 return err;
             }.bind(this))
 
     }
-    getBlogDetails(id){
+    getBlogDetails(id) {
         return axios.post(env.httpURL, {
-            "queryMethod":"getPostDetails",
-            "queryData":{
-                "id":id
+            "queryMethod": "getPostDetails",
+            "queryData": {
+                "id": id
             }
         })
             .then(function (response) {
-                if(response.data.error){
+                if (response.data.error) {
                 }
                 else {
                     let o = response.data
-                    this.props.history.push('/'+o.type+'/'+o.topics[0]+'/'+o.userName+'_'+o.title.split(' ').join('-')+'_'+o.date.split(' ').join('-')+'_'+o.id.toString())
-                    this.setState({blogDetails:response.data,isHome:false});
-                    this.setState({blogLoaded:true})
-                    window.scrollTo(0,0);
+                    this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString())
+                    this.setState({ blogDetails: response.data, isHome: false });
+                    this.setState({ blogLoaded: true })
+                    window.scrollTo(0, 0);
                 }
             }
                 .bind(this))
             .catch(function (err) {
                 console.log(err)
-                this.setState({blogLoaded:true})
+                this.setState({ blogLoaded: true })
                 return err
             }.bind(this));
     }
-    navigateBlogs(query){
-        this.setState({blogsLoaded:false})
+    navigateBlogs(query) {
+        this.setState({ blogsLoaded: false })
         return axios.post(env.httpURL, {
-            "queryMethod":"getPosts",
-            "queryData":query
+            "queryMethod": "getPosts",
+            "queryData": query
         })
             .then(function (response) {
-                if(!response.data){
-                    this.setState({blogs:[],blog:null,blogsLoaded:true,homePageLoaded:true});
+                if (!response.data) {
+                    this.setState({ blogs: [], blog: null, blogsLoaded: true, homePageLoaded: true });
                     return false
                 }
                 else {
-                    this.setState({blogs:response.data,blogsLoaded:true,homePageLoaded:true});
+                    this.setState({ blogs: response.data, blogsLoaded: true, homePageLoaded: true });
                 }
             }.bind(this))
             .catch(function (err) {
-                this.setState({blogs:[],blog:null,blogsLoaded:true,homePageLoaded:true});
+                this.setState({ blogs: [], blog: null, blogsLoaded: true, homePageLoaded: true });
             }.bind(this))
     }
-    setPageBlogs(name){
+    setPageBlogs(name) {
         return axios.post(env.httpURL, {
-            "queryMethod":"getPosts",
-            "queryData":{
-                "type":name
+            "queryMethod": "getPosts",
+            "queryData": {
+                "type": name
             }
         })
             .then(function (response) {
-                if(!response.data){
-                    this.setState({blogs:[],blog:null,blogDetails:null});
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                if (!response.data) {
+                    this.setState({ blogs: [], blog: null, blogDetails: null });
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                     return false
                 }
-                if(!response.data[0]){
-                    this.setState({blogs:[],blog:null,blogDetails:null});
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                if (!response.data[0]) {
+                    this.setState({ blogs: [], blog: null, blogDetails: null });
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                     return false
                 }
-                if(response.data[0]){
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogs:response.data});
-                    this.setState({blogsAreLoading:false})
+                if (response.data[0]) {
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogs: response.data });
+                    this.setState({ blogsAreLoading: false })
                 }
                 else {
-                    this.setState({blogs:[],blog:null,blogDetails:null});
-                    this.setState({homePageLoaded:true})
-                    this.setState({blogs:[]});
-                    this.setState({blogsLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                    this.setState({ blogs: [], blog: null, blogDetails: null });
+                    this.setState({ homePageLoaded: true })
+                    this.setState({ blogs: [] });
+                    this.setState({ blogsLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                 }
             }.bind(this))
             .catch(function (err) {
-                this.setState({blogs:[],blog:null,blogDetails:null});
-                this.setState({homePageLoaded:true})
-                this.setState({blogs:[]});
-                this.setState({blogsLoaded:true})
-                this.setState({blogsAreLoading:false})
+                this.setState({ blogs: [], blog: null, blogDetails: null });
+                this.setState({ homePageLoaded: true })
+                this.setState({ blogs: [] });
+                this.setState({ blogsLoaded: true })
+                this.setState({ blogsAreLoading: false })
             }.bind(this))
     }
-    setHomeBlogs(){
-        this.setState({blogsAreLoading:true})
+    setHomeBlogs() {
+        this.setState({ blogsAreLoading: true })
         return axios.post(env.httpURL, {
-            "queryMethod":"getAllPosts",
-            "queryData":{
+            "queryMethod": "getAllPosts",
+            "queryData": {
             }
         })
             .then(function (response) {
-                this.setState({loadFooter:true})
-                if(!response.data){
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                this.setState({ loadFooter: true })
+                if (!response.data) {
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                     return false
                 }
-                if(!response.data[0]){
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                if (!response.data[0]) {
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                     return false
                 }
-                if(response.data[0]){
-                    this.setState({blogs:response.data});
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                if (response.data[0]) {
+                    this.setState({ blogs: response.data });
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                 }
                 else {
-                    this.setState({blogs:[]});
-                    this.setState({blogsLoaded:true,homePageLoaded:true})
-                    this.setState({blogsAreLoading:false})
+                    this.setState({ blogs: [] });
+                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsAreLoading: false })
                 }
             }.bind(this))
             .catch(function (err) {
-                this.setState({loadFooter:true})
-                this.setState({blogs:[]});
-                this.setState({blogsLoaded:true,homePageLoaded:true})
-                this.setState({blogsAreLoading:false})
-                this.setState({loadFooter:true})
+                this.setState({ loadFooter: true })
+                this.setState({ blogs: [] });
+                this.setState({ blogsLoaded: true, homePageLoaded: true })
+                this.setState({ blogsAreLoading: false })
+                this.setState({ loadFooter: true })
             }.bind(this))
     }
-    handleNavigation(location){
-        window.scrollTo(0,0);
-        this.setState({currentLocation:location})
-        if(location==='home'){
+    handleNavigation(location) {
+        window.scrollTo(0, 0);
+        this.setState({ currentLocation: location })
+        if (location === 'home') {
             this.props.history.push('/')
-        }else {
-            this.props.history.push('/'+location)
+        } else {
+            this.props.history.push('/' + location)
         }
     }
     shuffle() {
@@ -400,147 +399,147 @@ class App extends Component {
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
         }
-        this.setState({colors:array});
+        this.setState({ colors: array });
     }
     resize = () => this.forceUpdate()
     componentWillReceiveProps() {
         let query = {}
         let page = window.location.pathname.split('/')[1];
         let topic = window.location.pathname.split('/')[2];
-        if(topicsOBJ[topic]){
+        if (topicsOBJ[topic]) {
             query.topics = topic
         }
-        if(pages[page] && pages[page].name!=='Home' ){
+        if (pages[page] && pages[page].name !== 'Home') {
             query.type = page
-            this.setState({currentLocation:page})
+            this.setState({ currentLocation: page })
         }
         this.navigateBlogs(query)
     }
     componentDidMount() {
-        this.setState({blogsLoaded:false})
+        this.setState({ blogsLoaded: false })
         let url = window.location.pathname.split('/').join('');
         let page = window.location.pathname.split('/')[1];
-        if(!pages[page]){
+        if (!pages[page]) {
             this.props.history.push('/')
         }
         let topic = window.location.pathname.split('/')[2];
         let query = {}
-        if(topicsOBJ[topic]){
+        if (topicsOBJ[topic]) {
             query.topics = topic
         }
-        if(pages[page] && pages[page].name!=='Home' ){
+        if (pages[page] && pages[page].name !== 'Home') {
             query.type = page;
-            this.setState({currentLocation:page})
+            this.setState({ currentLocation: page })
         }
         this.navigateBlogs(query)
-        this.setCurrentBlog(url,page);
+        this.setCurrentBlog(url, page);
         this.forceUpdate();
-        if(window.innerWidth<503){
+        if (window.innerWidth < 503) {
             this._handleChangeBodySize(16);
         }
-        if(window.innerWidth>503){
+        if (window.innerWidth > 503) {
             this._handleChangeBodySize(16);
         }
 
         window.addEventListener('resize', this.resize);
         let known = localStorage.getItem('user');
-        if(known){
+        if (known) {
             let user = JSON.parse(known)
-            if(typeof user.avatar!=='string'){
+            if (typeof user.avatar !== 'string') {
                 localStorage.removeItem('user');
                 return false
             }
-            if(user.firstName && user.lastName && user.userName){
-                if(page==='login'){
+            if (user.firstName && user.lastName && user.userName) {
+                if (page === 'login') {
                     this.props.history.push('/')
                 }
-                this.setState({user:user,loggedin:true})
+                this.setState({ user: user, loggedin: true })
                 let urlCreator = window.URL || window.webkitURL;
-                let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img));
-                this.setState({profilePic:imageUrl})
-                this.setState({homePageLoaded:true})
+                let imageUrl = urlCreator.createObjectURL(dataURItoBlob(JSON.parse(user.avatar).img));
+                this.setState({ profilePic: imageUrl })
+                this.setState({ homePageLoaded: true })
             }
             else {
                 localStorage.removeItem('user');
             }
         }
-        let location = window.location.pathname.slice(1,window.location.pathname.length)
-        if(pages[location] && location==='login'){
+        let location = window.location.pathname.slice(1, window.location.pathname.length)
+        if (pages[location] && location === 'login') {
         }
-        else if(pages[location] && location!=='login'){
-            this.setState({currentLocation:location})
+        else if (pages[location] && location !== 'login') {
+            this.setState({ currentLocation: location })
         }
         this.shuffle()
         this.forceUpdate()
         window.addEventListener('resize', this.resize)
-        this.setState({loadFooter:true})
+        this.setState({ loadFooter: true })
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
-        this.setState({blogsAreLoading:true})
-        window.scrollTo(0,0);
-        this.setState({ currentLocation:'home',blog:null})
+        this.setState({ blogsAreLoading: true })
+        window.scrollTo(0, 0);
+        this.setState({ currentLocation: 'home', blog: null })
     }
     handleMenuItemClick = (e, { name }) => {
-        this.setState({blogsAreLoading:true})
-        if(name==='search'){
+        this.setState({ blogsAreLoading: true })
+        if (name === 'search') {
             return
         }
-        if(name === 'home' || name ==='login'){
-            this.setState({ currentLocation:name,})
+        if (name === 'home' || name === 'login') {
+            this.setState({ currentLocation: name, })
         }
         else {
-            if(pages[name]){
+            if (pages[name]) {
             }
-            this.setState({ currentLocation:name,})
+            this.setState({ currentLocation: name, })
         }
     }
     handleMenuItemClickFooter = (name) => {
-        this.setState({blogsAreLoading:true})
-        if(name === 'home' || name ==='login'){
-            this.setState({ currentLocation:name,})
+        this.setState({ blogsAreLoading: true })
+        if (name === 'home' || name === 'login') {
+            this.setState({ currentLocation: name, })
         }
         else {
-            if(pages[name]){
+            if (pages[name]) {
             }
-            this.setState({ currentLocation:name,})
+            this.setState({ currentLocation: name, })
         }
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     }
-    successLogin = (user)=>{
-        this.setState({user:user})
-        localStorage.setItem('user',JSON.stringify(user))
-        this.setState({loggedin:true,currentLocation:'home'})
+    successLogin = (user) => {
+        this.setState({ user: user })
+        localStorage.setItem('user', JSON.stringify(user))
+        this.setState({ loggedin: true, currentLocation: 'home' })
         let urlCreator = window.URL || window.webkitURL;
-        let imageUrl = urlCreator.createObjectURL( dataURItoBlob(JSON.parse(user.avatar).img) );
-        this.setState({profilePic:imageUrl})
+        let imageUrl = urlCreator.createObjectURL(dataURItoBlob(JSON.parse(user.avatar).img));
+        this.setState({ profilePic: imageUrl })
     }
-    handleLoginButton = (e)=>{
-        this.setState({ currentLocation: 'login'})
+    handleLoginButton = (e) => {
+        this.setState({ currentLocation: 'login' })
     }
-    handleLogoutinButton = ()=>{
+    handleLogoutinButton = () => {
         localStorage.removeItem('user')
-        this.setState({ currentLocation: 'home' ,loggedin:false})
+        this.setState({ currentLocation: 'home', loggedin: false })
     }
-    _handleCreateNew = () =>{
+    _handleCreateNew = () => {
         let editorState = window.localStorage.getItem('draftContent')
         let blogData = window.localStorage.getItem('blogData')
-        if(editorState && blogData){
-            this.setState({editingMode:true})
+        if (editorState && blogData) {
+            this.setState({ editingMode: true })
         }
-        this.setState({createNew:true,currentLocation:'profile'})
+        this.setState({ createNew: true, currentLocation: 'profile' })
     }
-    _handleSwitchToProfile = () =>{
-        this.props.history.push('/'+this.state.user.userName+'/'+this.state.user.id+'_session_'+new Date().toDateString())
-        this.setState({currentLocation:'profile',createNew:false})
+    _handleSwitchToProfile = () => {
+        this.props.history.push('/' + this.state.user.userName + '/' + this.state.user.id + '_session_' + new Date().toDateString())
+        this.setState({ currentLocation: 'profile', createNew: false })
     }
-    _goToEditor(){
-        this.setState({editingMode:true})
+    _goToEditor() {
+        this.setState({ editingMode: true })
     }
-    _exitEditMode(){
-        this.setState({editingMode:false,createNew:false})
+    _exitEditMode() {
+        this.setState({ editingMode: false, createNew: false })
     }
     render() {
         const NonFixedMenu = () => (
@@ -557,30 +556,33 @@ class App extends Component {
         return (
             <div>
                 <Helmet>
-                    <title>{'ZemuldO-'+toTitleCase(this.state.currentLocation)}</title>
+                    <meta name="theme-color" content="#4285f4" />
+                    <meta name="msapplication-navbutton-color" content="#4285f4" />
+                    <meta name="apple-mobile-web-app-status-bar-style" content="#4285f4" />
+                    <title>{'ZemuldO-' + toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-               <div>
-                   { this.state.visible && this.state.currentLocation!=='login'?
-                       <FixedMenu
-                           currentLocation={this.state.currentLocation}
-                           showFixedMenu={this.showFixedMenu}
-                           hideFixedMe={this.hideFixedMenu}
-                           visible={this.state.visible}
-                           colors={this.state.colors}
-                           handleLoginButton={this.handleLoginButton}
-                           handleLogoutinButton={this.handleLogoutinButton}
-                           _handleSwitchToProfile={this._handleSwitchToProfile}
-                           profilePic={this.state.profilePic}
-                           _handleCreateNew={this._handleCreateNew}
-                           loggedin={this.state.loggedin}
-                           user={this.state.user}
-                           handleFilterChange={this.handleFilterChange}
-                           handleMenuItemClick={this.handleMenuItemClick}
-                           handleHomeClick={this.handleHomeClick}
-                           time={this.state.time}
-                       />:null}
-               </div>
+                <div>
+                    {this.state.visible && this.state.currentLocation !== 'login' ?
+                        <FixedMenu
+                            currentLocation={this.state.currentLocation}
+                            showFixedMenu={this.showFixedMenu}
+                            hideFixedMe={this.hideFixedMenu}
+                            visible={this.state.visible}
+                            colors={this.state.colors}
+                            handleLoginButton={this.handleLoginButton}
+                            handleLogoutinButton={this.handleLogoutinButton}
+                            _handleSwitchToProfile={this._handleSwitchToProfile}
+                            profilePic={this.state.profilePic}
+                            _handleCreateNew={this._handleCreateNew}
+                            loggedin={this.state.loggedin}
+                            user={this.state.user}
+                            handleFilterChange={this.handleFilterChange}
+                            handleMenuItemClick={this.handleMenuItemClick}
+                            handleHomeClick={this.handleHomeClick}
+                            time={this.state.time}
+                        /> : null}
+                </div>
                 <Visibility
                     onBottomPassed={this.showFixedMenu}
                     onBottomVisible={this.hideFixedMenu}
@@ -605,19 +607,19 @@ class App extends Component {
                         time={this.state.time}
                     />
                 </Visibility>
-                { !this.state.visible && this.state.currentLocation!=='login'? <NonFixedMenu /> : null }
-                <div style={{marginTop:'3em'}}>
+                {!this.state.visible && this.state.currentLocation !== 'login' ? <NonFixedMenu /> : null}
+                <div style={{ marginTop: '3em' }}>
                     {
-                        (this.state.currentLocation ==='login' || (this.state.currentLocation==='profile')) ?
+                        (this.state.currentLocation === 'login' || (this.state.currentLocation === 'profile')) ?
                             <Login
                                 history={this.props.history}
                                 handleLogoutinButton={this.handleLogoutinButton}
                                 handleNavigation={this.handleNavigation}
                                 user={this.state.user}
                                 _exitEditMode={this._exitEditMode}
-                                _goToEditor = {this._goToEditor}
+                                _goToEditor={this._goToEditor}
                                 editingMode={this.state.editingMode}
-                                createNew = {this.state.createNew}
+                                createNew={this.state.createNew}
                                 _handleCreateNew={this._handleCreateNew}
                                 loggedin={this.state.loggedin}
                                 successLogin={this.successLogin}
@@ -642,26 +644,26 @@ class App extends Component {
                                 setTopicPosts={this.setTopicPosts}
                                 setTopicNextPosts={this.setTopicNextPosts}
                                 deletedBlog={this.deletedBlog}
-                                setTopic = {this.setTopic}
-                                topic = {this.state.topic}
+                                setTopic={this.setTopic}
+                                topic={this.state.topic}
                                 user={this.state.user}
                             />
                     }
                 </div>
                 {
-                    this.state.loadFooter && this.state.currentLocation!=='login'?
+                    this.state.loadFooter && this.state.currentLocation !== 'login' ?
                         <Footer
                             colors={this.state.colors}
-                            topic = {this.state.topic}
+                            topic={this.state.topic}
                             handleMenuItemClickFooter={this.handleMenuItemClickFooter}
                             handleHomeClick={this.handleHomeClick}
                             color={this.state.colors[0]} corrent={this.state.current}
-                        />:
+                        /> :
                         null
                 }
-                <ReviewPortal/>
+                <ReviewPortal />
             </div>
         )
     }
 }
-export default  App
+export default App
