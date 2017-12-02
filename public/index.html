@@ -1,22 +1,26 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Facebook Pixel Code -->
     <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '1260373037401166');
         fbq('track', 'PageView');
     </script>
     <noscript>
-        <img height="1" width="1" style="display:none"
-                   src="https://www.facebook.com/tr?id=1260373037401166&ev=PageView&noscript=1"/>
+        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1260373037401166&ev=PageView&noscript=1"
+        />
     </noscript>
     <!-- End Facebook Pixel Code -->
     <meta charset="utf-8">
@@ -28,16 +32,24 @@
     <meta property="og:title" content="ZemuldO.COM">
     <meta property="og:image" content="https://zemuldo.com/img/icons/NN.png">
     <meta property="og:description" content="Best Place for your reading, Tech and Business articles. Here you find featured content on current technologies: BigData, AI,IoT and Much more">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#4285f4">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#4285f4">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#4285f4">
     <title>ZemuldO.COM</title>
     <link rel="manifest" href="https://zemuldo.com/manifest.json">
     <style>
-        .textAlignCenter{
+        .textAlignCenter {
             text-align: center;
         }
-        .fontWhite{
+
+        .fontWhite {
             color: white;
         }
-        .fullScreen{
+
+        .fullScreen {
             position: absolute;
             top: 0;
             left: 0;
@@ -47,13 +59,15 @@
             height: 100%;
             z-index: -1;
         }
-        .center{
-            position:absolute;
+
+        .center {
+            position: absolute;
             top: 45%;
             left: 45%;
             background-color: transparent;
             opacity: 0.7;
         }
+
         .preLoader {
             border-radius: 50%;
             border: 5px solid blue;
@@ -66,16 +80,25 @@
         }
 
         @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="zemuldo.com">
         <div class="fullScreen">
@@ -90,47 +113,48 @@
         // Check for browser support of service worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
-                .then(function(registration) {
-                }).catch(function(err) {
-            });
+                .then(function (registration) {
+                }).catch(function (err) {
+                });
         }
     </script>
     <script>
         var deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', function(e) {
-  console.log('beforeinstallprompt Event fired');
-  e.preventDefault();
+        window.addEventListener('beforeinstallprompt', function (e) {
+            console.log('beforeinstallprompt Event fired');
+            e.preventDefault();
 
-  // Stash the event so it can be triggered later.
-  deferredPrompt = e;
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
 
-  return false;
-});
+            return false;
+        });
 
-btnSave.addEventListener('click', function() {
-  if(deferredPrompt !== undefined) {
-    // The user has had a positive interaction with our app and Chrome
-    // has tried to prompt previously, so let's show the prompt.
-    deferredPrompt.prompt();
+        btnSave.addEventListener('click', function () {
+            if (deferredPrompt !== undefined) {
+                // The user has had a positive interaction with our app and Chrome
+                // has tried to prompt previously, so let's show the prompt.
+                deferredPrompt.prompt();
 
-    // Follow what the user has done with the prompt.
-    deferredPrompt.userChoice.then(function(choiceResult) {
+                // Follow what the user has done with the prompt.
+                deferredPrompt.userChoice.then(function (choiceResult) {
 
-      console.log(choiceResult.outcome);
+                    console.log(choiceResult.outcome);
 
-      if(choiceResult.outcome == 'dismissed') {
-        console.log('User cancelled home screen install');
-      }
-      else {
-        console.log('User added to home screen');
-      }
+                    if (choiceResult.outcome == 'dismissed') {
+                        console.log('User cancelled home screen install');
+                    }
+                    else {
+                        console.log('User added to home screen');
+                    }
 
-      // We no longer need the prompt.  Clear it up.
-      deferredPrompt = null;
-    });
-  }
-});
+                    // We no longer need the prompt.  Clear it up.
+                    deferredPrompt = null;
+                });
+            }
+        });
     </script>
 </body>
+
 </html>
