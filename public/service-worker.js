@@ -100,10 +100,14 @@ self.addEventListener('install', function(event) {
         t = urlsToCacheKeys.has(n);
         t || (n = addDirectoryIndex(n, "index.html"), t = urlsToCacheKeys.has(n));
         !t && "navigate" === e.request.mode && isPathWhitelisted(["^(?!\\/__).*"], e.request.url) && (n = new URL("https://zemuldo.co/index.html", self.location).toString(), t = urlsToCacheKeys.has(n)), t && e.respondWith(caches.open(cacheName).then(function(e) {
-            return e.match(urlsToCacheKeys.get(n)).then(function(e) {
+            return e.match(urlsToCacheKeys.get(n))
+                .then(function(e) {
                 if (e) return e;
                 throw Error("The cached response that was expected is missing.")
             })
+                .catch(function () {
+                    
+                })
         }).catch(function(t) {
             return console.warn('Couldn\'t serve response for "%s" from cache: %O', e.request.url, t), fetch(e.request)
         }))
