@@ -1,15 +1,9 @@
 let express = require('express');
-const spdy = require('spdy')
-const fs = require('fs')
 let path = require('path');
 let  app = express();
 let bodyParser = require('body-parser');
 let helmet = require('helmet')
 let checkMe = require('cookie-session')
-const options = {
-    key: fs.readFileSync(__dirname + '/keys/server.key'),
-    cert: fs.readFileSync(__dirname + '/keys/server.crt')
-};
 let ENV = require('./config/env');
 let env = ENV().raw.NODE_ENV
 let {getBlogTemplate} = require('./tools/tools')
@@ -149,13 +143,6 @@ app.get("/*", async function (req, res) {
     }
 
 });
-spdy
-    .createServer(options, app)
-    .listen(conf[env].httpPort, (error) => {
-        if (error) {
-            console.error(error)
-            return process.exit(1)
-        } else {
-            console.log('Listening on port: ' + conf[env].httpPort + '.')
-        }
-    })
+app.listen(conf[env].httpPort,()=>{
+    console.log("**Server started at http://localhost:"+conf[env].httpPort)
+});
