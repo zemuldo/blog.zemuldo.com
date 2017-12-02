@@ -47,8 +47,23 @@ const pages = {
         imgSRC:'img/blogs/blogs_pic.jpg'
     }
 }
-app.get('/service-worker.js', function(req, res, next) {
+app.use(bodyParser.json());
+app.use(helmet())
+app.set('x-powered-by',false)
+app.set('X-Powered-By',false)
+app.use(helmet.ieNoOpen())
+app.use(helmet.xssFilter())
+app.use(helmet.noSniff())
+app.use(helmet({
+    frameguard: false,
+    noCache:true
+}))
+
+app.get('/service-worker.js', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', 'service-worker.js'));
+});
+app.get('/manifest.json', function(req, res) {
+    res.sendFile(path.join(__dirname, 'public', '/manifest.json'));
 });
 app.get('*.js', function(req, res, next) {
     req.url = req.url + '.gz';
@@ -62,18 +77,6 @@ app.get('*.css', function(req, res, next) {
     res.set('Content-Type', 'text/css');
     next();
 });
-app.use(bodyParser.json());
-app.use(helmet())
-app.set('x-powered-by',false)
-app.set('X-Powered-By',false)
-app.use(helmet.ieNoOpen())
-app.use(helmet.xssFilter())
-app.use(helmet.noSniff())
-app.use(helmet({
-    frameguard: false,
-    noCache:true
-}))
-
 let expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 app.use(checkMe({
     name: 'session',
