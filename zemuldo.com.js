@@ -48,7 +48,7 @@ const pages = {
     }
 }
 app.get('/service-worker.js', function(req, res, next) {
-    res.sendFile(path.join(__dirname, 'build', 'service-worker.js'));
+    res.sendFile(path.join(__dirname, 'public', 'service-worker.js'));
 });
 app.get('*.js', function(req, res, next) {
     req.url = req.url + '.gz';
