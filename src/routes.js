@@ -1,5 +1,4 @@
 import React from 'react';
-import Login from './profile/loginForm'
 import Page from './pages/index'
 import {  Switch, Route } from 'react-router-dom'
 

@@ -9,22 +9,20 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
-function dataURItoBlob(dataURI, callback) {
+function dataURItoBlob(dataURI) {
     let byteString = atob(dataURI.split(',')[1]);
 
     // separate out the mime component
-    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
 
     // write the bytes of the string to an ArrayBuffer
     let ab = new ArrayBuffer(byteString.length);
     let ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
+    for (let i = 0; i < byteString.length; i++) {
         ia[i] = byteString.charCodeAt(i);
     }
 
     // write the ArrayBuffer to a blob, and you're done
-    let bb = new Blob([ab]);
-    return bb;
+    return new Blob([ab]);
 }
 class LoginForm extends React.Component {
     constructor(props){

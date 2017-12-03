@@ -1,20 +1,11 @@
 import React from 'react'
 import axios from 'axios'
-import {Header,Loader, Grid,Image } from 'semantic-ui-react'
+import {Header,Loader, Grid } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Welcome from '../partials/welCome'
 import Blogs from '../posts/blogs'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
-/*import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
-
-const cats = {
-    Development:'dev',
-    Business:'business',
-    Technology:'tech'
-}
-*/
 
 class RichEditorExample extends React.Component {
     constructor(props) {

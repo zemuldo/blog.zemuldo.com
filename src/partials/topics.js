@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Header} from 'semantic-ui-react'
 import _ from 'lodash'
+import util from '../util'
 import {topics} from '../environments/conf'
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
+
 class Topics extends Component {
     constructor(props){
         super(props);
@@ -36,7 +34,7 @@ class Topics extends Component {
                         name={topics[i].name}
                     >
                             <span>
-                                {toTitleCase(topics[i].name)}
+                                {util.toTitleCase(topics[i].name)}
                                 {' '+ '|'}
                             </span>
                     </button>

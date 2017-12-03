@@ -3,9 +3,9 @@ import 'semantic-ui-css/semantic.min.css';
 import { Button, Visibility } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
 import axios from 'axios'
+import util from '../util'
 import Login from '../profile/loginForm'
 import PagesComponent from '../pages/homePage'
-import GeoLocator from '../partials/geoLocator'
 import Footer from '../partials/footer'
 import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
@@ -15,26 +15,6 @@ import MainMenu from "../menu/main";
 import FixedMenu from "../menu/fixedMenu";
 const env = config[process.env.NODE_ENV] || 'development';
 
-function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-}
-function dataURItoBlob(dataURI, callback) {
-    let byteString = atob(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
-    // write the bytes of the string to an ArrayBuffer
-    let ab = new ArrayBuffer(byteString.length);
-    let ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    // write the ArrayBuffer to a blob, and you're done
-    let bb = new Blob([ab]);
-    return bb;
-}
 class App extends Component {
     constructor(props) {
         super(props);
@@ -455,7 +435,7 @@ class App extends Component {
                 }
                 this.setState({ user: user, loggedin: true })
                 let urlCreator = window.URL || window.webkitURL;
-                let imageUrl = urlCreator.createObjectURL(dataURItoBlob(JSON.parse(user.avatar).img));
+                let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
                 this.setState({ profilePic: imageUrl })
                 this.setState({ homePageLoaded: true })
             }
@@ -513,7 +493,7 @@ class App extends Component {
         localStorage.setItem('user', JSON.stringify(user))
         this.setState({ loggedin: true, currentLocation: 'home' })
         let urlCreator = window.URL || window.webkitURL;
-        let imageUrl = urlCreator.createObjectURL(dataURItoBlob(JSON.parse(user.avatar).img));
+        let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
         this.setState({ profilePic: imageUrl })
     }
     handleLoginButton = (e) => {
@@ -559,7 +539,7 @@ class App extends Component {
                     <meta name="theme-color" content="#4285f4" />
                     <meta name="msapplication-navbutton-color" content="#4285f4" />
                     <meta name="apple-mobile-web-app-status-bar-style" content="#4285f4" />
-                    <title>{'ZemuldO-' + toTitleCase(this.state.currentLocation)}</title>
+                    <title>{'ZemuldO-' + util.toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <div>
