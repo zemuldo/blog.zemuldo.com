@@ -20,6 +20,7 @@ class GridBlogs extends React.Component {
                                         <Grid.Column width={5}>
                                             <h4>{this.props.blogs[0].title}</h4>
                                             <p>By: Author: {this.props.blogs[0].author}</p>
+                                            <p>{this.props.blogs[0].about}</p>
                                         </Grid.Column> : null
                                 }
                                 {
@@ -27,6 +28,7 @@ class GridBlogs extends React.Component {
                                         <Grid.Column width={5}>
                                             <h4>{this.props.blogs[1].title}</h4>
                                             <p>By: Author: {this.props.blogs[1].author}</p>
+                                            <p>{this.props.blogs[1].about}</p>
                                         </Grid.Column> : null
                                 }
                                 {
@@ -34,6 +36,7 @@ class GridBlogs extends React.Component {
                                         <Grid.Column width={5}>
                                             <h4>{this.props.blogs[2].title}</h4>
                                             <p>By: Author: {this.props.blogs[2].author}</p>
+                                            <p>{this.props.blogs[2].about}</p>
                                         </Grid.Column> : null
                                 }
                             </Grid>
@@ -43,6 +46,7 @@ class GridBlogs extends React.Component {
                                         <Grid.Column width={5}>
                                             <h4>{this.props.blogs[3].title}</h4>
                                             <p>By: Author: {this.props.blogs[3].author}</p>
+                                            <p>{this.props.blogs[3].about}</p>
                                         </Grid.Column> : null
                                 }
                                 {
@@ -50,6 +54,7 @@ class GridBlogs extends React.Component {
                                         <Grid.Column width={5}>
                                             <h4>{this.props.blogs[4].title}</h4>
                                             <p>By: Author: {this.props.blogs[4].author}</p>
+                                            <p>{this.props.blogs[4].about}</p>
                                         </Grid.Column> : null
                                 }
                                 {
@@ -57,6 +62,7 @@ class GridBlogs extends React.Component {
                                         <Grid.Column width={5}>
                                             <h4>{this.props.blogs[5].title}</h4>
                                             <p>By: Author: {this.props.blogs[5].author}</p>
+                                            <p>{this.props.blogs[5].about}</p>
                                         </Grid.Column> : null
                                 }
                             </Grid>
