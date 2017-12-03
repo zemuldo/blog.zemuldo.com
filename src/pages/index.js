@@ -383,9 +383,13 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentWillReceiveProps() {
+        let url = window.location.pathname.split('/');
         let query = {}
         let page = window.location.pathname.split('/')[1];
         let topic = window.location.pathname.split('/')[2];
+        if(url.length<4){
+            this.setState({blog:null})
+        }
         if (topicsOBJ[topic]) {
             query.topics = topic
         }
@@ -522,17 +526,6 @@ class App extends Component {
         this.setState({ editingMode: false, createNew: false })
     }
     render() {
-        const NonFixedMenu = () => (
-            <div className='cleanButton alignCenter marginTop2'>
-                <Button color={this.state.colors[0]}>Development</Button>
-                <Button color={this.state.colors[4]}>Technology</Button>
-                <Button color={this.state.colors[3]}>Reviews</Button>
-                <Button color={this.state.colors[2]}>Tutorials</Button>
-                <Button color={this.state.colors[5]}>Trending</Button>
-                <Button color={this.state.colors[1]}>Latest</Button>
-                <Button color={this.state.colors[0]}>Futurist</Button>
-            </div>
-        )
         return (
             <div>
                 <Helmet>
@@ -587,7 +580,6 @@ class App extends Component {
                         time={this.state.time}
                     />
                 </Visibility>
-                {!this.state.visible && this.state.currentLocation !== 'login' ? <NonFixedMenu /> : null}
                 <div style={{ marginTop: '3em' }}>
                     {
                         (this.state.currentLocation === 'login' || (this.state.currentLocation === 'profile')) ?

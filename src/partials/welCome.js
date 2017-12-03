@@ -1,6 +1,7 @@
 import React from 'react'
-import {Header,Loader} from 'semantic-ui-react'
+import {Loader,Grid} from 'semantic-ui-react'
 import Blog from '../posts/blog'
+import GridBlogs from "../posts/gridBlogs";
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
 export default class WelcomePage extends React.Component {
@@ -51,22 +52,15 @@ export default class WelcomePage extends React.Component {
                            <Loader active inline='centered' />
                        </div>:
                        <div style={{margin: '2em 1em 3em 1em'}}>
+                           <GridBlogs
+                               color={this.props.color}
+                               blogs={this.props.blogs}
+                               blog={this.props.blog}
+                           />
                            {
                                (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
                                    <div>
-                                       <div >
-                                           <Header color={this.props.color} as='h1'>
-                                               Great Articles and Blogs
-                                           </Header>
-                                           <hr color="green"/>
-                                           <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
-                                               <p>
-                                                   Here you find great articles on tech related topics.
-                                                   Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                                   You can signup and share your content with us. Become part of us.
-                                               </p>
-                                           </div>
-                                       </div>
+
                                    </div>:
                                    <div>
                                        <Blog

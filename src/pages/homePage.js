@@ -240,6 +240,7 @@ class PagesComponent extends Component {
                                                         blogDetails={this.props.blogDetails}
                                                         blog={this.props.blog}
                                                         blogs={this.props.blogs}
+                                                        blogsLoaded={this.props.blogsLoaded}
                                                         blogLoaded={this.props.blogLoaded}
                                                         deletedBlog={this.props.deletedBlog}
                                                         user={this.props.user}
