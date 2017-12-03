@@ -20,6 +20,8 @@ const RUNTIME = 'sw-https://zemuldo.com-runtime'-+new Date().toDateString();
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
     "index.html",
+    'https://zemuldo.com/img/icons/NN.png',
+    'https://zemuldo.com/manifest.json',
     "static/css/main.zemuldo.css",
     "static/js/main.zemuldo.js",
     "static/media/flags.zemuldo.png",
