@@ -252,10 +252,7 @@ class PagesComponent extends Component {
                                         (window.innerWidth>1030) ?
                                             <Grid.Column  width={3}>
                                                 {<TwitterProf/>}
-                                            </Grid.Column>:
-                                            <div>
-
-                                            </div>
+                                            </Grid.Column>:null
                                     }
                                 </Grid.Row>
                             </Grid>

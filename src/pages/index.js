@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Visibility } from 'semantic-ui-react'
+import { Visibility } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
 import axios from 'axios'
 import util from '../util'

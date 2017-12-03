@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Menu,Icon, Dropdown,Image,Input,Container} from 'semantic-ui-react'
+import {Menu,Icon, Dropdown,Image,Input} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
 class FixedMenu extends Component {
@@ -12,19 +12,19 @@ class FixedMenu extends Component {
     render() {
         let urlDetails = 'all';
         return (
-
-            <Menu
-                stackable={true}
-                fixed='top'
-                size='small'
-                borderless
-                color={this.props.colors[0]}
-                secondary={true}
-            >
-                <Container className='navBar'>
+            <div >
+                <Menu
+                    style={{backgroundColor:'black'}}
+                    stackable={true}
+                    fixed='top'
+                    size='tiny'
+                    secondary={true}
+                    color={this.props.colors[0]}
+                    borderless
+                >
                     <Menu.Item
                         as='span'
-                        className='dropDown'
+                        className=''
                         name='home'
                         active={this.props.currentLocation === 'home'}
                         onClick={this.props.handleHomeClick}>
@@ -59,7 +59,7 @@ class FixedMenu extends Component {
                         as='span'
                         name='reviews'
                         active={this.props.currentLocation === 'reviews'}
-                        onClick={this.handleMenuItemClick}>
+                        onClick={this.props.handleMenuItemClick}>
                         <Icon color={this.props.colors[0]} name='circle notched' />
                         <span color={this.props.colors[0]}><Link to={"/reviews/"+urlDetails}>Reviews</Link></span>
                     </Menu.Item>
@@ -137,9 +137,8 @@ class FixedMenu extends Component {
                                 </Menu.Item>
                         }
                     </Menu.Menu>
-                </Container>
-            </Menu>
-
+                </Menu>
+            </div>
         )
     }
 }
