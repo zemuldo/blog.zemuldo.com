@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import {CompositeDecorator,convertFromRaw, Editor, EditorState,RichUtils} from 'draft-js';
+import {CompositeDecorator,convertFromRaw, Editor, EditorState} from 'draft-js';
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
