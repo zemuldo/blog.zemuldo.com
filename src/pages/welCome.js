@@ -1,5 +1,5 @@
 import React from 'react'
-import {Loader,Grid} from 'semantic-ui-react'
+import {Loader,Header} from 'semantic-ui-react'
 import Blog from '../posts/blog'
 import GridBlogs from "../posts/gridBlogs";
 /*import config from '../environments/conf'
@@ -8,11 +8,11 @@ export default class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            loadingBlogs:!!this.props.blogs[0]
         }
         this.componentDidMount = this.componentDidMount.bind(this);
     }
     componentDidMount() {
-
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -47,26 +47,50 @@ export default class WelcomePage extends React.Component {
         return (
            <div>
                {
-                   !this.props.blogLoaded?
+                   !this.props.blogLoaded && !this.props.blogsLoaded?
                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                            <Loader active inline='centered' />
                        </div>:
                        <div style={{margin: '2em 1em 3em 1em'}}>
-                           <GridBlogs
-                               x={this.props.x}
-                               next={this.props.next}
-                               setPreviousBlogs={this.props.setPreviousBlogs}
-                               setNextBlogs={this.props.setNextBlogs}
-                               onReadMore = {this.props.onReadMore}
-                               color={this.props.color}
-                               blogs={this.props.blogs}
-                               blog={this.props.blog}
-                           />
+                           {
+                               !this.props.blog?
+                                   <div>
+                                       {
+                                           this.props.blogs[0]?
+                                               <div>
+                                                   <Header color={this.props.color} as='h1'>
+                                                       Great Articles and Blogs
+                                                   </Header>
+                                                   <hr color="green"/>
+                                                   <br/>
+                                                   <GridBlogs
+                                                       x={this.props.x}
+                                                       next={this.props.next}
+                                                       setPreviousBlogs={this.props.setPreviousBlogs}
+                                                       setNextBlogs={this.props.setNextBlogs}
+                                                       onReadMore = {this.props.onReadMore}
+                                                       color={this.props.color}
+                                                       blogs={this.props.blogs}
+                                                       blog={this.props.blog}
+                                                   />
+                                               </div>:
+                                               <div>
+                                                   <Header color={this.props.color} as='h1'>
+                                                       Great Articles and Blogs
+                                                   </Header>
+                                                   <hr color="green"/>
+                                                   <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
+                                                       <p>
+                                                           There is no content on the topic yet. You can explore more
+                                                       </p>
+                                                   </div>
+                                               </div>
+                                       }
+                                   </div>:null
+                           }
                            {
                                (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
-                                   <div>
-
-                                   </div>:
+                                   null:
                                    <div>
                                        <Blog
                                            blogLoaded={this.props.blogLoaded}

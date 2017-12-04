@@ -116,7 +116,7 @@ class GridBlogs extends React.Component {
                                         onClick={ this.props.setNextBlogs.bind(this,'next')}
                                         name="next"
                                     >
-                                        Next
+                                        See More
                                     </Button>
                                     <Button
                                         color={this.props.color}
@@ -127,7 +127,7 @@ class GridBlogs extends React.Component {
                                         onClick={ this.props.setPreviousBlogs.bind(this,'previous')}
                                         name="previous"
                                     >
-                                        Prev
+                                        Previous
                                     </Button>
                                 </div>
                             </div>

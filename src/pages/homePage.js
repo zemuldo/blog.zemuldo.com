@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import { Header, Icon,Button, Grid ,Loader,Input} from 'semantic-ui-react'
-import WelcomePage from '../partials/welCome'
+import WelcomePage from './welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
 import axios from 'axios'
