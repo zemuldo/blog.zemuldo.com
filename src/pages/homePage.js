@@ -230,7 +230,7 @@ class PagesComponent extends Component {
                                         {
 
                                             !this.props.blogLoaded?
-                                                <div className='margin-5050'>
+                                                <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                                     <Loader active inline='centered' />
                                                 </div>:
                                                 <div>
