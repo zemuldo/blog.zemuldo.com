@@ -17,7 +17,6 @@ export default class WelcomePage extends React.Component {
             twtC:null,
             gplsC:null,
             linkdCont:null,
-            shareURL:null
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
@@ -32,12 +31,14 @@ export default class WelcomePage extends React.Component {
         this.setState({showDelete:true})
     }
     setBlogCounts(){
+        let thisBlog = this.props.blogDetails
+        let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         let gplusPost = {
             "method": "pos.plusones.get",
             "id": "p",
             "params": {
                 "nolog": true,
-                "id": "https://zemuldo/"+this.state.shareURL,
+                "id": "https://zemuldo/"+shareURL,
                 "source": "widget",
                 "userId": "@viewer",
                 "groupId": "@self"
@@ -48,8 +49,8 @@ export default class WelcomePage extends React.Component {
         }
         window.scrollTo(0,0);
         return Promise.all([
-            axios.get('https://graph.facebook.com/?id=https://zemuldo.com'+this.state.shareURL,{}),
-            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com'+this.state.shareURL,{}),
+            axios.get('https://graph.facebook.com/?id=https://zemuldo.com'+shareURL,{}),
+            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com'+shareURL,{}),
             axios.post(' https://clients6.google.com/rpc',gplusPost)
         ])
             .then(function (res) {
@@ -96,7 +97,6 @@ export default class WelcomePage extends React.Component {
             this.setBlogCounts()
             let thisBlog = this.props.blogDetails
             let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-            this.setState({shareURL:shareURL})
         }
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
@@ -170,7 +170,7 @@ export default class WelcomePage extends React.Component {
     }
 
     linkdnShare(){
-        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),"","height=550,width=525,left=100,top=100,menubar=0");
+        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+this.state.shareURL,"","height=550,width=525,left=100,top=100,menubar=0");
     }
     updateLikes=(id)=>{
         if(localStorage.getItem('user')){
