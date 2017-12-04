@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import { Visibility } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
+import {Link} from 'react-router-dom'
 import axios from 'axios'
 import util from '../util'
 import Login from '../profile/loginForm'
@@ -580,7 +581,13 @@ class App extends Component {
                         time={this.state.time}
                     />
                 </Visibility>
-                <div style={{ marginTop: '3em' }}>
+
+                <div style={{ marginTop: '1em' }}>
+                    <div className='alignCenter'>
+                        <h1>
+                            <Link to ='/'>ZemuldO.COM</Link>
+                        </h1>
+                    </div>
                     {
                         (this.state.currentLocation === 'login' || (this.state.currentLocation === 'profile')) ?
                             <Login

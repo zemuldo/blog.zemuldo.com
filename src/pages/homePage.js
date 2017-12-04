@@ -235,6 +235,7 @@ class PagesComponent extends Component {
                                                 </div>:
                                                 <div>
                                                     <WelcomePage
+                                                        onReadMore = {this.props.onReadMore}
                                                         richViewerState={this.props.richViewerState}
                                                         color={this.props.colors[1]}
                                                         blogDetails={this.props.blogDetails}
