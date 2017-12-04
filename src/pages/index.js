@@ -226,8 +226,6 @@ class App extends Component {
             }
         })
             .then(response => {
-                let url = '/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-                this.props.history.push(url)
                 this.setState({ blog: response.data, blogDetails: thisBlog });
                 this.setState({ blogLoaded: true, blog: response.data });
             })

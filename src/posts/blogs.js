@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button,List,Header} from 'semantic-ui-react'
-import 'semantic-ui-css/semantic.min.css';
 import _ from 'lodash'
+import {Link} from 'react-router-dom'
 class Blogs extends React.Component {
     constructor(props){
         super(props);
@@ -14,6 +14,7 @@ class Blogs extends React.Component {
     }
 
     render() {
+        let o = this.props.blogs
         return (
             <div>
                 {
@@ -38,15 +39,17 @@ class Blogs extends React.Component {
                                                 </i>
                                             </span>
                                         </span>
-                                        <Button
-                                            className="redMoreButton"
-                                            ref={this.props.blogs[i]._id}
-                                            onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
-                                            name="all"
-                                            style={{color:'blue',backgroundColor:'transparent',border:'none'}}
-                                        >
-                                            <span>Read</span>
-                                        </Button>
+                                        <Link to = {'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
+                                            <Button
+                                                className="redMoreButton"
+                                                ref={this.props.blogs[i]._id}
+                                                onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
+                                                name="all"
+                                                style={{color:'blue',backgroundColor:'transparent',border:'none'}}
+                                            >
+                                                <span>Read</span>
+                                            </Button>
+                                        </Link>
                                         <hr/>
                                     </List.Item>
                                 )
@@ -74,18 +77,21 @@ class Blogs extends React.Component {
                                                     {this.props.blogs[i].likes}
                                                 </i>
                                             </span>
-                                        <Button
-                                            circular
-                                            size="mini"
-                                            disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i].post_ID}
-                                            className="redMoreButton"
-                                            ref={this.props.blogs[i]._id}
-                                            onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
-                                            name="all"
-                                            style={{color:'blue',backgroundColor:'transparent',border:'none'}}
-                                        >
-                                            <span>Read</span>
-                                        </Button>
+                                        <Link to = {'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
+                                            <Button
+                                                circular
+                                                size="mini"
+                                                disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i].post_ID}
+                                                className="redMoreButton"
+                                                ref={this.props.blogs[i]._id}
+                                                onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
+                                                name="all"
+                                                style={{color:'blue',backgroundColor:'transparent',border:'none'}}
+                                            >
+                                                <span>Read</span>
+                                            </Button>
+                                        </Link>
+
                                         <hr/>
                                     </List.Item>
                                 )
