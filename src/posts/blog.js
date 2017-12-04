@@ -137,7 +137,8 @@ export default class WelcomePage extends React.Component {
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fzemuldo.com%2F';
         if(this.props.blogDetails){
-            let postURL = window.location.pathname
+            let thisBlog = this.props.blogDetails
+            let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
             let shareURL = fbShareURL+postURL+"&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
@@ -145,10 +146,12 @@ export default class WelcomePage extends React.Component {
     }
     tweetShare () {
         if(this.props.blogDetails){
+
             let hashTgs = '%2F&hashtags='+this.props.blogDetails.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let url= '&url=https%3A%2F%2Fzemuldo.com/'+window.location.pathname
+            let thisBlog = this.props.blogDetails
+            let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
             let fullURL = url+related+hashTgs+via
             let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
@@ -159,7 +162,7 @@ export default class WelcomePage extends React.Component {
         if(this.props.blogDetails){
             let url = "https://plus.google.com/share?url="+'https://zemuldo.com/'+window.location.pathname
             window.open(url);
-        }        
+        }
     }
 
     linkdnShare(){
