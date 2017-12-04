@@ -17,10 +17,10 @@ class GridBlog extends React.Component {
                 <p>By: Author: {this.props.blog.author}</p>
                 Likes:
                 <span>
-                                                <i style={{color:'orange'}}>
-                                                ~{this.props.blog.likes}
-                                                </i>
-                                            </span>
+                    <i style={{color:'orange'}}>
+                    ~{this.props.blog.likes}
+                    </i>
+                </span>
                 <hr color={this.props.color}/>
 
                 <p>{this.props.blog.about}</p>

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Loader,Grid,Button,Header} from 'semantic-ui-react'
+import {Loader,Grid,Button} from 'semantic-ui-react'
 import GridBlog from "./gridBlog";
 
 class GridBlogs extends React.Component {
