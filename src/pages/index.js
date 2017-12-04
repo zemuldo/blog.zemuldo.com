@@ -130,13 +130,11 @@ class App extends Component {
         })
             .then(function (response) {
                 if (!response.data) {
-                    window.history.push('/' + page + '/all')
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
                     return false
                 }
                 if (response.data.error) {
-                    window.history.push('/' + page + '/all')
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
                     window.scrollTo(0, 0)
@@ -150,7 +148,6 @@ class App extends Component {
 
                 }
                 else {
-                    window.history.push('/' + page + '/all')
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
                     window.scrollTo(0, 0)
@@ -158,7 +155,6 @@ class App extends Component {
                 }
             }.bind(this))
             .catch(function (err) {
-                window.history.push('/' + page + '/all')
                 this.setState({ blog: null });
                 this.setState({ blogLoaded: true })
                 return err
