@@ -53,6 +53,10 @@ export default class WelcomePage extends React.Component {
                        </div>:
                        <div style={{margin: '2em 1em 3em 1em'}}>
                            <GridBlogs
+                               x={this.props.x}
+                               next={this.props.next}
+                               setPreviousBlogs={this.props.setPreviousBlogs}
+                               setNextBlogs={this.props.setNextBlogs}
                                onReadMore = {this.props.onReadMore}
                                color={this.props.color}
                                blogs={this.props.blogs}

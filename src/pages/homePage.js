@@ -235,6 +235,10 @@ class PagesComponent extends Component {
                                                 </div>:
                                                 <div>
                                                     <WelcomePage
+                                                        x={x}
+                                                        next={this.state.next}
+                                                        setPreviousBlogs={this.setPreviousBlogs}
+                                                        setNextBlogs={this.setNextBlogs}
                                                         onReadMore = {this.props.onReadMore}
                                                         richViewerState={this.props.richViewerState}
                                                         color={this.props.colors[1]}
