@@ -16,7 +16,8 @@ export default class WelcomePage extends React.Component {
             fbC:null,
             twtC:null,
             gplsC:null,
-            linkdCont:null
+            linkdCont:null,
+            shareURL:null
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
@@ -36,7 +37,7 @@ export default class WelcomePage extends React.Component {
             "id": "p",
             "params": {
                 "nolog": true,
-                "id": "https://zemuldo/"+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),
+                "id": "https://zemuldo/"+this.state.shareURL,
                 "source": "widget",
                 "userId": "@viewer",
                 "groupId": "@self"
@@ -47,8 +48,8 @@ export default class WelcomePage extends React.Component {
         }
         window.scrollTo(0,0);
         return Promise.all([
-            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
-            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.get('https://graph.facebook.com/?id=https://zemuldo.com'+this.state.shareURL,{}),
+            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com'+this.state.shareURL,{}),
             axios.post(' https://clients6.google.com/rpc',gplusPost)
         ])
             .then(function (res) {
@@ -93,6 +94,9 @@ export default class WelcomePage extends React.Component {
         if(this.props.blogDetails){
             this.getAauthorAvatar()
             this.setBlogCounts()
+            let thisBlog = this.props.blogDetails
+            let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+            this.setState({shareURL:shareURL})
         }
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
