@@ -631,13 +631,15 @@ class App extends Component {
                 </div>
                 {
                     this.state.loadFooter && this.state.currentLocation !== 'login' ?
-                        <Footer
-                            colors={this.state.colors}
-                            topic={this.state.topic}
-                            handleMenuItemClickFooter={this.handleMenuItemClickFooter}
-                            handleHomeClick={this.handleHomeClick}
-                            color={this.state.colors[0]} corrent={this.state.current}
-                        /> :
+                        <div className={!this.state.blogsLoaded && !this.state.blogsLoaded? 'footer':''}>
+                            <Footer
+                                colors={this.state.colors}
+                                topic={this.state.topic}
+                                handleMenuItemClickFooter={this.handleMenuItemClickFooter}
+                                handleHomeClick={this.handleHomeClick}
+                                color={this.state.colors[0]} corrent={this.state.current}
+                            />
+                        </div> :
                         null
                 }
                 <ReviewPortal />
