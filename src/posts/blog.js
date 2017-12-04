@@ -49,8 +49,8 @@ export default class WelcomePage extends React.Component {
         }
         window.scrollTo(0,0);
         return Promise.all([
-            axios.get('https://graph.facebook.com/?id=https://zemuldo.com'+shareURL,{}),
-            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com'+shareURL,{}),
+            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+shareURL,{}),
+            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+shareURL,{}),
             axios.post(' https://clients6.google.com/rpc',gplusPost)
         ])
             .then(function (res) {
@@ -163,14 +163,18 @@ export default class WelcomePage extends React.Component {
         }
     }
     gplusShare () {
+        let thisBlog = this.props.blogDetails
+        let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         if(this.props.blogDetails){
-            let url = "https://plus.google.com/share?url="+'https://zemuldo.com/'+window.location.pathname
+            let url = "https://plus.google.com/share?url="+'https://zemuldo.com/'+url
             window.open(url);
         }
     }
 
     linkdnShare(){
-        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+this.state.shareURL,"","height=550,width=525,left=100,top=100,menubar=0");
+        let thisBlog = this.props.blogDetails
+        let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+url,"","height=550,width=525,left=100,top=100,menubar=0");
     }
     updateLikes=(id)=>{
         if(localStorage.getItem('user')){
