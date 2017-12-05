@@ -270,7 +270,7 @@ class App extends Component {
                 }
                 else {
                     this.handleUpdateBlogs(response.data)
-                    this.setState({ blogs: response.data, blogsLoaded: true, homePageLoaded: true });
+                    this.setState({  blogsLoaded: true, homePageLoaded: true });
                 }
             }.bind(this))
             .catch(function (err) {
@@ -300,7 +300,6 @@ class App extends Component {
                 if (response.data[0]) {
                     this.handleUpdateBlogs(response.data)
                     this.setState({ blogsLoaded: true, homePageLoaded: true })
-                    this.setState({ blogs: response.data });
                     this.setState({ blogsAreLoading: false })
                 }
                 else {
@@ -340,7 +339,6 @@ class App extends Component {
                 }
                 if (response.data[0]) {
                     this.handleUpdateBlogs(response.data)
-                    this.setState({ blogs: response.data });
                     this.setState({ blogsLoaded: true, homePageLoaded: true })
                     this.setState({ blogsAreLoading: false })
                 }
@@ -617,7 +615,7 @@ class App extends Component {
                                 history={this.props.history}
                                 handleFilterChange={this.handleFilterChange}
                                 color={this.state.colors[1]}
-                                blogs={this.state.blogs}
+                                blogs={this.props.blogs}
                                 blog={this.state.blog}
                                 blogDetails={this.state.blogDetails}
                                 blogsLoaded={this.state.blogsLoaded}
