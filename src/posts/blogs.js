@@ -2,6 +2,8 @@ import React from 'react';
 import {Button,List,Header} from 'semantic-ui-react'
 import _ from 'lodash'
 import {Link} from 'react-router-dom'
+import { connect } from "react-redux";
+
 class Blogs extends React.Component {
     constructor(props){
         super(props);
@@ -101,4 +103,11 @@ class Blogs extends React.Component {
         )
     }
 }
-export default Blogs;
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+
+export default connect(mapStateToProps)(Blogs) ;

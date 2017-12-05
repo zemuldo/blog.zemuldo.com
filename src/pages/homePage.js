@@ -164,7 +164,6 @@ class PagesComponent extends Component {
                                                                                 <Blogs
                                                                                     color={this.props.color}
                                                                                     onReadMore = {this.props.onReadMore}
-                                                                                    blogs ={this.props.blogs}
                                                                                     blog ={this.props.blog}/>
                                                                                 <div>
                                                                                     <br/>
