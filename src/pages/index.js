@@ -137,20 +137,17 @@ class App extends Component {
                 if (response.data.error) {
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
-                    window.scrollTo(0, 0)
                     return false
                 }
                 if (response.data.body) {
                     this.setState({ blog: response.data, richViewerState: response.data.body });
                     this.getBlogDetails(id);
-                    window.scrollTo(0, 0)
                     return false
 
                 }
                 else {
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
-                    window.scrollTo(0, 0)
                     return false
                 }
             }.bind(this))
@@ -243,16 +240,12 @@ class App extends Component {
                 if (response.data.error) {
                 }
                 else {
-                    let o = response.data
-                    this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString())
-                    this.setState({ blogDetails: response.data, isHome: false });
+                    this.setState({ blogDetails: response.data });
                     this.setState({ blogLoaded: true })
-                    window.scrollTo(0, 0);
                 }
             }
                 .bind(this))
             .catch(function (err) {
-                console.log(err)
                 this.setState({ blogLoaded: true })
                 return err
             }.bind(this));

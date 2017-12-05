@@ -259,7 +259,7 @@ export default class WelcomePage extends React.Component {
                         <div>
                             <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                 {
-                                    this.props.blogDetails.title
+                                    this.props.blogDetails.title+this.props.blog.id
                                 }
                             </Header>
                             <div className="shareIcon clearElem" style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
