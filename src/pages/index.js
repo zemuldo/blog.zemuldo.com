@@ -3,6 +3,9 @@ import 'semantic-ui-css/semantic.min.css';
 import { Visibility } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
 import {Link} from 'react-router-dom'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as BlogsActions from "../state/actions/blogs";
 import axios from 'axios'
 import util from '../util'
 import Login from '../profile/loginForm'
@@ -76,7 +79,11 @@ class App extends Component {
         this.setTopic = this.setTopic.bind(this)
         this.hideFixedMenu = this.hideFixedMenu.bind(this)
         this.showFixedMenu = this.showFixedMenu.bind(this)
+        this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
     };
+    handleUpdateBlogs(blogs){
+        this.props.actions.updateBlogs(blogs)
+    }
     hideFixedMenu = () => this.setState({ visible: false })
     showFixedMenu = () => this.setState({ visible: true })
     setTopic(topic) {
@@ -262,6 +269,7 @@ class App extends Component {
                     return false
                 }
                 else {
+                    this.handleUpdateBlogs(response.data)
                     this.setState({ blogs: response.data, blogsLoaded: true, homePageLoaded: true });
                 }
             }.bind(this))
@@ -290,6 +298,7 @@ class App extends Component {
                     return false
                 }
                 if (response.data[0]) {
+                    this.handleUpdateBlogs(response.data)
                     this.setState({ blogsLoaded: true, homePageLoaded: true })
                     this.setState({ blogs: response.data });
                     this.setState({ blogsAreLoading: false })
@@ -330,6 +339,7 @@ class App extends Component {
                     return false
                 }
                 if (response.data[0]) {
+                    this.handleUpdateBlogs(response.data)
                     this.setState({ blogs: response.data });
                     this.setState({ blogsLoaded: true, homePageLoaded: true })
                     this.setState({ blogsAreLoading: false })
@@ -583,7 +593,7 @@ class App extends Component {
                 <div style={{ marginTop: '1em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>ZemuldO.COM</Link>
+                            <Link to ='/'>ZemuldO.COM {this.props.blogs.length}</Link>
                         </h1>
                     </div>
                     {
@@ -645,4 +655,16 @@ class App extends Component {
         )
     }
 }
-export default App
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        actions: bindActionCreators(BlogsActions, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
