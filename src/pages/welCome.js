@@ -4,7 +4,7 @@ import Blog from '../posts/blog'
 import GridBlogs from "../posts/gridBlogs";
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
-export default class WelcomePage extends React.Component {
+class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -70,7 +70,6 @@ export default class WelcomePage extends React.Component {
                                                        setNextBlogs={this.props.setNextBlogs}
                                                        onReadMore = {this.props.onReadMore}
                                                        color={this.props.color}
-                                                       blogs={this.props.blogs}
                                                        blog={this.props.blog}
                                                    />
                                                </div>:
@@ -110,3 +109,5 @@ export default class WelcomePage extends React.Component {
         )
     }
 }
+
+export default WelcomePage

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Loader,Grid,Button} from 'semantic-ui-react'
 import GridBlog from "./gridBlog";
+import { connect } from "react-redux";
 
 class GridBlogs extends React.Component {
     constructor(props){
@@ -140,4 +141,10 @@ class GridBlogs extends React.Component {
     }
 }
 
-export default GridBlogs
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+
+export default connect(mapStateToProps) (GridBlogs)
