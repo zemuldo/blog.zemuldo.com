@@ -8,7 +8,6 @@ class Blogs extends React.Component {
         this.state = {
         };
         this.componentDidMount = this.componentDidMount.bind(this)
-
     };
     componentDidMount() {
     }

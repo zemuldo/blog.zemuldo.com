@@ -37,7 +37,7 @@ class App extends Component {
             homePageIsLoading: true,
             blogDetails: null,
             richViewerState: null,
-            blogLoade: false,
+            blogLoaded: false,
             homePageLoaded: false,
             loadFooter: false,
             topic: 'all',
@@ -213,9 +213,8 @@ class App extends Component {
         }
     }
     onReadMore(thisBlog) {
-        window.scrollTo(0, 0);
-        this.setState({ blogLoaded: false });
-        return axios.post(env.httpURL, {
+        this.setState({ blogLoaded: true });
+        axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
                 "id": thisBlog.id
@@ -224,6 +223,7 @@ class App extends Component {
             .then(response => {
                 this.setState({ blog: response.data, blogDetails: thisBlog });
                 this.setState({ blogLoaded: true, blog: response.data });
+                window.scrollTo(0, 0);
             })
             .catch(function (err) {
                 this.setState({ blog: null, blogDetails: thisBlog });
@@ -379,6 +379,7 @@ class App extends Component {
     resize = () => this.forceUpdate()
     componentWillReceiveProps() {
         let url = window.location.pathname.split('/');
+        let id = Number(window.location.pathname.split('_')[window.location.pathname.split('_').length - 1]);
         let query = {}
         let page = window.location.pathname.split('/')[1];
         let topic = window.location.pathname.split('/')[2];
@@ -392,7 +393,17 @@ class App extends Component {
             query.type = page
             this.setState({ currentLocation: page })
         }
-        this.navigateBlogs(query)
+        if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
+            this.navigateBlogs(query)
+        }
+        if(id.toString()!=='NaN' && !this.state.blog){
+            this.setBlogHere(id,page)
+
+        }
+        if(id.toString()!=='NaN' && this.state.blog && this.state.blog.id!==id){
+            this.setBlogHere(id,page)
+        }
+
     }
     componentDidMount() {
         this.setState({ blogsLoaded: false })

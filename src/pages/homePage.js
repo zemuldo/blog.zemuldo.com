@@ -153,8 +153,7 @@ class PagesComponent extends Component {
                                                         onChange={this.props.handleFilterChange}
                                                     />
 
-                                                    <Header
-                                                        color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                                    <Header color={this.props.colors[2]} as='h2'>Most Popular</Header>
                                                     {
                                                         this.props.blogsLoaded?
                                                             <div>
