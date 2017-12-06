@@ -184,37 +184,29 @@ class App extends Component {
         }
     }
     handleFilterChange(e) {
+        let query={}
+        let queryMthod = 'getAllPosts'
+        if(this.state.currentLocation!=='home'){
+            query.type=this.state.currentLocation
+        }
+        if(e.target.value !== ''){
+            query.filter = e.target.value
+            queryMthod='getFiltered'
+        }
         this.setState({ blogsAreLoading: true })
         e.preventDefault();
-        if (e.target.value === '') {
-            return axios.post(env.httpURL, {
-                "queryMethod": "getAllPosts",
-                "queryData": {}
+        axios.post(env.httpURL, {
+            "queryMethod": queryMthod,
+            "queryData": query
+        })
+            .then(response => {
+                this.props.actions.updateBlogs(response.data)
+                this.setState({ blogsAreLoading: false })
             })
-                .then(response => {
-                    this.setState({ blogs: response.data });
-                    this.setState({ blogsAreLoading: false })
-                })
-                .catch(exception => {
-                    this.setState({ blogsAreLoading: false })
-                });
-        }
-        else {
-            return axios.post(env.httpURL, {
-                "queryMethod": "getFiltered",
-                "queryData": {
-                    "filter": e.target.value,
-                }
-            })
-                .then(response => {
-                    this.setState({ blogs: response.data });
-                    this.setState({ blogsAreLoading: false })
-                })
-                .catch(exception => {
-                    this.setState({ blogs: [] });
-                    this.setState({ blogsAreLoading: false })
-                });
-        }
+            .catch(err => {
+                this.setState({ blogs: [] });
+                this.setState({ blogsAreLoading: false })
+            });
     }
     onReadMore(thisBlog) {
         this.setState({ blogLoaded: true });
@@ -384,17 +376,38 @@ class App extends Component {
         let query = {}
         let page = window.location.pathname.split('/')[1];
         let topic = window.location.pathname.split('/')[2];
+
         if(url.length<4){
             this.setState({blog:null})
         }
         if (topicsOBJ[topic]) {
             query.topics = topic
         }
-        if (pages[page] && pages[page].name !== 'Home') {
-            query.type = page
+        /*
+            Navigate to home from page.
+            User navigated to home but state current location is not home.
+            Set current location to home and update blogs
+        */
+        if(page===''&& this.state.currentLocation!=='home'){
+            this.navigateBlogs(query)
+            this.setState({ currentLocation: 'home' })
+        }
+        /*
+            Navigate to page from home
+            User navigated to page but state current location is home.
+            Set current location to page and update blogs
+        */
+        if(pages[page] && this.state.currentLocation==='home' && this.state.currentLocation!==page){
             this.setState({ currentLocation: page })
         }
-        if(pages[page]){
+        /*
+            Navigate to another page from page
+            User navigated to another page but state current location is page.
+            Set current location to another page and update blogs
+        */
+        if (page!=='' && pages[page] && this.state.currentLocation!=='home' && page!==this.state.currentLocation ) {
+            query.type = page
+            this.setState({ currentLocation: page })
             if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
                 if(page!==this.state.currentLocation && page!==''){
                     this.navigateBlogs(query)
@@ -628,6 +641,7 @@ class App extends Component {
                                 blogsAreLoading={this.blogsAreLoading}
                                 onReadMore={this.onReadMore}
                                 colors={this.state.colors}
+                                currentLocation={this.state.currentLocation}
                                 current={this.state.currentLocation}
                                 setTopicPosts={this.setTopicPosts}
                                 setTopicNextPosts={this.setTopicNextPosts}

@@ -130,6 +130,7 @@ class PagesComponent extends Component {
                                         (window.innerWidth>600) ?
                                             <Grid.Column computer={4}>
                                                 <Topics
+                                                    currentLocation={this.props.currentLocation}
                                                     topic={this.state.topic}
                                                     onTopicClick = {this.onTopicClick}
                                                     onAllcClick = {this.onAllcClick}
@@ -211,6 +212,7 @@ class PagesComponent extends Component {
                                         {
                                             window.innerWidth<600?
                                                 <Topics
+                                                    currentLocation={this.props.currentLocation}
                                                     topic={this.state.topic}
                                                     onTopicClick = {this.onTopicClick}
                                                     onAllcClick = {this.onAllcClick}
