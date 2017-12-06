@@ -239,7 +239,6 @@ class PagesComponent extends Component {
                                             color={this.props.colors[1]}
                                             blogDetails={this.props.blogDetails}
                                             blog={this.props.blog}
-                                            blogs={this.props.blogs}
                                             blogsLoaded={this.props.blogsLoaded}
                                             blogLoaded={this.props.blogLoaded}
                                             deletedBlog={this.props.deletedBlog}

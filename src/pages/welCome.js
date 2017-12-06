@@ -1,14 +1,13 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import {Loader,Header} from 'semantic-ui-react'
 import Blog from '../posts/blog'
 import GridBlogs from "../posts/gridBlogs";
-/*import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'*/
+
 class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            loadingBlogs:!!this.props.blogs[0]
         }
         this.componentDidMount = this.componentDidMount.bind(this);
     }
@@ -20,7 +19,6 @@ class WelcomePage extends React.Component {
             let postURL = this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString()
             let shareURL = fbShareURL+postURL+"&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
-
         }
     }
     tweetShare () {
@@ -110,4 +108,10 @@ class WelcomePage extends React.Component {
     }
 }
 
-export default WelcomePage
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+
+export default connect(mapStateToProps) (WelcomePage)
