@@ -399,7 +399,6 @@ class App extends Component {
             Set current location to home and update blogs
         */
         if(page===''&& this.state.currentLocation!=='home'){
-            console.log(this.state.currentLocation+" to "+page)
             this.navigateBlogs(query);
             this.setState({ currentLocation: 'home' })
         }
@@ -409,7 +408,6 @@ class App extends Component {
             Set current location to page and update blogs
         */
         if(pages[page] && this.state.currentLocation==='home' && this.state.currentLocation!==page){
-            console.log(page + ' to '+this.state.currentLocation)
             this.setState({ currentLocation: page })
             this.navigateBlogs(query)
         }
@@ -419,7 +417,6 @@ class App extends Component {
             Set current location to another page and update blogs
         */
         if (page!=='' && pages[page] && this.state.currentLocation!=='home' && page!==this.state.currentLocation ) {
-            console.log(page + ' to ' +this.state.currentLocation)
             query.type = page
             this.setState({ currentLocation: page })
             if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
@@ -429,7 +426,6 @@ class App extends Component {
             }
         }
         if(page===this.state.currentLocation && topic && topic!==this.state.topic){
-            console.log('topics within same page')
             this.setState({ topic: topic })
             this.navigateBlogs(query)
         }
