@@ -378,7 +378,7 @@ class App extends Component {
         this.setState({ colors: array });
     }
     resize = () => this.forceUpdate()
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         let url = window.location.pathname.split('/');
         let id = Number(window.location.pathname.split('_')[window.location.pathname.split('_').length - 1]);
         let query = {}
@@ -394,17 +394,19 @@ class App extends Component {
             query.type = page
             this.setState({ currentLocation: page })
         }
-        if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
-            this.navigateBlogs(query)
+        if(pages[page]){
+            if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
+                if(page!==this.state.currentLocation && page!==''){
+                    this.navigateBlogs(query)
+                }
+            }
         }
         if(id.toString()!=='NaN' && !this.state.blog){
             this.setBlogHere(id,page)
-
         }
         if(id.toString()!=='NaN' && this.state.blog && this.state.blog.id!==id){
             this.setBlogHere(id,page)
         }
-
     }
     componentDidMount() {
         this.setState({ blogsLoaded: false })
@@ -469,6 +471,7 @@ class App extends Component {
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
+        this.navigateBlogs({})
         this.setState({ blogsAreLoading: true })
         window.scrollTo(0, 0);
         this.setState({ currentLocation: 'home', blog: null })
