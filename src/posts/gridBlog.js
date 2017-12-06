@@ -8,7 +8,6 @@ class GridBlog extends React.Component {
         this.state = {
         }
     }
-
     render() {
         let o=this.props.blog
         return (
@@ -16,7 +15,7 @@ class GridBlog extends React.Component {
                 <Header color='green' as='h3'>
                     {this.props.blog.title.split(' ').join(' ')}
                 </Header>
-                <p>By: Author: {this.props.blog.author}</p>
+                <p>Author: {this.props.blog.author}</p>
                 Likes:
                 <span>
                     <i style={{color:'orange'}}>
@@ -24,7 +23,6 @@ class GridBlog extends React.Component {
                     </i>
                 </span>
                 <hr color={this.props.color}/>
-
                 <p>{this.props.blog.about}</p>
                 <Link to = {'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString()}>
                     <Button
@@ -37,10 +35,8 @@ class GridBlog extends React.Component {
                         <span>Read</span>
                     </Button>
                 </Link>
-
             </Grid.Column>
         )
     }
 }
-
 export default GridBlog
