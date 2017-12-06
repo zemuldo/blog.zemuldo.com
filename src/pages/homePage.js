@@ -27,11 +27,9 @@ class PagesComponent extends Component {
         this.onTopicClick = this.onTopicClick.bind(this);
     };
     onTopicClick = (e) => {
-        this.props.history.push('/'+this.props.current+'/'+e)
         this.props.setTopic(e)
     }
     onAllcClick = (e) => {
-        this.props.history.push('/'+this.props.current+'/all')
         this.props.setTopic('all')
     }
     _handleChangeBodySize(size){

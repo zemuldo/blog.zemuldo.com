@@ -370,7 +370,14 @@ class App extends Component {
         this.setState({ colors: array });
     }
     resize = () => this.forceUpdate()
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps() {
+        /*
+           This method is used to detect navigation/actions from the user then update the UI.
+           ie. Page navigation, Page crops etc
+        */
+        /*
+            Build variables from the window pathname
+        */
         let url = window.location.pathname.split('/');
         let id = Number(window.location.pathname.split('_')[window.location.pathname.split('_').length - 1]);
         let query = {}
@@ -399,6 +406,8 @@ class App extends Component {
         */
         if(pages[page] && this.state.currentLocation==='home' && this.state.currentLocation!==page){
             this.setState({ currentLocation: page })
+            query.type = page
+            this.navigateBlogs(query)
         }
         /*
             Navigate to another page from page
