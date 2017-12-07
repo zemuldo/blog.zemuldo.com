@@ -16,8 +16,19 @@
 
 }
 .dropDown{
-    border: none;
-    background-color: white;
+
+}
+
+/*
+    Footer
+*/
+.footer {
+    margin-top: 90%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
 }
 
 /*

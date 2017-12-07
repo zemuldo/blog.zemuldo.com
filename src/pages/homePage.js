@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import { Header, Icon,Button, Grid ,Loader,Input} from 'semantic-ui-react'
-import WelcomePage from '../partials/welCome'
+import WelcomePage from './welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
 import axios from 'axios'
@@ -27,11 +27,9 @@ class PagesComponent extends Component {
         this.onTopicClick = this.onTopicClick.bind(this);
     };
     onTopicClick = (e) => {
-        this.props.history.push('/'+this.props.current+'/'+e)
         this.props.setTopic(e)
     }
     onAllcClick = (e) => {
-        this.props.history.push('/'+this.props.current+'/all')
         this.props.setTopic('all')
     }
     _handleChangeBodySize(size){
@@ -115,154 +113,148 @@ class PagesComponent extends Component {
 
     }
     resetNav(queryMethod,topic){
-        this.setState({queryMethod:queryMethod,topic:topic})
+        this.setState({queryMethod:queryMethod,topic:topic});
         x=0
     }
     render(){
         return(
             <div>
-                {
-                    this.props.homePageLoaded?
-                        <div>
-                            <Grid columns={2}>
-                                <Grid.Row>
-                                    {
-                                        (window.innerWidth>600) ?
-                                            <Grid.Column computer={4}>
-                                                <Topics
-                                                    topic={this.state.topic}
-                                                    onTopicClick = {this.onTopicClick}
-                                                    onAllcClick = {this.onAllcClick}
-                                                    blogsAreLoading={this.props.blogsAreLoading}
-                                                    setTopicPosts={this.props.setTopicPosts}
-                                                    setTopicNextPosts={this.props.setTopicNextPosts}
-                                                    onReadMore = {this.props.onReadMore}
-                                                    blog ={this.props.blog}
-                                                    color={this.props.color}
-                                                    blogs={this.props.blogs}
-                                                    resetNav={this.resetNav}
-                                                />
-                                                <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
-                                                    <Header
-                                                        style={{marginLeft:'10px'}}
-                                                        color='blue' as='h3'>Search for it
-                                                    </Header>
-                                                    <Input
-                                                        icon={<Icon name='search' inverted circular link />}
-                                                        placeholder='Search...'
-                                                        onChange={this.props.handleFilterChange}
-                                                    />
+                <Grid columns={2}>
+                    <Grid.Row>
+                        {
+                            (window.innerWidth>600) ?
+                                <Grid.Column computer={4}>
+                                    <Topics
+                                        currentLocation={this.props.currentLocation}
+                                        topic={this.state.topic}
+                                        onTopicClick = {this.onTopicClick}
+                                        onAllcClick = {this.onAllcClick}
+                                        blogsAreLoading={this.props.blogsAreLoading}
+                                        setTopicPosts={this.props.setTopicPosts}
+                                        setTopicNextPosts={this.props.setTopicNextPosts}
+                                        onReadMore = {this.props.onReadMore}
+                                        blog ={this.props.blog}
+                                        color={this.props.color}
+                                        blogs={this.props.blogs}
+                                        resetNav={this.resetNav}
+                                    />
+                                    <div style={{ float: 'left', margin: '2em 3em 3em 2em'}}>
+                                        <Header
+                                            style={{marginLeft:'10px'}}
+                                            color='blue' as='h3'>Search for it
+                                        </Header>
+                                        <Input
+                                            icon={<Icon name='search' inverted circular link />}
+                                            placeholder='Search...'
+                                            onChange={this.props.handleFilterChange}
+                                        />
 
-                                                    <Header
-                                                        color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                        <Header color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                        {
+                                            this.props.blogsLoaded?
+                                                <div>
+                                                    <br/>
                                                     {
-                                                        this.props.blogsLoaded?
+                                                        (this.props.blogs[0]) ?
                                                             <div>
-                                                                <br/>
-                                                                    {
-                                                                        (this.props.blogs[0]) ?
-                                                                            <div>
-                                                                                <Blogs
-                                                                                    color={this.props.color}
-                                                                                    onReadMore = {this.props.onReadMore}
-                                                                                    blogs ={this.props.blogs}
-                                                                                    blog ={this.props.blog}/>
-                                                                                <div>
-                                                                                    <br/>
-                                                                                    <Button
-                                                                                        color={this.props.color}
-                                                                                        circular={true}
-                                                                                        size='mini'
-                                                                                        floated='left'
-                                                                                        disabled={!this.state.next}
-                                                                                        onClick={ this.setNextBlogs.bind(this,'next')}
-                                                                                        name="next"
-                                                                                    >
-                                                                                        Next
-                                                                                    </Button>
-                                                                                    <Button
-                                                                                        color={this.props.color}
-                                                                                        circular={true}
-                                                                                        size='mini'
-                                                                                        floated='right'
-                                                                                        disabled={x===0}
-                                                                                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
-                                                                                        name="previous"
-                                                                                    >
-                                                                                        Prev
-                                                                                    </Button>
-                                                                                </div>
-                                                                            </div>:
-                                                                            <div>
-                                                                                No matching content on this Topic
-                                                                            </div>
-                                                                    }
+                                                                <Blogs
+                                                                    color={this.props.color}
+                                                                    onReadMore = {this.props.onReadMore}
+                                                                    blog ={this.props.blog}/>
+                                                                <div>
+                                                                    <br/>
+                                                                    <Button
+                                                                        color={this.props.color}
+                                                                        circular={true}
+                                                                        size='mini'
+                                                                        floated='left'
+                                                                        disabled={!this.state.next}
+                                                                        onClick={ this.setNextBlogs.bind(this,'next')}
+                                                                        name="next"
+                                                                    >
+                                                                        Next
+                                                                    </Button>
+                                                                    <Button
+                                                                        color={this.props.color}
+                                                                        circular={true}
+                                                                        size='mini'
+                                                                        floated='right'
+                                                                        disabled={x===0}
+                                                                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
+                                                                        name="previous"
+                                                                    >
+                                                                        Prev
+                                                                    </Button>
+                                                                </div>
                                                             </div>:
-                                                            <div className='small-loader' >
-                                                                <Loader active inline='centered' />
+                                                            <div>
+                                                                No matching content on this Topic
                                                             </div>
                                                     }
-                                                </div>
-                                            </Grid.Column>:
-                                            <div>
-
-                                            </div>
-
-                                    }
-                                    <Grid.Column mobile = {window.innerWidth<600?16:9} computer={window.innerWidth<600?16:9}  width={9}>
-                                        {
-                                            window.innerWidth<600?
-                                                <Topics
-                                                    topic={this.state.topic}
-                                                    onTopicClick = {this.onTopicClick}
-                                                    onAllcClick = {this.onAllcClick}
-                                                    blogsAreLoading={this.props.blogsAreLoading}
-                                                    setTopicPosts={this.props.setTopicPosts}
-                                                    setTopicNextPosts={this.props.setTopicNextPosts}
-                                                    onReadMore = {this.props.onReadMore}
-                                                    blog ={this.props.blog}
-                                                    color={this.props.color}
-                                                    blogs={this.props.blogs}
-                                                    resetNav={this.resetNav}/>:
-                                                <div>
-                                                </div>
-                                        }
-                                        {
-
-                                            !this.props.blogLoaded?
-                                                <div className='margin-5050'>
-                                                    <Loader active inline='centered' />
                                                 </div>:
-                                                <div>
-                                                    <WelcomePage
-                                                        richViewerState={this.props.richViewerState}
-                                                        color={this.props.colors[1]}
-                                                        blogDetails={this.props.blogDetails}
-                                                        blog={this.props.blog}
-                                                        blogs={this.props.blogs}
-                                                        blogLoaded={this.props.blogLoaded}
-                                                        deletedBlog={this.props.deletedBlog}
-                                                        user={this.props.user}
-                                                    />
+                                                <div className='small-loader' >
+                                                    <Loader active inline='centered' />
                                                 </div>
                                         }
-                                    </Grid.Column>
-                                    {
-                                        (window.innerWidth>1030) ?
-                                            <Grid.Column  width={3}>
-                                                {<TwitterProf/>}
-                                            </Grid.Column>:
-                                            <div>
+                                    </div>
+                                </Grid.Column>:
+                                <div>
 
-                                            </div>
-                                    }
-                                </Grid.Row>
-                            </Grid>
-                        </div>:
-                        <div className='center-loader'>
-                            <Loader active inline='centered' />
-                        </div>
-                }
+                                </div>
+
+                        }
+                        <Grid.Column mobile = {window.innerWidth<600?16:9} computer={window.innerWidth<600?16:9}  width={9}>
+                            {
+                                window.innerWidth<600?
+                                    <Topics
+                                        currentLocation={this.props.currentLocation}
+                                        topic={this.state.topic}
+                                        onTopicClick = {this.onTopicClick}
+                                        onAllcClick = {this.onAllcClick}
+                                        blogsAreLoading={this.props.blogsAreLoading}
+                                        setTopicPosts={this.props.setTopicPosts}
+                                        setTopicNextPosts={this.props.setTopicNextPosts}
+                                        onReadMore = {this.props.onReadMore}
+                                        blog ={this.props.blog}
+                                        color={this.props.color}
+                                        blogs={this.props.blogs}
+                                        resetNav={this.resetNav}/>:
+                                    <div>
+                                    </div>
+                            }
+                            {
+
+                                !this.props.blogLoaded?
+                                    <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                                        <Loader active inline='centered' />
+                                    </div>:
+                                    <div>
+                                        <WelcomePage
+                                            x={x}
+                                            next={this.state.next}
+                                            setPreviousBlogs={this.setPreviousBlogs}
+                                            setNextBlogs={this.setNextBlogs}
+                                            onReadMore = {this.props.onReadMore}
+                                            richViewerState={this.props.richViewerState}
+                                            color={this.props.colors[1]}
+                                            blogDetails={this.props.blogDetails}
+                                            blog={this.props.blog}
+                                            blogsLoaded={this.props.blogsLoaded}
+                                            blogLoaded={this.props.blogLoaded}
+                                            deletedBlog={this.props.deletedBlog}
+                                            user={this.props.user}
+                                        />
+                                    </div>
+                            }
+                        </Grid.Column>
+                        {
+                            (window.innerWidth>1030) ?
+                                <Grid.Column  width={3}>
+                                    {<TwitterProf/>}
+                                </Grid.Column>:null
+                        }
+                    </Grid.Row>
+                </Grid>
             </div>)
     }
 }

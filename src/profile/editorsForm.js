@@ -55,12 +55,14 @@ class EditorsForm extends Component {
         super(props);
         this.state = {
             category:null,
-            topics:null,
+            topics:[],
             termsAccept:false,
+            about:'',
             dialogInComplete:true,
         };
         this.handleTopicChange = this.handleTopicChange.bind(this);
         this.handleUTAChange = this.handleUTAChange.bind(this);
+        this.handleAboutChange=this.handleAboutChange.bind(this)
         this.onFinishClick = this.onFinishClick.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this._handleGoBackToPrifile = this._handleGoBackToPrifile.bind(this)
@@ -73,16 +75,20 @@ class EditorsForm extends Component {
     handleCategoryChange(e,data){
         this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
     }
+    handleAboutChange(e,data){
+        this.setState({about:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)})
+    }
     handleTopicChange(e,data){
         this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
     }
     handleUTAChange(e,data){
-        this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+        this.setState({termsAccept:data.checked,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
     }
     onFinishClick(){
         let blogDta = {
             type:this.state.category,
-            topics:this.state.topics
+            topics:this.state.topics,
+            about:this.state.about
         }
         window.localStorage.setItem('blogData',JSON.stringify(blogDta))
         this.setState({filledForm:false})
@@ -117,10 +123,10 @@ class EditorsForm extends Component {
                                         <Dropdown style={{margin:'0em 0em 1em 0em',color:'green'}} onChange={this.handleTopicChange} multiple search selection closeOnChange options={topics} placeholder='Select topics' />
                                     </Form.Field>
                                 </Form.Group >
-                                <Form.TextArea label='About' placeholder='Small details about your article...' />
+                                <Form.TextArea onChange={this.handleAboutChange} label='About your blog' placeholder='Small details about your article...' />
                                 <Form.Checkbox onChange = {this.handleUTAChange} label='I agree to the Community Terms and Conditions' />
-                                <Form.Button type="button" onClick={this.onFinishClick}  color='green' size='large'>Submit</Form.Button>
-                                <Form.Button type="button" onClick={this._handleGoBackToPrifile}  color='green' size='large'>Back</Form.Button>
+                                <Form.Button disabled={this.state.topics.length<1 || this.state.about.length<139 || !this.state.category || !this.state.termsAccept} type="button" onClick={this.onFinishClick}  color='green' size='large'>Submit</Form.Button>
+                                <Form.Button type="button" onClick={this._handleGoBackToPrifile}  color='green' size='large'>Exit</Form.Button>
                             </Form>
                         </div>:
                         <Creator

@@ -1,9 +1,10 @@
-import React from 'react'
+import React,{Component} from 'react'
 import axios from 'axios'
+import ReactDOM from 'react-dom';
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Header, Icon,Modal } from 'semantic-ui-react'
+import {Button,Form, Segment,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
@@ -11,99 +12,6 @@ const cats = {
     Business:'business',
     Technology:'tech'
 }
-// Custom overrides for "code" style.
-const styleMap = {
-    CODE: {
-        backgroundColor: 'red',
-        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 16,
-        padding: 2,
-    },
-};
-function getBlockStyle(block) {
-    switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
-    }
-}
-class StyleButton extends React.Component {
-    constructor() {
-        super();
-        this.onToggle = (e) => {
-            e.preventDefault();
-            this.props.onToggle(this.props.style);
-        };
-    }
-    render() {
-        let className = 'RichEditor-styleButton';
-        if (this.props.active) {
-            className += ' RichEditor-activeButton';
-        }
-        return (
-            <span className={className} onMouseDown={this.onToggle}>
-                <Icon color="black" name = {this.props.icon}/>
-                {this.props.label}
-            </span>
-        );
-    }
-}
-const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one',icon:'header'},
-    {label: 'H2', style: 'header-two',icon:'header'},
-    {label: 'H3', style: 'header-three',icon:'header'},
-    {label: 'H4', style: 'header-four',icon:'header'},
-    {label: 'H5', style: 'header-five',icon:'header'},
-    {label: 'H6', style: 'header-six',icon:'header'},
-    {label: 'Blockquote', style: 'blockquote',icon:'header'},
-    {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
-    {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
-    {label: 'Code Block', style: 'code-block',icon:'code'},
-];
-const BlockStyleControls = (props) => {
-    const {editorState} = props;
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-    return (
-        <div  className="RichEditor-controls">
-            {BLOCK_TYPES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={type.style === blockType}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                    icon={type.icon}
-                />
-            )}
-        </div>
-    );
-};
-var INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD',icon:'bold'},
-    {label: 'Italic', style: 'ITALIC',icon:'italic'},
-    {label: 'Underline', style: 'UNDERLINE',icon:'underline'},
-    {label: 'Monospace', style: 'CODE',icon:'font'},
-];
-const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
-    return (
-        <div className="RichEditor-controls">
-            {INLINE_STYLES.map(type =>
-                <StyleButton
-                    key={type.label}
-                    active={currentStyle.has(type.style)}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                    icon={type.icon}
-                />
-            )}
-        </div>
-    );
-};
 
 function mediaBlockRenderer(block) {
     if (block.getType() === 'atomic') {
@@ -118,7 +26,7 @@ const Audio = (props) => {
     return <audio controls src={props.src} style={styles.media} />;
 };
 const Image = (props) => {
-    return <img alt="!This image might have been deleted" src={props.src} style={styles.media} />;
+    return <img src={props.src} style={styles.media} />;
 };
 const Video = (props) => {
     return <video controls src={props.src} style={styles.media} />;
@@ -155,7 +63,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
 const Link = (props) => {
     const {url} = props.contentState.getEntity(props.entityKey).getData();
     return (
-        <a href={url} rel="noreferrer noopener" target="_blank" style={styles.link}>
+        <a href={url} style={styles.link}>
             {props.children}
         </a>
     );
@@ -212,8 +120,8 @@ class RichEditorExample extends React.Component {
         this.state = {
             editorState:EditorState.createEmpty(),
             isLoaded:false,
-            category:this.props.category,
-            topics:this.props.topics,
+            category:null,
+            topics:null,
             termsAccept:false,
             dialogInComplete:true,
             filledForm:false,
@@ -234,6 +142,10 @@ class RichEditorExample extends React.Component {
         this.saveContent = this.saveContent.bind(this);
         this.handleEditorState = this.handleEditorState.bind(this);
         this.publish = this.publish.bind(this);
+        this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleTopicChange = this.handleTopicChange.bind(this);
+        this.handleUTAChange = this.handleUTAChange.bind(this);
+        this.onFinishClick = this.onFinishClick.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.reinInitEditorState=this.reinInitEditorState.bind(this)
         this.promptForLink = this._promptForLink.bind(this);
@@ -246,9 +158,9 @@ class RichEditorExample extends React.Component {
         this._addVideo = this._addVideo.bind(this);
         this.__promptForMedia = this.__promptForMedia.bind(this);
         this._confirmMedia = this._confirmMedia.bind(this)
-        this.handleGoBackToProfile = this.handleGoBackToProfile.bind(this)
     }
     __promptForMedia(type) {
+        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -258,6 +170,7 @@ class RichEditorExample extends React.Component {
         });
     }
     _addAudio() {
+        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -267,6 +180,7 @@ class RichEditorExample extends React.Component {
         });
     }
     _addImage() {
+        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -276,6 +190,7 @@ class RichEditorExample extends React.Component {
         });
     }
     _addVideo() {
+        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -380,6 +295,7 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
+        console.log("----++++++saving state")
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
@@ -388,6 +304,7 @@ class RichEditorExample extends React.Component {
     }
     focus = () => this.refs.editor.focus();
     _handleKeyCommand(command, editorState) {
+        console.log('key presed'+command)
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             this.onChange(newState);
@@ -396,10 +313,12 @@ class RichEditorExample extends React.Component {
         return false;
     }
     _onTab(e) {
+        console.log('tab presed'+e)
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
     _toggleBlockType(blockType) {
+        console.log('toglle presed'+blockType)
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -430,6 +349,7 @@ class RichEditorExample extends React.Component {
                     title:title,
                     query:"publish",
                     topics:blogData.topics,
+                    about:blogData.about,
                     images:["blogs_pic.jpg"],
                     authorID:this.props.currentUser.id,
                     author:this.props.currentUser.firstName+' '+this.props.currentUser.lastName,
@@ -461,6 +381,7 @@ class RichEditorExample extends React.Component {
 
     };
     saveContent = debounce((content) => {
+        console.log("localstoring....")
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
     componentDidMount() {
@@ -476,14 +397,28 @@ class RichEditorExample extends React.Component {
             this.setState({filledForm:true,editorState : EditorState.createEmpty(decorator)});
         }
     };
+    handleCategoryChange(e,data){
+        this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    handleTopicChange(e,data){
+        this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    handleUTAChange(e,data){
+        this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+    }
+    onFinishClick(){
+        let blogDta = {
+            type:this.state.category,
+            topics:this.state.topics
+        }
+        window.localStorage.setItem('blogData',JSON.stringify(blogDta))
+        this.setState({filledForm:false})
+    }
     startPublish = ()=>{
         this.showPreview()
     }
     showConfirm = () => {
         this.setState({ confirmOpen: true })
-    }
-    handleGoBackToProfile = () => {
-       this.props._exitEditMode()
     }
     showPreview=()=>{
         this.setState({ previewOpen: true })
@@ -493,7 +428,7 @@ class RichEditorExample extends React.Component {
     }
     handleConfirm = () => {
         this.closePreview()
-        this.setState({confirmOpen: false })
+        this.setState({startPublish:true, confirmOpen: false })
         this.publish()
     }
     handleCancel = () =>{
@@ -504,7 +439,6 @@ class RichEditorExample extends React.Component {
     reinInitEditorState (state){
         this.setState({editorState:state})
     }
-
 
     render() {
         let mediaInput;
@@ -552,7 +486,7 @@ class RichEditorExample extends React.Component {
             }
         }
         return (
-            <div>
+            <div className='RichEditor-root'>
                 <div  style={{ margin:'0em 0em 0em 3em'}}>
                     <Button
                         disabled = {this.state.hasSavedContent}
@@ -635,25 +569,115 @@ class RichEditorExample extends React.Component {
                         </Button.Group>
                     </Modal.Actions>
                 </Modal>
-                <div className={className} onClick={this.focus}>
-                    <Editor
-                        blockRendererFn={mediaBlockRenderer}
-                        blockStyleFn={getBlockStyle}
-                        customStyleMap={styleMap}
-                        editorState={editorState}
-                        handleKeyCommand={this.handleKeyCommand}
-                        onChange={this.onChange}
-                        onTab={this.onTab}
-                        placeholder="Start putting it down..."
-                        ref="editor"
-                        spellCheck={true}
-                    />
-                </div>
+                <Editor
+                    blockRendererFn={mediaBlockRenderer}
+                    blockStyleFn={getBlockStyle}
+                    customStyleMap={styleMap}
+                    editorState={editorState}
+                    handleKeyCommand={this.handleKeyCommand}
+                    onChange={this.onChange}
+                    onTab={this.onTab}
+                    placeholder="Start putting it down..."
+                    ref="editor"
+                    spellCheck={true}
+                />
             </div>
         );
     }
 }
-
+// Custom overrides for "code" style.
+const styleMap = {
+    CODE: {
+        backgroundColor: 'red',
+        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+        fontSize: 16,
+        padding: 2,
+    },
+};
+function getBlockStyle(block) {
+    switch (block.getType()) {
+        case 'blockquote': return 'RichEditor-blockquote';
+        default: return null;
+    }
+}
+class StyleButton extends React.Component {
+    constructor() {
+        super();
+        this.onToggle = (e) => {
+            e.preventDefault();
+            this.props.onToggle(this.props.style);
+        };
+    }
+    render() {
+        let className = 'RichEditor-styleButton';
+        if (this.props.active) {
+            className += ' RichEditor-activeButton';
+        }
+        return (
+            <span className={className} onMouseDown={this.onToggle}>
+                <Icon color="black" name = {this.props.icon}/>
+                {this.props.label}
+            </span>
+        );
+    }
+}
+const BLOCK_TYPES = [
+    {label: 'H1', style: 'header-one',icon:'header'},
+    {label: 'H2', style: 'header-two',icon:'header'},
+    {label: 'H3', style: 'header-three',icon:'header'},
+    {label: 'H4', style: 'header-four',icon:'header'},
+    {label: 'H5', style: 'header-five',icon:'header'},
+    {label: 'H6', style: 'header-six',icon:'header'},
+    {label: 'Blockquote', style: 'blockquote',icon:'header'},
+    {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
+    {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
+    {label: 'Code Block', style: 'code-block',icon:'code'},
+];
+const BlockStyleControls = (props) => {
+    const {editorState} = props;
+    const selection = editorState.getSelection();
+    const blockType = editorState
+        .getCurrentContent()
+        .getBlockForKey(selection.getStartKey())
+        .getType();
+    return (
+        <div  className="RichEditor-controls">
+            {BLOCK_TYPES.map((type) =>
+                <StyleButton
+                    key={type.label}
+                    active={type.style === blockType}
+                    label={type.label}
+                    onToggle={props.onToggle}
+                    style={type.style}
+                    icon={type.icon}
+                />
+            )}
+        </div>
+    );
+};
+var INLINE_STYLES = [
+    {label: 'Bold', style: 'BOLD',icon:'bold'},
+    {label: 'Italic', style: 'ITALIC',icon:'italic'},
+    {label: 'Underline', style: 'UNDERLINE',icon:'underline'},
+    {label: 'Monospace', style: 'CODE',icon:'font'},
+];
+const InlineStyleControls = (props) => {
+    var currentStyle = props.editorState.getCurrentInlineStyle();
+    return (
+        <div className="RichEditor-controls">
+            {INLINE_STYLES.map(type =>
+                <StyleButton
+                    key={type.label}
+                    active={currentStyle.has(type.style)}
+                    label={type.label}
+                    onToggle={props.onToggle}
+                    style={type.style}
+                    icon={type.icon}
+                />
+            )}
+        </div>
+    );
+};
 
 
 export default RichEditorExample

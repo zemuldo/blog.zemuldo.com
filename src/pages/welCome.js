@@ -1,9 +1,10 @@
 import React from 'react'
-import {Header,Loader} from 'semantic-ui-react'
+import {connect} from 'react-redux'
+import {Loader,Header} from 'semantic-ui-react'
 import Blog from '../posts/blog'
-/*import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'*/
-export default class WelcomePage extends React.Component {
+import GridBlogs from "../posts/gridBlogs";
+
+class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -11,7 +12,6 @@ export default class WelcomePage extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
     }
     componentDidMount() {
-
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -19,7 +19,6 @@ export default class WelcomePage extends React.Component {
             let postURL = this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString()
             let shareURL = fbShareURL+postURL+"&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
-
         }
     }
     tweetShare () {
@@ -46,28 +45,49 @@ export default class WelcomePage extends React.Component {
         return (
            <div>
                {
-                   !this.props.blogLoaded?
+                   !this.props.blogLoaded && !this.props.blogsLoaded?
                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                            <Loader active inline='centered' />
                        </div>:
                        <div style={{margin: '2em 1em 3em 1em'}}>
                            {
-                               (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
+                               !this.props.blog?
                                    <div>
-                                       <div >
-                                           <Header color={this.props.color} as='h1'>
-                                               Great Articles and Blogs
-                                           </Header>
-                                           <hr color="green"/>
-                                           <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
-                                               <p>
-                                                   Here you find great articles on tech related topics.
-                                                   Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                                   You can signup and share your content with us. Become part of us.
-                                               </p>
-                                           </div>
-                                       </div>
-                                   </div>:
+                                       {
+                                           this.props.blogs[0]?
+                                               <div>
+                                                   <Header color={this.props.color} as='h1'>
+                                                       Great Articles and Blogs
+                                                   </Header>
+                                                   <hr color="green"/>
+                                                   <br/>
+                                                   <GridBlogs
+                                                       x={this.props.x}
+                                                       next={this.props.next}
+                                                       setPreviousBlogs={this.props.setPreviousBlogs}
+                                                       setNextBlogs={this.props.setNextBlogs}
+                                                       onReadMore = {this.props.onReadMore}
+                                                       color={this.props.color}
+                                                       blog={this.props.blog}
+                                                   />
+                                               </div>:
+                                               <div>
+                                                   <Header color={this.props.color} as='h1'>
+                                                       Great Articles and Blogs
+                                                   </Header>
+                                                   <hr color="green"/>
+                                                   <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
+                                                       <p>
+                                                           There is no content on the topic yet. You can explore more
+                                                       </p>
+                                                   </div>
+                                               </div>
+                                       }
+                                   </div>:null
+                           }
+                           {
+                               (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
+                                   null:
                                    <div>
                                        <Blog
                                            blogLoaded={this.props.blogLoaded}
@@ -87,3 +107,11 @@ export default class WelcomePage extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+
+export default connect(mapStateToProps) (WelcomePage)

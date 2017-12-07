@@ -16,7 +16,7 @@ export default class WelcomePage extends React.Component {
             fbC:null,
             twtC:null,
             gplsC:null,
-            linkdCont:null
+            linkdCont:null,
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this)
@@ -31,12 +31,14 @@ export default class WelcomePage extends React.Component {
         this.setState({showDelete:true})
     }
     setBlogCounts(){
+        let thisBlog = this.props.blogDetails
+        let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         let gplusPost = {
             "method": "pos.plusones.get",
             "id": "p",
             "params": {
                 "nolog": true,
-                "id": "https://zemuldo/"+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),
+                "id": "https://zemuldo/"+shareURL,
                 "source": "widget",
                 "userId": "@viewer",
                 "groupId": "@self"
@@ -47,8 +49,8 @@ export default class WelcomePage extends React.Component {
         }
         window.scrollTo(0,0);
         return Promise.all([
-            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString(),{}),
-            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),{}),
+            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+shareURL,{}),
+            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+shareURL,{}),
             axios.post(' https://clients6.google.com/rpc',gplusPost)
         ])
             .then(function (res) {
@@ -93,6 +95,8 @@ export default class WelcomePage extends React.Component {
         if(this.props.blogDetails){
             this.getAauthorAvatar()
             this.setBlogCounts()
+            let thisBlog = this.props.blogDetails
+            let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         }
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
@@ -137,7 +141,8 @@ export default class WelcomePage extends React.Component {
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fzemuldo.com%2F';
         if(this.props.blogDetails){
-            let postURL = this.props.blogDetails.title.split(' ').join('%2520')+'_'+this.props.blogDetails.date.split(' ').join('%2520')+'_'+this.props.blogDetails.id.toString()
+            let thisBlog = this.props.blogDetails
+            let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
             let shareURL = fbShareURL+postURL+"&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
@@ -145,10 +150,12 @@ export default class WelcomePage extends React.Component {
     }
     tweetShare () {
         if(this.props.blogDetails){
+
             let hashTgs = '%2F&hashtags='+this.props.blogDetails.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let url= '&url=https%3A%2F%2Fzemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString()
+            let thisBlog = this.props.blogDetails
+            let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
             let fullURL = url+related+hashTgs+via
             let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
@@ -156,12 +163,18 @@ export default class WelcomePage extends React.Component {
         }
     }
     gplusShare () {
-        window.open("https://plus.google.com/share?url="+'https://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
-        return false;
+        let thisBlog = this.props.blogDetails
+        let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+        if(this.props.blogDetails){
+            let url = "https://plus.google.com/share?url="+'https://zemuldo.com/'+url
+            window.open(url);
+        }
     }
 
     linkdnShare(){
-        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.id.toString(),"","height=550,width=525,left=100,top=100,menubar=0");
+        let thisBlog = this.props.blogDetails
+        let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+url,"","height=550,width=525,left=100,top=100,menubar=0");
     }
     updateLikes=(id)=>{
         if(localStorage.getItem('user')){

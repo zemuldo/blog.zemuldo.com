@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import {  Menu, Button,Icon,Header,Modal,List,Grid,Container,Segment,Image} from 'semantic-ui-react'
+import {  Menu, Button,Icon,Header,Modal,List,Grid,Container,Segment} from 'semantic-ui-react'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 class Footer extends Component {

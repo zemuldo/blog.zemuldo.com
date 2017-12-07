@@ -4,11 +4,7 @@ import ReactDOM from 'react-dom'
 
 import retrieveImageUrl from './utils/retrieve-image-url'
 
-const isTouchDevice = !!(
-    typeof window !== 'undefined' &&
-    typeof navigator !== 'undefined' &&
-    ('ontouchstart' in window || navigator.msMaxTouchPoints > 0)
-)
+const isTouchDevice = ( typeof window !== 'undefined' && typeof navigator !== 'undefined' && ('ontouchstart' in window || navigator.msMaxTouchPoints > 0) )
 
 const isFileAPISupported = typeof File !== 'undefined'
 

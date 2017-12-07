@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Visibility } from 'semantic-ui-react'
+import { Visibility } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
+import {Link} from 'react-router-dom'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as BlogsActions from "../state/actions/blogs";
 import axios from 'axios'
+import util from '../util'
 import Login from '../profile/loginForm'
 import PagesComponent from '../pages/homePage'
-import GeoLocator from '../partials/geoLocator'
 import Footer from '../partials/footer'
 import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
@@ -15,26 +19,6 @@ import MainMenu from "../menu/main";
 import FixedMenu from "../menu/fixedMenu";
 const env = config[process.env.NODE_ENV] || 'development';
 
-function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-}
-function dataURItoBlob(dataURI, callback) {
-    let byteString = atob(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
-    // write the bytes of the string to an ArrayBuffer
-    let ab = new ArrayBuffer(byteString.length);
-    let ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    // write the ArrayBuffer to a blob, and you're done
-    let bb = new Blob([ab]);
-    return bb;
-}
 class App extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +40,7 @@ class App extends Component {
             homePageIsLoading: true,
             blogDetails: null,
             richViewerState: null,
-            blogLoade: false,
+            blogLoaded: false,
             homePageLoaded: false,
             loadFooter: false,
             topic: 'all',
@@ -95,7 +79,11 @@ class App extends Component {
         this.setTopic = this.setTopic.bind(this)
         this.hideFixedMenu = this.hideFixedMenu.bind(this)
         this.showFixedMenu = this.showFixedMenu.bind(this)
+        this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
     };
+    handleUpdateBlogs(blogs){
+        this.props.actions.updateBlogs(blogs)
+    }
     hideFixedMenu = () => this.setState({ visible: false })
     showFixedMenu = () => this.setState({ visible: true })
     setTopic(topic) {
@@ -149,35 +137,28 @@ class App extends Component {
         })
             .then(function (response) {
                 if (!response.data) {
-                    window.history.push('/' + page + '/all')
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
                     return false
                 }
                 if (response.data.error) {
-                    window.history.push('/' + page + '/all')
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
-                    window.scrollTo(0, 0)
                     return false
                 }
                 if (response.data.body) {
                     this.setState({ blog: response.data, richViewerState: response.data.body });
                     this.getBlogDetails(id);
-                    window.scrollTo(0, 0)
                     return false
 
                 }
                 else {
-                    window.history.push('/' + page + '/all')
                     this.setState({ blog: null });
                     this.setState({ blogLoaded: true })
-                    window.scrollTo(0, 0)
                     return false
                 }
             }.bind(this))
             .catch(function (err) {
-                window.history.push('/' + page + '/all')
                 this.setState({ blog: null });
                 this.setState({ blogLoaded: true })
                 return err
@@ -203,52 +184,42 @@ class App extends Component {
         }
     }
     handleFilterChange(e) {
+        let query={}
+        let queryMthod = 'getAllPosts'
+        if(this.state.currentLocation!=='home'){
+            query.type=this.state.currentLocation
+        }
+        if(e.target.value !== ''){
+            query.filter = e.target.value
+            queryMthod='getFiltered'
+        }
         this.setState({ blogsAreLoading: true })
         e.preventDefault();
-        if (e.target.value === '') {
-            return axios.post(env.httpURL, {
-                "queryMethod": "getAllPosts",
-                "queryData": {}
+        axios.post(env.httpURL, {
+            "queryMethod": queryMthod,
+            "queryData": query
+        })
+            .then(response => {
+                this.props.actions.updateBlogs(response.data)
+                this.setState({ blogsAreLoading: false })
             })
-                .then(response => {
-                    this.setState({ blogs: response.data });
-                    this.setState({ blogsAreLoading: false })
-                })
-                .catch(exception => {
-                    this.setState({ blogsAreLoading: false })
-                });
-        }
-        else {
-            return axios.post(env.httpURL, {
-                "queryMethod": "getFiltered",
-                "queryData": {
-                    "filter": e.target.value,
-                }
-            })
-                .then(response => {
-                    this.setState({ blogs: response.data });
-                    this.setState({ blogsAreLoading: false })
-                })
-                .catch(exception => {
-                    this.setState({ blogs: [] });
-                    this.setState({ blogsAreLoading: false })
-                });
-        }
+            .catch(err => {
+                this.setState({ blogs: [] });
+                this.setState({ blogsAreLoading: false })
+            });
     }
     onReadMore(thisBlog) {
-        window.scrollTo(0, 0);
-        this.setState({ blogLoaded: false });
-        return axios.post(env.httpURL, {
+        this.setState({ blogLoaded: true });
+        axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
                 "id": thisBlog.id
             }
         })
             .then(response => {
-                let url = '/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-                this.props.history.push(url)
                 this.setState({ blog: response.data, blogDetails: thisBlog });
                 this.setState({ blogLoaded: true, blog: response.data });
+                window.scrollTo(0, 0);
             })
             .catch(function (err) {
                 this.setState({ blog: null, blogDetails: thisBlog });
@@ -268,16 +239,12 @@ class App extends Component {
                 if (response.data.error) {
                 }
                 else {
-                    let o = response.data
-                    this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString())
-                    this.setState({ blogDetails: response.data, isHome: false });
+                    this.setState({ blogDetails: response.data });
                     this.setState({ blogLoaded: true })
-                    window.scrollTo(0, 0);
                 }
             }
                 .bind(this))
             .catch(function (err) {
-                console.log(err)
                 this.setState({ blogLoaded: true })
                 return err
             }.bind(this));
@@ -294,7 +261,8 @@ class App extends Component {
                     return false
                 }
                 else {
-                    this.setState({ blogs: response.data, blogsLoaded: true, homePageLoaded: true });
+                    this.handleUpdateBlogs(response.data)
+                    this.setState({  blogsLoaded: true, homePageLoaded: true });
                 }
             }.bind(this))
             .catch(function (err) {
@@ -322,8 +290,8 @@ class App extends Component {
                     return false
                 }
                 if (response.data[0]) {
+                    this.handleUpdateBlogs(response.data)
                     this.setState({ blogsLoaded: true, homePageLoaded: true })
-                    this.setState({ blogs: response.data });
                     this.setState({ blogsAreLoading: false })
                 }
                 else {
@@ -362,7 +330,7 @@ class App extends Component {
                     return false
                 }
                 if (response.data[0]) {
-                    this.setState({ blogs: response.data });
+                    this.handleUpdateBlogs(response.data)
                     this.setState({ blogsLoaded: true, homePageLoaded: true })
                     this.setState({ blogsAreLoading: false })
                 }
@@ -403,17 +371,70 @@ class App extends Component {
     }
     resize = () => this.forceUpdate()
     componentWillReceiveProps() {
+        /*
+           This method is used to detect navigation/actions from the user then update the UI.
+           ie. Page navigation, Page crops etc
+        */
+        /*
+            Build variables from the window pathname
+        */
+        let url = window.location.pathname.split('/');
+        let id = Number(window.location.pathname.split('_')[window.location.pathname.split('_').length - 1]);
         let query = {}
         let page = window.location.pathname.split('/')[1];
         let topic = window.location.pathname.split('/')[2];
+
+        if(url.length<4){
+            this.setState({blog:null})
+        }
         if (topicsOBJ[topic]) {
             query.topics = topic
         }
-        if (pages[page] && pages[page].name !== 'Home') {
+        if (pages[page] && page!=='home') {
+            query.type = page
+        }
+        /*
+            Navigate to home from page.
+            User navigated to home but state current location is not home.
+            Set current location to home and update blogs
+        */
+        if(page===''&& this.state.currentLocation!=='home'){
+            this.navigateBlogs(query);
+            this.setState({ currentLocation: 'home' })
+        }
+        /*
+            Navigate to page from home
+            User navigated to page but state current location is home.
+            Set current location to page and update blogs
+        */
+        if(pages[page] && this.state.currentLocation==='home' && this.state.currentLocation!==page){
+            this.setState({ currentLocation: page })
+            this.navigateBlogs(query)
+        }
+        /*
+            Navigate to another page from page
+            User navigated to another page but state current location is page.
+            Set current location to another page and update blogs
+        */
+        if (page!=='' && pages[page] && this.state.currentLocation!=='home' && page!==this.state.currentLocation ) {
             query.type = page
             this.setState({ currentLocation: page })
+            if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
+                if(page!==this.state.currentLocation && page!==''){
+                    this.navigateBlogs(query)
+                }
+            }
         }
-        this.navigateBlogs(query)
+        if(page===this.state.currentLocation && topic && topic!==this.state.topic){
+            this.setState({ topic: topic })
+            this.navigateBlogs(query)
+        }
+        if(id.toString()!=='NaN' && !this.state.blog){
+            this.setBlogHere(id,page)
+        }
+        if(id.toString()!=='NaN' && this.state.blog && this.state.blog.id!==id){
+            this.setBlogHere(id,page)
+        }
     }
     componentDidMount() {
         this.setState({ blogsLoaded: false })
@@ -455,7 +476,7 @@ class App extends Component {
                 }
                 this.setState({ user: user, loggedin: true })
                 let urlCreator = window.URL || window.webkitURL;
-                let imageUrl = urlCreator.createObjectURL(dataURItoBlob(JSON.parse(user.avatar).img));
+                let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
                 this.setState({ profilePic: imageUrl })
                 this.setState({ homePageLoaded: true })
             }
@@ -478,6 +499,7 @@ class App extends Component {
         window.removeEventListener('resize', this.resize)
     }
     handleHomeClick = () => {
+        this.navigateBlogs({})
         this.setState({ blogsAreLoading: true })
         window.scrollTo(0, 0);
         this.setState({ currentLocation: 'home', blog: null })
@@ -513,7 +535,7 @@ class App extends Component {
         localStorage.setItem('user', JSON.stringify(user))
         this.setState({ loggedin: true, currentLocation: 'home' })
         let urlCreator = window.URL || window.webkitURL;
-        let imageUrl = urlCreator.createObjectURL(dataURItoBlob(JSON.parse(user.avatar).img));
+        let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
         this.setState({ profilePic: imageUrl })
     }
     handleLoginButton = (e) => {
@@ -542,24 +564,13 @@ class App extends Component {
         this.setState({ editingMode: false, createNew: false })
     }
     render() {
-        const NonFixedMenu = () => (
-            <div className='cleanButton alignCenter marginTop2'>
-                <Button color={this.state.colors[0]}>Development</Button>
-                <Button color={this.state.colors[4]}>Technology</Button>
-                <Button color={this.state.colors[3]}>Reviews</Button>
-                <Button color={this.state.colors[2]}>Tutorials</Button>
-                <Button color={this.state.colors[5]}>Trending</Button>
-                <Button color={this.state.colors[1]}>Latest</Button>
-                <Button color={this.state.colors[0]}>Futurist</Button>
-            </div>
-        )
         return (
             <div>
                 <Helmet>
                     <meta name="theme-color" content="#4285f4" />
                     <meta name="msapplication-navbutton-color" content="#4285f4" />
                     <meta name="apple-mobile-web-app-status-bar-style" content="#4285f4" />
-                    <title>{'ZemuldO-' + toTitleCase(this.state.currentLocation)}</title>
+                    <title>{'ZemuldO-' + util.toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <div>
@@ -607,8 +618,13 @@ class App extends Component {
                         time={this.state.time}
                     />
                 </Visibility>
-                {!this.state.visible && this.state.currentLocation !== 'login' ? <NonFixedMenu /> : null}
-                <div style={{ marginTop: '3em' }}>
+
+                <div style={{ marginTop: '1em' }}>
+                    <div className='alignCenter'>
+                        <h1>
+                            <Link to ='/'>ZemuldO.COM </Link>
+                        </h1>
+                    </div>
                     {
                         (this.state.currentLocation === 'login' || (this.state.currentLocation === 'profile')) ?
                             <Login
@@ -630,7 +646,7 @@ class App extends Component {
                                 history={this.props.history}
                                 handleFilterChange={this.handleFilterChange}
                                 color={this.state.colors[1]}
-                                blogs={this.state.blogs}
+                                blogs={this.props.blogs}
                                 blog={this.state.blog}
                                 blogDetails={this.state.blogDetails}
                                 blogsLoaded={this.state.blogsLoaded}
@@ -640,6 +656,7 @@ class App extends Component {
                                 blogsAreLoading={this.blogsAreLoading}
                                 onReadMore={this.onReadMore}
                                 colors={this.state.colors}
+                                currentLocation={this.state.currentLocation}
                                 current={this.state.currentLocation}
                                 setTopicPosts={this.setTopicPosts}
                                 setTopicNextPosts={this.setTopicNextPosts}
@@ -652,13 +669,15 @@ class App extends Component {
                 </div>
                 {
                     this.state.loadFooter && this.state.currentLocation !== 'login' ?
-                        <Footer
-                            colors={this.state.colors}
-                            topic={this.state.topic}
-                            handleMenuItemClickFooter={this.handleMenuItemClickFooter}
-                            handleHomeClick={this.handleHomeClick}
-                            color={this.state.colors[0]} corrent={this.state.current}
-                        /> :
+                        <div className={!this.state.blogsLoaded && !this.state.blogsLoaded? 'footer':''}>
+                            <Footer
+                                colors={this.state.colors}
+                                topic={this.state.topic}
+                                handleMenuItemClickFooter={this.handleMenuItemClickFooter}
+                                handleHomeClick={this.handleHomeClick}
+                                color={this.state.colors[0]} corrent={this.state.current}
+                            />
+                        </div> :
                         null
                 }
                 <ReviewPortal />
@@ -666,4 +685,16 @@ class App extends Component {
         )
     }
 }
-export default App
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        actions: bindActionCreators(BlogsActions, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
