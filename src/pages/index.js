@@ -622,7 +622,7 @@ class App extends Component {
                 <div style={{ marginTop: '1em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>ZemuldO.COM {this.props.blogs.length}</Link>
+                            <Link to ='/'>ZemuldO.COM </Link>
                         </h1>
                     </div>
                     {
