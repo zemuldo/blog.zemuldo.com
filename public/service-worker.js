@@ -10,12 +10,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-const buildID='2017-12-07.';
+const buildID='2017-12-08.';
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'sw-precache-https://zemuldo.com-'+new Date().toDateString();
-const RUNTIME = 'sw-https://zemuldo.com-runtime'-+new Date().toDateString();
+const PRECACHE = 'sw-precache-https://zemuldo.com-'+buildID;
+const RUNTIME = 'sw-https://zemuldo.com-runtime-'+buildID;
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
