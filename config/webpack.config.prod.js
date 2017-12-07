@@ -1,5 +1,5 @@
 'use strict';
-
+const buildID='2017-12-7.';
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
@@ -41,7 +41,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].zemuldo.css';
+const cssFilename = 'static/css/'+buildID+'[name].zemuldo.css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -69,8 +69,8 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/[name].zemuldo.js',
-    chunkFilename: 'static/js/[name].zemuldo.chunk.js',
+    filename: 'static/js/'+buildID+'[name].zemuldo.js',
+    chunkFilename: 'static/js/'+buildID+'[name].zemuldo.chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location
@@ -151,7 +151,7 @@ module.exports = {
         ],
         loader: require.resolve('file-loader'),
         options: {
-          name: '/static/media/[name].zemuldo.[ext]',
+          name: '/static/media/'+buildID+'[name].zemuldo.[ext]',
         },
       },
       // "url" loader works just like "file" loader but it also embeds

@@ -10,7 +10,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-
+const buildID='2017-12-7.';
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
@@ -22,14 +22,14 @@ const PRECACHE_URLS = [
     "index.html",
     'https://zemuldo.com/img/icons/NN.png',
     'https://zemuldo.com/manifest.json',
-    "static/css/main.zemuldo.css",
-    "static/js/main.zemuldo.js",
-    "static/media/flags.zemuldo.png",
-    "static/media/icons.zemuldo.eot",
-    "static/media/icons.zemuldo.svg",
-    "static/media/icons.zemuldo.ttf",
-    "static/media/icons.zemuldo.woff",
-    "static/media/icons.zemuldo.woff2",
+    "static/css/"+buildID+"main.zemuldo.css",
+    "static/js/"+buildID+"main.zemuldo.js",
+    "static/media/"+buildID+"flags.zemuldo.png",
+    "static/media/"+buildID+"icons.zemuldo.eot",
+    "static/media/"+buildID+"icons.zemuldo.svg",
+    "static/media/"+buildID+"icons.zemuldo.ttf",
+    "static/media/"+buildID+"icons.zemuldo.woff",
+    "static/media/"+buildID+"icons.zemuldo.woff2",
 ];
 
 // The install handler takes care of precaching the resources we always need.
