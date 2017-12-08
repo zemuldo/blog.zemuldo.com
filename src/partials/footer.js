@@ -72,7 +72,13 @@ class Footer extends Component {
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/tech"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
+                                            <Link to={"/dev/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('dev')}>
+                                                <Icon color='blue' name='code' />
+                                                <span style={{color:this.props.colors[3]}} color={this.props.color}>Development</span>
+                                            </Link>
+                                        </List.Item>
+                                        <List.Item>
+                                            <Link to={"/tech/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
                                                 <Icon color='blue' name='server' />
                                                 <span style={{color:this.props.colors[0]}} color={this.props.color}>Tech Articles</span>
                                             </Link>
