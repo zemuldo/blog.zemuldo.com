@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Visibility } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
 import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
@@ -16,7 +15,6 @@ import config from '../environments/conf'
 import { pages } from '../environments/conf'
 import { topicsOBJ } from '../environments/conf'
 import MainMenu from "../menu/main";
-import FixedMenu from "../menu/fixedMenu";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class App extends Component {
@@ -44,7 +42,6 @@ class App extends Component {
             homePageLoaded: false,
             loadFooter: false,
             topic: 'all',
-            visible: false,
             time: new Date().toDateString()
         };
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
@@ -77,15 +74,11 @@ class App extends Component {
         this.deletedBlog = this.deletedBlog.bind(this)
         this.handleMenuItemClickFooter = this.handleMenuItemClickFooter.bind(this)
         this.setTopic = this.setTopic.bind(this)
-        this.hideFixedMenu = this.hideFixedMenu.bind(this)
-        this.showFixedMenu = this.showFixedMenu.bind(this)
         this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
     };
     handleUpdateBlogs(blogs){
         this.props.actions.updateBlogs(blogs)
     }
-    hideFixedMenu = () => this.setState({ visible: false })
-    showFixedMenu = () => this.setState({ visible: true })
     setTopic(topic) {
         this.setState({ topic: topic })
     }
@@ -573,51 +566,23 @@ class App extends Component {
                     <title>{'ZemuldO-' + util.toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                <div>
-                    {this.state.visible && this.state.currentLocation !== 'login' ?
-                        <FixedMenu
-                            currentLocation={this.state.currentLocation}
-                            showFixedMenu={this.showFixedMenu}
-                            hideFixedMe={this.hideFixedMenu}
-                            visible={this.state.visible}
-                            colors={this.state.colors}
-                            handleLoginButton={this.handleLoginButton}
-                            handleLogoutinButton={this.handleLogoutinButton}
-                            _handleSwitchToProfile={this._handleSwitchToProfile}
-                            profilePic={this.state.profilePic}
-                            _handleCreateNew={this._handleCreateNew}
-                            loggedin={this.state.loggedin}
-                            user={this.state.user}
-                            handleFilterChange={this.handleFilterChange}
-                            handleMenuItemClick={this.handleMenuItemClick}
-                            handleHomeClick={this.handleHomeClick}
-                            time={this.state.time}
-                        /> : null}
-                </div>
-                <Visibility
-                    onBottomPassed={this.showFixedMenu}
-                    onBottomVisible={this.hideFixedMenu}
-                    once={false}
-                >
-                    <MainMenu
-                        currentLocation={this.state.currentLocation}
-                        showFixedMenu={this.showFixedMenu}
-                        hideFixedMe={this.hideFixedMenu}
-                        visible={this.state.visible}
-                        colors={this.state.colors}
-                        handleLoginButton={this.handleLoginButton}
-                        handleLogoutinButton={this.handleLogoutinButton}
-                        _handleSwitchToProfile={this._handleSwitchToProfile}
-                        profilePic={this.state.profilePic}
-                        _handleCreateNew={this._handleCreateNew}
-                        loggedin={this.state.loggedin}
-                        user={this.state.user}
-                        handleFilterChange={this.handleFilterChange}
-                        handleMenuItemClick={this.handleMenuItemClick}
-                        handleHomeClick={this.handleHomeClick}
-                        time={this.state.time}
-                    />
-                </Visibility>
+                <MainMenu
+                    currentLocation={this.state.currentLocation}
+                    hideFixedMe={this.hideFixedMenu}
+                    visible={this.state.visible}
+                    colors={this.state.colors}
+                    handleLoginButton={this.handleLoginButton}
+                    handleLogoutinButton={this.handleLogoutinButton}
+                    _handleSwitchToProfile={this._handleSwitchToProfile}
+                    profilePic={this.state.profilePic}
+                    _handleCreateNew={this._handleCreateNew}
+                    loggedin={this.state.loggedin}
+                    user={this.state.user}
+                    handleFilterChange={this.handleFilterChange}
+                    handleMenuItemClick={this.handleMenuItemClick}
+                    handleHomeClick={this.handleHomeClick}
+                    time={this.state.time}
+                />
 
                 <div style={{ marginTop: '1em' }}>
                     <div className='alignCenter'>

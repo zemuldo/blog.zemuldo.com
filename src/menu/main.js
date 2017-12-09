@@ -3,7 +3,7 @@ import 'semantic-ui-css/semantic.min.css';
 import {Menu,Icon, Dropdown,Image,Input} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
-class MainMenu extends Component {
+class FixedMenu extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -16,6 +16,7 @@ class MainMenu extends Component {
                 <Menu
                     style={{backgroundColor:'black'}}
                     stackable={true}
+                    fixed='top'
                     size='tiny'
                     secondary={true}
                     color={this.props.colors[0]}
@@ -141,4 +142,4 @@ class MainMenu extends Component {
         )
     }
 }
-export default  MainMenu
+export default  FixedMenu
