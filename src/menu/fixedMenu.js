@@ -40,19 +40,19 @@ class FixedMenu extends Component {
                             </Dropdown.Item>
                             <Dropdown.Item
                                 as='span'
-                                name='dev'
-                                active={this.props.currentLocation === 'dev'}
-                                onClick={this.props.handleMenuItemClick}>
-                                <Icon color={this.props.colors[0]} name='code' />
-                                <Link to={"/dev/"+urlDetails}>Dev</Link>
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                as='span'
                                 name='business'
                                 active={this.props.currentLocation === 'business'}
                                 onClick={this.props.handleMenuItemClick}>
                                 <Icon color={this.props.colors[0]} name='creative commons' />
                                 <Link to={"/business/"+urlDetails}>Business</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='dev'
+                                active={this.props.currentLocation === 'dev'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='code' />
+                                <Link to={"/dev/"+urlDetails}>Dev</Link>
                             </Dropdown.Item>
                             <Dropdown.Item
                                 as='span'
@@ -67,7 +67,7 @@ class FixedMenu extends Component {
                                 name='reviews'
                                 active={this.props.currentLocation === 'reviews'}
                                 onClick={this.props.handleMenuItemClick}>
-                                <Icon color={this.props.colors[0]} name='circle notched' />
+                                <Icon color={this.props.colors[0]} name='star' />
                                 <Link to={"/reviews/"+urlDetails}>Reviews</Link>
                             </Dropdown.Item>
                             <Dropdown.Item
@@ -75,7 +75,7 @@ class FixedMenu extends Component {
                                 name='tutorials'
                                 active={this.props.currentLocation === 'tutorials'}
                                 onClick={this.props.handleMenuItemClick}>
-                                <Icon color={this.props.colors[0]} name='circle notched' />
+                                <Icon color={this.props.colors[0]} name='code' />
                                 <Link to={"/tutorials/"+urlDetails}>Tutorials</Link>
                             </Dropdown.Item>
                             <Dropdown.Item
@@ -83,7 +83,7 @@ class FixedMenu extends Component {
                                 name='about'
                                 active={this.props.currentLocation === 'about'}
                                 onClick={this.props.handleMenuItemClick}>
-                                <Icon color={this.props.colors[0]} name='circle notched' />
+                                <Icon color={this.props.colors[0]} name='info' />
                                 <Link to={"/about"}>About</Link>
                             </Dropdown.Item>
                         </Dropdown.Menu>
