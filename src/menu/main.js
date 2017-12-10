@@ -15,7 +15,6 @@ class FixedMenu extends Component {
             <div >
                 <Menu
                     style={{backgroundColor:'black'}}
-                    stackable={true}
                     fixed='top'
                     size='tiny'
                     secondary={true}

@@ -574,7 +574,7 @@ class App extends Component {
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 {
-                    window.innerWidth>600?
+                    window.innerWidth>800?
                         <MainMenu
                             currentLocation={this.state.currentLocation}
                             hideFixedMe={this.hideFixedMenu}
