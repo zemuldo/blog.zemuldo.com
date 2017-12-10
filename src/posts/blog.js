@@ -340,7 +340,7 @@ export default class WelcomePage extends React.Component {
                                     {this.props.blogDetails.author} {' '}
                                 </span>
                                 {
-                                    this.props.user.userName === this.props.blogDetails.userName?
+                                    this.props.user && this.props.user.userName === this.props.blogDetails.userName?
                                         <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
