@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button,Modal,Dropdown, Header,Icon, Image} from 'semantic-ui-react'
+import {Button,Modal, Header,Icon, Image,Dropdown} from 'semantic-ui-react'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'
@@ -95,8 +95,6 @@ export default class WelcomePage extends React.Component {
         if(this.props.blogDetails){
             this.getAauthorAvatar()
             this.setBlogCounts()
-            let thisBlog = this.props.blogDetails
-            let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         }
         this.setState({youLike:true})
         if(localStorage.getItem('user')){
@@ -342,18 +340,17 @@ export default class WelcomePage extends React.Component {
                                     {this.props.blogDetails.author} {' '}
                                 </span>
                                 {
-                                    // this.props.user.userName === this.props.blogDetails.userName?
-                                    //     <div>
-                                    //         <Dropdown text='Manage' pointing className='link item info'>
-                                    //             <Dropdown.Menu>
-                                    //                 <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
-                                    //                 <Dropdown.Item>Edit</Dropdown.Item>
-                                    //                 <Dropdown.Item>Hide</Dropdown.Item>
-                                    //             </Dropdown.Menu>
-                                    //         </Dropdown>
-                                    //     </div>:
-                                    //     <span>
-                                    //     </span>
+                                    this.props.user.userName === this.props.blogDetails.userName?
+                                        <div>
+                                            <Dropdown text='Manage' pointing className='link item info'>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item color='red' onClick={()=>this.openDelete()}>Delete</Dropdown.Item>
+                                                    <Dropdown.Item>Edit</Dropdown.Item>
+                                                    <Dropdown.Item>Hide</Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </div>:
+                                        null
                                 }
                             </div>
                             <hr color="green"/>
