@@ -537,6 +537,7 @@ class App extends Component {
         this.setState({ loggedin: true, currentLocation: 'home' })
         let urlCreator = window.URL || window.webkitURL;
         let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
+        this.props.history.push('/');
         this.setState({ profilePic: imageUrl })
     }
     handleLoginButton = (e) => {
