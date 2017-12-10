@@ -584,10 +584,10 @@ class App extends Component {
                     time={this.state.time}
                 />
 
-                <div style={{ marginTop: '1em' }}>
+                <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>ZemuldO.COM </Link>
+                            <Link to ='/'>Zemuldo Articles </Link>
                         </h1>
                     </div>
                     {
