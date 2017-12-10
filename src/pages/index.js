@@ -15,13 +15,13 @@ import config from '../environments/conf'
 import { pages } from '../environments/conf'
 import { topicsOBJ } from '../environments/conf'
 import MainMenu from "../menu/main";
+import FixedMenu from "../menu/fixedMenu";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            current: 'ZemuldO-Home',
             loggedin: false,
             user: null,
             iKnowYou: false,
@@ -66,7 +66,6 @@ class App extends Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
-        this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
@@ -83,35 +82,32 @@ class App extends Component {
         this.setState({ topic: topic })
     }
     deletedBlog() {
-        this.setState({ blog: null })
-        this.setHomeBlogs()
+        this.setState({ blog: null });
+        this.setHomeBlogs();
     }
     homePageIsLoading(value) {
-        this.setState({ homePageLoaded: !value })
+        this.setState({ homePageLoaded: !value });
     }
     blogsAreLoading(state) {
-        this.setState({ blogsLoaded: !state })
+        this.setState({ blogsLoaded: !state });
     }
     blogIsLoading(state) {
-        this.setState({ blogLoaded: !state })
-    }
-    _handleChangeBodySize(size) {
-        this.setState({ bodySize: size })
+        this.setState({ blogLoaded: !state });
     }
     setTopicPosts(topicBlogs, topic) {
         if (topicBlogs[0]) {
             this.setState({ blogs: topicBlogs, topic: topic });
-            this.blogsAreLoading(false)
+            this.blogsAreLoading(false);
         }
         else {
             this.setState({ blogs: [], topic: topic });
-            this.blogsAreLoading(false)
+            this.blogsAreLoading(false);
         }
     }
     setTopicNextPosts(topicBlogs) {
         if (topicBlogs[0]) {
             this.setState({ blogs: topicBlogs });
-            this.blogsAreLoading(false)
+            this.blogsAreLoading(false);
         }
         else {
             this.setState({ blogs: [] });
@@ -120,7 +116,7 @@ class App extends Component {
     }
     setBlogHere(id, page) {
         if (!pages[page]) {
-            window.location = '/'
+            window.location = '/';
         }
         return axios.post(env.httpURL, {
             "queryMethod": "getPost",
@@ -131,12 +127,12 @@ class App extends Component {
             .then(function (response) {
                 if (!response.data) {
                     this.setState({ blog: null });
-                    this.setState({ blogLoaded: true })
+                    this.setState({ blogLoaded: true });
                     return false
                 }
                 if (response.data.error) {
                     this.setState({ blog: null });
-                    this.setState({ blogLoaded: true })
+                    this.setState({ blogLoaded: true });
                     return false
                 }
                 if (response.data.body) {
@@ -147,13 +143,13 @@ class App extends Component {
                 }
                 else {
                     this.setState({ blog: null });
-                    this.setState({ blogLoaded: true })
+                    this.setState({ blogLoaded: true });
                     return false
                 }
             }.bind(this))
             .catch(function (err) {
                 this.setState({ blog: null });
-                this.setState({ blogLoaded: true })
+                this.setState({ blogLoaded: true });
                 return err
             }.bind(this));
     }
@@ -178,22 +174,22 @@ class App extends Component {
     }
     handleFilterChange(e) {
         let query={}
-        let queryMthod = 'getAllPosts'
+        let queryMthod = 'getAllPosts';
         if(this.state.currentLocation!=='home'){
             query.type=this.state.currentLocation
         }
         if(e.target.value !== ''){
-            query.filter = e.target.value
+            query.filter = e.target.value;
             queryMthod='getFiltered'
         }
-        this.setState({ blogsAreLoading: true })
+        this.setState({ blogsAreLoading: true });
         e.preventDefault();
         axios.post(env.httpURL, {
             "queryMethod": queryMthod,
             "queryData": query
         })
             .then(response => {
-                this.props.actions.updateBlogs(response.data)
+                this.props.actions.updateBlogs(response.data);
                 this.setState({ blogsAreLoading: false })
             })
             .catch(err => {
@@ -238,12 +234,12 @@ class App extends Component {
             }
                 .bind(this))
             .catch(function (err) {
-                this.setState({ blogLoaded: true })
+                this.setState({ blogLoaded: true });
                 return err
             }.bind(this));
     }
     navigateBlogs(query) {
-        this.setState({ blogsLoaded: false })
+        this.setState({ blogsLoaded: false });
         return axios.post(env.httpURL, {
             "queryMethod": "getPosts",
             "queryData": query
@@ -272,78 +268,78 @@ class App extends Component {
             .then(function (response) {
                 if (!response.data) {
                     this.setState({ blogs: [], blog: null, blogDetails: null });
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                     return false
                 }
                 if (!response.data[0]) {
                     this.setState({ blogs: [], blog: null, blogDetails: null });
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                     return false
                 }
                 if (response.data[0]) {
                     this.handleUpdateBlogs(response.data)
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                 }
                 else {
                     this.setState({ blogs: [], blog: null, blogDetails: null });
-                    this.setState({ homePageLoaded: true })
+                    this.setState({ homePageLoaded: true });
                     this.setState({ blogs: [] });
-                    this.setState({ blogsLoaded: true })
+                    this.setState({ blogsLoaded: true });
                     this.setState({ blogsAreLoading: false })
                 }
             }.bind(this))
             .catch(function (err) {
                 this.setState({ blogs: [], blog: null, blogDetails: null });
-                this.setState({ homePageLoaded: true })
+                this.setState({ homePageLoaded: true });
                 this.setState({ blogs: [] });
                 this.setState({ blogsLoaded: true })
                 this.setState({ blogsAreLoading: false })
             }.bind(this))
     }
     setHomeBlogs() {
-        this.setState({ blogsAreLoading: true })
+        this.setState({ blogsAreLoading: true });
         return axios.post(env.httpURL, {
             "queryMethod": "getAllPosts",
             "queryData": {
             }
         })
             .then(function (response) {
-                this.setState({ loadFooter: true })
+                this.setState({ loadFooter: true });
                 if (!response.data) {
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                     return false
                 }
                 if (!response.data[0]) {
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                     return false
                 }
                 if (response.data[0]) {
                     this.handleUpdateBlogs(response.data)
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                 }
                 else {
                     this.setState({ blogs: [] });
-                    this.setState({ blogsLoaded: true, homePageLoaded: true })
+                    this.setState({ blogsLoaded: true, homePageLoaded: true });
                     this.setState({ blogsAreLoading: false })
                 }
             }.bind(this))
             .catch(function (err) {
                 this.setState({ loadFooter: true })
                 this.setState({ blogs: [] });
-                this.setState({ blogsLoaded: true, homePageLoaded: true })
+                this.setState({ blogsLoaded: true, homePageLoaded: true });
                 this.setState({ blogsAreLoading: false })
                 this.setState({ loadFooter: true })
             }.bind(this))
     }
     handleNavigation(location) {
         window.scrollTo(0, 0);
-        this.setState({ currentLocation: location })
+        this.setState({ currentLocation: location });
         if (location === 'home') {
             this.props.history.push('/')
         } else {
@@ -362,7 +358,7 @@ class App extends Component {
         }
         this.setState({ colors: array });
     }
-    resize = () => this.forceUpdate()
+    resize = () => this.forceUpdate();
     componentWillReceiveProps() {
         /*
            This method is used to detect navigation/actions from the user then update the UI.
@@ -430,13 +426,24 @@ class App extends Component {
         }
     }
     componentDidMount() {
-        this.setState({ blogsLoaded: false })
+        /*
+            Initialize state variables for loading.
+        */
+        this.setState({ blogsLoaded: false });
+
+        /*
+            Take state variable from url. currrent location, topic and blog
+            And update blogs
+        */
         let url = window.location.pathname.split('/').join('');
         let page = window.location.pathname.split('/')[1];
+        let topic = window.location.pathname.split('/')[2];
+        /*
+            Redirect to home when unknown page is on url
+        */
         if (!pages[page]) {
             this.props.history.push('/')
         }
-        let topic = window.location.pathname.split('/')[2];
         let query = {}
         if (topicsOBJ[topic]) {
             query.topics = topic
@@ -445,17 +452,21 @@ class App extends Component {
             query.type = page;
             this.setState({ currentLocation: page })
         }
+        /*
+             update blogs and blog
+        */
         this.navigateBlogs(query)
         this.setCurrentBlog(url, page);
         this.forceUpdate();
         if (window.innerWidth < 503) {
-            this._handleChangeBodySize(16);
         }
         if (window.innerWidth > 503) {
-            this._handleChangeBodySize(16);
         }
 
         window.addEventListener('resize', this.resize);
+        /*
+            Attempt Auto login
+        */
         let known = localStorage.getItem('user');
         if (known) {
             let user = JSON.parse(known)
@@ -477,11 +488,8 @@ class App extends Component {
                 localStorage.removeItem('user');
             }
         }
-        let location = window.location.pathname.slice(1, window.location.pathname.length)
-        if (pages[location] && location === 'login') {
-        }
-        else if (pages[location] && location !== 'login') {
-            this.setState({ currentLocation: location })
+        if (pages[page] && page !== 'login') {
+            this.setState({ currentLocation: page })
         }
         this.shuffle()
         this.forceUpdate()
@@ -547,7 +555,6 @@ class App extends Component {
         this.setState({ createNew: true, currentLocation: 'profile' })
     }
     _handleSwitchToProfile = () => {
-        this.props.history.push('/' + this.state.user.userName + '/' + this.state.user.id + '_session_' + new Date().toDateString())
         this.setState({ currentLocation: 'profile', createNew: false })
     }
     _goToEditor() {
@@ -566,23 +573,43 @@ class App extends Component {
                     <title>{'ZemuldO-' + util.toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                <MainMenu
-                    currentLocation={this.state.currentLocation}
-                    hideFixedMe={this.hideFixedMenu}
-                    visible={this.state.visible}
-                    colors={this.state.colors}
-                    handleLoginButton={this.handleLoginButton}
-                    handleLogoutinButton={this.handleLogoutinButton}
-                    _handleSwitchToProfile={this._handleSwitchToProfile}
-                    profilePic={this.state.profilePic}
-                    _handleCreateNew={this._handleCreateNew}
-                    loggedin={this.state.loggedin}
-                    user={this.state.user}
-                    handleFilterChange={this.handleFilterChange}
-                    handleMenuItemClick={this.handleMenuItemClick}
-                    handleHomeClick={this.handleHomeClick}
-                    time={this.state.time}
-                />
+                {
+                    window.innerWidth>600?
+                        <MainMenu
+                            currentLocation={this.state.currentLocation}
+                            hideFixedMe={this.hideFixedMenu}
+                            visible={this.state.visible}
+                            colors={this.state.colors}
+                            handleLoginButton={this.handleLoginButton}
+                            handleLogoutinButton={this.handleLogoutinButton}
+                            _handleSwitchToProfile={this._handleSwitchToProfile}
+                            profilePic={this.state.profilePic}
+                            _handleCreateNew={this._handleCreateNew}
+                            loggedin={this.state.loggedin}
+                            user={this.state.user}
+                            handleFilterChange={this.handleFilterChange}
+                            handleMenuItemClick={this.handleMenuItemClick}
+                            handleHomeClick={this.handleHomeClick}
+                            time={this.state.time}
+                        />:
+                        <FixedMenu
+                            currentLocation={this.state.currentLocation}
+                            hideFixedMe={this.hideFixedMenu}
+                            visible={this.state.visible}
+                            colors={this.state.colors}
+                            handleLoginButton={this.handleLoginButton}
+                            handleLogoutinButton={this.handleLogoutinButton}
+                            _handleSwitchToProfile={this._handleSwitchToProfile}
+                            profilePic={this.state.profilePic}
+                            _handleCreateNew={this._handleCreateNew}
+                            loggedin={this.state.loggedin}
+                            user={this.state.user}
+                            handleFilterChange={this.handleFilterChange}
+                            handleMenuItemClick={this.handleMenuItemClick}
+                            handleHomeClick={this.handleHomeClick}
+                            time={this.state.time}
+                        />
+                }
 
                 <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>

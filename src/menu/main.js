@@ -110,7 +110,7 @@ class FixedMenu extends Component {
                                         <Dropdown.Menu>
                                             <Dropdown.Item as='span' onClick={this.props._handleSwitchToProfile}>
                                                 <Icon color={this.props.colors[0]} name='user circle' />
-                                                <Link to={'/'+this.props.user.userName+'/session-'+this.props.time} color={this.props.colors[1]} >Your Profile</Link>
+                                                <Link to={'/'+this.props.user.userName+'/profile-'+this.props.time.split(' ').join('-')} color={this.props.colors[1]} >Your Profile</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.colors[0]} name='users' />
