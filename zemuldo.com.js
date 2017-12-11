@@ -59,8 +59,8 @@ app.use(helmet({
     noCache:true
 }))
 
-app.get('/service-worker.js', function(req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'service-worker.js'));
+app.get('/sw.js', function(req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'sw.js'));
 });
 app.get('/manifest.json', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', '/manifest.json'));
