@@ -123,7 +123,7 @@ class EditorsForm extends Component {
                                         <Dropdown style={{margin:'0em 0em 1em 0em',color:'green'}} onChange={this.handleTopicChange} multiple search selection closeOnChange options={topics} placeholder='Select topics' />
                                     </Form.Field>
                                 </Form.Group >
-                                <Form.TextArea onChange={this.handleAboutChange} label='About your blog' placeholder='Small details about your article...' />
+                                <Form.TextArea maxLength="140" onChange={this.handleAboutChange} label='About your blog' placeholder='Small details about your article...upto 140 Characters' />
                                 <Form.Checkbox onChange = {this.handleUTAChange} label='I agree to the Community Terms and Conditions' />
                                 <Form.Button disabled={this.state.topics.length<1 || this.state.about.length<139 || !this.state.category || !this.state.termsAccept} type="button" onClick={this.onFinishClick}  color='green' size='large'>Submit</Form.Button>
                                 <Form.Button type="button" onClick={this._handleGoBackToPrifile}  color='green' size='large'>Exit</Form.Button>
