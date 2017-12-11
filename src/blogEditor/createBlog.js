@@ -295,7 +295,6 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
-        console.log("----++++++saving state")
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
@@ -304,7 +303,6 @@ class RichEditorExample extends React.Component {
     }
     focus = () => this.refs.editor.focus();
     _handleKeyCommand(command, editorState) {
-        console.log('key presed'+command)
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             this.onChange(newState);
@@ -313,12 +311,10 @@ class RichEditorExample extends React.Component {
         return false;
     }
     _onTab(e) {
-        console.log('tab presed'+e)
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
     _toggleBlockType(blockType) {
-        console.log('toglle presed'+blockType)
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -381,7 +377,6 @@ class RichEditorExample extends React.Component {
 
     };
     saveContent = debounce((content) => {
-        console.log("localstoring....")
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
     componentDidMount() {
@@ -569,18 +564,20 @@ class RichEditorExample extends React.Component {
                         </Button.Group>
                     </Modal.Actions>
                 </Modal>
-                <Editor
-                    blockRendererFn={mediaBlockRenderer}
-                    blockStyleFn={getBlockStyle}
-                    customStyleMap={styleMap}
-                    editorState={editorState}
-                    handleKeyCommand={this.handleKeyCommand}
-                    onChange={this.onChange}
-                    onTab={this.onTab}
-                    placeholder="Start putting it down..."
-                    ref="editor"
-                    spellCheck={true}
-                />
+                <div className={className}>
+                    <Editor
+                        blockRendererFn={mediaBlockRenderer}
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        handleKeyCommand={this.handleKeyCommand}
+                        onChange={this.onChange}
+                        onTab={this.onTab}
+                        placeholder="Start putting it down..."
+                        ref="editor"
+                        spellCheck={true}
+                    />
+                </div>
             </div>
         );
     }

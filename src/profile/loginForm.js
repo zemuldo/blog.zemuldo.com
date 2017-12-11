@@ -51,7 +51,6 @@ class LoginForm extends React.Component {
             userBlogs:null
         };
         this.componentDidMount=this.componentDidMount.bind(this)
-        this.componentWillUnmount=this.componentWillUnmount.bind(this)
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleUnameChange = this.handleUnameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -176,6 +175,7 @@ class LoginForm extends React.Component {
                     this.setState({success:true,hideMessage:false,registering:false,errorDetails:{field:'Success',message:"Success"}})
                     setTimeout(function () {
                         this.setState({signUp:false,success:false,hideMessage:true})
+                        this.props.history.push('/login')
                     }.bind(this),2000)
                 }
                 else {
@@ -228,14 +228,21 @@ class LoginForm extends React.Component {
     closeCreateAvatar=()=>{
         this.setState({ creatAvatarOpen: false })
     }
-    async componentDidMount() {
+    componentDidMount() {
+        let page = window.location.pathname.split('/')[1];
+        if(page==='signup'){
+            this.setState({signUp:true})
+        }
+        if(page==='login'){
+            this.setState({signUp:false})
+        }
         this.setState({hideMessage:true})
         if(this.state.user){
             let known = localStorage.getItem('user')
             if(known){
                 let user = JSON.parse(known)
                 if(user.firstName && user.lastName && user.userName){
-                    let valid = await this.validateUser()
+                    let valid = this.validateUser()
                     if(valid!==true){
                         localStorage.removeItem('user')
                         this.setState({loggedin:false})
@@ -250,7 +257,14 @@ class LoginForm extends React.Component {
             }
         }
     }
-    componentWillUnmount() {
+    componentWillReceiveProps() {
+        let page = window.location.pathname.split('/')[1];
+        if(page==='signup'){
+            this.setState({signUp:true})
+        }
+        if(page==='login'){
+            this.setState({signUp:false})
+        }
     }
     onLoginClick= () => {
         this.setState({logingin:true})

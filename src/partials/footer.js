@@ -54,7 +54,7 @@ class Footer extends Component {
                                 </Grid.Column>
                                 <Grid.Column  width={3}>
                                     <Header color='green' as='h4' content='Quote of the day' />
-                                    <p>Every complex System no matter how Complex is a combination of many smaller and simpler Systems and Units that operate together Synchronously.</p>
+                                    <p>Every complex System no matter how Complex is a combination of many smaller and simpler Systems and Units that operate together.</p>
                                 </Grid.Column>
                                 <Grid.Column width={3}>
                                     <Header color='green' inverted as='h4' content='Navigation' />
@@ -174,7 +174,7 @@ class Footer extends Component {
                                 >
                                     <Header icon='law' content='Terms and Conditions' />
                                     <Modal.Content>
-                                        <h3>This website uses cookies to ensure the best user experience.</h3>
+                                        <h3>This application uses cookies to ensure the best user experience.</h3>
                                         <p>Cookies help you have better experience. The full Policy is here.
                                             <a href="https://policy.zemuldo.com/terms" rel="noreferrer noopener" target="_blank">
                                                 <Icon color={this.props.color} name='law' />

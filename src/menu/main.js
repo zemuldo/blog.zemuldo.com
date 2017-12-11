@@ -3,7 +3,7 @@ import 'semantic-ui-css/semantic.min.css';
 import {Menu,Icon, Dropdown,Image,Input} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
-class MainMenu extends Component {
+class FixedMenu extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -15,7 +15,7 @@ class MainMenu extends Component {
             <div >
                 <Menu
                     style={{backgroundColor:'black'}}
-                    stackable={true}
+                    fixed='top'
                     size='tiny'
                     secondary={true}
                     color={this.props.colors[0]}
@@ -109,7 +109,7 @@ class MainMenu extends Component {
                                         <Dropdown.Menu>
                                             <Dropdown.Item as='span' onClick={this.props._handleSwitchToProfile}>
                                                 <Icon color={this.props.colors[0]} name='user circle' />
-                                                <Link to={'/'+this.props.user.userName+'/session-'+this.props.time} color={this.props.colors[1]} >Your Profile</Link>
+                                                <Link to={'/'+this.props.user.userName+'/profile-'+this.props.time.split(' ').join('-')} color={this.props.colors[1]} >Your Profile</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.colors[0]} name='users' />
@@ -141,4 +141,4 @@ class MainMenu extends Component {
         )
     }
 }
-export default  MainMenu
+export default  FixedMenu

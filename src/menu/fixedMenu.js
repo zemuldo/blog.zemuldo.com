@@ -15,64 +15,80 @@ class FixedMenu extends Component {
             <div >
                 <Menu
                     style={{backgroundColor:'black'}}
-                    stackable={true}
                     fixed='top'
                     size='tiny'
                     secondary={true}
                     color={this.props.colors[0]}
                     borderless
                 >
-                    <Menu.Item
-                        as='span'
-                        className=''
-                        name='home'
-                        active={this.props.currentLocation === 'home'}
-                        onClick={this.props.handleHomeClick}>
-                        <Icon color={this.props.colors[0]} name='home' />
-                        <span color={this.props.colors[0]}><Link to="/">Home</Link></span>
-                    </Menu.Item>
-                    <Menu.Item
-                        as='span'
-                        name='dev'
-                        active={this.props.currentLocation === 'dev'}
-                        onClick={this.props.handleMenuItemClick}>
-                        <Icon color={this.props.colors[0]} name='code' />
-                        <span color={this.props.colors[0]}><Link to={"/dev/"+urlDetails}>Dev</Link></span>
-                    </Menu.Item>
-                    <Menu.Item
-                        as='span'
-                        name='business'
-                        active={this.props.currentLocation === 'business'}
-                        onClick={this.props.handleMenuItemClick}>
-                        <Icon color={this.props.colors[0]} name='creative commons' />
-                        <span color={this.props.colors[0]}><Link to={"/business/"+urlDetails}>Business</Link></span>
-                    </Menu.Item>
-                    <Menu.Item
-                        as='span'
-                        name='tech'
-                        active={this.props.currentLocation === 'tech'}
-                        onClick={this.props.handleMenuItemClick}>
-                        <Icon color={this.props.colors[0]} name='server' />
-                        <span color={this.props.colors[0]}><Link to={"/tech/"+urlDetails}>Tech</Link></span>
-                    </Menu.Item>
-                    <Menu.Item
-                        as='span'
-                        name='reviews'
-                        active={this.props.currentLocation === 'reviews'}
-                        onClick={this.props.handleMenuItemClick}>
-                        <Icon color={this.props.colors[0]} name='circle notched' />
-                        <span color={this.props.colors[0]}><Link to={"/reviews/"+urlDetails}>Reviews</Link></span>
-                    </Menu.Item>
+                    <Dropdown
+                        className='dropDown'
+                        trigger={'MENU'}
+                        style={{color:this.props.colors[0]}}
+                        pointing='top left'
+                        item
+                    >
+                        <Dropdown.Menu>
+                            <Dropdown.Item
+                                as='span'
+                                className=''
+                                name='home'
+                                active={this.props.currentLocation === 'home'}
+                                onClick={this.props.handleHomeClick}>
+                                <Icon color={this.props.colors[0]} name='home' />
+                                <Link to="/">Home</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='business'
+                                active={this.props.currentLocation === 'business'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='creative commons' />
+                                <Link to={"/business/"+urlDetails}>Business</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='dev'
+                                active={this.props.currentLocation === 'dev'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='code' />
+                                <Link to={"/dev/"+urlDetails}>Dev</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='tech'
+                                active={this.props.currentLocation === 'tech'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='server' />
+                                <Link to={"/tech/"+urlDetails}>Tech</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='reviews'
+                                active={this.props.currentLocation === 'reviews'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='star' />
+                                <Link to={"/reviews/"+urlDetails}>Reviews</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='tutorials'
+                                active={this.props.currentLocation === 'tutorials'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='code' />
+                                <Link to={"/tutorials/"+urlDetails}>Tutorials</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                as='span'
+                                name='about'
+                                active={this.props.currentLocation === 'about'}
+                                onClick={this.props.handleMenuItemClick}>
+                                <Icon color={this.props.colors[0]} name='info' />
+                                <Link to={"/about"}>About</Link>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <Menu.Menu position='right'>
-                        <Menu.Item
-                            name='search'
-                            onClick={this.props.handleMenuItemClick}>
-                            <Input
-                                icon={<Icon name='search' inverted circular link />}
-                                placeholder='Search...'
-                                onChange={this.props.handleFilterChange}
-                            />
-                        </Menu.Item>
                         {
                             (!this.props.loggedin) ?
                                 <Menu.Item
@@ -110,7 +126,7 @@ class FixedMenu extends Component {
                                         <Dropdown.Menu>
                                             <Dropdown.Item as='span' onClick={this.props._handleSwitchToProfile}>
                                                 <Icon color={this.props.colors[0]} name='user circle' />
-                                                <Link to={'/'+this.props.user.userName+'/session-'+this.props.time} color={this.props.colors[1]} >Your Profile</Link>
+                                                <Link to={'/'+this.props.user.userName+'/profile-'+this.props.time.split(' ').join('-')} color={this.props.colors[1]} >Your Profile</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.colors[0]} name='users' />
