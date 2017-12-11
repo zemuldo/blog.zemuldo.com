@@ -228,21 +228,14 @@ class LoginForm extends React.Component {
     closeCreateAvatar=()=>{
         this.setState({ creatAvatarOpen: false })
     }
-    componentDidMount() {
-        let page = window.location.pathname.split('/')[1];
-        if(page==='signup'){
-            this.setState({signUp:true})
-        }
-        if(page==='login'){
-            this.setState({signUp:false})
-        }
+    async componentDidMount() {
         this.setState({hideMessage:true})
         if(this.state.user){
             let known = localStorage.getItem('user')
             if(known){
                 let user = JSON.parse(known)
                 if(user.firstName && user.lastName && user.userName){
-                    let valid = this.validateUser()
+                    let valid = await this.validateUser()
                     if(valid!==true){
                         localStorage.removeItem('user')
                         this.setState({loggedin:false})
