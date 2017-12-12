@@ -38,6 +38,7 @@ self.addEventListener('install', event => {
         caches.open(PRECACHE)
             .then(cache => cache.addAll(PRECACHE_URLS))
             .then(self.skipWaiting())
+            .catch(function () {})
     );
 });
 
@@ -51,7 +52,9 @@ self.addEventListener('activate', event => {
             return Promise.all(cachesToDelete.map(cacheToDelete => {
                 return caches.delete(cacheToDelete);
             }));
-        }).then(() => self.clients.claim())
+        })
+            .then(() => self.clients.claim())
+            .catch(function () {})
     );
 });
 
