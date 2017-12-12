@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import 'semantic-ui-css/semantic.min.css';
 import { Helmet } from "react-helmet";
 import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
