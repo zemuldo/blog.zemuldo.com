@@ -16,9 +16,9 @@ const getClientEnvironment = require('./env');
 const urls =
     {
   development:'http://localhost',
-  production:'https://zemuldo.com',
+  production:'https://blogs.zemuldo.com',
   dev:'http://localhost',
-  live:'https://zemuldo.com'
+  live:'https://blogs.zemuldo.com'
 }
 
 // Webpack uses `publicPath` to determine where the app is being served from.

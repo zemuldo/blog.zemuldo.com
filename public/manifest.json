@@ -1,19 +1,19 @@
 {
-  "short_name": "Zemuldo.COM",
-  "name": "Zemuldo Articles",
+  "short_name": "Zemuldo Blogs",
+  "name": "Zemuldo Blogs",
   "icons": [
     {
-      "src": "img/icons/NN.png",
+      "src": "https://photos.zemuldo.com/icon.png",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "img/icons/NN.png",
+      "src": "https://photos.zemuldo.com/icon.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "img/icons/NN.png",
+      "src":"https://photos.zemuldo.com/icon.png",
       "type": "image/png",
       "sizes": "192x192"
     }

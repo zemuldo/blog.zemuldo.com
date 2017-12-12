@@ -19,4 +19,4 @@ ReactDOM.render(
             <App />
         </BrowserRouter>
     </Provider>,
-    document.getElementById('zemuldo.com'));
+    document.getElementById('main-app'));

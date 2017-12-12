@@ -1,5 +1,5 @@
 {
-  "name": "zemuldo.com",
+  "name": "blogs.zemuldo.com",
   "version": "0.0.3",
   "private": true,
   "dependencies": {
@@ -119,22 +119,23 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "description": "Zemuldo.COM User Interface",
+  "description": "Zemuldo Blogs User Interface",
   "main": "build.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/zemuldo/zemuldo.com.git"
+    "url": "git+ssh://git@github.com/zemuldo/blogs.zemuldo.com.git"
   },
   "keywords": [
     "react",
     "react-site",
     "zemuld",
-    "zemuldo.com"
+    "zemuldo.com",
+    "blogs.zemuldo.com"
   ],
   "author": "Danstan Otieno Onyango",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zemuldo/zemuldo.com/issues"
+    "url": "https://github.com/zemuldo/blogs.zemuldo.com/issues"
   },
-  "homepage": "https://zemuldo.com"
+  "homepage": "https://blogs.zemuldo.com"
 }
