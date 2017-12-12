@@ -5,6 +5,9 @@ import AvatarEditor from '../avatarEditor/creatAvatar'
 import Pofile from './profile'
 import axios from 'axios';
 import config from '../environments/conf'
+import {bindActionCreators} from "redux";
+import * as BlogsActions from "../state/actions/blogs";
+import * as UserActions from "../state/actions/user";
 const env = config[process.env.NODE_ENV] || 'development'
 function toTitleCase(str)
 {
@@ -292,6 +295,7 @@ class LoginForm extends React.Component {
                     success.data.name = success.data.userName
                     this.setState({currentUser:success.data,logingin:false})
                     this.props.successLogin(success.data)
+                    this.props.userActions.updateUser(success.data)
                 }
                 else {
                     this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:success.data.error}})
@@ -379,7 +383,7 @@ class LoginForm extends React.Component {
     return(
         <div>
             {
-                this.props.loggedin?
+                this.props.user?
                     <div>
                         <Pofile
                             userBlogs ={this.state.userBlogs}
@@ -580,5 +584,10 @@ const mapStateToProps = (state) => {
         user: state.user
     }
 };
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        userActions:bindActionCreators(UserActions,dispatch)
+    }
+}
 
-export default connect(mapStateToProps)(LoginForm);
+export default connect(mapStateToProps,mapDispatchToProps)(LoginForm);

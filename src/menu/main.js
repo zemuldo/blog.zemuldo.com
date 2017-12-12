@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import {Menu,Icon, Dropdown,Image,Input} from 'semantic-ui-react'
+import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 class FixedMenu extends Component {
@@ -73,7 +74,7 @@ class FixedMenu extends Component {
                             />
                         </Menu.Item>
                         {
-                            (!this.props.loggedin) ?
+                            (!this.props.user) ?
                                 <Menu.Item
                                     as='span'
                                     position='right'
@@ -141,4 +142,11 @@ class FixedMenu extends Component {
         )
     }
 }
-export default  FixedMenu
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
+
+export default connect(mapStateToProps)  (FixedMenu);

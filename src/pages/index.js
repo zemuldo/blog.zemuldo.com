@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as BlogsActions from "../state/actions/blogs";
+import * as UserActions from "../state/actions/user";
 import axios from 'axios'
 import util from '../util'
 import Login from '../profile/loginForm'
@@ -21,7 +22,6 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loggedin: false,
             user: null,
             iKnowYou: false,
             visitorInfo: null,
@@ -75,7 +75,7 @@ class App extends Component {
         this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
     };
     handleUpdateBlogs(blogs){
-        this.props.actions.updateBlogs(blogs)
+        this.props.blogActions.updateBlogs(blogs)
     }
     setTopic(topic) {
         this.setState({ topic: topic })
@@ -188,7 +188,7 @@ class App extends Component {
             "queryData": query
         })
             .then(response => {
-                this.props.actions.updateBlogs(response.data);
+                this.props.blogActions.updateBlogs(response.data);
                 this.setState({ blogsAreLoading: false })
             })
             .catch(err => {
@@ -477,7 +477,7 @@ class App extends Component {
                 if (page === 'login') {
                     this.props.history.push('/')
                 }
-                this.setState({ user: user, loggedin: true })
+                this.props.userActions.updateUser(user)
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
                 this.setState({ profilePic: imageUrl })
@@ -533,7 +533,7 @@ class App extends Component {
     successLogin = (user) => {
         this.setState({ user: user })
         localStorage.setItem('user', JSON.stringify(user))
-        this.setState({ loggedin: true, currentLocation: 'home' })
+        this.setState({ currentLocation: 'home' })
         let urlCreator = window.URL || window.webkitURL;
         let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
         this.props.history.push('/');
@@ -543,8 +543,9 @@ class App extends Component {
         this.setState({ currentLocation: 'login' })
     }
     handleLogoutinButton = () => {
-        localStorage.removeItem('user')
-        this.setState({ currentLocation: 'home', loggedin: false })
+        localStorage.removeItem('user');
+        this.props.userActions.updateUser(null)
+        this.setState({ currentLocation: 'home'})
     }
     _handleCreateNew = () => {
         let editorState = window.localStorage.getItem('draftContent')
@@ -585,8 +586,6 @@ class App extends Component {
                             _handleSwitchToProfile={this._handleSwitchToProfile}
                             profilePic={this.state.profilePic}
                             _handleCreateNew={this._handleCreateNew}
-                            loggedin={this.state.loggedin}
-                            user={this.state.user}
                             handleFilterChange={this.handleFilterChange}
                             handleMenuItemClick={this.handleMenuItemClick}
                             handleHomeClick={this.handleHomeClick}
@@ -602,8 +601,6 @@ class App extends Component {
                             _handleSwitchToProfile={this._handleSwitchToProfile}
                             profilePic={this.state.profilePic}
                             _handleCreateNew={this._handleCreateNew}
-                            loggedin={this.state.loggedin}
-                            user={this.state.user}
                             handleFilterChange={this.handleFilterChange}
                             handleMenuItemClick={this.handleMenuItemClick}
                             handleHomeClick={this.handleHomeClick}
@@ -623,13 +620,11 @@ class App extends Component {
                                 history={this.props.history}
                                 handleLogoutinButton={this.handleLogoutinButton}
                                 handleNavigation={this.handleNavigation}
-                                user={this.state.user}
                                 _exitEditMode={this._exitEditMode}
                                 _goToEditor={this._goToEditor}
                                 editingMode={this.state.editingMode}
                                 createNew={this.state.createNew}
                                 _handleCreateNew={this._handleCreateNew}
-                                loggedin={this.state.loggedin}
                                 successLogin={this.successLogin}
                                 color={this.state.colors[0]}
                                 colors={this.state.colors}
@@ -655,7 +650,6 @@ class App extends Component {
                                 deletedBlog={this.deletedBlog}
                                 setTopic={this.setTopic}
                                 topic={this.state.topic}
-                                user={this.state.user}
                             />
                     }
                 </div>
@@ -680,12 +674,14 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        blogs: state.blogs
+        blogs: state.blogs,
+        user:state.user
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        actions: bindActionCreators(BlogsActions, dispatch)
+        blogActions: bindActionCreators(BlogsActions, dispatch),
+        userActions:bindActionCreators(UserActions,dispatch)
     }
 }
 
