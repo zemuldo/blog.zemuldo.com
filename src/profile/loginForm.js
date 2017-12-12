@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button,Modal,Loader, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Button,Modal,Loader, Form, Header, Message, Segment } from 'semantic-ui-react'
+import {connect} from 'react-redux'
 import AvatarEditor from '../avatarEditor/creatAvatar'
 import Pofile from './profile'
 import axios from 'axios';
@@ -28,7 +29,6 @@ class LoginForm extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-           user:this.props.user,
             logingin:false,
             registering:false,
             currentUser:null,
@@ -229,6 +229,10 @@ class LoginForm extends React.Component {
         this.setState({ creatAvatarOpen: false })
     }
     async componentDidMount() {
+        setTimeout(function () {
+            console.log('++++++++++++++++++++++++++++')
+            console.log(this.props.user)
+        }.bind(this),5000)
         this.setState({hideMessage:true})
         if(this.state.user){
             let known = localStorage.getItem('user')
@@ -570,4 +574,11 @@ class LoginForm extends React.Component {
     )
   }
 }
-export default LoginForm
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
+
+export default connect(mapStateToProps)(LoginForm);
