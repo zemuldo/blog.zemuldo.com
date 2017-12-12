@@ -46,7 +46,14 @@ const pages = {
         description:'Best Place for your reading, Tech and Business articles. Here you find featured content on current technologies like BigData, ML, AI, Deep Learning, DataScience and more',
         imgSRC:'img/blogs/blogs_pic.jpg'
     }
-}
+};
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, Authorization, X-Requested-With, Content-Type, Accept");
+    res.header("Allow-Control-Access-Method","GET");
+    next();
+});
+
 app.use(bodyParser.json());
 app.use(helmet())
 app.set('x-powered-by',false)
