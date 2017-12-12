@@ -3,17 +3,17 @@
   "name": "Zemuldo Blogs",
   "icons": [
     {
-      "src": "https://photos.zemuldo.com/icon.png",
+      "src": "img/icons/icon.png",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "https://photos.zemuldo.com/icon.png",
+      "src": "img/icons/icon.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src":"https://photos.zemuldo.com/icon.png",
+      "src": "img/icons/icon.png",
       "type": "image/png",
       "sizes": "192x192"
     }
