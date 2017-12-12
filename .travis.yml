@@ -1,14 +1,7 @@
 language: node_js
 node_js:
-  - 9
-services:
-  - mongodb
-sudo: false
-branches:
-  only:
-    - master
-    - devel
+  - "stable"
+before_script:
+  - npm install
 script:
-  - npm run build
-  - npm run mocha
-  - npm run lint
+  - npm test
