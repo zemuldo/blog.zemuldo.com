@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
 import {Header,Loader, Grid } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Welcome from './profile_wellcome'
@@ -230,5 +231,10 @@ class RichEditorExample extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
 
-export default RichEditorExample
+export default connect(mapStateToProps) (RichEditorExample);

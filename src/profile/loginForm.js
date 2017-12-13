@@ -6,7 +6,6 @@ import Pofile from './profile'
 import axios from 'axios';
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
-import * as BlogsActions from "../state/actions/blogs";
 import * as UserActions from "../state/actions/user";
 const env = config[process.env.NODE_ENV] || 'development'
 function toTitleCase(str)
@@ -34,7 +33,6 @@ class LoginForm extends React.Component {
         this.state = {
             logingin:false,
             registering:false,
-            currentUser:null,
             password:null,
             confirmPass:null,
             userName:null,
@@ -177,7 +175,7 @@ class LoginForm extends React.Component {
                 if(success.data.code===200){
                     this.setState({success:true,hideMessage:false,registering:false,errorDetails:{field:'Success',message:"Success"}})
                     setTimeout(function () {
-                        this.setState({signUp:false,success:false,hideMessage:true})
+                        this.setState({signUp:false,success:false,hideMessage:true,imagePreviewUrl:''})
                         this.props.history.push('/login')
                     }.bind(this),2000)
                 }
@@ -232,10 +230,6 @@ class LoginForm extends React.Component {
         this.setState({ creatAvatarOpen: false })
     }
     async componentDidMount() {
-        setTimeout(function () {
-            console.log('++++++++++++++++++++++++++++')
-            console.log(this.props.user)
-        }.bind(this),5000)
         this.setState({hideMessage:true})
         if(this.state.user){
             let known = localStorage.getItem('user')
@@ -245,14 +239,13 @@ class LoginForm extends React.Component {
                     let valid = await this.validateUser()
                     if(valid!==true){
                         localStorage.removeItem('user')
-                        this.setState({loggedin:false})
-                        this.props.handleLogoutinButton()
+                        this.props.userActions.updateUser(null)
+                        this.props.history.push('/')
                     }
                 }
                 else {
                     localStorage.removeItem('user')
-                    this.setState({loggedin:false})
-                    this.props.handleLogoutinButton()
+                    this.props.userActions.updateUser(null)
                 }
             }
         }
@@ -293,7 +286,7 @@ class LoginForm extends React.Component {
                 }
                 if(success.data.id){
                     success.data.name = success.data.userName
-                    this.setState({currentUser:success.data,logingin:false})
+                    this.setState({logingin:false})
                     this.props.successLogin(success.data)
                     this.props.userActions.updateUser(success.data)
                 }
@@ -374,12 +367,6 @@ class LoginForm extends React.Component {
     }
     setEditorRef = (editor) => this.editor = editor;
     render(){
-      let $imagePreview = null;
-      if (this.state.imagePreviewUrl!=='') {
-          $imagePreview = (<img src={this.state.imagePreviewUrl} />);
-      } else {
-          $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
-      }
     return(
         <div>
             {
@@ -387,8 +374,6 @@ class LoginForm extends React.Component {
                     <div>
                         <Pofile
                             userBlogs ={this.state.userBlogs}
-                            user={this.props.user}
-                            currentUser={this.state.currentUser}
                             _goToEditor = {this.props._goToEditor}
                             _exitEditMode={this.props._exitEditMode}
                             editingMode={this.props.editingMode}

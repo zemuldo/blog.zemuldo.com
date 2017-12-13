@@ -618,8 +618,6 @@ class App extends Component {
                         (this.state.currentLocation === 'login' || (this.state.currentLocation === 'profile')) ?
                             <Login
                                 history={this.props.history}
-                                handleLogoutinButton={this.handleLogoutinButton}
-                                handleNavigation={this.handleNavigation}
                                 _exitEditMode={this._exitEditMode}
                                 _goToEditor={this._goToEditor}
                                 editingMode={this.state.editingMode}
