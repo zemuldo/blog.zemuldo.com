@@ -10,7 +10,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-const buildID='2017-12-12';
+const buildID='2017-12-14';
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
@@ -38,7 +38,6 @@ self.addEventListener('install', event => {
         caches.open(PRECACHE)
             .then(cache => cache.addAll(PRECACHE_URLS))
             .then(self.skipWaiting())
-            .catch(function () {})
     );
 });
 
@@ -52,9 +51,7 @@ self.addEventListener('activate', event => {
             return Promise.all(cachesToDelete.map(cacheToDelete => {
                 return caches.delete(cacheToDelete);
             }));
-        })
-            .then(() => self.clients.claim())
-            .catch(function () {})
+        }).then(() => self.clients.claim())
     );
 });
 

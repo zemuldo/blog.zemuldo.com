@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Menu,Icon, Dropdown,Image,Input} from 'semantic-ui-react'
+import {Menu,Icon, Dropdown,Image} from 'semantic-ui-react'
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
 import {Link} from 'react-router-dom'
+import * as BlogsActions from "../state/actions/blogs";
+import * as UserActions from "../state/actions/user";
 
 class FixedMenu extends Component {
     constructor(props){
@@ -90,7 +94,7 @@ class FixedMenu extends Component {
                     </Dropdown>
                     <Menu.Menu position='right'>
                         {
-                            (!this.props.loggedin) ?
+                            (!this.props.user) ?
                                 <Menu.Item
                                     as='span'
                                     position='right'
@@ -158,4 +162,15 @@ class FixedMenu extends Component {
         )
     }
 }
-export default  FixedMenu
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        userActions:bindActionCreators(UserActions,dispatch)
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)  (FixedMenu);
