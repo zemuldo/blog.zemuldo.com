@@ -14,11 +14,11 @@ const buildID='2017-12-14';
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const CACHENAME = 'sw-'+buildID+'-precache';
+const PRECACHE = 'sw-'+buildID+'-precache';
 const RUNTIME = 'sw-'+buildID+'-runtime';
 
 // A list of local resources we always want to be cached.
-const FILES = [
+const PRECACHE_URLS = [
     "index.html",
     'manifest.json',
     'static/img/icons/icon.png',
@@ -32,133 +32,51 @@ const FILES = [
     "static/media/"+buildID+"icons.zemuldo.woff2",
 ];
 
-var BLACKLIST = [
-    '/gen_204\?',
-    '/async/',
-    '/complete/',
-];
-
-
-self.addEventListener('install', function(event) {
-    event.waitUntil(caches.open(CACHENAME).then(function(cache) {
-        return cache.addAll(FILES);
-    }));
-});
-
-self.addEventListener('activate', function(event) {
-    return event.waitUntil(caches.keys().then(function(keys) {
-        return Promise.all(keys.map(function(k) {
-            if (k != CACHENAME && k.indexOf('newtab-static-') == 0) {
-                return caches.delete(k);
-            } else {
-                return Promise.resolve();
-            }
-        }));
-    }));
-});
-
-self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        caches.match(event.request).then(function(response) {
-            if (response) {
-                return response;
-            }
-
-            return fetch(event.request).then(function(response) {
-                var shouldCache = response.ok;
-
-                for (var i = 0; i < BLACKLIST.length; ++i) {
-                    var b = new RegExp(BLACKLIST[i]);
-                    if (b.test(event.request.url)) {
-                        shouldCache = false;
-                        break;
-                    }
-                }
-
-                if (event.request.method == 'POST') {
-                    shouldCache = false;
-                }
-
-                if (shouldCache) {
-                    return caches.open(CACHENAME).then(function(cache) {
-                        cache.put(event.request, response.clone());
-                        return response;
-                    });
-                } else {
-                    return response;
-                }
-            });
-        })
+// The install handler takes care of precaching the resources we always need.
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open(PRECACHE)
+            .then(cache => cache.addAll(PRECACHE_URLS))
+            .then(self.skipWaiting())
+            .catch(function () {})
     );
 });
 
+// The activate handler takes care of cleaning up old caches.
+self.addEventListener('activate', event => {
+    const currentCaches = [PRECACHE, RUNTIME];
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+        }).then(cachesToDelete => {
+            return Promise.all(cachesToDelete.map(cacheToDelete => {
+                return caches.delete(cacheToDelete);
+            }));
+        }).then(() => self.clients.claim())
+    );
+});
 
+// The fetch handler serves responses for same-origin resources from a cache.
+// If no response is found, it populates the runtime cache with the response
+// from the network before returning it to the page.
+self.addEventListener('fetch', event => {
+    // Skip cross-origin requests, like those for Google Analytics.
+    if (event.request.url.startsWith(self.location.origin)) {
+        event.respondWith(
+            caches.match(event.request).then(cachedResponse => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
 
-if (!Cache.prototype.add) {
-
-    Cache.prototype.add = function add(request) {
-        return this.addAll([request]);
-    };
-}
-
-if (!Cache.prototype.addAll) {
-
-    Cache.prototype.addAll = function addAll(requests) {
-        var cache = this;
-
-        function NetworkError(message) {
-            this.name = 'NetworkError';
-            this.code = 19;
-            this.message = message;
-        }
-        NetworkError.prototype = Object.create(Error.prototype);
-
-        return Promise.resolve()
-            .then(function() {
-                if (arguments.length < 1) throw new TypeError();
-
-                requests = requests.map(function(request) {
-                    if (request instanceof Request) {
-                        return request;
-                    } else {
-                        return String(request);              }
-                });
-
-                return Promise.all(requests.map(function(request) {
-                    if (typeof request === 'string') {
-                        request = new Request(request);
-                    }
-
-                    return fetch(request.clone());
-                }));
-            })
-            .then(function(responses) {
-                return Promise.all(responses.map(function(response, i) {
-                    return cache.put(requests[i], response);
-                }));
-            })
-            .then(function() {
-                return undefined;
-            });
-    };
-}
-
-if (!CacheStorage.prototype.match) {
-
-    CacheStorage.prototype.match = function match(request, opts) {
-        var caches = this;
-        return caches.keys().then(function(cacheNames) {
-            var match;
-            return cacheNames.reduce(function(chain, cacheName) {
-                return chain.then(function() {
-                    return match || caches.open(cacheName).then(function(cache) {
-                        return cache.match(request, opts);
-                    }).then(function(response) {
-                        match = response;
-                        return match;
+                return caches.open(RUNTIME).then(cache => {
+                    return fetch(event.request).then(response => {
+                        // Put a copy of the response in the runtime cache.
+                        return cache.put(event.request, response.clone()).then(() => {
+                            return response;
+                        });
                     });
                 });
-            }, Promise.resolve());
-        });
-    };
-}
+            })
+        );
+    }
+});
