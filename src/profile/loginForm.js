@@ -286,8 +286,7 @@ class LoginForm extends React.Component {
                 }
                 if(success.data.id){
                     success.data.name = success.data.userName
-                    this.setState({logingin:false})
-                    this.props.successLogin(success.data)
+                    this.setState({logingin:false});
                     this.props.userActions.updateUser(success.data)
                 }
                 else {
@@ -379,7 +378,7 @@ class LoginForm extends React.Component {
                             editingMode={this.props.editingMode}
                             createNew={this.props.createNew}
                             _handleCreateNew={this.props._handleCreateNew}
-                            colors = {this.props.colors}/>
+                            colors = {this.props.vars.colors}/>
                     </div>:
                     <div>
                         <Modal open ={this.state.creatAvatarOpen}>
@@ -566,7 +565,8 @@ class LoginForm extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.user
+        user: state.user,
+        vars:state.vars
     }
 };
 const mapDispatchToProps = (dispatch, props) => {

@@ -13,7 +13,6 @@ class RichEditorExample extends React.Component {
         super(props);
         this.state = {
             user:null,
-            createNew:false,
             blogs:null,
             blog:null,
             blogsLoaded:false,
@@ -169,7 +168,7 @@ class RichEditorExample extends React.Component {
                             window.innerWidth>600?
                                 <Grid.Column  width={10}>
                                     {
-                                        this.props.createNew?
+                                        this.props.vars.createNew?
                                             <EditorsForm
                                                 currentUser={this.props.user}
                                                 _goToEditor = {this.props._goToEditor}
@@ -191,7 +190,7 @@ class RichEditorExample extends React.Component {
                                 </Grid.Column>:
                                 <Grid.Column  width={16}>
                                     {
-                                        this.props.createNew?
+                                        this.props.vars.createNew?
                                             <EditorsForm
                                                 currentUser={this.props.user}
                                                 _goToEditor = {this.props._goToEditor}
@@ -233,7 +232,8 @@ class RichEditorExample extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.user
+        user: state.user,
+        vars:state.vars
     }
 };
 
