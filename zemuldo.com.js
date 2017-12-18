@@ -159,6 +159,9 @@ app.get("/*", async function (req, res) {
     }
 
 });
+/*app.listen(conf[env].httpPort,()=>{
+    console.log("**Server started at http://localhost:"+conf[env].httpPort)
+});*/
 spdy
     .createServer(options, app)
     .listen(conf[env].httpPort, (error) => {
