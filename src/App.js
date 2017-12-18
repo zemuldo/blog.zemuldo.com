@@ -1,5 +1,6 @@
 import React from 'react'
 import Main from './routes'
+import NavBar from './menu/navBar'
 import 'semantic-ui-css/semantic.min.css';
 
 class App extends React.Component {
@@ -8,10 +9,17 @@ class App extends React.Component {
         this.state = {
         };
     };
-    componentDidMount(){}
+    resize = () => this.forceUpdate();
+    componentDidMount(){
+        window.addEventListener('resize', this.resize);
+    };
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resize)
+    };
     render() {
         return (
             <div>
+                <NavBar/>
                 <Main />
             </div>
         )

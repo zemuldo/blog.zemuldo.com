@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as BlogsActions from "../state/actions/blogs";
 import * as UserActions from "../state/actions/user";
+import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
 import Login from '../profile/loginForm'
@@ -73,6 +74,13 @@ class App extends Component {
         this.handleMenuItemClickFooter = this.handleMenuItemClickFooter.bind(this)
         this.setTopic = this.setTopic.bind(this)
         this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
+    };
+    updateVars(vars){
+        let newVars = this.props.vars;
+        for(let i=0;i<vars.length;i++){
+            newVars[vars[i].key]=vars[i].value
+        }
+        this.props.varsActions.updateVars(newVars);
     };
     handleUpdateBlogs(blogs){
         this.props.blogActions.updateBlogs(blogs)
@@ -480,7 +488,7 @@ class App extends Component {
                 this.props.userActions.updateUser(user)
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                this.setState({ profilePic: imageUrl })
+                this.updateVars([{key:'profilePic',value:imageUrl}])
                 this.setState({ homePageLoaded: true })
             }
             else {
@@ -537,7 +545,7 @@ class App extends Component {
         let urlCreator = window.URL || window.webkitURL;
         let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
         this.props.history.push('/');
-        this.setState({ profilePic: imageUrl })
+        this.updateVars([{key:'profilePic',value:imageUrl}])
     }
     handleLoginButton = (e) => {
         this.setState({ currentLocation: 'login' })
@@ -574,82 +582,34 @@ class App extends Component {
                     <title>{'ZemuldO-' + util.toTitleCase(this.state.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
-                {
-                    window.innerWidth>800?
-                        <MainMenu
-                            currentLocation={this.state.currentLocation}
-                            hideFixedMe={this.hideFixedMenu}
-                            visible={this.state.visible}
-                            colors={this.state.colors}
-                            handleLoginButton={this.handleLoginButton}
-                            handleLogoutinButton={this.handleLogoutinButton}
-                            _handleSwitchToProfile={this._handleSwitchToProfile}
-                            profilePic={this.state.profilePic}
-                            _handleCreateNew={this._handleCreateNew}
-                            handleFilterChange={this.handleFilterChange}
-                            handleMenuItemClick={this.handleMenuItemClick}
-                            handleHomeClick={this.handleHomeClick}
-                            time={this.state.time}
-                        />:
-                        <FixedMenu
-                            currentLocation={this.state.currentLocation}
-                            hideFixedMe={this.hideFixedMenu}
-                            visible={this.state.visible}
-                            colors={this.state.colors}
-                            handleLoginButton={this.handleLoginButton}
-                            handleLogoutinButton={this.handleLogoutinButton}
-                            _handleSwitchToProfile={this._handleSwitchToProfile}
-                            profilePic={this.state.profilePic}
-                            _handleCreateNew={this._handleCreateNew}
-                            handleFilterChange={this.handleFilterChange}
-                            handleMenuItemClick={this.handleMenuItemClick}
-                            handleHomeClick={this.handleHomeClick}
-                            time={this.state.time}
-                        />
-                }
-
                 <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>
                         <h1>
                             <Link to ='/'>Zemuldo Articles </Link>
                         </h1>
                     </div>
-                    {
-                        (this.state.currentLocation === 'login' || (this.state.currentLocation === 'profile')) ?
-                            <Login
-                                history={this.props.history}
-                                _exitEditMode={this._exitEditMode}
-                                _goToEditor={this._goToEditor}
-                                editingMode={this.state.editingMode}
-                                createNew={this.state.createNew}
-                                _handleCreateNew={this._handleCreateNew}
-                                successLogin={this.successLogin}
-                                color={this.state.colors[0]}
-                                colors={this.state.colors}
-                            /> :
-                            <PagesComponent
-                                history={this.props.history}
-                                handleFilterChange={this.handleFilterChange}
-                                color={this.state.colors[1]}
-                                blogs={this.props.blogs}
-                                blog={this.state.blog}
-                                blogDetails={this.state.blogDetails}
-                                blogsLoaded={this.state.blogsLoaded}
-                                blogLoaded={this.state.blogLoaded}
-                                homePageLoaded={this.state.homePageLoaded}
-                                richViewerState={this.state.richViewerState}
-                                blogsAreLoading={this.blogsAreLoading}
-                                onReadMore={this.onReadMore}
-                                colors={this.state.colors}
-                                currentLocation={this.state.currentLocation}
-                                current={this.state.currentLocation}
-                                setTopicPosts={this.setTopicPosts}
-                                setTopicNextPosts={this.setTopicNextPosts}
-                                deletedBlog={this.deletedBlog}
-                                setTopic={this.setTopic}
-                                topic={this.state.topic}
-                            />
-                    }
+                    <PagesComponent
+                        history={this.props.history}
+                        handleFilterChange={this.handleFilterChange}
+                        color={this.state.colors[1]}
+                        blogs={this.props.blogs}
+                        blog={this.state.blog}
+                        blogDetails={this.state.blogDetails}
+                        blogsLoaded={this.state.blogsLoaded}
+                        blogLoaded={this.state.blogLoaded}
+                        homePageLoaded={this.state.homePageLoaded}
+                        richViewerState={this.state.richViewerState}
+                        blogsAreLoading={this.blogsAreLoading}
+                        onReadMore={this.onReadMore}
+                        colors={this.state.colors}
+                        currentLocation={this.state.currentLocation}
+                        current={this.state.currentLocation}
+                        setTopicPosts={this.setTopicPosts}
+                        setTopicNextPosts={this.setTopicNextPosts}
+                        deletedBlog={this.deletedBlog}
+                        setTopic={this.setTopic}
+                        topic={this.state.topic}
+                    />
                 </div>
                 {
                     this.state.loadFooter && this.state.currentLocation !== 'login' ?
@@ -673,13 +633,15 @@ class App extends Component {
 const mapStateToProps = (state) => {
     return {
         blogs: state.blogs,
-        user:state.user
+        user:state.user,
+        vars:state.vars
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
         blogActions: bindActionCreators(BlogsActions, dispatch),
-        userActions:bindActionCreators(UserActions,dispatch)
+        userActions:bindActionCreators(UserActions,dispatch),
+        varsActions:bindActionCreators(VarsActions,dispatch)
     }
 }
 

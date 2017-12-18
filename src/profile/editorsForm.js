@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import {connect } from 'react-redux';
 import {Label, Header,Form,Select,Dropdown} from 'semantic-ui-react'
 import Creator from '../blogEditor/createBlog'
+import * as VarsActions from "../state/actions/vars";
+import {bindActionCreators} from "redux";
 const categories = [
     { key: 'dev', value: 'Development', text: 'Development',name:'development' },
     { key: 'tech', value: 'Technology', text: 'Technology' ,name:'technology'},
@@ -65,7 +68,6 @@ class EditorsForm extends Component {
         this.handleAboutChange=this.handleAboutChange.bind(this)
         this.onFinishClick = this.onFinishClick.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this._handleGoBackToPrifile = this._handleGoBackToPrifile.bind(this)
     };
     componentDidMount() {
     }
@@ -92,17 +94,20 @@ class EditorsForm extends Component {
         }
         window.localStorage.setItem('blogData',JSON.stringify(blogDta))
         this.setState({filledForm:false})
-        this.props._goToEditor()
+        this.updateVars([{key:'editingMode',value:true}]);
     }
-    _handleGoBackToPrifile = ()=>{
-        this.props._exitEditMode()
-}
-
+    updateVars(vars){
+        let newVars = this.props.vars;
+        for(let i=0;i<vars.length;i++){
+            newVars[vars[i].key]=vars[i].value
+        }
+        this.props.varsActions.updateVars(newVars);
+    };
     render() {
         return (
             <div>
                 {
-                    !this.props.editingMode?
+                    !this.props.vars.editingMode?
                         <div>
                             <Header color='green' as='h3'>
                                 Creating your Article is easy. Save and continue where you left..
@@ -126,7 +131,7 @@ class EditorsForm extends Component {
                                 <Form.TextArea maxLength="140" onChange={this.handleAboutChange} label='About your blog' placeholder='Small details about your article...upto 140 Characters' />
                                 <Form.Checkbox onChange = {this.handleUTAChange} label='I agree to the Community Terms and Conditions' />
                                 <Form.Button disabled={this.state.topics.length<1 || this.state.about.length<139 || !this.state.category || !this.state.termsAccept} type="button" onClick={this.onFinishClick}  color='green' size='large'>Submit</Form.Button>
-                                <Form.Button type="button" onClick={this._handleGoBackToPrifile}  color='green' size='large'>Exit</Form.Button>
+                                <Form.Button type="button" onClick={()=>this.updateVars([{key:'editingMode',value:false},{key:'createNew',value:false}])}  color='green' size='large'>Exit</Form.Button>
                             </Form>
                         </div>:
                         <Creator
@@ -140,4 +145,17 @@ class EditorsForm extends Component {
         )
     }
 }
-export default EditorsForm;
+
+const mapStateToProps = (state) => {
+    return {
+        vars:state.vars
+    }
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        varsActions:bindActionCreators(VarsActions,dispatch)
+    }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps) (EditorsForm);
