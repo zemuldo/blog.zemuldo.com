@@ -1,6 +1,8 @@
 import React from 'react'
 import Main from './routes'
 import NavBar from './menu/navBar'
+import Footer from './partials/footer'
+import ReviewPortal from "./partials/portal";
 
 class App extends React.Component {
     constructor(props){
@@ -19,6 +21,8 @@ class App extends React.Component {
             <div>
                 <NavBar/>
                 <Main />
+                <Footer/>
+                <ReviewPortal/>
             </div>
         )
     }

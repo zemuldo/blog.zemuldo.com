@@ -7,6 +7,7 @@ const vars = {
     createNew: false,
     editingMode: false,
     colors: ['green', 'blue', 'orange', 'violet', 'blue', 'orange'],
+    color:'green',
     currentLocation: 'home',
     profilePic: null,
     blogsLoaded: false,
