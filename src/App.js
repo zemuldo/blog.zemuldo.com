@@ -1,13 +1,11 @@
 import React from 'react'
 import Main from './routes'
 import NavBar from './menu/navBar'
-import 'semantic-ui-css/semantic.min.css';
 
 class App extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-        };
+        this.state = {};
     };
     resize = () => this.forceUpdate();
     componentDidMount(){
