@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Helmet } from "react-helmet";
 import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
@@ -9,14 +9,11 @@ import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
 import PagesComponent from '../pages/homePage'
-import Footer from '../partials/footer'
-import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
-import { pages } from '../environments/conf'
-import { topicsOBJ } from '../environments/conf'
+import { pages,topicsOBJ } from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development';
 
-class App extends Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,8 +38,6 @@ class App extends Component {
             topic: 'all',
             time: new Date().toDateString()
         };
-        this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
-        this.handleLoginButton = this.handleLoginButton.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
@@ -249,16 +244,19 @@ class App extends Component {
         })
             .then(function (response) {
                 if (!response.data) {
-                    this.setState({ blogs: [], blog: null, blogsLoaded: true, homePageLoaded: true });
+                    this.setState({ blogs: [], blog: null, blogsLoaded: true });
+                    this.updateVars([{key:'homePageLoaded',value:true}])
                     return false
                 }
                 else {
                     this.handleUpdateBlogs(response.data)
-                    this.setState({  blogsLoaded: true, homePageLoaded: true });
+                    this.setState({  blogsLoaded: true });
                 }
+                this.updateVars([{key:'homePageLoaded',value:true}])
             }.bind(this))
             .catch(function (err) {
-                this.setState({ blogs: [], blog: null, blogsLoaded: true, homePageLoaded: true });
+                this.setState({ blogs: [], blog: null, blogsLoaded: true });
+                this.updateVars([{key:'homePageLoaded',value:true}])
             }.bind(this))
     }
     setPageBlogs(name) {
@@ -271,19 +269,19 @@ class App extends Component {
             .then(function (response) {
                 if (!response.data) {
                     this.setState({ blogs: [], blog: null, blogDetails: null });
-                    this.setState({ blogsLoaded: true, homePageLoaded: true });
+                    this.setState({ blogsLoaded: true});
                     this.setState({ blogsAreLoading: false })
                     return false
                 }
                 if (!response.data[0]) {
                     this.setState({ blogs: [], blog: null, blogDetails: null });
-                    this.setState({ blogsLoaded: true, homePageLoaded: true });
+                    this.setState({ blogsLoaded: true });
                     this.setState({ blogsAreLoading: false })
                     return false
                 }
                 if (response.data[0]) {
                     this.handleUpdateBlogs(response.data)
-                    this.setState({ blogsLoaded: true, homePageLoaded: true });
+                    this.setState({ blogsLoaded: true });
                     this.setState({ blogsAreLoading: false })
                 }
                 else {
@@ -458,7 +456,7 @@ class App extends Component {
         /*
              update blogs and blog
         */
-        this.navigateBlogs(query)
+        this.navigateBlogs(query);
         this.setCurrentBlog(url, page);
         this.forceUpdate();
         if (window.innerWidth < 503) {
@@ -508,20 +506,6 @@ class App extends Component {
         window.scrollTo(0, 0);
         this.setState({ currentLocation: 'home', blog: null })
     }
-    handleMenuItemClick = (e, { name }) => {
-        this.setState({ blogsAreLoading: true })
-        if (name === 'search') {
-            return
-        }
-        if (name === 'home' || name === 'login' || name === 'signup') {
-            this.setState({ currentLocation: name, })
-        }
-        else {
-            if (pages[name]) {
-            }
-            this.setState({ currentLocation: name, })
-        }
-    }
     handleMenuItemClickFooter = (name) => {
         this.setState({ blogsAreLoading: true })
         if (name === 'home' || name === 'login' || name === 'signup') {
@@ -542,14 +526,6 @@ class App extends Component {
         let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
         this.props.history.push('/');
         this.updateVars([{key:'profilePic',value:imageUrl}])
-    }
-    handleLoginButton = (e) => {
-        this.setState({ currentLocation: 'login' })
-    }
-    handleLogoutinButton = () => {
-        localStorage.removeItem('user');
-        this.props.userActions.updateUser(null)
-        this.setState({ currentLocation: 'home'})
     }
     _handleCreateNew = () => {
         let editorState = window.localStorage.getItem('draftContent')
@@ -593,7 +569,6 @@ class App extends Component {
                         blogDetails={this.state.blogDetails}
                         blogsLoaded={this.state.blogsLoaded}
                         blogLoaded={this.state.blogLoaded}
-                        homePageLoaded={this.state.homePageLoaded}
                         richViewerState={this.state.richViewerState}
                         blogsAreLoading={this.blogsAreLoading}
                         onReadMore={this.onReadMore}
@@ -607,20 +582,6 @@ class App extends Component {
                         topic={this.state.topic}
                     />
                 </div>
-                {
-                    this.state.loadFooter && this.state.currentLocation !== 'login' ?
-                        <div className={!this.state.blogsLoaded && !this.state.blogsLoaded? 'footer':''}>
-                            <Footer
-                                colors={this.state.colors}
-                                topic={this.state.topic}
-                                handleMenuItemClickFooter={this.handleMenuItemClickFooter}
-                                handleHomeClick={this.handleHomeClick}
-                                color={this.state.colors[0]} corrent={this.state.current}
-                            />
-                        </div> :
-                        null
-                }
-                <ReviewPortal />
             </div>
         )
     }
