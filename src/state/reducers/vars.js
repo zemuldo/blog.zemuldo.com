@@ -20,7 +20,6 @@ const vars = {
     topic: 'all',
     time: new Date().toDateString(),
     signUp:false,
-    history:null
 };
 
 const varsReducer = (state = vars, action ) => {
