@@ -18,7 +18,9 @@ const vars = {
     homePageLoaded: false,
     loadFooter: false,
     topic: 'all',
-    time: new Date().toDateString()
+    time: new Date().toDateString(),
+    signUp:false,
+    history:null
 };
 
 const varsReducer = (state = vars, action ) => {
