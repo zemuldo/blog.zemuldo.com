@@ -1,6 +1,6 @@
 import React from 'react'
-import CompMenu from './main';
-import MobileMenu from './fixedMenu'
+import CompMenu from './compMenu';
+import MobileMenu from './mobileMenu'
 
 class NavBar extends React.Component {
     constructor(props){
@@ -15,8 +15,7 @@ class NavBar extends React.Component {
                 {
                     window.innerWidth>800?
                         <CompMenu/>:
-                        <MobileMenu
-                        />
+                        <MobileMenu/>
                 }
             </div>
         )
