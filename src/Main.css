@@ -164,6 +164,10 @@ a:hover{
         Forms
 */
 
+.forms-ls{
+    margin-top: 10%;
+}
+
 .login-form{
     text-align: center;
     margin-bottom: 10%;
