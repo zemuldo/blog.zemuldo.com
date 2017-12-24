@@ -8,15 +8,12 @@ import * as UserActions from "../state/actions/user";
 import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
-import Login from '../profile/loginForm'
 import PagesComponent from '../pages/homePage'
 import Footer from '../partials/footer'
 import ReviewPortal from '../partials/portal'
 import config from '../environments/conf'
 import { pages } from '../environments/conf'
 import { topicsOBJ } from '../environments/conf'
-import MainMenu from "../menu/main";
-import FixedMenu from "../menu/fixedMenu";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class App extends Component {
@@ -222,7 +219,6 @@ class App extends Component {
                 this.setState({ blogLoaded: true });
                 return err;
             }.bind(this))
-
     }
     getBlogDetails(id) {
         return axios.post(env.httpURL, {
@@ -495,7 +491,7 @@ class App extends Component {
                 localStorage.removeItem('user');
             }
         }
-        if (pages[page] && page !== 'login') {
+        if (pages[page] && page !== 'login' && page !== 'signup') {
             this.setState({ currentLocation: page })
         }
         this.shuffle()
@@ -517,7 +513,7 @@ class App extends Component {
         if (name === 'search') {
             return
         }
-        if (name === 'home' || name === 'login') {
+        if (name === 'home' || name === 'login' || name === 'signup') {
             this.setState({ currentLocation: name, })
         }
         else {
@@ -528,7 +524,7 @@ class App extends Component {
     }
     handleMenuItemClickFooter = (name) => {
         this.setState({ blogsAreLoading: true })
-        if (name === 'home' || name === 'login') {
+        if (name === 'home' || name === 'login' || name === 'signup') {
             this.setState({ currentLocation: name, })
         }
         else {
