@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {  Menu, Button,Icon,Header,Modal,List,Grid,Container,Segment} from 'semantic-ui-react'
-import config from '../environments/conf'
+import config, {pages} from '../environments/conf'
+import {bindActionCreators} from "redux";
+import * as VarsActions from "../state/actions/vars";
 const env = config[process.env.NODE_ENV] || 'development'
-class Footer extends Component {
+class Footer extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -14,7 +17,40 @@ class Footer extends Component {
     handleCookieOpen = () => this.setState({ cookieModalOpen: true })
     handleCookieClose = () => this.setState({ cookieModalOpen: false })
     handleUlerOpen = () => this.setState({ ulerModalaOpen: true })
-    handleUlerClose = () => this.setState({ ulerModalaOpen: false })
+    handleUlerClose = () => this.setState({ ulerModalaOpen: false });
+    updateVars(vars){
+        let newVars = this.props.vars;
+        for(let i=0;i<vars.length;i++){
+            newVars[vars[i].key]=vars[i].value
+        }
+        this.props.varsActions.updateVars(newVars);
+    };
+    handleHomeClick = () => {
+        let newVars = this.props.vars;
+        newVars.blogsAreLoading=true;
+        newVars.currentLocation='home';
+        newVars.blog=null;
+        this.props.varsActions.updateVars(newVars);
+    };
+    handleMenuItemClick = (name) => {
+        if (name === 'search') {
+            return false
+        }
+        let newVars = this.props.vars;
+        newVars.blogsAreLoading=true;
+        if (name === 'home' || name === 'login') {
+            newVars.currentLocation=name;
+        }
+        else {
+            if (pages[name]) {
+            }
+            newVars.currentLocation=name;
+            this.props.varsActions.updateVars(newVars);
+        }
+    };
+    componentDidMount(){
+        console.log(this.props)
+    };
     render() {
         let urlDetails = 'all';
         return (
@@ -35,19 +71,19 @@ class Footer extends Component {
                                         <List.Item>
                                             <a href="https://github.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='black' name='github' />
-                                                <span style={{color:'black'}} color={this.props.color}>GitHub</span>
+                                                <span style={{color:'black'}} color={this.props.vars.color}>GitHub</span>
                                             </a>
                                         </List.Item>
                                         <List.Item >
                                             <a href="https://twitter.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='twitter' />
-                                                <span style={{color:'blue'}} color={this.props.color} >Twitter</span>
+                                                <span style={{color:'blue'}} color={this.props.vars.color} >Twitter</span>
                                             </a>
                                         </List.Item>
                                         <List.Item>
                                             <a href="https://facebook.com/zemuldo" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='facebook' />
-                                                <span style={{color:'blue'}} color={this.props.color}>FaceBook</span>
+                                                <span style={{color:'blue'}} color={this.props.vars.color}>FaceBook</span>
                                             </a>
                                         </List.Item>
                                     </List>
@@ -60,51 +96,51 @@ class Footer extends Component {
                                     <Header color='green' inverted as='h4' content='Navigation' />
                                     <List link >
                                         <List.Item>
-                                            <Link  to="/" onClick={()=>this.props.handleHomeClick()}>
+                                            <Link  to="/" onClick={()=>this.handleHomeClick()}>
                                                 <Icon color='blue' name='home' />
-                                                <span style={{color:this.props.colors[1]}} color={this.props.color}>Home Page</span>
+                                                <span style={{color:this.props.vars.colors[1]}} color={this.props.vars.color}>Home Page</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/tutorials/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tuts')}>
+                                            <Link to={"/tutorials/"+urlDetails} onClick={()=>this.handleMenuItemClick('tuts')}>
                                                 <Icon color='blue' name='code' />
-                                                <span style={{color:this.props.colors[2]}} color={this.props.color}>Tutorials</span>
+                                                <span style={{color:this.props.vars.colors[2]}} color={this.props.vars.color}>Tutorials</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/dev/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('dev')}>
+                                            <Link to={"/dev/"+urlDetails} onClick={()=>this.handleMenuItemClick('dev')}>
                                                 <Icon color='blue' name='code' />
-                                                <span style={{color:this.props.colors[3]}} color={this.props.color}>Development</span>
+                                                <span style={{color:this.props.vars.colors[3]}} color={this.props.vars.color}>Development</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/tech/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('tech')}>
+                                            <Link to={"/tech/"+urlDetails} onClick={()=>this.handleMenuItemClick('tech')}>
                                                 <Icon color='blue' name='server' />
-                                                <span style={{color:this.props.colors[0]}} color={this.props.color}>Tech Articles</span>
+                                                <span style={{color:this.props.vars.colors[0]}} color={this.props.vars.color}>Tech Articles</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/business/"+urlDetails}onClick={()=>this.props.handleMenuItemClickFooter('business')}>
+                                            <Link to={"/business/"+urlDetails}onClick={()=>this.handleMenuItemClick('business')}>
                                                 <Icon color='blue' name='book' />
-                                                <span style={{color:this.props.colors[4]}} color={this.props.color}>Business Articles</span>
+                                                <span style={{color:this.props.vars.colors[4]}} color={this.props.vars.color}>Business Articles</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/reviews/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('reviews')}>
+                                            <Link to={"/reviews/"+urlDetails} onClick={()=>this.handleMenuItemClick('reviews')}>
                                                 <Icon color='blue' name='star' />
-                                                <span style={{color:this.props.colors[3]}} color={this.props.color}>Reviews</span>
+                                                <span style={{color:this.props.vars.colors[3]}} color={this.props.vars.color}>Reviews</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/about/"+urlDetails} onClick={()=>this.props.handleMenuItemClickFooter('about')}>
+                                            <Link to={"/about/"+urlDetails} onClick={()=>this.handleMenuItemClick('about')}>
                                                 <Icon color='blue' name='info' />
-                                                <span style={{color:this.props.colors[0]}} color={this.props.color}>About</span>
+                                                <span style={{color:this.props.vars.colors[0]}} color={this.props.vars.color}>About</span>
                                             </Link>
                                         </List.Item>
                                         <List.Item>
                                             <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
                                                 <Icon color='blue' name='user' />
-                                                <span style={{color:this.props.colors[4]}} color={this.props.color}>The Creator</span>
+                                                <span style={{color:this.props.vars.colors[4]}} color={this.props.vars.color}>The Creator</span>
                                             </a>
                                         </List.Item>
                                     </List>
@@ -119,22 +155,22 @@ class Footer extends Component {
                         <List horizontal  divided link>
                             <List.Item>
                                 <a href={env.serverURL+'/sitemap.xml'} rel="noreferrer noopener" target="_blank">
-                                    <Icon color={this.props.color} name='map' />
-                                    <span style={{color:this.props.colors[3]}} color={this.props.color}>Site Map</span>
+                                    <Icon color={this.props.vars.color} name='map' />
+                                    <span style={{color:this.props.vars.colors[3]}} color={this.props.vars.color}>Site Map</span>
                                 </a>
                             </List.Item>
                             <List.Item>
                                 <a >
-                                    <Icon color={this.props.color} name='phone' />
-                                    <span style={{color:this.props.colors[0]}} color={this.props.color}>Contact</span>
+                                    <Icon color={this.props.vars.color} name='phone' />
+                                    <span style={{color:this.props.vars.colors[0]}} color={this.props.vars.color}>Contact</span>
                                 </a>
                             </List.Item>
                             <List.Item>
                                 <Modal
                                     trigger={
                                         <Menu.Item name='Cookie Policy' onClick={this.handleCookieOpen} >
-                                            <Icon color={this.props.color} name='privacy' />
-                                            <span style={{color:this.props.colors[5]}} color={this.props.color}>Cookie Policy</span>
+                                            <Icon color={this.props.vars.color} name='privacy' />
+                                            <span style={{color:this.props.vars.colors[5]}} color={this.props.vars.color}>Cookie Policy</span>
                                         </Menu.Item>
                                     }
                                     open={this.state.cookieModalOpen}
@@ -147,13 +183,13 @@ class Footer extends Component {
                                         <h3>This website uses cookies to ensure the best user experience.</h3>
                                         <p>Cookies help you have better experience. The full Policy is here
                                             <a href="https://policy.zemuldo.com/cookie" rel="noreferrer noopener" target="_blank">
-                                                <Icon color={this.props.color} name='privacy' />
-                                                <span style={{color:this.props.colors[2]}} color={this.props.color}>Zemuldo.com Cookie Policy</span>
+                                                <Icon color={this.props.vars.color} name='privacy' />
+                                                <span style={{color:this.props.vars.colors[2]}} color={this.props.vars.color}>Zemuldo.com Cookie Policy</span>
                                             </a>
                                         </p>
                                     </Modal.Content>
                                     <Modal.Actions>
-                                        <Button color={this.props.color} onClick={this.handleCookieClose} inverted>
+                                        <Button color={this.props.vars.color} onClick={this.handleCookieClose} inverted>
                                             <Icon name='checkmark' /> OK
                                         </Button>
                                     </Modal.Actions>
@@ -163,8 +199,8 @@ class Footer extends Component {
                                 <Modal
                                     trigger={
                                         <Menu.Item name='Terms and Conditions' onClick={this.handleUlerOpen} >
-                                            <Icon color={this.props.color} name='law' />
-                                            <span style={{color:this.props.colors[3]}} color={this.props.color}>Terms and Conditions</span>
+                                            <Icon color={this.props.vars.color} name='law' />
+                                            <span style={{color:this.props.vars.colors[3]}} color={this.props.vars.color}>Terms and Conditions</span>
                                         </Menu.Item>
                                     }
                                     open={this.state.ulerModalaOpen}
@@ -177,13 +213,13 @@ class Footer extends Component {
                                         <h3>This application uses cookies to ensure the best user experience.</h3>
                                         <p>Cookies help you have better experience. The full Policy is here.
                                             <a href="https://policy.zemuldo.com/terms" rel="noreferrer noopener" target="_blank">
-                                                <Icon color={this.props.color} name='law' />
-                                                <span color={this.props.color}> Zemuldo.COM Terms and Conditions</span>
+                                                <Icon color={this.props.vars.color} name='law' />
+                                                <span color={this.props.vars.color}> Zemuldo.COM Terms and Conditions</span>
                                             </a>
                                         </p>
                                     </Modal.Content>
                                     <Modal.Actions>
-                                        <Button color={this.props.color} onClick={this.handleUlerClose} inverted>
+                                        <Button color={this.props.vars.color} onClick={this.handleUlerClose} inverted>
                                             <Icon name='checkmark' /> OK
                                         </Button>
                                     </Modal.Actions>
@@ -191,8 +227,8 @@ class Footer extends Component {
                             </List.Item>
                             <List.Item>
                                 <a href="https://danstan.zemuldo.com" rel="noreferrer noopener" target="_blank">
-                                    <Icon color={this.props.color} name='copyright' />
-                                    <span style={{color:this.props.colors[2]}} color={this.props.color}>CopyRight {" Zemuldo "+new Date().getFullYear()}</span>
+                                    <Icon color={this.props.vars.color} name='copyright' />
+                                    <span style={{color:this.props.vars.colors[2]}} color={this.props.vars.color}>CopyRight {" Zemuldo "+new Date().getFullYear()}</span>
                                 </a>
                             </List.Item>
                         </List>
@@ -203,4 +239,18 @@ class Footer extends Component {
         )
     }
 }
-export default Footer;
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+        vars:state.vars
+    }
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        varsActions:bindActionCreators(VarsActions,dispatch),
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps) (Footer);
