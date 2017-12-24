@@ -1,13 +1,12 @@
 import React from 'react';
 import Page from './pages/index'
-import Login from './profile/loginForm'
+import Login from './profile/login'
 import {  Switch, Route } from 'react-router-dom'
 
 class Routes extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-        };
+        this.state = {};
     };
     render() {
         return (
@@ -23,6 +22,7 @@ class Routes extends React.Component {
                     <Route path='/about' component={Page}/>
                     <Route path='/:user/:details' component={Login}/>
                     <Route path='/login' component={Login}/>
+                    <Route path='/signup' component={Login}/>
                     <Route exact path='/*' component={Page}/>
                 </Switch>
             </main>
