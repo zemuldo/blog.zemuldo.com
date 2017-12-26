@@ -83,7 +83,7 @@ class Login extends React.Component {
                             let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
                             this.updateVars([{key:'profilePic',value:imageUrl}])
                             this.props.userActions.updateUser(user);
-                            this.props.history.push('/'+user.userName+'/profile-'+this.props.vars.time.split(' ').join('-'));
+                            this.props.history.push('/user/'+user.userName);
                             this.setState({validatingKnounUser:false});
                             return true
                         }
@@ -153,6 +153,7 @@ class Login extends React.Component {
                     this.updateVars([{key:'profilePic',value:imageUrl}])
                     this.props.userActions.updateUser(user);
                     localStorage.setItem('user',JSON.stringify(success.data))
+                    this.props.history.push('/'+'user/'+success.data.userName)
                 }
                 else {
                     this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:success.data.error}})
@@ -299,7 +300,6 @@ class Login extends React.Component {
         this.setState({ creatAvatarOpen: false })
     }
     async componentDidMount() {
-        console.log(this.props.history);
         await this.validateUser()
     }
     componentWillReceiveProps() {
