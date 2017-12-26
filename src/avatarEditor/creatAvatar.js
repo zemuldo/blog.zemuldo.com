@@ -217,6 +217,7 @@ class AvaratEditor extends React.Component {
                     <Grid.Column width={8}>
                         {!!this.state.preview &&
                         <img
+                            alt={'blogs.zemuldo.com_create profile picture'}
                             src={this.state.preview.img}
                             style={{
                                 borderRadius: `${(Math.min(

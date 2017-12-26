@@ -25,7 +25,7 @@ const Audio = (props) => {
     return <audio controls src={props.src} style={styles.media} />;
 };
 const Image = (props) => {
-    return <img src={props.src} style={styles.media} />;
+    return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'} />;
 };
 const Video = (props) => {
     return <video controls src={props.src} style={styles.media} />;
@@ -647,7 +647,7 @@ const BlockStyleControls = (props) => {
         </div>
     );
 };
-var INLINE_STYLES = [
+let INLINE_STYLES = [
     {label: 'Bold', style: 'BOLD',icon:'bold'},
     {label: 'Italic', style: 'ITALIC',icon:'italic'},
     {label: 'Underline', style: 'UNDERLINE',icon:'underline'},

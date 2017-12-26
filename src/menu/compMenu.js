@@ -183,6 +183,7 @@ class ComMenu extends React.Component {
                                     <Dropdown
                                         className='dropDown'
                                         trigger={<Image
+                                            alt={'blogd.zemuldo.com_'+this.props.user.userName+'+_profile_pic'}
                                             avatar={true}
                                             wrapped={true}
                                             id="photo"
