@@ -153,7 +153,7 @@ class Login extends React.Component {
                     this.updateVars([{key:'profilePic',value:imageUrl}])
                     this.props.userActions.updateUser(user);
                     localStorage.setItem('user',JSON.stringify(success.data))
-                    this.props.history.push('/'+'user/'+success.data.userName)
+                    this.props.history.push('/user/'+success.data.userName)
                 }
                 else {
                     this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:success.data.error}})

@@ -28,13 +28,13 @@ class WelcomePage extends React.Component {
             let related = '&related=http%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
             let url= '&url=http%3A%2F%2Fzemuldo.com/'+this.props.blogDetails.title.split(' ').join('-')+'_'+this.props.blogDetails.date.split(' ').join('-')+'_'+this.props.blogDetails.id.toString()
             let fullURL = url+related+hashTgs+via
-            let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
+            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
     }
     gplusShare () {
-        window.open("https://plus.google.com/share?url="+'http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
+        window.open('https://plus.google.com/share?url=http://zemuldo.com/'+this.props.blogDetails.title.split(' ').join('-'),"","height=550,width=525,left=100,top=100,menubar=0");
         return false;
     }
     linkdnShare(){

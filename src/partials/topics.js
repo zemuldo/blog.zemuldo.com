@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import _ from 'lodash'
 import util from '../util'
 import {topics} from '../environments/conf'
 
-class Topics extends Component {
+class Topics extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-        };
+        this.state = {};
     };
     render() {
         return (
             <div className='topicsWrapper'>
                 <Header color='blue' as='h3'>Topics</Header>
-                <Link to = {'/'+this.props.currentLocation+'/'+'all'}>
+                <Link to = {'/'+this.props.currentLocation+'/all'}>
                 <button
                     disabled={window.location.pathname.split('/')[2]==='all' || !window.location.pathname.split('/')[2]}
                     className="topicButton"
@@ -23,7 +22,7 @@ class Topics extends Component {
                     name='all'
                 >
                             <span>
-                                {'All '+ '|'}
+                                {'All |'}
                             </span>
                 </button>
                 </Link>
@@ -37,7 +36,7 @@ class Topics extends Component {
                     >
                             <span>
                                 {util.toTitleCase(topics[i].name)}
-                                {' '+ '|'}
+                                {' |'}
                             </span>
                     </button>
                     </Link>

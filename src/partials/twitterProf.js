@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {  Header } from 'semantic-ui-react'
 import { Timeline } from 'react-twitter-widgets'
 
-class TwitterProf extends Component {
+class TwitterProf extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            modalOpen:false
-        };
+        this.state = {};
     };
     render() {
         return (
@@ -28,4 +26,5 @@ class TwitterProf extends Component {
         )
     }
 }
+
 export default TwitterProf;

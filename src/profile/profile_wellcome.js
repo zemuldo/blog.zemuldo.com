@@ -1,5 +1,5 @@
 import React from 'react'
-import {Header,Loader,Segment,List,Grid,Divider,Image,Container} from 'semantic-ui-react'
+import {Header,Loader} from 'semantic-ui-react'
 import Blog from '../posts/blog'
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/

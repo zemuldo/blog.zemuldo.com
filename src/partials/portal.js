@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Button, Header, Segment, Portal,Form ,Checkbox,TextArea} from 'semantic-ui-react'
 import axios from 'axios'
 import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
-export default class ReviewPortal extends Component {
+const env = config[process.env.NODE_ENV] || 'development';
+
+class ReviewPortal extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -132,3 +133,5 @@ export default class ReviewPortal extends Component {
         )
     }
 }
+
+export default  ReviewPortal;

@@ -1,14 +1,6 @@
-import React,{Component} from 'react'
-import axios from 'axios'
+import React from 'react'
 import debounce from 'lodash/debounce';
-import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
-const cats = {
-    Development:'dev',
-    Business:'business',
-    Technology:'tech'
-}
+import {CompositeDecorator,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
 
 function mediaBlockRenderer(block) {
     if (block.getType() === 'atomic') {
@@ -135,7 +127,6 @@ class RichEditorExample extends React.Component {
         this.setState({ isLoaded: value });
     };
     onChange = (editorState) =>{
-        const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.setState({hasSavedContent:false})
 

@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React from 'react'
 import { Header, Icon,Button, Grid ,Loader,Input} from 'semantic-ui-react'
 import WelcomePage from './welCome'
 import Blogs from '../posts/blogs'
@@ -10,13 +10,12 @@ import {pages} from '../environments/conf'
 import {topicsOBJ} from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 let x =0
-class PagesComponent extends Component {
+class PagesComponent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             next:true,
             topic:'all',
-            queryMethod:'getPagedPosts',
         };
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);

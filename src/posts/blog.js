@@ -155,7 +155,7 @@ export default class WelcomePage extends React.Component {
             let thisBlog = this.props.blogDetails
             let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
             let fullURL = url+related+hashTgs+via
-            let shareURL = 'https://twitter.com/intent/tweet?text='+'pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
+            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
@@ -164,7 +164,7 @@ export default class WelcomePage extends React.Component {
         let thisBlog = this.props.blogDetails
         let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         if(this.props.blogDetails){
-            let url = "https://plus.google.com/share?url="+'https://zemuldo.com/'+url
+            let url = 'https://plus.google.com/share?url=https://zemuldo.com/'+url
             window.open(url);
         }
     }

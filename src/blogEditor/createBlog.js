@@ -1,10 +1,9 @@
-import React,{Component} from 'react'
+import React from 'react'
 import axios from 'axios'
-import ReactDOM from 'react-dom';
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Form, Segment,Header,Confirm, Icon,Modal, Grid ,Loader,Input,Divider,Label,Select,Dropdown} from 'semantic-ui-react'
+import {Button,Header, Icon,Modal} from 'semantic-ui-react'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
@@ -160,7 +159,6 @@ class RichEditorExample extends React.Component {
         this._confirmMedia = this._confirmMedia.bind(this)
     }
     __promptForMedia(type) {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -170,7 +168,6 @@ class RichEditorExample extends React.Component {
         });
     }
     _addAudio() {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -180,7 +177,6 @@ class RichEditorExample extends React.Component {
         });
     }
     _addImage() {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -190,7 +186,6 @@ class RichEditorExample extends React.Component {
         });
     }
     _addVideo() {
-        const {editorState} = this.state;
         this.setState({
             showMedURLInput: true,
             urlValue: '',
