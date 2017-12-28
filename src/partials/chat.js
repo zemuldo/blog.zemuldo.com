@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Header, Segment, Portal,Form,TextArea} from 'semantic-ui-react'
+import { Button, Header, Segment, Portal,Form,TextArea,Comment,Image} from 'semantic-ui-react'
 import _ from 'lodash'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development';
@@ -60,10 +60,16 @@ class LiveChat extends React.Component {
         this.setState({chat:x})
         let mess = {type: "user", sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
         this.ws.send(JSON.stringify(mess));
+        this.setState({message:''})
 
     }
     handleTextChange(event) {
         this.setState({message: event.target.value});
+    }
+    _handleKeyPress= (e)=> {
+        if (e.key === 'Enter') {
+            this.handleSubmit(e)
+        }
     }
     render() {
         return (
@@ -89,21 +95,39 @@ class LiveChat extends React.Component {
                                 onOpen={this.handlePortalOpen}
                                 onClose={this.handlePortalClose}
                             >
-                                <Segment style={{ right: '60%',left:'3%', position: 'fixed', bottom: '10%', zIndex: 1000 }}>
-                                    <Header className='alignCenter'>Zemuldo Profile Bot</Header>
-                                    <div style={{overflowX: 'scroll', height:'400px'}}>
-                                        {
-                                            _.times(this.state.chat.length,(i)=>
-                                                <p key ={i} style={this.state.chat[i].by==='bot'?{textAlign:'left',color:'red'}:{textAlign:'right',color:'green'}}>{this.state.chat[i].text}</p>
-                                            )
-                                        }
+                                <Segment style={{borderRadius:'1%', backgroundColor:'blue', right: '60%',left:'3%', position: 'fixed', bottom: '10%', zIndex: 1000 }}>
+                                    <div>
+                                        <Header className='alignCenter'>Zemuldo Profile Bot</Header>
+                                        <Image size='medium' src='https://photos.zemuldo.com/chatbot.png'/>
+                                        <hr color='green'/>
+                                        <div className='chatContainer' style={{overflowX: 'scroll', height:'400px'}}>
+                                            {
+                                                _.times(this.state.chat.length,(i)=>
+                                                    <div key ={i}>
+                                                        <Comment className={this.state.chat[i].by==='bot'?'botMessContainer':'userMessContainer'} style={this.state.chat[i].by==='bot'?{textAlign:'left',color:'green'}:{textAlign:'right',color:'blue'}}>
+                                                            <Comment.Avatar as='avatar' src='https://photos.zemuldo.com/cht.jpg' />
+                                                            <Comment.Content>
+                                                                <Comment.Author as='a'>{this.state.chat[i].by==='bot'?this.state.chat[i].by:'You'}</Comment.Author>
+                                                                <Comment.Metadata>
+                                                                    <div>{new Date().toUTCString()}</div>
+                                                                </Comment.Metadata>
+                                                                <Comment.Text> {this.state.chat[i].text}</Comment.Text>
+                                                                <Comment.Actions>
+                                                                    <Comment.Action>Reply</Comment.Action>
+                                                                </Comment.Actions>
+                                                            </Comment.Content>
+                                                        </Comment>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
+                                        <Form>
+                                            <Form.Field>
+                                                <TextArea value={this.state.message} onKeyPress={this._handleKeyPress}  onChange={this.handleTextChange} placeholder='Leave a message' style={{ minHeight: 30 }} />
+                                            </Form.Field>
+                                            <Button  disabled={!(this.state.message.length>1)} onClick={this.handleSubmit} type='submit'>Send</Button>
+                                        </Form>
                                     </div>
-                                    <Form>
-                                        <Form.Field>
-                                            <TextArea  onChange={this.handleTextChange} placeholder='Leave a message' style={{ minHeight: 30 }} />
-                                        </Form.Field>
-                                        <Button  disabled={!(this.state.message.length>1)} onClick={this.handleSubmit} type='submit'>Submit</Button>
-                                    </Form>
                                 </Segment>
                             </Portal>
                         </div>:

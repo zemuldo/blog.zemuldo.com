@@ -287,3 +287,19 @@ a:hover{
 .marginTop2{
     margin-top: 2%;
 }
+
+/*
+    Chat
+*/
+.chatContainer{
+    background-color: white;
+    padding: 4px;
+}
+.userMessContainer{
+    border-radius: 3%;
+    border: lightblue;
+}
+.botMessContainer{
+    border-radius: 3%;
+    border: darkolivegreen;
+}
