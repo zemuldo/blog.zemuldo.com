@@ -29,16 +29,12 @@ class LiveChat extends React.Component {
     }
     chat(){
         this.ws.onopen = function() {
-            console.log('Socket open.');
             this.ws.send(JSON.stringify({message: 'Hello There'}));
-            console.log('Message sent.')
         }.bind(this);
         this.ws.onmessage = function(message) {
-            console.log('Socket server message', JSON.parse(message.data));
             let mess = JSON.parse(message.data)
             if(mess.type==='sessionId'){
                 this.setState({sessionId:mess.msg})
-                console.log(this.state.sessionId)
             }
             else {
                 let x = this.state.chat
