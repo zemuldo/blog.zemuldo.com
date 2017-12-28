@@ -134,13 +134,13 @@ module.exports = {
     },
     live:{
         httpPort:8080,
-        wsURL:'ws://zemuldo.com:8090',
+        wsURL:'wss://api.zemuldo.com',
         httpURL:'https://api.zemuldo.com',
         serverURL:'https://blogs.zemuldo.com'
     },
     production:{
         httpPort:8080,
-        wsURL:'ws://zemuldo.com:8090',
+        wsURL:'wss://api.zemuldo.com',
         httpURL:'https://api.zemuldo.com',
         serverURL:'https://blogs.zemuldo.com'
     },
