@@ -32,15 +32,15 @@ class LiveChat extends React.Component {
             this.ws.send(JSON.stringify({message: 'Hello There'}));
         }.bind(this);
         this.ws.onmessage = function(message) {
-            // let mess = JSON.parse(message.data)
-            // if(mess.type==='sessionId'){
-            //     this.setState({sessionId:mess.msg})
-            // }
-            // else {
-            //     let x = this.state.chat
-            //     x.push({by:'bot',text:mess.msg});
-            //     this.setState({chat:x})
-            // }
+            let mess = JSON.parse(message.data)
+            if(mess.type==='sessionId'){
+                this.setState({sessionId:mess.msg})
+            }
+            else {
+                let x = this.state.chat
+                x.push({by:'bot',text:mess.msg});
+                this.setState({chat:x})
+            }
         }.bind(this);
     }
     toggle = () => {
