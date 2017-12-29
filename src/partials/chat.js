@@ -11,7 +11,7 @@ for (let i=0;i<100;i++){
 
 class LiveChat extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             log: [],
             portalOpen: false,
@@ -19,7 +19,7 @@ class LiveChat extends React.Component {
             message:'',
             checked:false,
             sessionId:null,
-            chat:[{by:'bot',text:'Hi i am zemuldo profile bot, just here to help'}]
+            chat:[]
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
@@ -27,20 +27,16 @@ class LiveChat extends React.Component {
         this.handlePortalClose = this.handlePortalClose.bind(this);
         this.handlePortalOpen = this.handlePortalOpen.bind(this);
         this.chat = this.chat.bind(this);
-        this.scrollChat=this.scrollChat.bind(this)
+        this.scrollChat=this.scrollChat.bind(this);
         this.ws = new WebSocket(env.wsURL);
     }
     scrollChat =function (i) {
         this.refs[i].scrollIntoView({block:'end', behavior:'smooth'})
-    }
+    };
     componentDidMount(){
-
        this.chat();
     }
     chat(){
-        this.ws.onopen = function() {
-            this.ws.send(JSON.stringify({message: 'Hello There'}));
-        }.bind(this);
         this.ws.onmessage = function(message) {
             let mess = JSON.parse(message.data);
             if(mess.type==='sessionId'){
@@ -51,6 +47,7 @@ class LiveChat extends React.Component {
                 let ref = x.length;
                 x.push({by:'bot',text:mess.msg});
                 this.setState({chat:x});
+                this.setState({portalOpen:true});
                 this.scrollChat(ref)
             }
         }.bind(this);
@@ -58,22 +55,25 @@ class LiveChat extends React.Component {
     toggle = () => {
         this.setState({ checked: !this.state.checked });
     };
-
     handlePortalOpen = () => {
+        if(this.state.chat.length===0){
+            this.setState({chat:[{by:'bot',text:'Hi i am zemuldo profile bot, just here to help'}]})
+        }
         this.setState({ portalOpen: true ,checked: false});
     };
-
     handlePortalClose = () => {
         this.setState({ portalOpen: false ,checked: false});
     };
     handleSubmit= (e)=>{
-        let x = this.state.chat;
-        x.push({by:'user',text:this.state.message})
-        this.setState({chat:x});
-        let mess = {type: "user", sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
-        this.ws.send(JSON.stringify(mess));
-        this.setState({message:''})
-
+        if(this.state.message.length>1){
+            let x = this.state.chat;
+            x.push({by:'user',text:this.state.message});
+            this.setState({chat:x});
+            let mess = {type: "user", sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
+            this.ws.send(JSON.stringify(mess));
+            this.setState({message:''});
+            this.scrollChat('MessageEnd')
+        }
     };
     handleTextChange(event) {
         this.setState({message: event.target.value});
@@ -85,7 +85,7 @@ class LiveChat extends React.Component {
     };
     render() {
         return (
-            <div ref="chat-cont">
+            <div>
                 {
                     window.innerWidth>800 ?
                         <div style={{
@@ -116,14 +116,14 @@ class LiveChat extends React.Component {
                                             <Image  src={env.photosURL+'chatbot.png'}/>
                                             <hr color='blue'/>
                                         </div>
-                                        <div ref="chat" className='chatContainer' style={{overflowX: 'scroll', height:'300px'}}>
+                                        <div className='chatContainer' style={{overflowX: 'scroll', height:'300px'}}>
                                             {
                                                 _.times(this.state.chat.length,(i)=>
                                                     <div ref={i}  key ={i}>
                                                         <Comment className={this.state.chat[i].by==='bot'?'botMessContainer':'userMessContainer'}>
                                                             <Comment.Content>
                                                                 <Comment.Metadata>
-                                                                    <div>{new Date().toUTCString()}</div>
+                                                                    <div><u>{new Date().toUTCString()}</u></div>
                                                                 </Comment.Metadata>
                                                                 <Comment.Text>{this.state.chat[i].text}</Comment.Text>
                                                             </Comment.Content>
@@ -144,13 +144,21 @@ class LiveChat extends React.Component {
                                                     </div>
                                                 )
                                             }
+                                            <div ref='MessageEnd'>
+
+                                            </div>
                                         </div>
                                         <div ref='chat_dumy'>
 
                                         </div>
                                         <Form>
                                             <Form.Field>
-                                                <TextArea value={this.state.message} onKeyPress={this._handleKeyPress}  onChange={this.handleTextChange} placeholder='Leave a message' style={{ minHeight: 30 }} />
+                                                <TextArea
+                                                    value={this.state.message}
+                                                    onKeyPress={this._handleKeyPress}
+                                                    onChange={this.handleTextChange}
+                                                    placeholder='Start Typing'
+                                                    style={{ minHeight: 30 }} />
                                             </Form.Field>
                                             <Button  disabled={!(this.state.message.length>1)} onClick={this.handleSubmit} type='submit'>Send</Button>
                                         </Form>
