@@ -32,15 +32,15 @@ class LiveChat extends React.Component {
             this.ws.send(JSON.stringify({message: 'Hello There'}));
         }.bind(this);
         this.ws.onmessage = function(message) {
-            let mess = JSON.parse(message.data)
-            if(mess.type==='sessionId'){
-                this.setState({sessionId:mess.msg})
-            }
-            else {
-                let x = this.state.chat
-                x.push({by:'bot',text:mess.msg});
-                this.setState({chat:x})
-            }
+            // let mess = JSON.parse(message.data)
+            // if(mess.type==='sessionId'){
+            //     this.setState({sessionId:mess.msg})
+            // }
+            // else {
+            //     let x = this.state.chat
+            //     x.push({by:'bot',text:mess.msg});
+            //     this.setState({chat:x})
+            // }
         }.bind(this);
     }
     toggle = () => {
@@ -95,28 +95,36 @@ class LiveChat extends React.Component {
                                 onOpen={this.handlePortalOpen}
                                 onClose={this.handlePortalClose}
                             >
-                                <Segment style={{borderRadius:'1%', backgroundColor:'blue', right: '60%',left:'3%', position: 'fixed', bottom: '10%', zIndex: 1000 }}>
+                                <Segment style={{borderRadius:'1%', backgroundColor:'blue', minWidth:'400px', maxWidth:'300px', right: '70%',left:'3%', position: 'fixed', bottom: '10%', zIndex: 1000 }}>
                                     <div>
                                         <Header className='alignCenter'>Zemuldo Profile Bot</Header>
-                                        <Image size='medium' src='https://photos.zemuldo.com/chatbot.png'/>
+                                        <Image size='medium' src={env.photosURL+'chatbot.png'}/>
                                         <hr color='green'/>
                                         <div className='chatContainer' style={{overflowX: 'scroll', height:'400px'}}>
                                             {
                                                 _.times(this.state.chat.length,(i)=>
-                                                    <div key ={i}>
-                                                        <Comment className={this.state.chat[i].by==='bot'?'botMessContainer':'userMessContainer'} style={this.state.chat[i].by==='bot'?{textAlign:'left',color:'green'}:{textAlign:'right',color:'blue'}}>
-                                                            <Comment.Avatar as='avatar' src='https://photos.zemuldo.com/cht.jpg' />
+                                                    <div  key ={i}>
+                                                        <Comment className={this.state.chat[i].by==='bot'?'botMessContainer':'userMessContainer'}>
                                                             <Comment.Content>
-                                                                <Comment.Author as='a'>{this.state.chat[i].by==='bot'?this.state.chat[i].by:'You'}</Comment.Author>
                                                                 <Comment.Metadata>
                                                                     <div>{new Date().toUTCString()}</div>
                                                                 </Comment.Metadata>
-                                                                <Comment.Text> {this.state.chat[i].text}</Comment.Text>
-                                                                <Comment.Actions>
-                                                                    <Comment.Action>Reply</Comment.Action>
-                                                                </Comment.Actions>
+                                                                <Comment.Text>{this.state.chat[i].text}</Comment.Text>
                                                             </Comment.Content>
                                                         </Comment>
+                                                        <br/>
+                                                        <div>
+                                                            {
+                                                               this.state.chat[this.state.chat.length-1].by==='user' && this.state.chat.length===i+1?
+                                                                   <Comment className={'botTyping'}>
+                                                                       <Comment.Text>Bot typing...</Comment.Text>
+                                                                   </Comment>:
+                                                                   this.state.chat[this.state.chat.length-1].by==='bot' && this.state.chat.length===i+1?
+                                                                   <Comment className={'userTyping'}>
+                                                                       <Comment.Text>Press Enter...</Comment.Text>
+                                                                   </Comment>:null
+                                                            }
+                                                        </div>
                                                     </div>
                                                 )
                                             }
