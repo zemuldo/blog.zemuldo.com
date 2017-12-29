@@ -4,6 +4,11 @@ import _ from 'lodash'
 import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development';
 
+let imets = [];
+for (let i=0;i<100;i++){
+    imets.push(i);
+}
+
 class LiveChat extends React.Component {
     constructor(props){
         super(props)
@@ -15,16 +20,21 @@ class LiveChat extends React.Component {
             checked:false,
             sessionId:null,
             chat:[{by:'bot',text:'Hi i am zemuldo profile bot, just here to help'}]
-        }
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
         this.toggle = this.toggle.bind(this);
         this.handlePortalClose = this.handlePortalClose.bind(this);
         this.handlePortalOpen = this.handlePortalOpen.bind(this);
+        this.chat = this.chat.bind(this);
+        this.scrollChat=this.scrollChat.bind(this)
         this.ws = new WebSocket(env.wsURL);
-        this.chat = this.chat.bind(this)
+    }
+    scrollChat =function (i) {
+        this.refs[i].scrollIntoView({block:'end', behavior:'smooth'})
     }
     componentDidMount(){
+
        this.chat();
     }
     chat(){
@@ -32,37 +42,39 @@ class LiveChat extends React.Component {
             this.ws.send(JSON.stringify({message: 'Hello There'}));
         }.bind(this);
         this.ws.onmessage = function(message) {
-            let mess = JSON.parse(message.data)
+            let mess = JSON.parse(message.data);
             if(mess.type==='sessionId'){
                 this.setState({sessionId:mess.msg})
             }
             else {
-                let x = this.state.chat
+                let x = this.state.chat;
+                let ref = x.length;
                 x.push({by:'bot',text:mess.msg});
-                this.setState({chat:x})
+                this.setState({chat:x});
+                this.scrollChat(ref)
             }
         }.bind(this);
     }
     toggle = () => {
         this.setState({ checked: !this.state.checked });
-    }
+    };
 
     handlePortalOpen = () => {
         this.setState({ portalOpen: true ,checked: false});
-    }
+    };
 
     handlePortalClose = () => {
         this.setState({ portalOpen: false ,checked: false});
-    }
+    };
     handleSubmit= (e)=>{
-        let x = this.state.chat
+        let x = this.state.chat;
         x.push({by:'user',text:this.state.message})
-        this.setState({chat:x})
+        this.setState({chat:x});
         let mess = {type: "user", sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
         this.ws.send(JSON.stringify(mess));
         this.setState({message:''})
 
-    }
+    };
     handleTextChange(event) {
         this.setState({message: event.target.value});
     }
@@ -70,10 +82,10 @@ class LiveChat extends React.Component {
         if (e.key === 'Enter') {
             this.handleSubmit(e)
         }
-    }
+    };
     render() {
         return (
-            <div>
+            <div ref="chat-cont">
                 {
                     window.innerWidth>800 ?
                         <div style={{
@@ -95,15 +107,19 @@ class LiveChat extends React.Component {
                                 onOpen={this.handlePortalOpen}
                                 onClose={this.handlePortalClose}
                             >
-                                <Segment style={{borderRadius:'1%', backgroundColor:'blue', minWidth:'400px', maxWidth:'300px', right: '70%',left:'3%', position: 'fixed', bottom: '10%', zIndex: 1000 }}>
+                                <Segment
+                                    style={{borderRadius:'1%', backgroundColor:'green', maxHeight:'80%', minWidth:'400px', maxWidth:'300px', right: '70%',left:'3%', position: 'fixed', bottom: '10%', zIndex: 1000 }}
+                                >
                                     <div>
-                                        <Header className='alignCenter'>Zemuldo Profile Bot</Header>
-                                        <Image size='medium' src={env.photosURL+'chatbot.png'}/>
-                                        <hr color='green'/>
-                                        <div className='chatContainer' style={{overflowX: 'scroll', height:'400px'}}>
+                                        <div className='alignCenter'>
+                                            <Header >Zemuldo Profile Bot</Header>
+                                            <Image  src={env.photosURL+'chatbot.png'}/>
+                                            <hr color='blue'/>
+                                        </div>
+                                        <div ref="chat" className='chatContainer' style={{overflowX: 'scroll', height:'300px'}}>
                                             {
                                                 _.times(this.state.chat.length,(i)=>
-                                                    <div  key ={i}>
+                                                    <div ref={i}  key ={i}>
                                                         <Comment className={this.state.chat[i].by==='bot'?'botMessContainer':'userMessContainer'}>
                                                             <Comment.Content>
                                                                 <Comment.Metadata>
@@ -128,6 +144,9 @@ class LiveChat extends React.Component {
                                                     </div>
                                                 )
                                             }
+                                        </div>
+                                        <div ref='chat_dumy'>
+
                                         </div>
                                         <Form>
                                             <Form.Field>
