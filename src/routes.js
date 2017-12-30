@@ -1,6 +1,7 @@
 import React from 'react';
 import Page from './pages/index'
 import Login from './profile/login'
+import About from './pages/about'
 import {  Switch, Route } from 'react-router-dom'
 
 class Routes extends React.Component {
@@ -19,7 +20,7 @@ class Routes extends React.Component {
                     <Route path='/business/:loadedDetails' component={Page}/>
                     <Route path='/reviews/:loadedDetails' component={Page}/>
                     <Route path='/tutorials/:loadedDetails' component={Page}/>
-                    <Route path='/about' component={Page}/>
+                    <Route path='/about' component={About}/>
                     <Route path='/:user/:details' component={Login}/>
                     <Route path='/login' component={Login}/>
                     <Route path='/signup' component={Login}/>
