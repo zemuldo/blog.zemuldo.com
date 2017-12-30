@@ -3,7 +3,7 @@ import Main from './routes'
 import NavBar from './menu/navBar'
 import Footer from './partials/footer'
 import ReviewPortal from "./partials/portal";
-import LiveChat from './partials/chat'
+import LiveChat from './bot/chat'
 
 class App extends React.Component {
     constructor(props){
