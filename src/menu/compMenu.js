@@ -175,7 +175,7 @@ class ComMenu extends React.Component {
                                     position='right'
                                     name='login'
                                     color={this.props.vars.colors[0]}
-                                    onClick={() => { this.updateVars([{key:'currentLocation',value:'login'}]) }}>
+                                    onClick={() => { this.updateVars([{key:'currentLocation',value:'login'},{key:'signUp',value:false}]) }}>
                                     <Icon color={this.props.vars.colors[0]} name='unlock' />
                                     <span style={{color:'black'}}><Link to="/login">Login</Link></span>
                                 </Menu.Item>:
