@@ -3,15 +3,16 @@ import {Button,Modal, Header,Icon, Image,Dropdown} from 'semantic-ui-react'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'
-const env = config[process.env.NODE_ENV] || 'development'
-export default class WelcomePage extends React.Component {
+const env = config[process.env.NODE_ENV] || 'development';
+
+class Blog extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             youLike:false,
             showDelete:false,
             userLoggedIn:false,
-            likes:this.props.blogDetails?this.props.blogDetails.likes:0,
+            likes:this.props.blog?this.props.blog.likes:0,
             authorAvatar:null,
             fbC:null,
             twtC:null,
@@ -19,9 +20,9 @@ export default class WelcomePage extends React.Component {
             linkdCont:null,
         }
         this.componentDidMount = this.componentDidMount.bind(this);
-        this.updateLikes=this.updateLikes.bind(this)
-        this.getAauthorAvatar = this.getAauthorAvatar.bind(this)
-        this.closeDelete = this.closeDelete.bind(this)
+        this.updateLikes=this.updateLikes.bind(this);
+        this.getAauthorAvatar = this.getAauthorAvatar.bind(this);
+        this.closeDelete = this.closeDelete.bind(this);
         this.openDelete = this.openDelete.bind(this)
     }
     closeDelete(){
@@ -31,7 +32,7 @@ export default class WelcomePage extends React.Component {
         this.setState({showDelete:true})
     }
     setBlogCounts(){
-        let thisBlog = this.props.blogDetails
+        let thisBlog = this.props.blog;
         let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         let gplusPost = {
             "method": "pos.plusones.get",
@@ -73,7 +74,7 @@ export default class WelcomePage extends React.Component {
         axios.post(env.httpURL,{
             "queryMethod":"getAvatar",
             "queryData":{
-                "id":this.props.blogDetails.authorID
+                "id":this.props.blog.authorID
             }
         })
             .then(function (res) {
@@ -92,37 +93,37 @@ export default class WelcomePage extends React.Component {
             })
     }
     componentDidMount() {
-        if(this.props.blogDetails){
-            this.getAauthorAvatar()
+        if(this.props.blog){
+            this.getAauthorAvatar();
             this.setBlogCounts()
         }
-        this.setState({youLike:true})
+        this.setState({youLike:true});
         if(localStorage.getItem('user')){
-            this.setState({userLoggedIn:true})
+            this.setState({userLoggedIn:true});
             axios.post(env.httpURL, {
                 "queryMethod":"getLike",
                 "queryData":{
-                    postID:this.props.blogDetails.id,
-                    title:this.props.blogDetails.title,
+                    postID:this.props.blog.id,
+                    title:this.props.blog.title,
                     userID:JSON.parse(localStorage.getItem('user')).id
                 }
             })
                 .then(function (response) {
                     if(!response.data){
-                        this.setState({youLike:false})
+                        this.setState({youLike:false});
                         return false
                     }
                     if(!response.data.state){
-                        this.setState({youLike:false})
+                        this.setState({youLike:false});
                         return false
                     }
                     if(response.data.state===false){
-                        this.setState({youLike:false})
+                        this.setState({youLike:false});
                         return false
                     }
                     if(response.data.state===true){
                         if(response.data.n){
-                            this.setState({youLike:true})
+                            this.setState({youLike:true});
                             return true
                         }
                         else {
@@ -131,46 +132,46 @@ export default class WelcomePage extends React.Component {
                     }
                 }.bind(this))
                 .catch(function (err) {
-                    this.setState({youLike:false})
+                    this.setState({youLike:false});
                     return false
                 }.bind(this));
         }
     }
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fzemuldo.com%2F';
-        if(this.props.blogDetails){
-            let thisBlog = this.props.blogDetails
+        if(this.props.blog){
+            let thisBlog = this.props.blog;
             let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-            let shareURL = fbShareURL+postURL+"&amp;src=sdkpreparse'"
+            let shareURL = fbShareURL+postURL+"&amp;src=sdkpreparse'";
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
     }
     tweetShare () {
-        if(this.props.blogDetails){
+        if(this.props.blog){
 
-            let hashTgs = '%2F&hashtags='+this.props.blogDetails.topics.join(',')
-            let via = '&via=zemuldo'
-            let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let thisBlog = this.props.blogDetails
+            let hashTgs = '%2F&hashtags='+this.props.blog.topics.join(',');
+            let via = '&via=zemuldo';
+            let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F';
+            let thisBlog = this.props.blog;
             let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-            let fullURL = url+related+hashTgs+via
-            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR '+this.props.blogDetails.title+fullURL
+            let fullURL = url+related+hashTgs+via;
+            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR '+this.props.blog.title+fullURL;
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
 
         }
     }
     gplusShare () {
-        let thisBlog = this.props.blogDetails
+        let thisBlog = this.props.blog;
         let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-        if(this.props.blogDetails){
-            let url = 'https://plus.google.com/share?url=https://zemuldo.com/'+url
+        if(this.props.blog){
+             url = 'https://plus.google.com/share?url=https://zemuldo.com/'+url;
             window.open(url);
         }
     }
 
     linkdnShare(){
-        let thisBlog = this.props.blogDetails
+        let thisBlog = this.props.blog;
         let url= '&url=https%3A%2F%2Fzemuldo.com/'+ thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
         window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/'+url,"","height=550,width=525,left=100,top=100,menubar=0");
     }
@@ -180,7 +181,7 @@ export default class WelcomePage extends React.Component {
                 "queryMethod":"updateBlogLikes",
                 "queryData":{
                     id:id,
-                    title:this.props.blogDetails.title,
+                    title:this.props.blog.title,
                     userID:JSON.parse(localStorage.getItem('user')).id
                 }
             })
@@ -198,7 +199,7 @@ export default class WelcomePage extends React.Component {
                 }.bind(this));
         }
 
-    }
+    };
     deletBlog=(id)=>{
         if(localStorage.getItem('user')){
             return axios.post(env.httpURL, {
@@ -216,7 +217,7 @@ export default class WelcomePage extends React.Component {
                 }.bind(this));
         }
 
-    }
+    };
     render() {
         return (
             <div>
@@ -226,18 +227,18 @@ export default class WelcomePage extends React.Component {
                         <Modal.Description>
                             <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                 {
-                                    this.props.blogDetails.title
+                                    this.props.blog.title
                                 }
                             </Header>
                             <span className="info">
                                    Published on:
                                    <br/>
-                                {this.props.blogDetails.date}
+                                {this.props.blog.date}
                                </span>
                             <br/>
                             <br/>
                             <span className="info">
-                                    {this.props.blogDetails.author} {' '}
+                                    {this.props.blog.author} {' '}
                                 </span>
                             <div style={{margin: '2em 0em 3em 0em',fontSize:"16px",fontFamily:"georgia"}}>
                                 <br/>
@@ -249,15 +250,15 @@ export default class WelcomePage extends React.Component {
                         <Button color='black' onClick={()=>this.closeDelete()}>
                             Cancel
                         </Button>
-                        <Button color='red' positive icon='checkmark' labelPosition='right' content="Delete" onClick={()=>this.deletBlog(this.props.blogDetails.id)} />
+                        <Button color='red' positive icon='checkmark' labelPosition='right' content="Delete" onClick={()=>this.deletBlog(this.props.blog.id)} />
                     </Modal.Actions>
                 </Modal>
                 {
-                    this.props.blogDetails && this.props.blogLoaded?
+                    this.props.blog && this.props.blogLoaded?
                         <div>
                             <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                 {
-                                    this.props.blogDetails.title
+                                    this.props.blog.title
                                 }
                             </Header>
                             <div className="shareIcon clearElem" style={{display:'block',fontSize:"16px",fontFamily:"georgia"}}>
@@ -267,7 +268,7 @@ export default class WelcomePage extends React.Component {
                                             {
                                                 this.state.youLike?
                                                     <Icon color={this.props.color} name ="like"/>:
-                                                    <button onClick={()=>this.updateLikes(this.props.blogDetails.id)}>
+                                                    <button onClick={()=>this.updateLikes(this.props.blog.id)}>
                                                         <Icon color='green' name="thumbs up"/>
                                                     </button>
                                             }
@@ -332,15 +333,15 @@ export default class WelcomePage extends React.Component {
                                <span className="info">
                                    Published on:
                                    <br/>
-                                   {this.props.blogDetails.date}
+                                   {this.props.blog.date}
                                </span>
                                 <br/>
                                 <br/>
                                 <span className="info">
-                                    {this.props.blogDetails.author} {' '}
+                                    {this.props.blog.author} {' '}
                                 </span>
                                 {
-                                    this.props.user && this.props.user.userName === this.props.blogDetails.userName?
+                                    this.props.user && this.props.user.userName === this.props.blog.userName?
                                         <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
@@ -367,3 +368,5 @@ export default class WelcomePage extends React.Component {
         )
     }
 }
+
+export default Blog;

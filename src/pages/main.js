@@ -51,10 +51,9 @@ class App extends React.Component {
         this.handleNavigation = this.handleNavigation.bind(this);
         this.setHomeBlogs = this.setHomeBlogs.bind(this);
         this.setPageBlogs = this.setPageBlogs.bind(this);
-        this.navigateBlogs = this.navigateBlogs.bind(this)
-        this.getBlogDetails = this.getBlogDetails.bind(this)
-        this.onReadMore = this.onReadMore.bind(this)
-        this.setCurrentBlog = this.setCurrentBlog.bind(this)
+        this.navigateBlogs = this.navigateBlogs.bind(this);
+        this.onReadMore = this.onReadMore.bind(this);
+        this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
@@ -62,9 +61,9 @@ class App extends React.Component {
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
-        this.deletedBlog = this.deletedBlog.bind(this)
+        this.deletedBlog = this.deletedBlog.bind(this);
         this.handleMenuItemClickFooter = this.handleMenuItemClickFooter.bind(this)
-        this.setTopic = this.setTopic.bind(this)
+        this.setTopic = this.setTopic.bind(this);
         this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
     };
     updateVars(vars){
@@ -117,34 +116,23 @@ class App extends React.Component {
         if (!pages[page]) {
             window.location = '/';
         }
-        return axios.post(env.httpURL, {
+        return Promise.all([
+            axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
                 id: id
             }
-        })
+            }),axios.post(env.httpURL, {
+                "queryMethod": "getPostDetails",
+                "queryData": {
+                    "id": id
+                }
+            })])
             .then(function (response) {
-                if (!response.data) {
-                    this.setState({ blog: null });
-                    this.setState({ blogLoaded: true });
-                    return false
-                }
-                if (response.data.error) {
-                    this.setState({ blog: null });
-                    this.setState({ blogLoaded: true });
-                    return false
-                }
-                if (response.data.body) {
-                    this.setState({ blog: response.data, richViewerState: response.data.body });
-                    this.getBlogDetails(id);
-                    return false
-
-                }
-                else {
-                    this.setState({ blog: null });
-                    this.setState({ blogLoaded: true });
-                    return false
-                }
+                let blog = response[0].data;
+                Object.assign(blog,response[1].data);
+                this.setState({ blog: blog});
+                this.setState({ blogLoaded: true });
             }.bind(this))
             .catch(function (err) {
                 this.setState({ blog: null });
@@ -205,36 +193,15 @@ class App extends React.Component {
             }
         })
             .then(response => {
-                this.setState({ blog: response.data, blogDetails: thisBlog });
-                this.setState({ blogLoaded: true, blog: response.data });
+                let blog = response.data;
+                Object.assign(blog,thisBlog);
+                this.setState({ blogLoaded: true, blog: blog });
                 window.scrollTo(0, 0);
             })
             .catch(function (err) {
-                this.setState({ blog: null, blogDetails: thisBlog });
-                this.setState({ blogLoaded: true });
+                this.setState({ blog: null,blogLoaded: true });
                 return err;
             }.bind(this))
-    }
-    getBlogDetails(id) {
-        return axios.post(env.httpURL, {
-            "queryMethod": "getPostDetails",
-            "queryData": {
-                "id": id
-            }
-        })
-            .then(function (response) {
-                if (response.data.error) {
-                }
-                else {
-                    this.setState({ blogDetails: response.data });
-                    this.setState({ blogLoaded: true })
-                }
-            }
-                .bind(this))
-            .catch(function (err) {
-                this.setState({ blogLoaded: true });
-                return err
-            }.bind(this));
     }
     navigateBlogs(query) {
         this.setState({ blogsLoaded: false });
@@ -566,7 +533,6 @@ class App extends React.Component {
                         color={this.state.colors[1]}
                         blogs={this.props.blogs}
                         blog={this.state.blog}
-                        blogDetails={this.state.blogDetails}
                         blogsLoaded={this.state.blogsLoaded}
                         blogLoaded={this.state.blogLoaded}
                         richViewerState={this.state.richViewerState}
