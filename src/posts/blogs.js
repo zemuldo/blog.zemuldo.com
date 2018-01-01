@@ -7,13 +7,10 @@ import { connect } from "react-redux";
 class Blogs extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-        };
+        this.state = {};
         this.componentDidMount = this.componentDidMount.bind(this)
     };
-    componentDidMount() {
-    }
-
+    componentDidMount() {}
     render() {
         let o = this.props.blogs
         return (
@@ -82,14 +79,14 @@ class Blogs extends React.Component {
                                             <Button
                                                 circular
                                                 size="mini"
-                                                disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i].post_ID}
+                                                disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i]._id}
                                                 className="redMoreButton"
                                                 ref={this.props.blogs[i]._id}
                                                 onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
                                                 name="all"
                                                 style={{color:'blue',backgroundColor:'transparent',border:'none'}}
                                             >
-                                                <span>Read</span>
+                                                <span>Read More</span>
                                             </Button>
                                         </Link>
 
@@ -106,7 +103,8 @@ class Blogs extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        blogs: state.blogs
+        blogs: state.blogs,
+        blog:state.blog
     }
 }
 

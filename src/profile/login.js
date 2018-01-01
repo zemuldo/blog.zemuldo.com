@@ -296,6 +296,9 @@ class Login extends React.Component {
         await this.validateUser()
     }
     componentWillReceiveProps() {
+        if(window.location.origin==='http://localhost:8070'){
+            console.log('+++++++++++++++receing props')
+        }
         let page = window.location.pathname.split('/')[1];
         if(page==='signup' && !this.props.vars.signUp){
             this.props.varsActions.updateVars({signUp:true});

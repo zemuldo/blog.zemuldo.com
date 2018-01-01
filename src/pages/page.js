@@ -8,6 +8,7 @@ import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 import {pages} from '../environments/conf'
 import {topicsOBJ} from '../environments/conf'
+import {connect} from "react-redux";
 const env = config[process.env.NODE_ENV] || 'development'
 let x =0
 class PagesComponent extends React.Component {
@@ -20,7 +21,7 @@ class PagesComponent extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
-        this.setNextBlogs = this.setNextBlogs.bind(this)
+        this.setNextBlogs = this.setNextBlogs.bind(this);
         this.setPreviousBlogs = this.setPreviousBlogs.bind(this);
         this.resetNav = this.resetNav.bind(this);
         this.onTopicClick = this.onTopicClick.bind(this);
@@ -159,7 +160,7 @@ class PagesComponent extends React.Component {
                                                                 <Blogs
                                                                     color={this.props.color}
                                                                     onReadMore = {this.props.onReadMore}
-                                                                    blog ={this.props.blog}/>
+                                                                />
                                                                 <div>
                                                                     <br/>
                                                                     <Button
@@ -218,33 +219,30 @@ class PagesComponent extends React.Component {
                                         color={this.props.color}
                                         blogs={this.props.blogs}
                                         resetNav={this.resetNav}/>:
-                                    <div>
-                                    </div>
+                                    null
                             }
                             {
 
-                                !this.props.blogLoaded?
+                                !this.props.vars.blogLoaded?
                                     <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                         <Loader active inline='centered' />
                                         <p>Loading Blog...</p>
                                     </div>:
-                                    <div>
-                                        <WelcomePage
-                                            x={x}
-                                            next={this.state.next}
-                                            setPreviousBlogs={this.setPreviousBlogs}
-                                            setNextBlogs={this.setNextBlogs}
-                                            onReadMore = {this.props.onReadMore}
-                                            richViewerState={this.props.richViewerState}
-                                            color={this.props.colors[1]}
-                                            blogDetails={this.props.blogDetails}
-                                            blog={this.props.blog}
-                                            blogsLoaded={this.props.blogsLoaded}
-                                            blogLoaded={this.props.blogLoaded}
-                                            deletedBlog={this.props.deletedBlog}
-                                            user={this.props.user}
-                                        />
-                                    </div>
+                                    <WelcomePage
+                                        x={x}
+                                        next={this.state.next}
+                                        setPreviousBlogs={this.setPreviousBlogs}
+                                        setNextBlogs={this.setNextBlogs}
+                                        onReadMore = {this.props.onReadMore}
+                                        richViewerState={this.props.richViewerState}
+                                        color={this.props.colors[1]}
+                                        blogDetails={this.props.blogDetails}
+                                        blog={this.props.blog}
+                                        blogsLoaded={this.props.blogsLoaded}
+                                        blogLoaded={this.props.blogLoaded}
+                                        deletedBlog={this.props.deletedBlog}
+                                        user={this.props.user}
+                                    />
                             }
                         </Grid.Column>
                         {
@@ -258,4 +256,11 @@ class PagesComponent extends React.Component {
             </div>)
     }
 }
-export default PagesComponent
+
+const mapStateToProps = (state) => {
+    return {
+        vars: state.vars
+    }
+}
+
+export default connect(mapStateToProps) (PagesComponent);

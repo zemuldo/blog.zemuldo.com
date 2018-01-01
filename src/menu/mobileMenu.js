@@ -10,6 +10,7 @@ import {bindActionCreators} from "redux";
 import {pages} from "../environments/conf";
 import axios from "axios/index";
 import config from '../environments/conf'
+import * as BlogActions from "../state/actions/blog";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class MobileMenu extends React.Component {
@@ -27,6 +28,8 @@ class MobileMenu extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleHomeClick = () => {
+        this.props.blogActions.updateBlog({id:null});
+        this.props.varsActions.updateVars({ blogLoaded: true });
         let newVars = this.props.vars;
         newVars.blogsAreLoading=true;
         newVars.currentLocation='home';
@@ -34,6 +37,8 @@ class MobileMenu extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleMenuItemClick = (e, { name }) => {
+        this.props.blogActions.updateBlog({id:null});
+        this.props.varsActions.updateVars({ blogLoaded: true });
         if (name === 'search') {
             return false
         }
@@ -258,6 +263,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        blogActions: bindActionCreators(BlogActions,dispatch),
         userActions:bindActionCreators(UserActions,dispatch),
         varsActions:bindActionCreators(VarsActions,dispatch),
         blogsActions:bindActionCreators(BlogsActions,dispatch)

@@ -1,5 +1,6 @@
 import React from 'react'
-import {Button,Modal, Header,Icon, Image,Dropdown} from 'semantic-ui-react'
+import {Button,Modal, Header,Icon, Image,Dropdown} from 'semantic-ui-react';
+import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'
@@ -209,7 +210,7 @@ class Blog extends React.Component {
                 }
             })
                 .then(function (response) {
-                    this.closeDelete()
+                    this.closeDelete();
                     this.props.deletedBlog()
                 }.bind(this))
                 .catch(function (err) {
@@ -254,7 +255,7 @@ class Blog extends React.Component {
                     </Modal.Actions>
                 </Modal>
                 {
-                    this.props.blog && this.props.blogLoaded?
+                    this.props.blog?
                         <div>
                             <Header style={{ textAlign :'left',alignment:'center'}} color={this.props.color} as='h1'>
                                 {
@@ -369,4 +370,12 @@ class Blog extends React.Component {
     }
 }
 
-export default Blog;
+const mapStateToProps = (state) => {
+    return {
+        blog:state.blog,
+        vars:state.vars,
+        user:state.user
+    }
+}
+
+export default  connect(mapStateToProps) (Blog);

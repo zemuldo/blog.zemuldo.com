@@ -44,7 +44,7 @@ class WelcomePage extends React.Component {
         return (
             <div style={{margin: '2em 1em 3em 1em'}}>
                 {
-                    !this.props.blog?
+                    !this.props.blog.id?
                         <div>
                             {
                                 this.props.blogs[0]?
@@ -61,7 +61,6 @@ class WelcomePage extends React.Component {
                                             setNextBlogs={this.props.setNextBlogs}
                                             onReadMore = {this.props.onReadMore}
                                             color={this.props.color}
-                                            blog={this.props.blog}
                                         />
                                     </div>:
                                     <div>
@@ -79,16 +78,13 @@ class WelcomePage extends React.Component {
                         </div>:null
                 }
                 {
-                    !this.props.blog?
-                        <p>Content Not found</p>:
+                    !this.props.blog.id?
+                        null:
                         <div>
                             <Blog
-                                blogLoaded={this.props.blogLoaded}
-                                blog={this.props.blog}
                                 color={this.props.color}
                                 counts ={this.props.counts}
                                 deletedBlog={this.props.deletedBlog}
-                                user={this.props.user}
                             />
                         </div>
                 }
@@ -99,7 +95,8 @@ class WelcomePage extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        blogs: state.blogs
+        blogs: state.blogs,
+        blog:state.blog
     }
 }
 

@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as BlogsActions from "../state/actions/blogs";
+import * as BlogActions from '../state/actions/blog';
 import * as UserActions from "../state/actions/user";
 import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
@@ -74,7 +75,7 @@ class App extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleUpdateBlogs(blogs){
-        this.props.blogActions.updateBlogs(blogs)
+        this.props.blogsActions.updateBlogs(blogs)
     }
     setTopic(topic) {
         this.setState({ topic: topic })
@@ -131,13 +132,12 @@ class App extends React.Component {
             .then(function (response) {
                 let blog = response[0].data;
                 Object.assign(blog,response[1].data);
-                this.setState({ blog: blog});
-                this.setState({ blogLoaded: true });
+                this.props.blogActions.updateBlog(blog);
+                this.props.varsActions.updateVars({ blogLoaded: true });
             }.bind(this))
             .catch(function (err) {
-                this.setState({ blog: null });
-                this.setState({ blogLoaded: true });
-                return err
+                this.props.blogActions.updateBlog({});
+                this.props.varsActions.updateVars({ blogLoaded: true });
             }.bind(this));
     }
     setCurrentBlog(url, page) {
@@ -151,12 +151,13 @@ class App extends React.Component {
         else if (url.indexOf('%2520') > 0) {
             id = Number(url.split('_')[url.split('_').length - 1]);
         }
+        console.log('+++new blog upadet on mount')
         if (id && id.toString() !== 'NaN') {
             this.setBlogHere(id, page)
         }
         else {
-            this.setState({ blog: null });
-            this.setState({ blogLoaded: true })
+            this.props.blogActions.updateBlog({});
+            this.props.varsActions.updateVars({ blogLoaded: true });
         }
     }
     handleFilterChange(e) {
@@ -176,7 +177,7 @@ class App extends React.Component {
             "queryData": query
         })
             .then(response => {
-                this.props.blogActions.updateBlogs(response.data);
+                this.props.blogsActions.updateBlogs(response.data);
                 this.setState({ blogsAreLoading: false })
             })
             .catch(err => {
@@ -185,7 +186,7 @@ class App extends React.Component {
             });
     }
     onReadMore(thisBlog) {
-        this.setState({ blogLoaded: false });
+        this.props.varsActions.updateVars({ blogLoaded: false });
         axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
@@ -195,11 +196,13 @@ class App extends React.Component {
             .then(response => {
                 let blog = response.data;
                 Object.assign(blog,thisBlog);
-                this.setState({ blogLoaded: true, blog: blog });
+                this.props.blogActions.updateBlog(blog);
+                this.props.varsActions.updateVars({ blogLoaded: true });
                 window.scrollTo(0, 0);
             })
             .catch(function (err) {
-                this.setState({ blog: null,blogLoaded: true });
+                this.props.blogActions.updateBlog({});
+                this.props.varsActions.updateVars({ blogLoaded: true });
                 return err;
             }.bind(this))
     }
@@ -328,6 +331,7 @@ class App extends React.Component {
     }
     resize = () => this.forceUpdate();
     componentWillReceiveProps() {
+        //this.props.varsActions.updateVars({ blogLoaded: false });
         /*
            This method is used to detect navigation/actions from the user then update the UI.
            ie. Page navigation, Page crops etc
@@ -386,14 +390,15 @@ class App extends React.Component {
             this.setState({ topic: topic })
             this.navigateBlogs(query)
         }
-        if(id.toString()!=='NaN' && !this.state.blog){
-            this.setBlogHere(id,page)
+        if(id.toString()!=='NaN' && !this.props.blog && this.props.vars.blogLoaded){
+            //this.setBlogHere(id,page)
         }
-        if(id.toString()!=='NaN' && this.state.blog && this.state.blog.id!==id){
+        if(id.toString()!=='NaN' && this.props.blog && this.props.blog.id!==id){
             this.setBlogHere(id,page)
         }
     }
     componentDidMount() {
+        //this.props.varsActions.updateVars({ blogLoaded: false });
         /*
             Initialize state variables for loading.
         */
@@ -449,8 +454,7 @@ class App extends React.Component {
                 this.props.userActions.updateUser(user)
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                this.updateVars([{key:'profilePic',value:imageUrl}])
-                this.setState({ homePageLoaded: true })
+                this.props.varsActions.updateVars({profilePic:imageUrl})
             }
             else {
                 localStorage.removeItem('user');
@@ -524,7 +528,7 @@ class App extends React.Component {
                 <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>Zemuldo Articles </Link>
+                            <Link to ='/'>Zemuldo Articles {this.props.vars.blogLoaded.toString()}</Link>
                         </h1>
                     </div>
                     <PagesComponent
@@ -555,6 +559,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        blog:state.blog,
         blogs: state.blogs,
         user:state.user,
         vars:state.vars
@@ -562,7 +567,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        blogActions: bindActionCreators(BlogsActions, dispatch),
+        blogActions: bindActionCreators(BlogActions,dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch),
         userActions:bindActionCreators(UserActions,dispatch),
         varsActions:bindActionCreators(VarsActions,dispatch)
     }

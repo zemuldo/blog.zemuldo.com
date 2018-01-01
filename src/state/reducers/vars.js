@@ -21,12 +21,13 @@ const vars = {
     topic: 'all',
     time: new Date().toDateString(),
     signUp:false,
+    test:1
 };
 
 const varsReducer = (state = vars, action ) => {
     switch (action.type) {
         case UPDATE_VARS:
-            return action.vars;
+            return Object.assign({},state,action.vars);
         default:
             return state;
     }
