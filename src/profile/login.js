@@ -56,13 +56,6 @@ class Login extends React.Component {
         this.setBlogs = this.setBlogs.bind(this)
         this.validateUser = this.validateUser.bind(this)
     };
-    updateVars(vars){
-        let newVars = this.props.vars;
-        for(let i=0;i<vars.length;i++){
-            newVars[vars[i].key]=vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
-    };
     validateUser() {
         this.setState({hideMessage:true})
         let known = localStorage.getItem('user')
@@ -81,7 +74,7 @@ class Login extends React.Component {
                         if (success.data.state === true) {
                             let urlCreator = window.URL || window.webkitURL;
                             let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                            this.updateVars([{key:'profilePic',value:imageUrl}])
+                            this.props.varsActions.updateVars({profilePic:imageUrl});
                             this.props.userActions.updateUser(user);
                             this.props.history.push('/user/'+user.userName);
                             this.setState({validatingKnounUser:false});
@@ -150,7 +143,7 @@ class Login extends React.Component {
                     this.setState({logingin:false});
                     let urlCreator = window.URL || window.webkitURL;
                     let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                    this.updateVars([{key:'profilePic',value:imageUrl}])
+                    this.props.varsActions.updateVars({profilePic:imageUrl});
                     this.props.userActions.updateUser(user);
                     localStorage.setItem('user',JSON.stringify(success.data))
                     this.props.history.push('/user/'+success.data.userName)
@@ -246,7 +239,7 @@ class Login extends React.Component {
                     setTimeout(function () {
                         this.setState({signUp:false,success:false,hideMessage:true,imagePreviewUrl:''})
                         this.props.history.push('/login');
-                        this.updateVars([{key:'signUp',value:false}])
+                        this.props.varsActions.updateVars({signUp:true});
                     }.bind(this),2000)
                 }
                 else {
@@ -304,11 +297,11 @@ class Login extends React.Component {
     }
     componentWillReceiveProps() {
         let page = window.location.pathname.split('/')[1];
-        if(page==='signup'){
-            this.updateVars([{key:'signUp',value:true}])
+        if(page==='signup' && !this.props.vars.signUp){
+            this.props.varsActions.updateVars({signUp:true});
         }
-        if(page==='login'){
-            this.updateVars([{key:'signUp',value:false}])
+        if(page==='login'  && this.props.vars.signUp){
+            this.props.varsActions.updateVars({signUp:false});
         }
     }
     setBlogs(userName){
@@ -333,7 +326,7 @@ class Login extends React.Component {
             }.bind(this))
     }
     handSwichReg = function (state){
-        this.updateVars([{key:'signUp',value:state}])
+        this.props.varsActions.updateVars({signUp:state});
     }
     _handleFileChange(e) {
         e.preventDefault();
@@ -377,29 +370,7 @@ class Login extends React.Component {
                                         colors = {this.props.vars.colors}/>
                                 </div>:
                                 <div>
-                                    <Modal open ={this.state.creatAvatarOpen}>
-                                        <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                            Create your Profile Picture.
-                                        </Header></Modal.Header>
-                                        <Modal.Content>
-                                            <div>
-                                                <p>
-                                                    Click preview to see your picture as it will appear.
-                                                </p>
-                                            </div>
-                                            <hr/>
-                                            <Modal.Description>
-                                                <AvatarEditor setAvatar = {this.setAvatar}/>
-                                            </Modal.Description>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button.Group>
-                                                <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
-                                                <Button.Or />
-                                                <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
-                                            </Button.Group>
-                                        </Modal.Actions>
-                                    </Modal>
+
                                     <div className='forms-ls'>
                                         {
                                             this.props.vars.signUp?
