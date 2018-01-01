@@ -42,67 +42,57 @@ class WelcomePage extends React.Component {
 
     render() {
         return (
-           <div>
-               {
-                   !this.props.blogLoaded && !this.props.blogsLoaded?
-                       <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                           <Loader active inline='centered' />
-                           <p>Loading Blog...</p>
-                       </div>:
-                       <div style={{margin: '2em 1em 3em 1em'}}>
-                           {
-                               !this.props.blog?
-                                   <div>
-                                       {
-                                           this.props.blogs[0]?
-                                               <div>
-                                                   <Header color={this.props.color} as='h1'>
-                                                       Great Articles and Blogs
-                                                   </Header>
-                                                   <hr color="green"/>
-                                                   <br/>
-                                                   <GridBlogs
-                                                       x={this.props.x}
-                                                       next={this.props.next}
-                                                       setPreviousBlogs={this.props.setPreviousBlogs}
-                                                       setNextBlogs={this.props.setNextBlogs}
-                                                       onReadMore = {this.props.onReadMore}
-                                                       color={this.props.color}
-                                                       blog={this.props.blog}
-                                                   />
-                                               </div>:
-                                               <div>
-                                                   <Header color={this.props.color} as='h1'>
-                                                       Great Articles and Blogs
-                                                   </Header>
-                                                   <hr color="green"/>
-                                                   <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
-                                                       <p>
-                                                           There is no content on the topic yet. You can explore more
-                                                       </p>
-                                                   </div>
-                                               </div>
-                                       }
-                                   </div>:null
-                           }
-                           {
-                               !this.props.blog?
-                                   <p>Content Not found</p>:
-                                   <div>
-                                       <Blog
-                                           blogLoaded={this.props.blogLoaded}
-                                           blog={this.props.blog}
-                                           color={this.props.color}
-                                           counts ={this.props.counts}
-                                           deletedBlog={this.props.deletedBlog}
-                                           user={this.props.user}
-                                       />
-                                   </div>
-                           }
-                       </div>
-               }
-
-           </div>
+            <div style={{margin: '2em 1em 3em 1em'}}>
+                {
+                    !this.props.blog?
+                        <div>
+                            {
+                                this.props.blogs[0]?
+                                    <div>
+                                        <Header color={this.props.color} as='h1'>
+                                            Great Articles and Blogs
+                                        </Header>
+                                        <hr color="green"/>
+                                        <br/>
+                                        <GridBlogs
+                                            x={this.props.x}
+                                            next={this.props.next}
+                                            setPreviousBlogs={this.props.setPreviousBlogs}
+                                            setNextBlogs={this.props.setNextBlogs}
+                                            onReadMore = {this.props.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blog}
+                                        />
+                                    </div>:
+                                    <div>
+                                        <Header color={this.props.color} as='h1'>
+                                            Great Articles and Blogs
+                                        </Header>
+                                        <hr color="green"/>
+                                        <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
+                                            <p>
+                                                There is no content on the topic yet. You can explore more
+                                            </p>
+                                        </div>
+                                    </div>
+                            }
+                        </div>:null
+                }
+                {
+                    !this.props.blog?
+                        <p>Content Not found</p>:
+                        <div>
+                            <Blog
+                                blogLoaded={this.props.blogLoaded}
+                                blog={this.props.blog}
+                                color={this.props.color}
+                                counts ={this.props.counts}
+                                deletedBlog={this.props.deletedBlog}
+                                user={this.props.user}
+                            />
+                        </div>
+                }
+            </div>
         )
     }
 }

@@ -226,6 +226,7 @@ class PagesComponent extends React.Component {
                                 !this.props.blogLoaded?
                                     <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                         <Loader active inline='centered' />
+                                        <p>Loading Blog...</p>
                                     </div>:
                                     <div>
                                         <WelcomePage
