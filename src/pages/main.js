@@ -197,7 +197,7 @@ class App extends React.Component {
             });
     }
     onReadMore(thisBlog) {
-        this.setState({ blogLoaded: true });
+        this.setState({ blogLoaded: false });
         axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
