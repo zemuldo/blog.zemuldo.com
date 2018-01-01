@@ -8,7 +8,7 @@ import * as UserActions from "../state/actions/user";
 import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
-import PagesComponent from '../pages/homePage'
+import PagesComponent from './page'
 import config from '../environments/conf'
 import { pages,topicsOBJ } from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development';

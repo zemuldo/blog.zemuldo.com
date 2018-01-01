@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from './pages/index'
+import Page from './pages/main'
 import Login from './profile/login'
 import About from './pages/about'
 import {  Switch, Route } from 'react-router-dom'
