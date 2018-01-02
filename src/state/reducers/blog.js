@@ -1,5 +1,6 @@
 import { UPDATE_BLOG,RESET_BLOG } from "../actions/blog";
 const initialState = {
+    id:null,
     gplsC:0,
     twtC:0,
     linkdCont:0,

@@ -369,7 +369,7 @@ class App extends React.Component {
             Set current location to page and update blogs
         */
         if(pages[page] && this.state.currentLocation==='home' && this.state.currentLocation!==page){
-            this.setState({ currentLocation: page })
+            this.setState({ currentLocation: page });
             this.navigateBlogs(query)
         }
         /*
@@ -386,15 +386,21 @@ class App extends React.Component {
                 }
             }
         }
+        if(this.props.blog.id && this.props.vars.blogLoaded &&  (id.toString()==='NaN' || !id)){
+            this.props.blogActions.resetBlog({id:null})
+        }
+        if(!this.props.blog.id && id.toString()!=='NaN' && id && this.props.blog.id!==id){
+            //this.props.blogActions.resetBlog({id:null})
+        }
         if(page===this.state.currentLocation && topic && topic!==this.state.topic){
             this.setState({ topic: topic })
             this.navigateBlogs(query)
         }
-        if(id.toString()!=='NaN' && !this.props.blog && this.props.vars.blogLoaded){
-            //this.setBlogHere(id,page)
-        }
-        if(id.toString()!=='NaN' && this.props.blog && this.props.blog.id!==id){
-            //this.setBlogHere(id,page)
+        if(id.toString()!=='NaN' && this.props.blog.id!==id && this.props.vars.blogLoaded){
+            this.props.varsActions.updateVars({ blogLoaded: false });
+            this.setBlogHere(id,page)
+            console.log('++++++++++++++update blog')
+            console.log(this.props.blog.id)
         }
     }
     componentDidMount() {
