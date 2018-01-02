@@ -7,7 +7,6 @@ import * as VarsActions from "../state/actions/vars";
 import * as UserActions from "../state/actions/user";
 import * as BlogsActions from "../state/actions/blogs";
 import {bindActionCreators} from "redux";
-import {pages} from "../environments/conf";
 import axios from "axios/index";
 import config from '../environments/conf';
 import * as BlogActions from "../state/actions/blog";
@@ -29,73 +28,50 @@ class ComMenu extends React.Component {
     };
     handleHomeClick = () => {
         this.props.blogActions.resetBlog();
-        this.props.varsActions.updateVars({ blogLoaded: true });
-        let newVars = this.props.vars;
-        newVars.blogsAreLoading=true;
-        newVars.currentLocation='home';
-        newVars.blog=null;
-        this.props.varsActions.updateVars(newVars);
+        this.props.varsActions.updateVars({currentLocation:'home'});
     };
     handleMenuItemClick = (e, { name }) => {
         this.props.blogActions.resetBlog();
-        this.props.varsActions.updateVars({ blogLoaded: true });
         if (name === 'search') {
             return false
         }
         let newVars = this.props.vars;
         newVars.blogsAreLoading=true;
-        if (name === 'home' || name === 'login') {
-            newVars.currentLocation=name;
+        if (name !== 'home' || name !== 'login') {
+            this.props.varsActions.updateVars({currentLocation:name})
         }
-        else {
-            if (pages[name]) {
-            }
-            newVars.currentLocation=name;
-            this.props.varsActions.updateVars(newVars);
-        }
+
     };
     handleLogoutinButton = () => {
         localStorage.removeItem('user');
         this.props.userActions.updateUser(null);
-        this.updateVars([{key:'currentLocation',value:'home'}])
+        this.props.varsActions.updateVars([{currentLocation:'home'}])
     };
     handleCreateNew = () => {
-        let editorState = window.localStorage.getItem('draftContent')
-        let blogData = window.localStorage.getItem('blogData')
+        let editorState = window.localStorage.getItem('draftContent');
+        let blogData = window.localStorage.getItem('blogData');
         if (editorState && blogData) {
-            this.updateVars([
-                {key:'editingMode',value:true},
-                {key:'createNew',value:true},
-                {key:'currentLocation',value:'profile'}
-                ])
+            this.props.varsActions.updateVars({editingMode:true,createNew:true,currentLocation:'profile'});
         }
         else {
-            this.updateVars([
-                {key:'editingMode',value:false},
-                {key:'createNew',value:true},
-                {key:'currentLocation',value:'profile'}
-            ])
+            this.props.varsActions.updateVars({editingMode:true,createNew:false,currentLocation:'profile'});
         }
     };
     handleProfile=()=>{
-        this.updateVars([
-            {key:'currentLocation',value:'profile'},
-            {key:'createNew',value:false},
-            {key:'editingMode',value:false}
-            ])
+        this.props.varsActions.updateVars({editingMode:false,createNew:false,currentLocation:'profile'});
         console.log(this.props.vars.createNew)
     };
     handleFilterChange(e) {
-        let query={}
+        let query={};
         let queryMthod = 'getAllPosts';
         if(this.props.vars.currentLocation!=='home'){
-            query.type=this.state.currentLocation
+            query.type=this.props.vars.currentLocation
         }
         if(e.target.value !== ''){
             query.filter = e.target.value;
             queryMthod='getFiltered'
         }
-        this.updateVars([{key:'blogsAreLoading',value:true}])
+        this.updateVars([{key:'blogsAreLoading',value:true}]);
         e.preventDefault();
         axios.post(env.httpURL, {
             "queryMethod": queryMthod,
@@ -107,7 +83,8 @@ class ComMenu extends React.Component {
             })
             .catch(err => {
                 this.props.blogsActions.updateBlogs([]);
-                this.updateVars([{key:'blogsAreLoading',value:false}])
+                this.updateVars([{key:'blogsAreLoading',value:false}]);
+                return err
             });
     }
     render() {
@@ -256,6 +233,6 @@ const mapDispatchToProps = (dispatch, props) => {
         varsActions:bindActionCreators(VarsActions,dispatch),
         blogsActions:bindActionCreators(BlogsActions,dispatch)
     }
-}
+};
 
 export default connect(mapStateToProps,mapDispatchToProps)  (ComMenu);

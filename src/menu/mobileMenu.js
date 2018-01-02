@@ -16,8 +16,7 @@ const env = config[process.env.NODE_ENV] || 'development';
 class MobileMenu extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-        };
+        this.state = {};
         this.handleFilterChange=this.handleFilterChange.bind(this)
     };
     updateVars(vars){

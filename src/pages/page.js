@@ -125,7 +125,7 @@ class PagesComponent extends React.Component {
                             (window.innerWidth>600) ?
                                 <Grid.Column computer={4}>
                                     <Topics
-                                        currentLocation={this.props.currentLocation}
+                                        currentLocation={this.props.vars.currentLocation}
                                         topic={this.state.topic}
                                         onTopicClick = {this.onTopicClick}
                                         onAllcClick = {this.onAllcClick}
@@ -134,7 +134,7 @@ class PagesComponent extends React.Component {
                                         setTopicNextPosts={this.props.setTopicNextPosts}
                                         onReadMore = {this.props.onReadMore}
                                         blog ={this.props.blog}
-                                        color={this.props.color}
+                                        color={this.props.vars.color}
                                         blogs={this.props.blogs}
                                         resetNav={this.resetNav}
                                     />
@@ -149,20 +149,20 @@ class PagesComponent extends React.Component {
                                             onChange={this.props.handleFilterChange}
                                         />
 
-                                        <Header color={this.props.colors[2]} as='h2'>Most Popular</Header>
+                                        <Header color={this.props.vars.colors[2]} as='h2'>Most Popular</Header>
                                         <div>
                                             <br/>
                                             {
                                                 this.props.blogs[0]?
                                                     <div>
                                                         <Blogs
-                                                            color={this.props.color}
+                                                            color={this.props.vars.color}
                                                             onReadMore = {this.props.onReadMore}
                                                         />
                                                         <div>
                                                             <br/>
                                                             <Button
-                                                                color={this.props.color}
+                                                                color={this.props.vars.color}
                                                                 circular={true}
                                                                 size='mini'
                                                                 floated='left'
@@ -173,7 +173,7 @@ class PagesComponent extends React.Component {
                                                                 Next
                                                             </Button>
                                                             <Button
-                                                                color={this.props.color}
+                                                                color={this.props.vars.color}
                                                                 circular={true}
                                                                 size='mini'
                                                                 floated='right'
@@ -201,7 +201,7 @@ class PagesComponent extends React.Component {
                             {
                                 window.innerWidth<600?
                                     <Topics
-                                        currentLocation={this.props.currentLocation}
+                                        currentLocation={this.props.vars.currentLocation}
                                         topic={this.state.topic}
                                         onTopicClick = {this.onTopicClick}
                                         onAllcClick = {this.onAllcClick}
@@ -210,7 +210,7 @@ class PagesComponent extends React.Component {
                                         setTopicNextPosts={this.props.setTopicNextPosts}
                                         onReadMore = {this.props.onReadMore}
                                         blog ={this.props.blog}
-                                        color={this.props.color}
+                                        color={this.props.vars.color}
                                         blogs={this.props.blogs}
                                         resetNav={this.resetNav}/>:
                                     null
@@ -228,12 +228,7 @@ class PagesComponent extends React.Component {
                                         setPreviousBlogs={this.setPreviousBlogs}
                                         setNextBlogs={this.setNextBlogs}
                                         onReadMore = {this.props.onReadMore}
-                                        richViewerState={this.props.richViewerState}
-                                        color={this.props.colors[1]}
-                                        blogDetails={this.props.blogDetails}
-                                        blog={this.props.blog}
-                                        blogsLoaded={this.props.blogsLoaded}
-                                        blogLoaded={this.props.blogLoaded}
+                                        color={this.props.vars.colors[1]}
                                         deletedBlog={this.props.deletedBlog}
                                         user={this.props.user}
                                     />
@@ -253,7 +248,9 @@ class PagesComponent extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        vars: state.vars
+        vars: state.vars,
+        blogs:state.blogs,
+        blog:state.blog
     }
 }
 

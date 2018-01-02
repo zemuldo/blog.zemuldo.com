@@ -49,7 +49,7 @@ class WelcomePage extends React.Component {
                             {
                                 this.props.blogs[0]?
                                     <div>
-                                        <Header color={this.props.color} as='h1'>
+                                        <Header color={this.props.vars.color} as='h1'>
                                             Great Articles and Blogs
                                         </Header>
                                         <hr color="green"/>
@@ -60,11 +60,11 @@ class WelcomePage extends React.Component {
                                             setPreviousBlogs={this.props.setPreviousBlogs}
                                             setNextBlogs={this.props.setNextBlogs}
                                             onReadMore = {this.props.onReadMore}
-                                            color={this.props.color}
+                                            color={this.props.vars.color}
                                         />
                                     </div>:
                                     <div>
-                                        <Header color={this.props.color} as='h1'>
+                                        <Header color={this.props.vars.color} as='h1'>
                                             Great Articles and Blogs
                                         </Header>
                                         <hr color="green"/>
@@ -82,7 +82,7 @@ class WelcomePage extends React.Component {
                         null:
                         <div>
                             <Blog
-                                color={this.props.color}
+                                color={this.props.vars.color}
                                 counts ={this.props.counts}
                                 deletedBlog={this.props.deletedBlog}
                             />
@@ -96,7 +96,8 @@ class WelcomePage extends React.Component {
 const mapStateToProps = (state) => {
     return {
         blogs: state.blogs,
-        blog:state.blog
+        blog:state.blog,
+        vars:state.vars
     }
 }
 
