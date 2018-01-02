@@ -1,5 +1,10 @@
 import { UPDATE_BLOG } from "../actions/blog";
-const initialState = {};
+const initialState = {
+    gplsC:0,
+    twtC:0,
+    linkdCont:0,
+    fbC:0
+};
 
 const blogReducer = (state = initialState, action ) => {
   switch (action.type) {

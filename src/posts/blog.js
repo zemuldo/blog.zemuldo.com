@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'
+import {bindActionCreators} from "redux";
+import * as BlogActions from "../state/actions/blog";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class Blog extends React.Component {
@@ -24,7 +26,10 @@ class Blog extends React.Component {
         this.updateLikes=this.updateLikes.bind(this);
         this.getAauthorAvatar = this.getAauthorAvatar.bind(this);
         this.closeDelete = this.closeDelete.bind(this);
-        this.openDelete = this.openDelete.bind(this)
+        this.openDelete = this.openDelete.bind(this);
+        this.getFBCount=this.getFBCount.bind(this);
+        this.getTWTCount=this.getTWTCount.bind(this);
+        this.getGCCount=this.getGCCount.bind(this);
     }
     closeDelete(){
         this.setState({showDelete:false})
@@ -50,26 +55,67 @@ class Blog extends React.Component {
             "apiVersion": "v1"
         }
         window.scrollTo(0,0);
-        return Promise.all([
-            axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+shareURL,{}),
-            axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+shareURL,{}),
-            axios.post(' https://clients6.google.com/rpc',gplusPost)
-        ])
-            .then(function (res) {
-                this.setState({
-                    fbC:(res[0].data.share.share_count)? res[0].data.share.share_count:0,
-                    twtC:(res[1].data.count)?res[1].data.count:0,
-                    gplsC:(res[2].data.result.metadata.globalCounts.count)?res[2].data.result.metadata.globalCounts.count:0
-                })
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({counts:{
-                    fbC:0,
-                    twtC:0,
-                    gplsC:0
-                }})
-            }.bind(this))
+        this.getFBCount(shareURL);
+        this.getTWTCount(shareURL);
+        this.getGCCount(gplusPost);
     }
+
+    getFBCount(shareURL){
+
+       return axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+shareURL,{})
+            .then((res)=> {
+                this.setState({fbC:(res.data.share.share_count)? res.data.share.share_count:0});
+                this.props.blogActions.updateBlog({
+                    fbC:(res.data.share.share_count)? res.data.share.share_count:0
+                });
+                return true
+            })
+            .catch( (err) =>{
+                this.setState({
+                    fbC:0,
+                })
+                this.props.blogActions.updateBlog({
+                    fbC:0,
+                });
+            })
+    };twtC
+    getTWTCount(shareURL){
+
+        return axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+shareURL,{})
+            .then((res)=> {
+                this.setState({twtC:(res.data.count)?res.data.count:0})
+                this.props.blogActions.updateBlog({
+                    twtC:(res.data.count)?res.data.count:0
+                });
+            })
+            .catch( (err) =>{
+                this.setState({twtC:0})
+                this.props.blogActions.updateBlog({
+                    twtC:0,
+                });
+            })
+    };
+    getGCCount(gplusPost){
+
+        return axios.post(' https://clients6.google.com/rpc',gplusPost)
+            .then((res)=> {
+                this.setState({
+                    gplsC:(res.data.result.metadata.globalCounts.count)?res.data.result.metadata.globalCounts.count:0
+                });
+                this.props.blogActions.updateBlog({
+                    gplsC:(res.data.result.metadata.globalCounts.count)?res.data.result.metadata.globalCounts.count:0
+                });
+                return true
+            })
+            .catch( (err) =>{
+                this.setState({
+                    gplsC:0,
+                })
+                this.props.blogActions.updateBlog({
+                    gplsC:0,
+                });
+            })
+    };
 
     getAauthorAvatar(){
         axios.post(env.httpURL,{
@@ -290,22 +336,22 @@ class Blog extends React.Component {
                                 <Button
                                     onClick={() => {this.tweetShare();}}
                                     circular color='twitter' icon='twitter' />
-                                <sup>{this.state.twtC}</sup>
+                                <sup>{this.props.blog.twtC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {this.fbShare();}}
                                     circular color='facebook' icon='facebook' />
-                                <sup>{this.state.fbC}</sup>
+                                <sup>{this.props.blog.fbC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {this.linkdnShare();}}
                                     circular color='linkedin' icon='linkedin' />
-                                <sup>{this.state.gplsC}</sup>
+                                <sup>{this.props.blog.gplsC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {this.gplusShare();}}
                                     circular color='google plus' icon='google plus' />
-                                <sup>{this.state.gplsC}</sup>
+                                <sup>{this.props.blog.gplsC}</sup>
                                 <br/>
                                 <br/>
                                 <span>
@@ -378,4 +424,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default  connect(mapStateToProps) (Blog);
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        blogActions: bindActionCreators(BlogActions,dispatch),
+    }
+}
+
+export default  connect(mapStateToProps,mapDispatchToProps) (Blog);
