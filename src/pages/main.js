@@ -394,7 +394,7 @@ class App extends React.Component {
             //this.setBlogHere(id,page)
         }
         if(id.toString()!=='NaN' && this.props.blog && this.props.blog.id!==id){
-            this.setBlogHere(id,page)
+            //this.setBlogHere(id,page)
         }
     }
     componentDidMount() {
@@ -463,9 +463,9 @@ class App extends React.Component {
         if (pages[page] && page !== 'login' && page !== 'signup') {
             this.setState({ currentLocation: page })
         }
-        this.shuffle()
-        this.forceUpdate()
-        window.addEventListener('resize', this.resize)
+        this.shuffle();
+        this.forceUpdate();
+        window.addEventListener('resize', this.resize);
         this.setState({ loadFooter: true })
     }
     componentWillUnmount() {

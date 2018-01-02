@@ -150,52 +150,46 @@ class PagesComponent extends React.Component {
                                         />
 
                                         <Header color={this.props.colors[2]} as='h2'>Most Popular</Header>
-                                        {
-                                            this.props.blogsLoaded?
-                                                <div>
-                                                    <br/>
-                                                    {
-                                                        (this.props.blogs[0]) ?
-                                                            <div>
-                                                                <Blogs
-                                                                    color={this.props.color}
-                                                                    onReadMore = {this.props.onReadMore}
-                                                                />
-                                                                <div>
-                                                                    <br/>
-                                                                    <Button
-                                                                        color={this.props.color}
-                                                                        circular={true}
-                                                                        size='mini'
-                                                                        floated='left'
-                                                                        disabled={!this.state.next}
-                                                                        onClick={ this.setNextBlogs.bind(this,'next')}
-                                                                        name="next"
-                                                                    >
-                                                                        Next
-                                                                    </Button>
-                                                                    <Button
-                                                                        color={this.props.color}
-                                                                        circular={true}
-                                                                        size='mini'
-                                                                        floated='right'
-                                                                        disabled={x===0}
-                                                                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
-                                                                        name="previous"
-                                                                    >
-                                                                        Prev
-                                                                    </Button>
-                                                                </div>
-                                                            </div>:
-                                                            <div>
-                                                                No matching content on this Topic
-                                                            </div>
-                                                    }
-                                                </div>:
-                                                <div className='small-loader' >
-                                                    <Loader active inline='centered' />
-                                                </div>
-                                        }
+                                        <div>
+                                            <br/>
+                                            {
+                                                this.props.blogs[0]?
+                                                    <div>
+                                                        <Blogs
+                                                            color={this.props.color}
+                                                            onReadMore = {this.props.onReadMore}
+                                                        />
+                                                        <div>
+                                                            <br/>
+                                                            <Button
+                                                                color={this.props.color}
+                                                                circular={true}
+                                                                size='mini'
+                                                                floated='left'
+                                                                disabled={!this.state.next}
+                                                                onClick={ this.setNextBlogs.bind(this,'next')}
+                                                                name="next"
+                                                            >
+                                                                Next
+                                                            </Button>
+                                                            <Button
+                                                                color={this.props.color}
+                                                                circular={true}
+                                                                size='mini'
+                                                                floated='right'
+                                                                disabled={x===0}
+                                                                onClick={ this.setPreviousBlogs.bind(this,'previous')}
+                                                                name="previous"
+                                                            >
+                                                                Prev
+                                                            </Button>
+                                                        </div>
+                                                    </div>:
+                                                    <div>
+                                                        No matching content on this Topic
+                                                    </div>
+                                            }
+                                        </div>
                                     </div>
                                 </Grid.Column>:
                                 <div>
