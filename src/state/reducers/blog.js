@@ -1,4 +1,4 @@
-import { UPDATE_BLOG } from "../actions/blog";
+import { UPDATE_BLOG,RESET_BLOG } from "../actions/blog";
 const initialState = {
     gplsC:0,
     twtC:0,
@@ -9,9 +9,11 @@ const initialState = {
 const blogReducer = (state = initialState, action ) => {
   switch (action.type) {
     case UPDATE_BLOG:
-      return Object.assign({},state,action.blog);
+        return Object.assign({},state,action.blog);
+    case RESET_BLOG:
+        return Object.assign({},state,{id:null});
     default:
-    return state;
+        return state;
   }
 }
 

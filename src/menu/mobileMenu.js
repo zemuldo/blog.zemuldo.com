@@ -28,7 +28,7 @@ class MobileMenu extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleHomeClick = () => {
-        this.props.blogActions.updateBlog({id:null});
+        this.props.blogActions.resetBlog();
         this.props.varsActions.updateVars({ blogLoaded: true });
         let newVars = this.props.vars;
         newVars.blogsAreLoading=true;
@@ -37,7 +37,7 @@ class MobileMenu extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleMenuItemClick = (e, { name }) => {
-        this.props.blogActions.updateBlog({id:null});
+        this.props.blogActions.resetBlog();
         this.props.varsActions.updateVars({ blogLoaded: true });
         if (name === 'search') {
             return false

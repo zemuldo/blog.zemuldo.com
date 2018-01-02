@@ -17,10 +17,6 @@ class Blog extends React.Component {
             userLoggedIn:false,
             likes:this.props.blog?this.props.blog.likes:0,
             authorAvatar:null,
-            fbC:null,
-            twtC:null,
-            gplsC:null,
-            linkdCont:null,
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes=this.updateLikes.bind(this);
@@ -64,16 +60,12 @@ class Blog extends React.Component {
 
        return axios.get('https://graph.facebook.com/?id=https://zemuldo.com/'+shareURL,{})
             .then((res)=> {
-                this.setState({fbC:(res.data.share.share_count)? res.data.share.share_count:0});
                 this.props.blogActions.updateBlog({
                     fbC:(res.data.share.share_count)? res.data.share.share_count:0
                 });
                 return true
             })
             .catch( (err) =>{
-                this.setState({
-                    fbC:0,
-                })
                 this.props.blogActions.updateBlog({
                     fbC:0,
                 });
@@ -83,13 +75,11 @@ class Blog extends React.Component {
 
         return axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/'+shareURL,{})
             .then((res)=> {
-                this.setState({twtC:(res.data.count)?res.data.count:0})
                 this.props.blogActions.updateBlog({
                     twtC:(res.data.count)?res.data.count:0
                 });
             })
             .catch( (err) =>{
-                this.setState({twtC:0})
                 this.props.blogActions.updateBlog({
                     twtC:0,
                 });
@@ -99,18 +89,12 @@ class Blog extends React.Component {
 
         return axios.post(' https://clients6.google.com/rpc',gplusPost)
             .then((res)=> {
-                this.setState({
-                    gplsC:(res.data.result.metadata.globalCounts.count)?res.data.result.metadata.globalCounts.count:0
-                });
                 this.props.blogActions.updateBlog({
                     gplsC:(res.data.result.metadata.globalCounts.count)?res.data.result.metadata.globalCounts.count:0
                 });
                 return true
             })
             .catch( (err) =>{
-                this.setState({
-                    gplsC:0,
-                })
                 this.props.blogActions.updateBlog({
                     gplsC:0,
                 });
