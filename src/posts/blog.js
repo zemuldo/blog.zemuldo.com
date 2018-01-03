@@ -372,7 +372,7 @@ class Blog extends React.Component {
                                     {this.props.blog.author} {' '}
                                 </span>
                                 {
-                                    this.props.user && this.props.user.userName === this.props.blog.userName?
+                                    this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.userName?
                                         <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
