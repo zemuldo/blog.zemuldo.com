@@ -362,7 +362,7 @@ class Login extends React.Component {
                     </div>:
                     <div>
                         {
-                            this.props.user?
+                            this.props.user && this.props.user.id?
                                 <div>
                                     <Pofile
                                         userBlogs ={this.state.userBlogs}

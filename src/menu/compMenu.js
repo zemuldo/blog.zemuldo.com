@@ -37,8 +37,7 @@ class ComMenu extends React.Component {
     };
     handleLogoutinButton = () => {
         localStorage.removeItem('user');
-        this.props.userActions.updateUser(null);
-        this.props.varsActions.updateVars([{currentLocation:'home'}])
+        this.props.userActions.updateUser({id:null});
     };
     handleCreateNew = () => {
         let editorState = window.localStorage.getItem('draftContent');
@@ -140,7 +139,7 @@ class ComMenu extends React.Component {
                             />
                         </Menu.Item>
                         {
-                            (!this.props.user) ?
+                            (!this.props.user || !this.props.user.id) ?
                                 <Menu.Item
                                     as='span'
                                     position='right'
@@ -197,7 +196,7 @@ class ComMenu extends React.Component {
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
                                                 <Icon color={this.props.vars.colors[0]} name='sign out' />
-                                                <Link to={'/'} color={this.props.vars.colors[0]}>Sign Out</Link>
+                                                <span color={this.props.vars.colors[0]}>Sign Out</span>
                                             </Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
