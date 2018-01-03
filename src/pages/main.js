@@ -471,7 +471,7 @@ class App extends React.Component {
                 <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>Zemuldo Articles {this.props.blogs.length}</Link>
+                            <Link to ='/'>Zemuldo Articles</Link>
                         </h1>
                     </div>
                     <PagesComponent
