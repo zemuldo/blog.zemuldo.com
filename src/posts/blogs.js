@@ -3,6 +3,14 @@ import {Button,List,Header} from 'semantic-ui-react'
 import _ from 'lodash'
 import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
+import axios from "axios/index";
+import config from '../environments/conf'
+import * as BlogsActions from "../state/actions/blogs";
+import * as VarsActions from "../state/actions/vars";
+import * as UserActions from "../state/actions/user";
+import {bindActionCreators} from "redux";
+import * as BlogActions from "../state/actions/blog";
+const env = config[process.env.NODE_ENV] || 'development'
 
 class Blogs extends React.Component {
     constructor(props){
@@ -11,6 +19,27 @@ class Blogs extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this)
     };
     componentDidMount() {}
+    onReadMore(thisBlog) {
+        this.props.varsActions.updateVars({ blogLoaded: false });
+        axios.post(env.httpURL, {
+            "queryMethod": "getPost",
+            "queryData": {
+                "id": thisBlog.id
+            }
+        })
+            .then(response => {
+                let blog = response.data;
+                Object.assign(blog,thisBlog);
+                this.props.blogActions.updateBlog(blog);
+                this.props.varsActions.updateVars({ blogLoaded: true });
+                window.scrollTo(0, 0);
+            })
+            .catch(function (err) {
+                this.props.blogActions.updateBlog({});
+                this.props.varsActions.updateVars({ blogLoaded: true });
+                return err;
+            }.bind(this))
+    }
     render() {
         let o = this.props.blogs
         return (
@@ -41,7 +70,7 @@ class Blogs extends React.Component {
                                             <Button
                                                 className="redMoreButton"
                                                 ref={this.props.blogs[i]._id}
-                                                onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
+                                                onClick={() => { this.onReadMore(this.props.blogs[i]) }}
                                                 name="all"
                                                 style={{color:'blue',backgroundColor:'transparent',border:'none'}}
                                             >
@@ -82,7 +111,7 @@ class Blogs extends React.Component {
                                                 disabled={!this.props.blog?false:this.props.blog._id===this.props.blogs[i]._id}
                                                 className="redMoreButton"
                                                 ref={this.props.blogs[i]._id}
-                                                onClick={() => { this.props.onReadMore(this.props.blogs[i]) }}
+                                                onClick={() => { this.onReadMore(this.props.blogs[i]) }}
                                                 name="all"
                                                 style={{color:'blue',backgroundColor:'transparent',border:'none'}}
                                             >
@@ -108,4 +137,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Blogs) ;
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        blogActions: bindActionCreators(BlogActions, dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch),
+        userActions:bindActionCreators(UserActions,dispatch),
+        varsActions:bindActionCreators(VarsActions,dispatch)
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Blogs) ;

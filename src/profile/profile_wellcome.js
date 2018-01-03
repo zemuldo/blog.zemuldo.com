@@ -1,9 +1,12 @@
 import React from 'react'
 import {Header,Loader} from 'semantic-ui-react'
+import GridBlogs from '../posts/gridBlogs'
 import Blog from '../posts/blog'
+import {connect} from "react-redux";
+import UserBlogs from "./userBlogs";
 /*import config from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development'*/
-export default class WelcomePage extends React.Component {
+class WelcomePage extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -47,44 +50,28 @@ export default class WelcomePage extends React.Component {
         return (
             <div>
                 {
-                    !this.props.blogLoaded?
-                        <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                            <Loader active inline='centered' />
-                        </div>:
-                        <div style={{margin: '2em 1em 3em 1em'}}>
-                            {
-                                (!this.props.blog || !this.props.blogDetails || !this.props.blogDetails.title) ?
-                                    <div>
-                                        <div >
-                                            <Header color={this.props.color} as='h1'>
-                                                Great Articles and Blogs
-                                            </Header>
-                                            <hr color="green"/>
-                                            <div style={{fontSize:"16px",fontFamily:"georgia", padding: '0em 0em 2em 1em'}}>
-                                                <p>
-                                                    Here you find great articles on tech related topics.
-                                                    Your reading defines your growth and personal development. Read on Business, Technology, reviews plus more.
-                                                    You can signup and share your content with us. Become part of us.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>:
-                                    <div>
-                                        <Blog
-                                            blogLoaded={this.props.blogLoaded}
-                                            blog={this.props.blog}
-                                            color={this.props.color}
-                                            blogDetails={this.props.blogDetails}
-                                            counts ={this.props.counts}
-                                            deletedBlog={this.props.deletedBlog}
-                                            user={this.props.user}
-                                        />
-                                    </div>
-                            }
-                        </div>
+                    this.props.blog.id?
+                        <div>Blog</div>:
+                        <UserBlogs
+                            x={this.props.x}
+                            next={this.props.next}
+                            setPreviousBlogs={this.props.setPreviousBlogs}
+                            setNextBlogs={this.props.setNextBlogs}
+                            onReadMore = {this.props.onReadMore}
+                            color={this.props.vars.color}
+                        />
                 }
-
             </div>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs,
+        blog:state.blog,
+        vars:state.vars
+    }
+}
+
+export default connect(mapStateToProps) (WelcomePage);

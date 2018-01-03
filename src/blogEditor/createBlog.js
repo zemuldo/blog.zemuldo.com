@@ -1,10 +1,13 @@
 import React from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
 import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
 import {Button,Header, Icon,Modal} from 'semantic-ui-react'
 import config from '../environments/conf'
+import {bindActionCreators} from "redux";
+import * as VarsActions from "../state/actions/vars";
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',
@@ -220,7 +223,7 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.focus(), 0);
         });
     }
-    _onURLInputKeyDown(e) {
+    onURLInputKeyDown(e) {
         if (e.which === 13) {
             this._confirmMedia(e);
         }
@@ -353,11 +356,10 @@ class RichEditorExample extends React.Component {
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');
                         this.setState({isPublished:true,filledForm:true});
-                        this.props._exitEditMode();
-
+                        this.props.varsActions.updateVars({editingMode: false, createNew: false })
                     }
                     else {
-                        this.props._exitEditMode();
+                        this.props.varsActions.updateVars({editingMode: false, createNew: false })
                     }
                 }.bind(this))
 
@@ -418,11 +420,11 @@ class RichEditorExample extends React.Component {
     }
     handleConfirm = () => {
         this.closePreview()
-        this.setState({startPublish:true, confirmOpen: false })
+        this.setState({startPublish:true, confirmOpen: false });
         this.publish()
     }
     handleCancel = () =>{
-        this.reinInitEditorState(this.state.editorState)
+        this.reinInitEditorState(this.state.editorState);
         this.closePreview()
         this.setState({ confirmOpen: false })
     }
@@ -547,7 +549,7 @@ class RichEditorExample extends React.Component {
                         <hr/>
                         <Modal.Description>
                             <div>
-                                <ShowPreview _exitEditMode={this.props._exitEditMode}  reinInitEditorState = {this.reinInitEditorState} editorState={this.state.editorState}/>
+                                <ShowPreview reinInitEditorState = {this.reinInitEditorState} editorState={this.state.editorState}/>
                             </div>
                         </Modal.Description>
                     </Modal.Content>
@@ -654,7 +656,7 @@ let INLINE_STYLES = [
     {label: 'Monospace', style: 'CODE',icon:'font'},
 ];
 const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
+    let currentStyle = props.editorState.getCurrentInlineStyle();
     return (
         <div className="RichEditor-controls">
             {INLINE_STYLES.map(type =>
@@ -672,4 +674,16 @@ const InlineStyleControls = (props) => {
 };
 
 
-export default RichEditorExample
+const mapStateToProps = (state) => {
+    return {
+        vars:state.vars
+    }
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        varsActions:bindActionCreators(VarsActions,dispatch)
+    }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps) (RichEditorExample);

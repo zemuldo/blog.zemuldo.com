@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import {Header,Loader, Grid } from 'semantic-ui-react'
+import {Header, Grid } from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Welcome from './profile_wellcome'
 import Blogs from '../posts/blogs'
@@ -26,7 +26,6 @@ class RichEditorExample extends React.Component {
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
-        this.setBlogs = this.setBlogs.bind(this)
 
     }
     blogsAreLoading(state){
@@ -46,53 +45,25 @@ class RichEditorExample extends React.Component {
                 if(response.data.error){
                 }
                 else {
-                    this.setState({blog:response.data,blogDetails:thisBlog})
-                    this.setState({blogIsLoading:false,richViewerState:response.data.body})
-                    this.setState({blogLoaded:true})
+                    this.setState({blog:response.data,blogDetails:thisBlog});
+                    this.setState({blogIsLoading:false,richViewerState:response.data.body});
+                    this.setState({blogLoaded:true});
                     window.scrollTo(0,0)
                 }
 
             })
             .catch(exception => {
-                this.setState({blog:null})
-                this.setState({blogLoaded:true})
-                return exception
+                this.setState({blog:null});
+                this.setState({blogLoaded:true});
+                return exception;
             });
     }
     resize = () => this.forceUpdate();
     componentDidMount() {
         window.addEventListener('resize', this.resize)
-        this.blogsAreLoading(true);
-        this.setBlogs()
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
-    }
-    setBlogs(){
-        this.blogsAreLoading(true);
-        axios.post(env.httpURL, {
-            "queryMethod":"getPosts",
-            "queryData":{
-                userName:this.props.user.userName
-            }
-        })
-            .then(function (response) {
-                if(response.data[0]){
-                    this.setState({blogs:response.data,blogsLoaded:true})
-                    this.setState({blogLoaded:true})
-
-                }
-                else {
-                    this.setState({blogs:[],blogsLoaded:true});
-                    this.setState({blogLoaded:true})
-
-                }
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({blogs:[],blogsLoaded:true});
-                this.setState({blogLoaded:true})
-            }.bind(this))
-
     }
     onReadMore(thisBlog){
         this.setState({blogIsLoading:true});
@@ -106,7 +77,7 @@ class RichEditorExample extends React.Component {
                 this.setState({blog:response.data,blogDetails:thisBlog});
                 this.setState({blogIsLoading:false,richViewerState:response.data.body});
                 window.scrollTo(0,0);
-                this.setCurrentBlog(thisBlog)
+                this.setCurrentBlog(thisBlog);
                 this.setBlogCounts()
             })
             .catch(function (err) {
@@ -139,75 +110,71 @@ class RichEditorExample extends React.Component {
                                     </Header>
                                     <div>
                                         {
-                                            this.state.blogsLoaded?
-                                              <div>
-                                                  {
-                                                      this.state.blogs[0]?
-                                                          <Blogs
-                                                              color={this.props.color}
-                                                              onReadMore = {this.onReadMore}
-                                                              blogs ={this.state.blogs}
-                                                              blog ={this.state.blog}/>:
-                                                          <div>
-                                                              You haven't published anything yet
-                                                          </div>
-                                                  }
-                                              </div>:
-                                                <div style={{ position:'center', margin: '2em 0em 0em 0em'}} >
-                                                    <Loader active inline='centered' />
+                                            this.props.blogs[0]?
+                                                <Blogs
+                                                    color={this.props.color}
+                                                    onReadMore = {this.onReadMore}
+                                                />:
+                                                <div>
+                                                    You haven't published anything yet
                                                 </div>
                                         }
-
                                     </div>
                                 </Grid.Column>:
-                                <div>
-
-                                </div>
+                                null
                         }
                         {
                             window.innerWidth>600?
                                 <Grid.Column  width={10}>
+                                    <Header color={this.props.vars.color} as='h1'>
+                                        Welcome to your Dashboard
+                                    </Header>
                                     {
                                         this.props.vars.createNew?
                                             <EditorsForm
                                                 currentUser={this.props.user}
                                                 _goToEditor = {this.props._goToEditor}
-                                                _exitEditMode={this.props._exitEditMode}
                                                 editingMode = {this.props.editingMode}
                                                 onFinishClick={this.onFinishClick}
                                                 handleUTAChange={this.handleUTAChange}
                                                 handleCategoryChange={this.handleCategoryChange}
-                                                handleTopicChange={this.handleTopicChange} />:
-                                            <Welcome
-                                                richViewerState={this.state.richViewerState}
-                                                color={this.props.colors[1]}
-                                                blogIsLoading={this.state.blogIsLoading}
-                                                blogDetails={this.state.blogDetails}
-                                                blog={this.state.blog}
-                                                blogs={this.state.blogs}
-                                                blogLoaded={this.state.blogLoaded}/>
+                                                handleTopicChange={this.handleTopicChange}
+                                            />:
+                                            <div>
+                                                <Header color={this.props.vars.color} as='h1'>
+                                                    Your Articles
+                                                </Header>
+                                                <Welcome
+                                                    richViewerState={this.state.richViewerState}
+                                                    color={this.props.colors[1]}
+                                                    blogIsLoading={this.state.blogIsLoading}
+                                                    blogDetails={this.state.blogDetails}
+                                                    blog={this.state.blog}
+                                                    blogs={this.state.blogs}
+                                                    blogLoaded={this.state.blogLoaded}/>
+                                            </div>
                                     }
                                 </Grid.Column>:
                                 <Grid.Column  width={16}>
+                                    <Header color={this.props.vars.color} as='h1'>
+                                        Welcome to your Dashboard.
+                                    </Header>
                                     {
                                         this.props.vars.createNew?
                                             <EditorsForm
                                                 currentUser={this.props.user}
                                                 _goToEditor = {this.props._goToEditor}
-                                                _exitEditMode={this.props._exitEditMode}
                                                 editingMode = {this.props.editingMode}
                                                 onFinishClick={this.onFinishClick}
                                                 handleUTAChange={this.handleUTAChange}
                                                 handleCategoryChange={this.handleCategoryChange}
-                                                handleTopicChange={this.handleTopicChange} />:
-                                            <Welcome
-                                                richViewerState={this.state.richViewerState}
-                                                color={this.props.colors[1]}
-                                                blogIsLoading={this.state.blogIsLoading}
-                                                blogDetails={this.props.blogDetails}
-                                                blog={this.state.blog}
-                                                blogs={this.state.blogs}
-                                                blogLoaded={this.state.blogLoaded}/>
+                                                handleTopicChange={this.handleTopicChange}
+                                            />:
+                                            <div>
+                                                <Header color={this.props.vars.color} as='h2'>
+                                                    Your Top Articles.
+                                                </Header>
+                                            </div>
                                     }
                                 </Grid.Column>
                         }
@@ -218,9 +185,7 @@ class RichEditorExample extends React.Component {
                                         I will give you some more stuff here
                                     </div>
                                 </Grid.Column>:
-                                <div>
-
-                                </div>
+                               null
                         }
 
                     </Grid.Row>
@@ -233,7 +198,8 @@ class RichEditorExample extends React.Component {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        vars:state.vars
+        vars:state.vars,
+        blogs:state.blogs
     }
 };
 

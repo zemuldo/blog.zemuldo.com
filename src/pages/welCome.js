@@ -10,8 +10,7 @@ class WelcomePage extends React.Component {
         this.state = {};
         this.componentDidMount = this.componentDidMount.bind(this);
     }
-    componentDidMount() {
-    }
+    componentDidMount() {}
     fbShare () {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
         if(this.props.blog){

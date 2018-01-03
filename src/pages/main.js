@@ -407,6 +407,7 @@ class App extends React.Component {
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
                 this.props.varsActions.updateVars({profilePic:imageUrl})
+                this.setBlogs(user.userName)
             }
             else {
                 localStorage.removeItem('user');
@@ -417,6 +418,25 @@ class App extends React.Component {
         }
         this.forceUpdate();
         window.addEventListener('resize', this.resize);
+    }
+    setBlogs(userName){
+        axios.post(env.httpURL, {
+            "queryMethod":"getPosts",
+            "queryData":{
+                userName:userName
+            }
+        })
+            .then(function (response) {
+                if(response.data[0]){
+                    this.props.blogsActions.updateBlogs(response.data);
+                }
+                else {
+                    this.props.blogsActions.updateBlogs([]);
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.props.blogsActions.updateBlogs([]);
+            }.bind(this))
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
@@ -451,7 +471,7 @@ class App extends React.Component {
                 <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>Zemuldo Articles {this.props.vars.blogLoaded.toString()}</Link>
+                            <Link to ='/'>Zemuldo Articles {this.props.blogs.length}</Link>
                         </h1>
                     </div>
                     <PagesComponent

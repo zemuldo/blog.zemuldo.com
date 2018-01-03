@@ -19,13 +19,6 @@ class ComMenu extends React.Component {
         };
         this.handleFilterChange=this.handleFilterChange.bind(this);
     };
-    updateVars(vars){
-        let newVars = this.props.vars;
-        for(let i=0;i<vars.length;i++){
-            newVars[vars[i].key]=vars[i].value;
-        }
-        this.props.varsActions.updateVars(newVars);
-    };
     handleHomeClick = () => {
         this.props.blogActions.resetBlog();
         this.props.varsActions.updateVars({currentLocation:'home'});
@@ -54,12 +47,11 @@ class ComMenu extends React.Component {
             this.props.varsActions.updateVars({editingMode:true,createNew:true,currentLocation:'profile'});
         }
         else {
-            this.props.varsActions.updateVars({editingMode:true,createNew:false,currentLocation:'profile'});
+            this.props.varsActions.updateVars({editingMode:false,createNew:true,currentLocation:'profile'});
         }
     };
     handleProfile=()=>{
         this.props.varsActions.updateVars({editingMode:false,createNew:false,currentLocation:'profile'});
-        console.log(this.props.vars.createNew)
     };
     handleFilterChange(e) {
         let query={};
@@ -71,7 +63,6 @@ class ComMenu extends React.Component {
             query.filter = e.target.value;
             queryMthod='getFiltered'
         }
-        this.updateVars([{key:'blogsAreLoading',value:true}]);
         e.preventDefault();
         axios.post(env.httpURL, {
             "queryMethod": queryMthod,
@@ -79,11 +70,9 @@ class ComMenu extends React.Component {
         })
             .then(response => {
                 this.props.blogsActions.updateBlogs(response.data);
-                this.updateVars([{key:'blogsAreLoading',value:false}])
             })
             .catch(err => {
                 this.props.blogsActions.updateBlogs([]);
-                this.updateVars([{key:'blogsAreLoading',value:false}]);
                 return err
             });
     }
@@ -157,7 +146,7 @@ class ComMenu extends React.Component {
                                     position='right'
                                     name='login'
                                     color={this.props.vars.colors[0]}
-                                    onClick={() => { this.updateVars([{key:'currentLocation',value:'login'},{key:'signUp',value:false}]) }}>
+                                    onClick={() => { this.props.varsActions.updateVars({curentLocation:'login',signUp:false}) }}>
                                     <Icon color={this.props.vars.colors[0]} name='unlock' />
                                     <span style={{color:'black'}}><Link to="/login">Login</Link></span>
                                 </Menu.Item>:
