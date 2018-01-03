@@ -11,6 +11,8 @@ import * as VarsActions from "../state/actions/vars";
 import SignUpForm from "./signUpForm";
 import util from "../util";
 import LoginForm from "./lognForm";
+import * as BlogsActions from "../state/actions/blogs";
+import * as BlogActions from '../state/actions/blog';
 const env = config[process.env.NODE_ENV] || 'development'
 
 class Login extends React.Component {
@@ -56,18 +58,11 @@ class Login extends React.Component {
         this.setBlogs = this.setBlogs.bind(this)
         this.validateUser = this.validateUser.bind(this)
     };
-    updateVars(vars){
-        let newVars = this.props.vars;
-        for(let i=0;i<vars.length;i++){
-            newVars[vars[i].key]=vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
-    };
     validateUser() {
-        this.setState({hideMessage:true})
-        let known = localStorage.getItem('user')
+        this.setState({hideMessage:true});
+        let known = localStorage.getItem('user');
         if(known){
-            let user = JSON.parse(localStorage.getItem('user'))
+            let user = JSON.parse(localStorage.getItem('user'));
             return axios.post(env.httpURL, {
                 "queryMethod": "validateUser",
                 "queryData": {
@@ -76,37 +71,38 @@ class Login extends React.Component {
                     "userName": user.userName
                 }
             })
-                .then(function (success) {
+                .then( (success) =>{
                     if (success.data.state) {
                         if (success.data.state === true) {
+                            this.props.varsActions.updateVars({currentLocation:'profile'});
+                            this.setBlogs(user.userName);
                             let urlCreator = window.URL || window.webkitURL;
                             let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                            this.updateVars([{key:'profilePic',value:imageUrl}])
+                            this.props.varsActions.updateVars({profilePic:imageUrl});
                             this.props.userActions.updateUser(user);
-                            this.props.history.push('/'+user.userName+'/profile-'+this.props.vars.time.split(' ').join('-'));
+                            this.props.history.push('/user/'+user.userName);
                             this.setState({validatingKnounUser:false});
                             return true
                         }
                         else {
-                            this.props.userActions.updateUser(null)
+                            this.props.userActions.updateUser(null);
                             localStorage.removeItem('user');
                             this.setState({validatingKnounUser:false});
                             return false
                         }
                     }
                     else {
-                        this.props.userActions.updateUser(null)
+                        this.props.userActions.updateUser(null);
                         localStorage.removeItem('user');
                         this.setState({validatingKnounUser:false});
                         return false
                     }
-                }.bind(this))
-                .catch(function (err) {
+                })
+                .catch((err)=>{
                     localStorage.removeItem('user');
                     this.setState({validatingKnounUser:false});
-                    console.log(err)
-                    return false
-                }.bind(this))
+                    return err
+                })
         }
         else {
             if(window.location.pathname ==='/signup'){
@@ -120,7 +116,7 @@ class Login extends React.Component {
 
     }
     onLoginClick= () => {
-        this.setState({logingin:true})
+        this.setState({logingin:true});
         if(!this.state.userName || !this.state.password){
             this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:"Invalid login details"}})
             setTimeout(function () {
@@ -146,23 +142,25 @@ class Login extends React.Component {
                 }
                 if(success.data.id){
                     let user = success.data;
-                    success.data.name = success.data.userName
+                    this.setBlogs(user.userName)
+                    success.data.name = success.data.userName;
                     this.setState({logingin:false});
                     let urlCreator = window.URL || window.webkitURL;
                     let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                    this.updateVars([{key:'profilePic',value:imageUrl}])
+                    this.props.varsActions.updateVars({profilePic:imageUrl});
                     this.props.userActions.updateUser(user);
-                    localStorage.setItem('user',JSON.stringify(success.data))
+                    localStorage.setItem('user',JSON.stringify(success.data));
+                    this.props.history.push('/user/'+success.data.userName)
                 }
                 else {
-                    this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:success.data.error}})
+                    this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:success.data.error}});
                     setTimeout(function () {
                         this.setState({error:false,hideMessage:true})
                     }.bind(this),2000)
                 }
             }.bind(this))
             .catch(function (error) {
-                this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}})
+                this.setState({error:true,hideMessage:false,logingin:false,errorDetails:{field:'Login',message:"An erro occured, Check your Internet"}});
                 setTimeout(function () {
                     this.setState({error:false,hideMessage:true})
                 }.bind(this),2000)
@@ -170,54 +168,54 @@ class Login extends React.Component {
 
     }
     handleSignUp(){
-        this.setState({registering:true})
+        this.setState({registering:true});
         if(!this.state.userName || this.state.userName.length<4){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Username',message:"Username is required and must be more tha 5 characters"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         if(!this.state.firstName || this.state.firstName.length<3){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'First Name',message:"First Name is required and must be more tha 3 characters"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         if(!this.state.lastName || this.state.lastName.length<3){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Last Name',message:"Last Name is required and must be more tha 3 characters"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         if(!this.state.email){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Email',message:"Email Address is required"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         if(typeof this.state.imagePreviewUrl !=='object'){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Avatar',message:"You have not created profile picture"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         if(!this.state.password || !this.state.confirmPass){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Password',message:"Password is required"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         if(this.state.password !== this.state.confirmPass){
             this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Password',message:"Passwords don't match"}})
             setTimeout(function () {
                 this.setState({hideMessage:true,error:false})
-            }.bind(this),2000)
+            }.bind(this),2000);
             return
         }
         let userData ={
@@ -237,15 +235,15 @@ class Login extends React.Component {
                     this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Failed',message:"An error occured. Check your Internet"}})
                     setTimeout(function () {
                         this.setState({hideMessage:true})
-                    }.bind(this),4000)
+                    }.bind(this),4000);
                     return false
                 }
                 if(success.data.code===200){
                     this.setState({success:true,hideMessage:false,registering:false,errorDetails:{field:'Success',message:"Success"}})
                     setTimeout(function () {
-                        this.setState({signUp:false,success:false,hideMessage:true,imagePreviewUrl:''})
+                        this.setState({signUp:false,success:false,hideMessage:true,imagePreviewUrl:''});
                         this.props.history.push('/login');
-                        this.updateVars([{key:'signUp',value:false}])
+                        this.props.varsActions.updateVars({signUp:true});
                     }.bind(this),2000)
                 }
                 else {
@@ -260,7 +258,7 @@ class Login extends React.Component {
                 this.setState({error:true,hideMessage:false,registering:false,errorDetails:{field:'Failed',message:error.message}})
                 setTimeout(function () {
                     this.setState({hideMessage:true})
-                }.bind(this),4000)
+                }.bind(this),4000);
                 return false
             }.bind(this))
     }
@@ -294,46 +292,45 @@ class Login extends React.Component {
     }
     showCreateAvatar=(state)=>{
         this.setState({ creatAvatarOpen: state })
-    }
+    };
     closeCreateAvatar=()=>{
         this.setState({ creatAvatarOpen: false })
-    }
+    };
     async componentDidMount() {
-        console.log(this.props.history);
+        this.props.varsActions.updateVars({blogLoaded:true,currentLocation:'login'});
+        this.props.blogActions.resetBlog();
         await this.validateUser()
     }
     componentWillReceiveProps() {
         let page = window.location.pathname.split('/')[1];
-        if(page==='signup'){
-            this.updateVars([{key:'signUp',value:true}])
+        if(page==='signup' && !this.props.vars.signUp){
+            this.props.varsActions.updateVars({signUp:true});
         }
-        if(page==='login'){
-            this.updateVars([{key:'signUp',value:false}])
+        if(page==='login'  && this.props.vars.signUp){
+            this.props.varsActions.updateVars({signUp:false});
         }
     }
     setBlogs(userName){
-;        axios.post(env.httpURL, {
+        axios.post(env.httpURL, {
             "queryMethod":"getPosts",
             "queryData":{
                 userName:userName
             }
         })
             .then(function (response) {
-;                if(response.data[0]){
-                    this.setState({userBlogs:response.data})
-
+                if(response.data[0]){
+                    this.props.blogsActions.updateBlogs(response.data);
                 }
                 else {
-                    this.setState({userBlogs:[]});
-
+                    this.props.blogsActions.updateBlogs([]);
                 }
             }.bind(this))
             .catch(function (err) {
-                this.setState({userBlogs:[]})
+                this.props.blogsActions.updateBlogs([]);
             }.bind(this))
     }
     handSwichReg = function (state){
-        this.updateVars([{key:'signUp',value:state}])
+        this.props.varsActions.updateVars({signUp:state});
     }
     _handleFileChange(e) {
         e.preventDefault();
@@ -365,41 +362,19 @@ class Login extends React.Component {
                     </div>:
                     <div>
                         {
-                            this.props.user?
+                            this.props.user && this.props.user.id?
                                 <div>
                                     <Pofile
                                         userBlogs ={this.state.userBlogs}
                                         _goToEditor = {this.props._goToEditor}
                                         _exitEditMode={this.props._exitEditMode}
-                                        editingMode={this.props.editingMode}
-                                        createNew={this.props.createNew}
+                                        editingMode={this.props.vars.editingMode}
+                                        createNew={this.props.vars.createNew}
                                         _handleCreateNew={this.props._handleCreateNew}
-                                        colors = {this.props.vars.colors}/>
+                                        colors = {this.props.vars.colors}
+                                    />
                                 </div>:
                                 <div>
-                                    <Modal open ={this.state.creatAvatarOpen}>
-                                        <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
-                                            Create your Profile Picture.
-                                        </Header></Modal.Header>
-                                        <Modal.Content>
-                                            <div>
-                                                <p>
-                                                    Click preview to see your picture as it will appear.
-                                                </p>
-                                            </div>
-                                            <hr/>
-                                            <Modal.Description>
-                                                <AvatarEditor setAvatar = {this.setAvatar}/>
-                                            </Modal.Description>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button.Group>
-                                                <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
-                                                <Button.Or />
-                                                <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
-                                            </Button.Group>
-                                        </Modal.Actions>
-                                    </Modal>
                                     <div className='forms-ls'>
                                         {
                                             this.props.vars.signUp?
@@ -451,11 +426,13 @@ class Login extends React.Component {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        vars:state.vars
+        vars:state.vars,
     }
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        blogActions: bindActionCreators(BlogActions, dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch),
         userActions:bindActionCreators(UserActions,dispatch),
         varsActions:bindActionCreators(VarsActions,dispatch)
     }

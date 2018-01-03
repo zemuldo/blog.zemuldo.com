@@ -4,7 +4,7 @@ const initialState = null;
 const userReducer = (state = initialState, action ) => {
     switch (action.type) {
         case UPDATE_USER:
-            return action.user;
+            return Object.assign({},state,action.user);
         default:
             return state;
     }

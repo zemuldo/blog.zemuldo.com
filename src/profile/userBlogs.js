@@ -1,13 +1,43 @@
 import React from 'react'
-import {Loader,Grid,Button} from 'semantic-ui-react'
-import GridBlog from "./gridBlog";
+import {Loader,Grid} from 'semantic-ui-react'
+import GridBlog from "../posts/gridBlog";
 import { connect } from "react-redux";
+import axios from "axios/index";
+import * as BlogsActions from "../state/actions/blogs";
+import * as VarsActions from "../state/actions/vars";
+import * as UserActions from "../state/actions/user";
+import {bindActionCreators} from "redux";
+import * as BlogActions from "../state/actions/blog";
+import config from '../environments/conf'
+const env = config[process.env.NODE_ENV] || 'development'
 
 class GridBlogs extends React.Component {
     constructor(props){
         super(props)
         this.state = {
         }
+        this.onReadMore=this.onReadMore.bind(this)
+    }
+    onReadMore(thisBlog) {
+        this.props.varsActions.updateVars({ blogLoaded: false });
+        axios.post(env.httpURL, {
+            "queryMethod": "getPost",
+            "queryData": {
+                "id": thisBlog.id
+            }
+        })
+            .then(response => {
+                let blog = response.data;
+                Object.assign(blog,thisBlog);
+                this.props.blogActions.updateBlog(blog);
+                this.props.varsActions.updateVars({ blogLoaded: true });
+                window.scrollTo(0, 0);
+            })
+            .catch(function (err) {
+                this.props.blogActions.updateBlog({});
+                this.props.varsActions.updateVars({ blogLoaded: true });
+                return err;
+            }.bind(this))
     }
 
     render() {
@@ -21,7 +51,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[0] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[0]}
                                             />:null
@@ -29,7 +59,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[1] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[1]}
                                             />:null
@@ -37,7 +67,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[2] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[2]}
                                             />:null
@@ -47,7 +77,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[3] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[3]}
                                             />:null
@@ -55,7 +85,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[4] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[4]}
                                             />:null
@@ -63,7 +93,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[5] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[5]}
                                             />:null
@@ -73,7 +103,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[6] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[6]}
                                             />:null
@@ -81,7 +111,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[7] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[7]}
                                             />:null
@@ -89,7 +119,7 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[8] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[8]}
                                             />:null
@@ -99,40 +129,13 @@ class GridBlogs extends React.Component {
                                     {
                                         this.props.blogs[9] ?
                                             <GridBlog
-                                                onReadMore = {this.props.onReadMore}
+                                                onReadMore = {this.onReadMore}
                                                 color={this.props.color}
                                                 blog={this.props.blogs[9]}
                                             />:null
                                     }
                                 </Grid>
                             </div>
-                            <div>
-                                <div>
-                                    <Button
-                                        color={this.props.color}
-                                        circular={true}
-                                        size='mini'
-                                        floated='left'
-                                        disabled={!this.props.next}
-                                        onClick={ this.props.setNextBlogs.bind(this,'next')}
-                                        name="next"
-                                    >
-                                        See More
-                                    </Button>
-                                    <Button
-                                        color={this.props.color}
-                                        circular={true}
-                                        size='mini'
-                                        floated='right'
-                                        disabled={this.props.x===0}
-                                        onClick={ this.props.setPreviousBlogs.bind(this,'previous')}
-                                        name="previous"
-                                    >
-                                        Previous
-                                    </Button>
-                                </div>
-                            </div>
-
                         </div> :
                         <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                             <Loader active inline='centered' />
@@ -151,4 +154,12 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps) (GridBlogs)
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        blogActions: bindActionCreators(BlogActions, dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch),
+        userActions:bindActionCreators(UserActions,dispatch),
+        varsActions:bindActionCreators(VarsActions,dispatch)
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps) (GridBlogs)

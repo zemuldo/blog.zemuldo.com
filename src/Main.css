@@ -287,3 +287,35 @@ a:hover{
 .marginTop2{
     margin-top: 2%;
 }
+
+/*
+    Chat
+*/
+.chatContainer{
+    background-color: white;
+    padding: 10px;
+}
+.userMessContainer{
+    padding: 4px;
+    color: blue;
+    background-color: lightblue;
+    margin-left: 60%;
+    border-radius: 5%;
+    border: lightblue;
+}
+.botMessContainer{
+    padding: 4px;
+    color: blue;
+    margin-right: 30%;
+    background-color: lightgreen;
+    border-radius: 3%;
+    border: darkolivegreen;
+}
+.userTyping{
+    color: blue;
+    margin-left: 60%;
+}
+.botTyping{
+    color: blue;
+    margin-right: 30%;
+}

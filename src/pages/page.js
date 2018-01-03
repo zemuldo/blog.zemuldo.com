@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React from 'react'
 import { Header, Icon,Button, Grid ,Loader,Input} from 'semantic-ui-react'
 import WelcomePage from './welCome'
 import Blogs from '../posts/blogs'
@@ -8,20 +8,20 @@ import TwitterProf from '../partials/twitterProf'
 import config from '../environments/conf'
 import {pages} from '../environments/conf'
 import {topicsOBJ} from '../environments/conf'
+import {connect} from "react-redux";
 const env = config[process.env.NODE_ENV] || 'development'
 let x =0
-class PagesComponent extends Component {
+class PagesComponent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             next:true,
             topic:'all',
-            queryMethod:'getPagedPosts',
         };
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this._handleChangeBodySize = this._handleChangeBodySize.bind(this);
-        this.setNextBlogs = this.setNextBlogs.bind(this)
+        this.setNextBlogs = this.setNextBlogs.bind(this);
         this.setPreviousBlogs = this.setPreviousBlogs.bind(this);
         this.resetNav = this.resetNav.bind(this);
         this.onTopicClick = this.onTopicClick.bind(this);
@@ -125,7 +125,7 @@ class PagesComponent extends Component {
                             (window.innerWidth>600) ?
                                 <Grid.Column computer={4}>
                                     <Topics
-                                        currentLocation={this.props.currentLocation}
+                                        currentLocation={this.props.vars.currentLocation}
                                         topic={this.state.topic}
                                         onTopicClick = {this.onTopicClick}
                                         onAllcClick = {this.onAllcClick}
@@ -134,7 +134,7 @@ class PagesComponent extends Component {
                                         setTopicNextPosts={this.props.setTopicNextPosts}
                                         onReadMore = {this.props.onReadMore}
                                         blog ={this.props.blog}
-                                        color={this.props.color}
+                                        color={this.props.vars.color}
                                         blogs={this.props.blogs}
                                         resetNav={this.resetNav}
                                     />
@@ -149,53 +149,47 @@ class PagesComponent extends Component {
                                             onChange={this.props.handleFilterChange}
                                         />
 
-                                        <Header color={this.props.colors[2]} as='h2'>Most Popular</Header>
-                                        {
-                                            this.props.blogsLoaded?
-                                                <div>
-                                                    <br/>
-                                                    {
-                                                        (this.props.blogs[0]) ?
-                                                            <div>
-                                                                <Blogs
-                                                                    color={this.props.color}
-                                                                    onReadMore = {this.props.onReadMore}
-                                                                    blog ={this.props.blog}/>
-                                                                <div>
-                                                                    <br/>
-                                                                    <Button
-                                                                        color={this.props.color}
-                                                                        circular={true}
-                                                                        size='mini'
-                                                                        floated='left'
-                                                                        disabled={!this.state.next}
-                                                                        onClick={ this.setNextBlogs.bind(this,'next')}
-                                                                        name="next"
-                                                                    >
-                                                                        Next
-                                                                    </Button>
-                                                                    <Button
-                                                                        color={this.props.color}
-                                                                        circular={true}
-                                                                        size='mini'
-                                                                        floated='right'
-                                                                        disabled={x===0}
-                                                                        onClick={ this.setPreviousBlogs.bind(this,'previous')}
-                                                                        name="previous"
-                                                                    >
-                                                                        Prev
-                                                                    </Button>
-                                                                </div>
-                                                            </div>:
-                                                            <div>
-                                                                No matching content on this Topic
-                                                            </div>
-                                                    }
-                                                </div>:
-                                                <div className='small-loader' >
-                                                    <Loader active inline='centered' />
-                                                </div>
-                                        }
+                                        <Header color={this.props.vars.colors[2]} as='h2'>Most Popular</Header>
+                                        <div>
+                                            <br/>
+                                            {
+                                                this.props.blogs[0]?
+                                                    <div>
+                                                        <Blogs
+                                                            color={this.props.vars.color}
+                                                            onReadMore = {this.props.onReadMore}
+                                                        />
+                                                        <div>
+                                                            <br/>
+                                                            <Button
+                                                                color={this.props.vars.color}
+                                                                circular={true}
+                                                                size='mini'
+                                                                floated='left'
+                                                                disabled={!this.state.next}
+                                                                onClick={ this.setNextBlogs.bind(this,'next')}
+                                                                name="next"
+                                                            >
+                                                                Next
+                                                            </Button>
+                                                            <Button
+                                                                color={this.props.vars.color}
+                                                                circular={true}
+                                                                size='mini'
+                                                                floated='right'
+                                                                disabled={x===0}
+                                                                onClick={ this.setPreviousBlogs.bind(this,'previous')}
+                                                                name="previous"
+                                                            >
+                                                                Prev
+                                                            </Button>
+                                                        </div>
+                                                    </div>:
+                                                    <div>
+                                                        No matching content on this Topic
+                                                    </div>
+                                            }
+                                        </div>
                                     </div>
                                 </Grid.Column>:
                                 <div>
@@ -207,7 +201,7 @@ class PagesComponent extends Component {
                             {
                                 window.innerWidth<600?
                                     <Topics
-                                        currentLocation={this.props.currentLocation}
+                                        currentLocation={this.props.vars.currentLocation}
                                         topic={this.state.topic}
                                         onTopicClick = {this.onTopicClick}
                                         onAllcClick = {this.onAllcClick}
@@ -216,35 +210,28 @@ class PagesComponent extends Component {
                                         setTopicNextPosts={this.props.setTopicNextPosts}
                                         onReadMore = {this.props.onReadMore}
                                         blog ={this.props.blog}
-                                        color={this.props.color}
+                                        color={this.props.vars.color}
                                         blogs={this.props.blogs}
                                         resetNav={this.resetNav}/>:
-                                    <div>
-                                    </div>
+                                    null
                             }
                             {
 
-                                !this.props.blogLoaded?
+                                !this.props.vars.blogLoaded?
                                     <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                                         <Loader active inline='centered' />
+                                        <p>Loading Blog...</p>
                                     </div>:
-                                    <div>
-                                        <WelcomePage
-                                            x={x}
-                                            next={this.state.next}
-                                            setPreviousBlogs={this.setPreviousBlogs}
-                                            setNextBlogs={this.setNextBlogs}
-                                            onReadMore = {this.props.onReadMore}
-                                            richViewerState={this.props.richViewerState}
-                                            color={this.props.colors[1]}
-                                            blogDetails={this.props.blogDetails}
-                                            blog={this.props.blog}
-                                            blogsLoaded={this.props.blogsLoaded}
-                                            blogLoaded={this.props.blogLoaded}
-                                            deletedBlog={this.props.deletedBlog}
-                                            user={this.props.user}
-                                        />
-                                    </div>
+                                    <WelcomePage
+                                        x={x}
+                                        next={this.state.next}
+                                        setPreviousBlogs={this.setPreviousBlogs}
+                                        setNextBlogs={this.setNextBlogs}
+                                        onReadMore = {this.props.onReadMore}
+                                        color={this.props.vars.colors[1]}
+                                        deletedBlog={this.props.deletedBlog}
+                                        user={this.props.user}
+                                    />
                             }
                         </Grid.Column>
                         {
@@ -258,4 +245,13 @@ class PagesComponent extends Component {
             </div>)
     }
 }
-export default PagesComponent
+
+const mapStateToProps = (state) => {
+    return {
+        vars: state.vars,
+        blogs:state.blogs,
+        blog:state.blog
+    }
+}
+
+export default connect(mapStateToProps) (PagesComponent);

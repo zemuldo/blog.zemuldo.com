@@ -49,7 +49,6 @@ class Footer extends React.Component {
         }
     };
     componentDidMount(){
-        console.log(this.props)
     };
     render() {
         let urlDetails = 'all';
@@ -132,7 +131,7 @@ class Footer extends React.Component {
                                             </Link>
                                         </List.Item>
                                         <List.Item>
-                                            <Link to={"/about/"+urlDetails} onClick={()=>this.handleMenuItemClick('about')}>
+                                            <Link to={"/about/"} onClick={()=>this.handleMenuItemClick('about')}>
                                                 <Icon color='blue' name='info' />
                                                 <span style={{color:this.props.vars.colors[0]}} color={this.props.vars.color}>About</span>
                                             </Link>

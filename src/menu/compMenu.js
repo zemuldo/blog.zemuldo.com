@@ -7,9 +7,9 @@ import * as VarsActions from "../state/actions/vars";
 import * as UserActions from "../state/actions/user";
 import * as BlogsActions from "../state/actions/blogs";
 import {bindActionCreators} from "redux";
-import {pages} from "../environments/conf";
 import axios from "axios/index";
-import config from '../environments/conf'
+import config from '../environments/conf';
+import * as BlogActions from "../state/actions/blog";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class ComMenu extends React.Component {
@@ -17,82 +17,51 @@ class ComMenu extends React.Component {
         super(props);
         this.state = {
         };
-        this.handleFilterChange=this.handleFilterChange.bind(this)
-    };
-    updateVars(vars){
-        let newVars = this.props.vars;
-        for(let i=0;i<vars.length;i++){
-            newVars[vars[i].key]=vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
+        this.handleFilterChange=this.handleFilterChange.bind(this);
     };
     handleHomeClick = () => {
-        let newVars = this.props.vars;
-        newVars.blogsAreLoading=true;
-        newVars.currentLocation='home';
-        newVars.blog=null;
-        this.props.varsActions.updateVars(newVars);
+        this.props.blogActions.resetBlog();
+        this.props.varsActions.updateVars({currentLocation:'home'});
     };
     handleMenuItemClick = (e, { name }) => {
+        this.props.blogActions.resetBlog();
         if (name === 'search') {
             return false
         }
         let newVars = this.props.vars;
         newVars.blogsAreLoading=true;
-        if (name === 'home' || name === 'login') {
-            newVars.currentLocation=name;
+        if (name !== 'home' || name !== 'login') {
+            this.props.varsActions.updateVars({currentLocation:name})
         }
-        else {
-            if (pages[name]) {
-            }
-            newVars.currentLocation=name;
-            this.props.varsActions.updateVars(newVars);
-        }
+
     };
     handleLogoutinButton = () => {
         localStorage.removeItem('user');
-        this.props.userActions.updateUser(null);
-        this.updateVars([{key:'currentLocation',value:'home'}])
+        this.props.userActions.updateUser({id:null});
     };
     handleCreateNew = () => {
-        let editorState = window.localStorage.getItem('draftContent')
-        let blogData = window.localStorage.getItem('blogData')
+        let editorState = window.localStorage.getItem('draftContent');
+        let blogData = window.localStorage.getItem('blogData');
         if (editorState && blogData) {
-            this.updateVars([
-                {key:'editingMode',value:true},
-                {key:'createNew',value:true},
-                {key:'currentLocation',value:'profile'}
-                ])
+            this.props.varsActions.updateVars({editingMode:true,createNew:true,currentLocation:'profile'});
         }
         else {
-            this.updateVars([
-                {key:'editingMode',value:false},
-                {key:'createNew',value:true},
-                {key:'currentLocation',value:'profile'}
-            ])
+            this.props.varsActions.updateVars({editingMode:false,createNew:true,currentLocation:'profile'});
         }
-        console.log(this.props.vars.createNew)
-
     };
     handleProfile=()=>{
-        this.updateVars([
-            {key:'currentLocation',value:'profile'},
-            {key:'createNew',value:false},
-            {key:'editingMode',value:false}
-            ])
-        console.log(this.props.vars.createNew)
+        this.props.varsActions.updateVars({editingMode:false,createNew:false,currentLocation:'profile'});
     };
     handleFilterChange(e) {
-        let query={}
+        let query={};
         let queryMthod = 'getAllPosts';
         if(this.props.vars.currentLocation!=='home'){
-            query.type=this.state.currentLocation
+            query.type=this.props.vars.currentLocation
         }
         if(e.target.value !== ''){
             query.filter = e.target.value;
             queryMthod='getFiltered'
         }
-        this.updateVars([{key:'blogsAreLoading',value:true}])
         e.preventDefault();
         axios.post(env.httpURL, {
             "queryMethod": queryMthod,
@@ -100,11 +69,10 @@ class ComMenu extends React.Component {
         })
             .then(response => {
                 this.props.blogsActions.updateBlogs(response.data);
-                this.updateVars([{key:'blogsAreLoading',value:false}])
             })
             .catch(err => {
                 this.props.blogsActions.updateBlogs([]);
-                this.updateVars([{key:'blogsAreLoading',value:false}])
+                return err
             });
     }
     render() {
@@ -171,13 +139,13 @@ class ComMenu extends React.Component {
                             />
                         </Menu.Item>
                         {
-                            (!this.props.user) ?
+                            (!this.props.user || !this.props.user.id) ?
                                 <Menu.Item
                                     as='span'
                                     position='right'
                                     name='login'
                                     color={this.props.vars.colors[0]}
-                                    onClick={() => { this.updateVars([{key:'currentLocation',value:'login'}]) }}>
+                                    onClick={() => { this.props.varsActions.updateVars({curentLocation:'login',signUp:false}) }}>
                                     <Icon color={this.props.vars.colors[0]} name='unlock' />
                                     <span style={{color:'black'}}><Link to="/login">Login</Link></span>
                                 </Menu.Item>:
@@ -185,6 +153,7 @@ class ComMenu extends React.Component {
                                     <Dropdown
                                         className='dropDown'
                                         trigger={<Image
+                                            alt={'blogd.zemuldo.com_'+this.props.user.userName+'+_profile_pic'}
                                             avatar={true}
                                             wrapped={true}
                                             id="photo"
@@ -207,27 +176,27 @@ class ComMenu extends React.Component {
                                         <Dropdown.Menu>
                                             <Dropdown.Item as='span' onClick={this.handleProfile}>
                                                 <Icon color={this.props.vars.colors[0]} name='user circle' />
-                                                <Link to={'/'+this.props.user.userName+'/profile-'+this.props.vars.time.split(' ').join('-')} color={this.props.vars.colors[1]} >Your Profile</Link>
+                                                <Link to={'/user/'+this.props.user.userName} color={this.props.vars.colors[1]} >Your Profile</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.vars.colors[0]} name='users' />
-                                                <Link to={'/'+this.props.user.userName+'/followers'} color={this.props.vars.colors[2]} >Followers</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/followers'} color={this.props.vars.colors[2]} >Followers</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.vars.colors[0]} name='help' />
-                                                <Link to={'/'+this.props.user.userName+'/help'} color={this.props.vars.colors[0]} >Help</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/help'} color={this.props.vars.colors[0]} >Help</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item  as='span' onClick={this.handleCreateNew}>
                                                 <Icon color={this.props.vars.colors[0]} name='plus'  />
-                                                <Link to={'/'+this.props.user.userName+'/editor'} color={this.props.vars.colors[0]} >New Article</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/editor'} color={this.props.vars.colors[0]} >New Article</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.vars.colors[0]} name='setting' />
-                                                <Link to={'/'+this.props.user.userName+'/settings'} color={this.props.vars.colors[1]} >Settings</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/settings'} color={this.props.vars.colors[1]} >Settings</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
                                                 <Icon color={this.props.vars.colors[0]} name='sign out' />
-                                                <Link to={'/'} color={this.props.vars.colors[0]}>Sign Out</Link>
+                                                <span color={this.props.vars.colors[0]}>Sign Out</span>
                                             </Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
@@ -247,10 +216,11 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        blogActions: bindActionCreators(BlogActions,dispatch),
         userActions:bindActionCreators(UserActions,dispatch),
         varsActions:bindActionCreators(VarsActions,dispatch),
         blogsActions:bindActionCreators(BlogsActions,dispatch)
     }
-}
+};
 
 export default connect(mapStateToProps,mapDispatchToProps)  (ComMenu);

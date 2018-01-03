@@ -10,13 +10,13 @@ import {bindActionCreators} from "redux";
 import {pages} from "../environments/conf";
 import axios from "axios/index";
 import config from '../environments/conf'
+import * as BlogActions from "../state/actions/blog";
 const env = config[process.env.NODE_ENV] || 'development';
 
 class MobileMenu extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-        };
+        this.state = {};
         this.handleFilterChange=this.handleFilterChange.bind(this)
     };
     updateVars(vars){
@@ -27,6 +27,8 @@ class MobileMenu extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleHomeClick = () => {
+        this.props.blogActions.resetBlog();
+        this.props.varsActions.updateVars({ blogLoaded: true });
         let newVars = this.props.vars;
         newVars.blogsAreLoading=true;
         newVars.currentLocation='home';
@@ -34,6 +36,8 @@ class MobileMenu extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleMenuItemClick = (e, { name }) => {
+        this.props.blogActions.resetBlog();
+        this.props.varsActions.updateVars({ blogLoaded: true });
         if (name === 'search') {
             return false
         }
@@ -187,7 +191,7 @@ class MobileMenu extends React.Component {
                                     position='right'
                                     name='login'
                                     color={this.props.vars.colors[0]}
-                                    onClick={() => { this.updateVars([{key:'currentLocation',value:'login'}]) }}>
+                                    onClick={() => { this.updateVars([{key:'currentLocation',value:'login'},{key:'signUp',value:false}]) }}>
                                     <Icon color={this.props.vars.colors[0]} name='unlock' />
                                     <span style={{color:'black'}}><Link to="/login">Login</Link></span>
                                 </Menu.Item>:
@@ -195,6 +199,7 @@ class MobileMenu extends React.Component {
                                     <Dropdown
                                         className='dropDown'
                                         trigger={<Image
+                                            alt={'blogd.zemuldo.com_'+this.props.user.userName+'+_profile_pic'}
                                             avatar={true}
                                             wrapped={true}
                                             id="photo"
@@ -217,23 +222,23 @@ class MobileMenu extends React.Component {
                                         <Dropdown.Menu>
                                             <Dropdown.Item as='span' onClick={this.handleProfile}>
                                                 <Icon color={this.props.vars.colors[0]} name='user circle' />
-                                                <Link to={'/'+this.props.user.userName+'/profile-'+this.props.vars.time.split(' ').join('-')} color={this.props.vars.colors[1]} >Your Profile</Link>
+                                                <Link to={'/user/'+this.props.user.userName} color={this.props.vars.colors[1]} >Your Profile</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.vars.colors[0]} name='users' />
-                                                <Link to={'/'+this.props.user.userName+'/followers'} color={this.props.vars.colors[2]} >Followers</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/followers'} color={this.props.vars.colors[2]} >Followers</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.vars.colors[0]} name='help' />
-                                                <Link to={'/'+this.props.user.userName+'/help'} color={this.props.vars.colors[0]} >Help</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/help'} color={this.props.vars.colors[0]} >Help</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item  as='span' onClick={this.handleCreateNew}>
                                                 <Icon color={this.props.vars.colors[0]} name='plus'  />
-                                                <Link to={'/'+this.props.user.userName+'/editor'} color={this.props.vars.colors[0]} >New Article</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/editor'} color={this.props.vars.colors[0]} >New Article</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
                                                 <Icon color={this.props.vars.colors[0]} name='setting' />
-                                                <Link to={'/'+this.props.user.userName+'/settings'} color={this.props.vars.colors[1]} >Settings</Link>
+                                                <Link to={'/user/'+this.props.user.userName+'/settings'} color={this.props.vars.colors[1]} >Settings</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
                                                 <Icon color={this.props.vars.colors[0]} name='sign out' />
@@ -257,6 +262,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        blogActions: bindActionCreators(BlogActions,dispatch),
         userActions:bindActionCreators(UserActions,dispatch),
         varsActions:bindActionCreators(VarsActions,dispatch),
         blogsActions:bindActionCreators(BlogsActions,dispatch)

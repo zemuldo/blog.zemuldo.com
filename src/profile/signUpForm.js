@@ -20,6 +20,7 @@ class SignUpForm extends React.Component {
                                 <div>
                                     {!!this.props.imagePreviewUrl &&
                                     <img
+                                        alt={'zemuldo blogs create account'}
                                         src={this.props.imagePreviewUrl.img}
                                         style={{
                                             borderRadius: `${(Math.min(

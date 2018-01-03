@@ -1,7 +1,10 @@
 import React from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
 import {CompositeDecorator,convertFromRaw, Editor, EditorState} from 'draft-js';
 import config from '../environments/conf'
+import {bindActionCreators} from "redux";
+import * as VarsActions from "../state/actions/vars";
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
     Development:'dev',
@@ -148,22 +151,18 @@ class RichEditorExample extends React.Component {
     isLoading(value){
         this.setState({ isLoaded: value });
     };
-    onChange = (editorState) =>{
-    }
+    onChange = (editorState) =>{};
     focus = () => this.refs.editor.focus();
-    handleKeyCommand(command, editorState) {
-    }
-    onTab(e) {
-       
-    }
+    handleKeyCommand(command, editorState) {}
+    onTab(e) {}
     publish = () => {
         this.setState({ open: true })
         const content = localStorage.getItem('draftContent');
         const blogData = JSON.parse(localStorage.getItem('blogData'))
         if(content && blogData){
-            let obj = JSON.parse(content)
-            let title = obj.blocks[0].text
-            obj.blocks.splice(0,1)
+            let obj = JSON.parse(content);
+            let title = obj.blocks[0].text;
+            obj.blocks.splice(0,1);
             axios.post(env.httpURL, {
                 queryMethod:"publish",
                 "queryData":{
@@ -181,15 +180,15 @@ class RichEditorExample extends React.Component {
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');
                         this.setState({isPublished:true,filledForm:true});
-                        this.props._exitEditMode();
+                        this.props.varsActions.updateVars({editingMode:true,createNew:true});
                     }
                     else {
-                        this.props._exitEditMode();
+                        this.props.varsActions.updateVars({editingMode:true,createNew:true});
                     }
                 }.bind(this))
 
                 .catch(function (err) {
-                    this.setState({filledForm:true})
+                    this.setState({filledForm:true});
                     this.setState({isPublished:false})
                 }.bind(this))
         }
@@ -244,6 +243,10 @@ class RichEditorExample extends React.Component {
     }
 }
 
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        varsActions:bindActionCreators(VarsActions,dispatch)
+    }
+};
 
-
-export default RichEditorExample
+export default connect(mapDispatchToProps) (RichEditorExample);

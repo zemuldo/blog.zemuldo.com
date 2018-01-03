@@ -4,11 +4,12 @@ import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as BlogsActions from "../state/actions/blogs";
+import * as BlogActions from '../state/actions/blog';
 import * as UserActions from "../state/actions/user";
 import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
-import PagesComponent from '../pages/homePage'
+import PagesComponent from './page'
 import config from '../environments/conf'
 import { pages,topicsOBJ } from '../environments/conf'
 const env = config[process.env.NODE_ENV] || 'development';
@@ -16,34 +17,10 @@ const env = config[process.env.NODE_ENV] || 'development';
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            user: null,
-            iKnowYou: false,
-            visitorInfo: null,
-            geoAllowed: false,
-            createNew: false,
-            editingMode: false,
-            colors: ['green', 'blue', 'orange', 'violet', 'blue', 'orange'],
-            currentLocation: 'home',
-            profilePic: null,
-            blogs: [],
-            blogsLoaded: false,
-            blogsAreLoading: true,
-            homePageIsLoading: true,
-            blogDetails: null,
-            richViewerState: null,
-            blogLoaded: false,
-            homePageLoaded: false,
-            loadFooter: false,
-            topic: 'all',
-            time: new Date().toDateString()
-        };
+        this.state = {};
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.handleHomeClick = this.handleHomeClick.bind(this);
-        this.shuffle = this.shuffle.bind(this);
-        this.successLogin = this.successLogin.bind(this);
         this._handleCreateNew = this._handleCreateNew.bind(this);
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this);
         this._goToEditor = this._goToEditor.bind(this);
@@ -51,20 +28,17 @@ class App extends React.Component {
         this.handleNavigation = this.handleNavigation.bind(this);
         this.setHomeBlogs = this.setHomeBlogs.bind(this);
         this.setPageBlogs = this.setPageBlogs.bind(this);
-        this.navigateBlogs = this.navigateBlogs.bind(this)
-        this.getBlogDetails = this.getBlogDetails.bind(this)
-        this.onReadMore = this.onReadMore.bind(this)
-        this.setCurrentBlog = this.setCurrentBlog.bind(this)
+        this.navigateBlogs = this.navigateBlogs.bind(this);
+        this.onReadMore = this.onReadMore.bind(this);
+        this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
-        this.homePageIsLoading = this.homePageIsLoading.bind(this);
         this.blogIsLoading = this.blogIsLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
-        this.deletedBlog = this.deletedBlog.bind(this)
-        this.handleMenuItemClickFooter = this.handleMenuItemClickFooter.bind(this)
-        this.setTopic = this.setTopic.bind(this)
+        this.deletedBlog = this.deletedBlog.bind(this);
+        this.setTopic = this.setTopic.bind(this);
         this.handleUpdateBlogs=this.handleUpdateBlogs.bind(this)
     };
     updateVars(vars){
@@ -75,7 +49,7 @@ class App extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleUpdateBlogs(blogs){
-        this.props.blogActions.updateBlogs(blogs)
+        this.props.blogsActions.updateBlogs(blogs)
     }
     setTopic(topic) {
         this.setState({ topic: topic })
@@ -83,9 +57,6 @@ class App extends React.Component {
     deletedBlog() {
         this.setState({ blog: null });
         this.setHomeBlogs();
-    }
-    homePageIsLoading(value) {
-        this.setState({ homePageLoaded: !value });
     }
     blogsAreLoading(state) {
         this.setState({ blogsLoaded: !state });
@@ -117,39 +88,27 @@ class App extends React.Component {
         if (!pages[page]) {
             window.location = '/';
         }
-        return axios.post(env.httpURL, {
+        return Promise.all([
+            axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
                 id: id
             }
-        })
+            }),axios.post(env.httpURL, {
+                "queryMethod": "getPostDetails",
+                "queryData": {
+                    "id": id
+                }
+            })])
             .then(function (response) {
-                if (!response.data) {
-                    this.setState({ blog: null });
-                    this.setState({ blogLoaded: true });
-                    return false
-                }
-                if (response.data.error) {
-                    this.setState({ blog: null });
-                    this.setState({ blogLoaded: true });
-                    return false
-                }
-                if (response.data.body) {
-                    this.setState({ blog: response.data, richViewerState: response.data.body });
-                    this.getBlogDetails(id);
-                    return false
-
-                }
-                else {
-                    this.setState({ blog: null });
-                    this.setState({ blogLoaded: true });
-                    return false
-                }
+                let blog = response[0].data;
+                Object.assign(blog,response[1].data);
+                this.props.blogActions.updateBlog(blog);
+                this.props.varsActions.updateVars({ blogLoaded: true });
             }.bind(this))
             .catch(function (err) {
-                this.setState({ blog: null });
-                this.setState({ blogLoaded: true });
-                return err
+                this.props.blogActions.updateBlog({});
+                this.props.varsActions.updateVars({ blogLoaded: true });
             }.bind(this));
     }
     setCurrentBlog(url, page) {
@@ -167,15 +126,15 @@ class App extends React.Component {
             this.setBlogHere(id, page)
         }
         else {
-            this.setState({ blog: null });
-            this.setState({ blogLoaded: true })
+            this.props.blogActions.updateBlog({});
+            this.props.varsActions.updateVars({ blogLoaded: true });
         }
     }
     handleFilterChange(e) {
         let query={}
         let queryMthod = 'getAllPosts';
-        if(this.state.currentLocation!=='home'){
-            query.type=this.state.currentLocation
+        if(this.props.vars.currentLocation!=='home'){
+            query.type=this.props.vars.currentLocation
         }
         if(e.target.value !== ''){
             query.filter = e.target.value;
@@ -188,7 +147,7 @@ class App extends React.Component {
             "queryData": query
         })
             .then(response => {
-                this.props.blogActions.updateBlogs(response.data);
+                this.props.blogsActions.updateBlogs(response.data);
                 this.setState({ blogsAreLoading: false })
             })
             .catch(err => {
@@ -197,7 +156,7 @@ class App extends React.Component {
             });
     }
     onReadMore(thisBlog) {
-        this.setState({ blogLoaded: true });
+        this.props.varsActions.updateVars({ blogLoaded: false });
         axios.post(env.httpURL, {
             "queryMethod": "getPost",
             "queryData": {
@@ -205,58 +164,34 @@ class App extends React.Component {
             }
         })
             .then(response => {
-                this.setState({ blog: response.data, blogDetails: thisBlog });
-                this.setState({ blogLoaded: true, blog: response.data });
+                let blog = response.data;
+                Object.assign(blog,thisBlog);
+                this.props.blogActions.updateBlog(blog);
+                this.props.varsActions.updateVars({ blogLoaded: true });
                 window.scrollTo(0, 0);
             })
             .catch(function (err) {
-                this.setState({ blog: null, blogDetails: thisBlog });
-                this.setState({ blogLoaded: true });
+                this.props.blogActions.updateBlog({});
+                this.props.varsActions.updateVars({ blogLoaded: true });
                 return err;
             }.bind(this))
     }
-    getBlogDetails(id) {
-        return axios.post(env.httpURL, {
-            "queryMethod": "getPostDetails",
-            "queryData": {
-                "id": id
-            }
-        })
-            .then(function (response) {
-                if (response.data.error) {
-                }
-                else {
-                    this.setState({ blogDetails: response.data });
-                    this.setState({ blogLoaded: true })
-                }
-            }
-                .bind(this))
-            .catch(function (err) {
-                this.setState({ blogLoaded: true });
-                return err
-            }.bind(this));
-    }
     navigateBlogs(query) {
-        this.setState({ blogsLoaded: false });
         return axios.post(env.httpURL, {
             "queryMethod": "getPosts",
             "queryData": query
         })
             .then(function (response) {
                 if (!response.data) {
-                    this.setState({ blogs: [], blog: null, blogsLoaded: true });
-                    this.updateVars([{key:'homePageLoaded',value:true}])
+                    this.props.blogsActions.updateBlogs([]);
                     return false
                 }
                 else {
-                    this.handleUpdateBlogs(response.data)
-                    this.setState({  blogsLoaded: true });
+                    this.props.blogsActions.updateBlogs(response.data);
                 }
-                this.updateVars([{key:'homePageLoaded',value:true}])
             }.bind(this))
             .catch(function (err) {
-                this.setState({ blogs: [], blog: null, blogsLoaded: true });
-                this.updateVars([{key:'homePageLoaded',value:true}])
+                this.props.blogsActions.updateBlogs([]);
             }.bind(this))
     }
     setPageBlogs(name) {
@@ -347,18 +282,6 @@ class App extends React.Component {
             this.props.history.push('/' + location)
         }
     }
-    shuffle() {
-        let array = this.state.colors
-        let currentIndex = array.length, temporaryValue, randomIndex;
-        while (0 !== currentIndex) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-        this.setState({ colors: array });
-    }
     resize = () => this.forceUpdate();
     componentWillReceiveProps() {
         /*
@@ -388,17 +311,17 @@ class App extends React.Component {
             User navigated to home but state current location is not home.
             Set current location to home and update blogs
         */
-        if(page===''&& this.state.currentLocation!=='home'){
+        if(page===''&& this.props.vars.currentLocation!=='home'){
             this.navigateBlogs(query);
-            this.setState({ currentLocation: 'home' })
+            this.props.varsActions.updateVars({currentLocation:'home'});
         }
         /*
             Navigate to page from home
             User navigated to page but state current location is home.
             Set current location to page and update blogs
         */
-        if(pages[page] && this.state.currentLocation==='home' && this.state.currentLocation!==page){
-            this.setState({ currentLocation: page })
+        if(pages[page] && this.props.vars.currentLocation==='home' && this.props.vars.currentLocation!==page){
+            this.props.varsActions.updateVars({currentLocation:page});
             this.navigateBlogs(query)
         }
         /*
@@ -406,23 +329,24 @@ class App extends React.Component {
             User navigated to another page but state current location is page.
             Set current location to another page and update blogs
         */
-        if (page!=='' && pages[page] && this.state.currentLocation!=='home' && page!==this.state.currentLocation ) {
-            query.type = page
-            this.setState({ currentLocation: page })
-            if(!this.state.blogs[0] || this.state.blogs[0].type!==page){
-                if(page!==this.state.currentLocation && page!==''){
+        if (page!=='' && pages[page] && this.props.vars.currentLocation!=='home' && page!==this.props.vars.currentLocation ) {
+            query.type = page;
+            this.props.varsActions.updateVars({currentLocation:page});
+            if(!this.props.blogs[0] || this.props.blogs[0].type!==page){
+                if(page!==this.props.vars.currentLocation && page!==''){
                     this.navigateBlogs(query)
                 }
             }
         }
-        if(page===this.state.currentLocation && topic && topic!==this.state.topic){
-            this.setState({ topic: topic })
+        if(this.props.blog.id && this.props.vars.blogLoaded &&  (id.toString()==='NaN' || !id)){
+            this.props.blogActions.resetBlog({id:null})
+        }
+        if(page===this.props.vars.currentLocation && topic && topic!==this.props.vars.topic){
+            this.props.varsActions.updateVars({topic:topic});
             this.navigateBlogs(query)
         }
-        if(id.toString()!=='NaN' && !this.state.blog){
-            this.setBlogHere(id,page)
-        }
-        if(id.toString()!=='NaN' && this.state.blog && this.state.blog.id!==id){
+        if(id.toString()!=='NaN' && this.props.blog.id!==id && this.props.vars.blogLoaded){
+            this.props.varsActions.updateVars({ blogLoaded: false });
             this.setBlogHere(id,page)
         }
     }
@@ -430,7 +354,7 @@ class App extends React.Component {
         /*
             Initialize state variables for loading.
         */
-        this.setState({ blogsLoaded: false });
+        this.props.varsActions.updateVars({blogsLoaded:false});
 
         /*
             Take state variable from url. currrent location, topic and blog
@@ -451,7 +375,7 @@ class App extends React.Component {
         }
         if (pages[page] && pages[page].name !== 'Home') {
             query.type = page;
-            this.setState({ currentLocation: page })
+            this.props.varsActions.updateVars({currentLocation:page});
         }
         /*
              update blogs and blog
@@ -482,50 +406,40 @@ class App extends React.Component {
                 this.props.userActions.updateUser(user)
                 let urlCreator = window.URL || window.webkitURL;
                 let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-                this.updateVars([{key:'profilePic',value:imageUrl}])
-                this.setState({ homePageLoaded: true })
+                this.props.varsActions.updateVars({profilePic:imageUrl})
+                this.setBlogs(user.userName)
             }
             else {
                 localStorage.removeItem('user');
             }
         }
         if (pages[page] && page !== 'login' && page !== 'signup') {
-            this.setState({ currentLocation: page })
+            this.props.varsActions.updateVars({currentLocation:page});
         }
-        this.shuffle()
-        this.forceUpdate()
-        window.addEventListener('resize', this.resize)
-        this.setState({ loadFooter: true })
+        this.forceUpdate();
+        window.addEventListener('resize', this.resize);
+    }
+    setBlogs(userName){
+        axios.post(env.httpURL, {
+            "queryMethod":"getPosts",
+            "queryData":{
+                userName:userName
+            }
+        })
+            .then(function (response) {
+                if(response.data[0]){
+                    this.props.blogsActions.updateBlogs(response.data);
+                }
+                else {
+                    this.props.blogsActions.updateBlogs([]);
+                }
+            }.bind(this))
+            .catch(function (err) {
+                this.props.blogsActions.updateBlogs([]);
+            }.bind(this))
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
-    }
-    handleHomeClick = () => {
-        this.navigateBlogs({})
-        this.setState({ blogsAreLoading: true })
-        window.scrollTo(0, 0);
-        this.setState({ currentLocation: 'home', blog: null })
-    }
-    handleMenuItemClickFooter = (name) => {
-        this.setState({ blogsAreLoading: true })
-        if (name === 'home' || name === 'login' || name === 'signup') {
-            this.setState({ currentLocation: name, })
-        }
-        else {
-            if (pages[name]) {
-            }
-            this.setState({ currentLocation: name, })
-        }
-        window.scrollTo(0, 0);
-    }
-    successLogin = (user) => {
-        this.setState({ user: user })
-        localStorage.setItem('user', JSON.stringify(user))
-        this.setState({ currentLocation: 'home' })
-        let urlCreator = window.URL || window.webkitURL;
-        let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img));
-        this.props.history.push('/');
-        this.updateVars([{key:'profilePic',value:imageUrl}])
     }
     _handleCreateNew = () => {
         let editorState = window.localStorage.getItem('draftContent')
@@ -551,35 +465,24 @@ class App extends React.Component {
                     <meta name="theme-color" content="#4285f4" />
                     <meta name="msapplication-navbutton-color" content="#4285f4" />
                     <meta name="apple-mobile-web-app-status-bar-style" content="#4285f4" />
-                    <title>{'ZemuldO-' + util.toTitleCase(this.state.currentLocation)}</title>
+                    <title>{'ZemuldO-' + util.toTitleCase(this.props.vars.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home" />
                 </Helmet>
                 <div style={{ marginTop: '5em' }}>
                     <div className='alignCenter'>
                         <h1>
-                            <Link to ='/'>Zemuldo Articles </Link>
+                            <Link to ='/'>Zemuldo Articles</Link>
                         </h1>
                     </div>
                     <PagesComponent
                         history={this.props.history}
                         handleFilterChange={this.handleFilterChange}
-                        color={this.state.colors[1]}
-                        blogs={this.props.blogs}
-                        blog={this.state.blog}
-                        blogDetails={this.state.blogDetails}
-                        blogsLoaded={this.state.blogsLoaded}
-                        blogLoaded={this.state.blogLoaded}
-                        richViewerState={this.state.richViewerState}
                         blogsAreLoading={this.blogsAreLoading}
                         onReadMore={this.onReadMore}
-                        colors={this.state.colors}
-                        currentLocation={this.state.currentLocation}
-                        current={this.state.currentLocation}
                         setTopicPosts={this.setTopicPosts}
                         setTopicNextPosts={this.setTopicNextPosts}
                         deletedBlog={this.deletedBlog}
                         setTopic={this.setTopic}
-                        topic={this.state.topic}
                     />
                 </div>
             </div>
@@ -589,6 +492,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        blog:state.blog,
         blogs: state.blogs,
         user:state.user,
         vars:state.vars
@@ -596,7 +500,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        blogActions: bindActionCreators(BlogsActions, dispatch),
+        blogActions: bindActionCreators(BlogActions,dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch),
         userActions:bindActionCreators(UserActions,dispatch),
         varsActions:bindActionCreators(VarsActions,dispatch)
     }

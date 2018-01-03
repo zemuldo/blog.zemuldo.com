@@ -19,10 +19,10 @@ class AvaratEditor extends React.Component {
     }
 
     handleNewImage = e => {
-        this.setState({ image: e.target.files[0] })
-        const img = this.editor.getImageScaledToCanvas().toDataURL()
-        const rect = this.editor.getCroppingRect()
-        util.dataURItoBlob(img)
+        this.setState({ image: e.target.files[0] });
+        const img = this.editor.getImageScaledToCanvas().toDataURL();
+        const rect = this.editor.getCroppingRect();
+        util.dataURItoBlob(img);
         this.props.setAvatar({
             img,
             rect,
@@ -34,9 +34,9 @@ class AvaratEditor extends React.Component {
     }
 
     handleSave = () => {
-        const img = this.editor.getImageScaledToCanvas().toDataURL()
-        const rect = this.editor.getCroppingRect()
-        util.dataURItoBlob(img)
+        const img = this.editor.getImageScaledToCanvas().toDataURL();
+        const rect = this.editor.getCroppingRect();
+        util.dataURItoBlob(img);
 
         this.setState({
             preview: {
@@ -47,7 +47,7 @@ class AvaratEditor extends React.Component {
                 height: this.state.height,
                 borderRadius: this.state.borderRadius
             }
-        })
+        });
         this.props.setAvatar({
             img,
             rect,
@@ -56,16 +56,16 @@ class AvaratEditor extends React.Component {
             height: this.state.height,
             borderRadius: this.state.borderRadius
         })
-    }
+    };
 
     handleScale = e => {
         const scale = parseFloat(e.target.value)
         this.setState({ scale })
-    }
+    };
 
     handleAllowZoomOut = ({ target: { checked: allowZoomOut } }) => {
         this.setState({ allowZoomOut })
-    }
+    };
 
     rotateLeft = e => {
         e.preventDefault()
@@ -73,50 +73,50 @@ class AvaratEditor extends React.Component {
         this.setState({
             rotate: this.state.rotate - 90
         })
-    }
+    };
 
     rotateRight = e => {
         e.preventDefault()
         this.setState({
             rotate: this.state.rotate + 90
         })
-    }
+    };
 
     handleBorderRadius = e => {
-        const borderRadius = parseInt(e.target.value)
+        const borderRadius = parseInt(e.target.value,10);
         this.setState({ borderRadius })
-    }
+    };
 
     handleXPosition = e => {
         const x = parseFloat(e.target.value)
         this.setState({ position: { ...this.state.position, x } })
-    }
+    };
 
     handleYPosition = e => {
-        const y = parseFloat(e.target.value)
+        const y = parseFloat(e.target.value);
         this.setState({ position: { ...this.state.position, y } })
-    }
+    };
 
     handleWidth = e => {
-        const width = parseInt(e.target.value)
+        const width = parseInt(e.target.value,10);
         this.setState({ width })
-    }
+    };
 
     handleHeight = e => {
-        const height = parseInt(e.target.value)
+        const height = parseInt(e.target.value,10);
         this.setState({ height })
-    }
+    };
 
     logCallback (e) {
     }
 
     setEditorRef = editor => {
         if (editor) this.editor = editor
-    }
+    };
 
     handlePositionChange = position => {
         this.setState({ position })
-    }
+    };
 
     render () {
         return (
@@ -217,6 +217,7 @@ class AvaratEditor extends React.Component {
                     <Grid.Column width={8}>
                         {!!this.state.preview &&
                         <img
+                            alt={'blogs.zemuldo.com_create profile picture'}
                             src={this.state.preview.img}
                             style={{
                                 borderRadius: `${(Math.min(

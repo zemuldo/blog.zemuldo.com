@@ -136,9 +136,9 @@ class EditorsForm extends Component {
                         </div>:
                         <Creator
                             currentUser = {this.props.currentUser}
-                            _exitEditMode={this.props._exitEditMode}
                             topics={this.state.topics}
-                            category={this.state.category}/>
+                            category={this.state.category}
+                        />
                 }
             </div>
 
