@@ -71,7 +71,12 @@ app.use(function(req, res, next) {
 });
 
 app.get('/*sw.js', function(req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'sw.js'));
+    if(req.url !=='/sw.js'){
+        res.redirect('/sw.js')
+    }
+    else {
+        res.sendFile(path.join(__dirname, 'public', 'sw.js'));
+    }
 });
 app.get('/*manifest.json', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', 'manifest.json'));
