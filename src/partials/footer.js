@@ -54,6 +54,8 @@ class Footer extends React.Component {
         let urlDetails = 'all';
         return (
             <div>
+                <br/>
+                <br/>
                 <Segment
                     vertical
                     style={{margin: '0em 0em 0em 0em', padding: '0em 0em 0em 0em' }}
