@@ -6,22 +6,26 @@ import ReviewPortal from "./partials/portal";
 import LiveChat from './bot/chat'
 
 class App extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {};
     };
+
     resize = () => this.forceUpdate();
-    componentDidMount(){
+
+    componentDidMount() {
         window.addEventListener('resize', this.resize);
     };
+
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
     };
+
     render() {
         return (
             <div>
                 <NavBar/>
-                <Main />
+                <Main/>
                 <Footer/>
                 <ReviewPortal/>
                 <LiveChat/>
@@ -29,4 +33,5 @@ class App extends React.Component {
         )
     }
 }
+
 export default App

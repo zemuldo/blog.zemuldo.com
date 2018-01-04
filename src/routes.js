@@ -2,13 +2,14 @@ import React from 'react';
 import Page from './pages/main'
 import Login from './profile/login'
 import About from './pages/about'
-import {  Switch, Route } from 'react-router-dom'
+import {Switch, Route} from 'react-router-dom'
 
 class Routes extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {};
     };
+
     render() {
         return (
             <main>
@@ -30,4 +31,5 @@ class Routes extends React.Component {
         )
     }
 }
+
 export default Routes;

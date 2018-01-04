@@ -1,5 +1,5 @@
 let util = {
-    dataURItoBlob: (dataURI)=> {
+    dataURItoBlob: (dataURI) => {
         let byteString = atob(dataURI.split(',')[1]);
 
         // separate out the mime component
@@ -14,8 +14,10 @@ let util = {
         // write the ArrayBuffer to a blob, and you're done
         return new Blob([ab]);
     },
-    toTitleCase: (str)=> {
-        return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+    toTitleCase: (str) => {
+        return str.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
     }
 }
 

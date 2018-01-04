@@ -8,14 +8,16 @@
     Navigation Bar
  */
 
-.navBar{
+.navBar {
     background-color: black;
     opacity: 0.8;
 }
-.navBar span{
+
+.navBar span {
 
 }
-.dropDown{
+
+.dropDown {
 
 }
 
@@ -51,7 +53,7 @@
 }
 
 .redMoreButton:hover span {
-    color:orange;
+    color: orange;
     padding-right: 25px;
 }
 
@@ -59,22 +61,27 @@
     opacity: 1;
     right: 0;
 }
-.cleanButton button{
+
+.cleanButton button {
     background-color: transparent;
     border: none;
 }
-.cleanButton button:hover{
+
+.cleanButton button:hover {
     background-color: transparent;
     border: none;
 }
-.clearButton{
+
+.clearButton {
     background-color: transparent;
     border: none;
 }
-button:hover{
+
+button:hover {
     cursor: pointer;
 }
-a:hover{
+
+a:hover {
     cursor: pointer;
 }
 
@@ -116,7 +123,8 @@ a:hover{
     font-style: italic;
     margin: 0 10% 0 10%;
 }
-.RichEditor-editor .CODE{
+
+.RichEditor-editor .CODE {
     background-color: black;
     border-radius: 3%;
     padding: 10%;
@@ -148,11 +156,12 @@ a:hover{
     color: #5890ff;
 }
 
-.TextEditTools{
+.TextEditTools {
     border: 1px solid grey;
     border-radius: 5px;
-    padding:3px
+    padding: 3px
 }
+
 .RichEditor-root-preview {
     background: #fff;
     font-family: 'Georgia', serif;
@@ -164,45 +173,53 @@ a:hover{
         Forms
 */
 
-.forms-ls{
+.forms-ls {
     margin-top: 10%;
 }
 
-.login-form{
+.login-form {
     text-align: center;
     margin-bottom: 10%;
     margin-top: 6%;
 }
-.login-content{
+
+.login-content {
     min-width: 250px;
     display: inline-block;
 }
-.signup-form{
+
+.signup-form {
     text-align: center;
     margin-bottom: 10%;
     margin-top: 6%;
 }
-.signup-content{
+
+.signup-content {
     min-width: 400px;
     display: inline-block;
 }
-.clearElem button{
+
+.clearElem button {
     border: none;
     background-color: transparent;
 }
-.shareIcon sup{
+
+.shareIcon sup {
     color: green;
     font-size: small;
 }
-.info{
+
+.info {
     color: green;
     font-size: medium;
 }
-.authorImage{
+
+.authorImage {
     width: 400px;
     background: yellow;
 }
-.authorImage img{
+
+.authorImage img {
     float: left;
     width: 150px;
     background: red;
@@ -213,25 +230,29 @@ a:hover{
     Styling for the Topics Navigation Component.
 */
 
-.topicsWrapper{
-    color:blue;
+.topicsWrapper {
+    color: blue;
     margin: 2em 0em 0em 1em;
 }
-.topicsWrapper h3{
-  margin-left:10px;
+
+.topicsWrapper h3 {
+    margin-left: 10px;
 }
-.topicsWrapper button{
+
+.topicsWrapper button {
     color: blue;
     cursor: pointer;
     background-color: transparent;
     border: none;
 }
+
 .topicButton span {
     cursor: pointer;
     display: inline-block;
     position: relative;
     transition: 0.5s;
 }
+
 .topicButton span:after {
     color: orange;
     position: absolute;
@@ -240,13 +261,16 @@ a:hover{
     right: -5px;
     transition: 1s;
 }
+
 .topicButton:hover span {
     color: orange;
     padding-right: 3px;
 }
-.topicButton:disabled{
+
+.topicButton:disabled {
     color: orange;
 }
+
 .topicButton:hover span:after {
     opacity: 1;
     right: 0;
@@ -255,16 +279,18 @@ a:hover{
 /*
              Loaders
 */
-.center-loader{
+.center-loader {
     left: 50%;
     position: fixed;
     z-index: -1;
     bottom: 50%;
 }
-.small-loader{
+
+.small-loader {
     margin: 3em 0em 0em 0em;
 }
-.preloader{
+
+.preloader {
     border-radius: 50%;
     border: 5px solid blue;
     border-right: 5px solid green;
@@ -278,25 +304,28 @@ a:hover{
 /*
     Common
 */
-.alignCenter{
+.alignCenter {
     text-align: center;
 }
-.marginLeft35{
+
+.marginLeft35 {
     margin-left: 35%;
 }
-.marginTop2{
+
+.marginTop2 {
     margin-top: 2%;
 }
 
 /*
     Chat
 */
-.chatContainer{
+.chatContainer {
     background-color: white;
     padding: 10px;
     border-radius: 1%;
 }
-.userMessContainer{
+
+.userMessContainer {
     padding: 4px;
     color: blue;
     background-color: lightblue;
@@ -304,7 +333,8 @@ a:hover{
     border-radius: 5%;
     border: lightblue;
 }
-.botMessContainer{
+
+.botMessContainer {
     padding: 4px;
     color: blue;
     margin-right: 30%;
@@ -312,11 +342,13 @@ a:hover{
     border-radius: 3%;
     border: darkolivegreen;
 }
-.userTyping{
+
+.userTyping {
     color: blue;
     margin-left: 60%;
 }
-.botTyping{
+
+.botTyping {
     color: blue;
     margin-right: 30%;
 }
