@@ -19,17 +19,17 @@ const RUNTIME = 'sw-'+buildID+'-runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-    "index.html",
-    'manifest.json',
-    'img/icons/icon.png',
-    "static/css/"+buildID+"main.zemuldo.css",
-    "static/js/"+buildID+"main.zemuldo.js",
-    "static/media/"+buildID+"flags.zemuldo.png",
-    "static/media/"+buildID+".icons.zemuldo.eot",
-    "static/media/"+buildID+".icons.zemuldo.svg",
-    "static/media/"+buildID+".icons.zemuldo.ttf",
-    "static/media/"+buildID+".icons.zemuldo.woff",
-    "static/media/"+buildID+".icons.zemuldo.woff2",
+    "/index.html",
+    '/manifest.json',
+    '/img/icons/icon.png',
+    "/static/css/"+buildID+"main.zemuldo.css",
+    "/static/js/"+buildID+"main.zemuldo.js",
+    "/static/media/"+buildID+"flags.zemuldo.png",
+    "/static/media/"+buildID+".icons.zemuldo.eot",
+    "/static/media/"+buildID+".icons.zemuldo.svg",
+    "/static/media/"+buildID+".icons.zemuldo.ttf",
+    "/static/media/"+buildID+".icons.zemuldo.woff",
+    "/static/media/"+buildID+".icons.zemuldo.woff2",
 ];
 
 // The install handler takes care of precaching the resources we always need.
