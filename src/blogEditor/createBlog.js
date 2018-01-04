@@ -3,16 +3,25 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce';
-import {CompositeDecorator,AtomicBlockUtils,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
-import {Button,Header, Icon,Modal} from 'semantic-ui-react'
+import {
+    CompositeDecorator,
+    AtomicBlockUtils,
+    convertFromRaw,
+    convertToRaw,
+    Editor,
+    EditorState,
+    RichUtils
+} from 'draft-js';
+import {Button, Header, Icon, Modal} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
-    Development:'dev',
-    Business:'business',
-    Technology:'tech'
+    Development: 'dev',
+    Business: 'business',
+    Technology: 'tech'
 }
 
 function mediaBlockRenderer(block) {
@@ -24,14 +33,15 @@ function mediaBlockRenderer(block) {
     }
     return null;
 }
+
 const Audio = (props) => {
-    return <audio controls src={props.src} style={styles.media} />;
+    return <audio controls src={props.src} style={styles.media}/>;
 };
 const Image = (props) => {
-    return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'} />;
+    return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'}/>;
 };
 const Video = (props) => {
-    return <video controls src={props.src} style={styles.media} />;
+    return <video controls src={props.src} style={styles.media}/>;
 };
 const Media = (props) => {
     const entity = props.contentState.getEntity(
@@ -41,11 +51,11 @@ const Media = (props) => {
     const type = entity.getType();
     let media;
     if (type === 'audio') {
-        media = <Audio src={src} />;
+        media = <Audio src={src}/>;
     } else if (type === 'image') {
-        media = <Image src={src} />;
+        media = <Image src={src}/>;
     } else if (type === 'video') {
-        media = <Video src={src} />;
+        media = <Video src={src}/>;
     }
     return media;
 };
@@ -62,6 +72,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
         callback
     );
 }
+
 const Link = (props) => {
     const {url} = props.contentState.getEntity(props.entityKey).getData();
     return (
@@ -120,18 +131,18 @@ class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState:EditorState.createEmpty(),
-            isLoaded:false,
-            category:null,
-            topics:null,
-            termsAccept:false,
-            dialogInComplete:true,
-            filledForm:false,
-            continueEdit:false,
-            isPublished:false,
-            open:false,
-            previewOpen:false,
-            confirmOpen:false,
+            editorState: EditorState.createEmpty(),
+            isLoaded: false,
+            category: null,
+            topics: null,
+            termsAccept: false,
+            dialogInComplete: true,
+            filledForm: false,
+            continueEdit: false,
+            isPublished: false,
+            open: false,
+            previewOpen: false,
+            confirmOpen: false,
             showMedURLInput: false,
             url: '',
             urlType: '',
@@ -149,7 +160,7 @@ class RichEditorExample extends React.Component {
         this.handleUTAChange = this.handleUTAChange.bind(this);
         this.onFinishClick = this.onFinishClick.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
-        this.reinInitEditorState=this.reinInitEditorState.bind(this)
+        this.reinInitEditorState = this.reinInitEditorState.bind(this)
         this.promptForLink = this._promptForLink.bind(this);
         this.onURLChange = (e) => this.setState({urlValue: e.target.value});
         this.confirmLink = this._confirmLink.bind(this);
@@ -161,6 +172,7 @@ class RichEditorExample extends React.Component {
         this.__promptForMedia = this.__promptForMedia.bind(this);
         this._confirmMedia = this._confirmMedia.bind(this)
     }
+
     __promptForMedia(type) {
         this.setState({
             showMedURLInput: true,
@@ -170,6 +182,7 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.refs.url.focus(), 0);
         });
     }
+
     _addAudio() {
         this.setState({
             showMedURLInput: true,
@@ -179,6 +192,7 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.refs.url.focus(), 0);
         });
     }
+
     _addImage() {
         this.setState({
             showMedURLInput: true,
@@ -188,6 +202,7 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.refs.url.focus(), 0);
         });
     }
+
     _addVideo() {
         this.setState({
             showMedURLInput: true,
@@ -197,6 +212,7 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.refs.url.focus(), 0);
         });
     }
+
     _confirmMedia(e) {
         e.preventDefault();
         const {editorState, urlValue, urlType} = this.state;
@@ -223,11 +239,13 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.focus(), 0);
         });
     }
+
     onURLInputKeyDown(e) {
         if (e.which === 13) {
             this._confirmMedia(e);
         }
     }
+
     _promptForLink(e) {
         e.preventDefault();
         const {editorState} = this.state;
@@ -251,6 +269,7 @@ class RichEditorExample extends React.Component {
             });
         }
     }
+
     _confirmLink(e) {
         e.preventDefault();
         const {editorState, urlValue} = this.state;
@@ -261,7 +280,7 @@ class RichEditorExample extends React.Component {
             {url: urlValue}
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+        const newEditorState = EditorState.set(editorState, {currentContent: contentStateWithEntity});
         this.setState({
             editorState: RichUtils.toggleLink(
                 newEditorState,
@@ -274,11 +293,13 @@ class RichEditorExample extends React.Component {
             setTimeout(() => this.refs.editor.focus(), 0);
         });
     }
+
     _onLinkInputKeyDown(e) {
         if (e.which === 13) {
             this._confirmLink(e);
         }
     }
+
     _removeLink(e) {
         e.preventDefault();
         const {editorState} = this.state;
@@ -289,17 +310,20 @@ class RichEditorExample extends React.Component {
             });
         }
     }
-    isLoading(value){
-        this.setState({ isLoaded: value });
+
+    isLoading(value) {
+        this.setState({isLoaded: value});
     };
-    onChange = (editorState) =>{
+
+    onChange = (editorState) => {
         const contentState = editorState.getCurrentContent();
         this.setState({editorState});
         this.saveContent(contentState)
-        this.setState({hasSavedContent:false})
+        this.setState({hasSavedContent: false})
 
     }
     focus = () => this.refs.editor.focus();
+
     _handleKeyCommand(command, editorState) {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
@@ -308,10 +332,12 @@ class RichEditorExample extends React.Component {
         }
         return false;
     }
+
     _onTab(e) {
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
+
     _toggleBlockType(blockType) {
         this.onChange(
             RichUtils.toggleBlockType(
@@ -320,6 +346,7 @@ class RichEditorExample extends React.Component {
             )
         );
     }
+
     _toggleInlineStyle(inlineStyle) {
         this.onChange(
             RichUtils.toggleInlineStyle(
@@ -328,47 +355,49 @@ class RichEditorExample extends React.Component {
             )
         );
     }
+
     publish = () => {
-        this.setState({ open: true })
+        this.setState({open: true})
         const content = localStorage.getItem('draftContent');
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        if(content && blogData){
+        if (content && blogData) {
             let obj = JSON.parse(content)
             let title = obj.blocks[0].text
-            obj.blocks.splice(0,1)
+            obj.blocks.splice(0, 1)
             axios.post(env.httpURL, {
-                queryMethod:"publish",
-                "queryData":{
-                    type:cats[blogData.type],
-                    title:title,
-                    query:"publish",
-                    topics:blogData.topics,
-                    about:blogData.about,
-                    images:["blogs_pic.jpg"],
-                    authorID:this.props.currentUser.id,
-                    author:this.props.currentUser.firstName+' '+this.props.currentUser.lastName,
-                    userName:this.props.currentUser.userName,
-                    body:JSON.stringify(obj)}
+                queryMethod: "publish",
+                "queryData": {
+                    type: cats[blogData.type],
+                    title: title,
+                    query: "publish",
+                    topics: blogData.topics,
+                    about: blogData.about,
+                    images: ["blogs_pic.jpg"],
+                    authorID: this.props.currentUser.id,
+                    author: this.props.currentUser.firstName + ' ' + this.props.currentUser.lastName,
+                    userName: this.props.currentUser.userName,
+                    body: JSON.stringify(obj)
+                }
 
             })
                 .then(function (response) {
-                    if(response.data.state===true){
+                    if (response.data.state === true) {
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');
-                        this.setState({isPublished:true,filledForm:true});
-                        this.props.varsActions.updateVars({editingMode: false, createNew: false })
+                        this.setState({isPublished: true, filledForm: true});
+                        this.props.varsActions.updateVars({editingMode: false, createNew: false})
                     }
                     else {
-                        this.props.varsActions.updateVars({editingMode: false, createNew: false })
+                        this.props.varsActions.updateVars({editingMode: false, createNew: false})
                     }
                 }.bind(this))
 
                 .catch(function (err) {
-                    this.setState({filledForm:true})
-                    this.setState({isPublished:false})
+                    this.setState({filledForm: true})
+                    this.setState({isPublished: false})
                 }.bind(this))
         }
-        else{
+        else {
 
         }
 
@@ -376,60 +405,82 @@ class RichEditorExample extends React.Component {
     saveContent = debounce((content) => {
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
+
     componentDidMount() {
         this.handleEditorState()
     }
-    handleEditorState(){
+
+    handleEditorState() {
         const editorState = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
-        if(editorState && blogDataState){
-            this.setState({hasSavedContent:false,filledForm:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)),decorator)});
+        if (editorState && blogDataState) {
+            this.setState({
+                hasSavedContent: false,
+                filledForm: true,
+                continueEdit: true,
+                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)), decorator)
+            });
         }
         else {
-            this.setState({filledForm:true,editorState : EditorState.createEmpty(decorator)});
+            this.setState({filledForm: true, editorState: EditorState.createEmpty(decorator)});
         }
     };
-    handleCategoryChange(e,data){
-        this.setState({category:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+
+    handleCategoryChange(e, data) {
+        this.setState({
+            category: data.value,
+            dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
+        });
     }
-    handleTopicChange(e,data){
-        this.setState({topics:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+
+    handleTopicChange(e, data) {
+        this.setState({
+            topics: data.value,
+            dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
+        });
     }
-    handleUTAChange(e,data){
-        this.setState({termsAccept:data.value,dialogInComplete:(this.state.topics && this.state.category && this.state.termsAccept)});
+
+    handleUTAChange(e, data) {
+        this.setState({
+            termsAccept: data.value,
+            dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
+        });
     }
-    onFinishClick(){
+
+    onFinishClick() {
         let blogDta = {
-            type:this.state.category,
-            topics:this.state.topics
+            type: this.state.category,
+            topics: this.state.topics
         }
-        window.localStorage.setItem('blogData',JSON.stringify(blogDta))
-        this.setState({filledForm:false})
+        window.localStorage.setItem('blogData', JSON.stringify(blogDta))
+        this.setState({filledForm: false})
     }
-    startPublish = ()=>{
+
+    startPublish = () => {
         this.showPreview()
     }
     showConfirm = () => {
-        this.setState({ confirmOpen: true })
+        this.setState({confirmOpen: true})
     }
-    showPreview=()=>{
-        this.setState({ previewOpen: true })
+    showPreview = () => {
+        this.setState({previewOpen: true})
     }
-    closePreview=()=>{
-        this.setState({ previewOpen: false })
+    closePreview = () => {
+        this.setState({previewOpen: false})
     }
     handleConfirm = () => {
         this.closePreview()
-        this.setState({startPublish:true, confirmOpen: false });
+        this.setState({startPublish: true, confirmOpen: false});
         this.publish()
     }
-    handleCancel = () =>{
+    handleCancel = () => {
         this.reinInitEditorState(this.state.editorState);
         this.closePreview()
-        this.setState({ confirmOpen: false })
+        this.setState({confirmOpen: false})
     }
-    reinInitEditorState (state){
-        this.setState({editorState:state})
+
+    reinInitEditorState(state) {
+        this.setState({editorState: state})
     }
 
     render() {
@@ -479,20 +530,21 @@ class RichEditorExample extends React.Component {
         }
         return (
             <div className='RichEditor-root'>
-                <div  style={{ margin:'0em 0em 0em 3em'}}>
+                <div style={{margin: '0em 0em 0em 3em'}}>
                     <Button
-                        disabled = {this.state.hasSavedContent}
-                        style={{float:'right'}} type="button"
+                        disabled={this.state.hasSavedContent}
+                        style={{float: 'right'}} type="button"
                         onClick={this.startPublish}
                         color='green' size='mini'>Publish
                     </Button>
                     <Button
-                        disabled = {this.state.hasSavedContent}
-                        style={{float:'left'}} type="button"
+                        disabled={this.state.hasSavedContent}
+                        style={{float: 'left'}} type="button"
                         onClick={this.handleGoBackToProfile}
                         color='green' size='mini'>Exit
                     </Button>
-                    <Header style={{ margin:'3em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                    <Header style={{margin: '3em 0em 0em 0em', textAlign: 'left', alignment: 'center'}} color='green'
+                            as='h1'>
                         Draft an article on the fly.
                     </Header>
                     <br/>
@@ -510,19 +562,20 @@ class RichEditorExample extends React.Component {
                         Select some text, then use the buttons to add or remove links
                         on the selected text.
                         <div style={styles.buttons}>
-                            <Button color='green' size='mini' onMouseDown={this.promptForLink} style={{marginRight: 10}}>
-                                <Icon name ='external share'/>
+                            <Button color='green' size='mini' onMouseDown={this.promptForLink}
+                                    style={{marginRight: 10}}>
+                                <Icon name='external share'/>
                                 Add Link
                             </Button>
                             <Button color='red' size='mini' onMouseDown={this.removeLink}>
-                                <Icon name ='external share'/>
+                                <Icon name='external share'/>
                                 Remove Link
                             </Button>
                         </div>
                         {urlInput}
                         Use the buttons to add audio, image, or video.
                         <div style={styles.buttons}>
-                            <Button color='green' size='mini' onMouseDown={this._addAudio } style={{marginRight: 10}}>
+                            <Button color='green' size='mini' onMouseDown={this._addAudio} style={{marginRight: 10}}>
                                 Add Audio
                             </Button>
                             <Button color='green' size='mini' onMouseDown={this._addImage} style={{marginRight: 10}}>
@@ -536,8 +589,9 @@ class RichEditorExample extends React.Component {
                     </div>
                 </div>
                 <hr/>
-                <Modal open ={this.state.previewOpen}>
-                    <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                <Modal open={this.state.previewOpen}>
+                    <Modal.Header><Header style={{margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center'}}
+                                          color='green' as='h1'>
                         You are about to publish this article.
                     </Header></Modal.Header>
                     <Modal.Content>
@@ -549,14 +603,15 @@ class RichEditorExample extends React.Component {
                         <hr/>
                         <Modal.Description>
                             <div>
-                                <ShowPreview reinInitEditorState = {this.reinInitEditorState} editorState={this.state.editorState}/>
+                                <ShowPreview reinInitEditorState={this.reinInitEditorState}
+                                             editorState={this.state.editorState}/>
                             </div>
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button.Group>
                             <Button color="blue" onClick={this.closePreview}>Back</Button>
-                            <Button.Or />
+                            <Button.Or/>
                             <Button color="green" onClick={this.handleConfirm}>Publish</Button>
                         </Button.Group>
                     </Modal.Actions>
@@ -579,6 +634,7 @@ class RichEditorExample extends React.Component {
         );
     }
 }
+
 // Custom overrides for "code" style.
 const styleMap = {
     CODE: {
@@ -588,12 +644,16 @@ const styleMap = {
         padding: 2,
     },
 };
+
 function getBlockStyle(block) {
     switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
+        case 'blockquote':
+            return 'RichEditor-blockquote';
+        default:
+            return null;
     }
 }
+
 class StyleButton extends React.Component {
     constructor() {
         super();
@@ -602,6 +662,7 @@ class StyleButton extends React.Component {
             this.props.onToggle(this.props.style);
         };
     }
+
     render() {
         let className = 'RichEditor-styleButton';
         if (this.props.active) {
@@ -609,23 +670,24 @@ class StyleButton extends React.Component {
         }
         return (
             <span className={className} onMouseDown={this.onToggle}>
-                <Icon color="black" name = {this.props.icon}/>
+                <Icon color="black" name={this.props.icon}/>
                 {this.props.label}
             </span>
         );
     }
 }
+
 const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one',icon:'header'},
-    {label: 'H2', style: 'header-two',icon:'header'},
-    {label: 'H3', style: 'header-three',icon:'header'},
-    {label: 'H4', style: 'header-four',icon:'header'},
-    {label: 'H5', style: 'header-five',icon:'header'},
-    {label: 'H6', style: 'header-six',icon:'header'},
-    {label: 'Blockquote', style: 'blockquote',icon:'header'},
-    {label: 'UL', style: 'unordered-list-item',icon:'unordered list'},
-    {label: 'OL', style: 'ordered-list-item',icon:'ordered list'},
-    {label: 'Code Block', style: 'code-block',icon:'code'},
+    {label: 'H1', style: 'header-one', icon: 'header'},
+    {label: 'H2', style: 'header-two', icon: 'header'},
+    {label: 'H3', style: 'header-three', icon: 'header'},
+    {label: 'H4', style: 'header-four', icon: 'header'},
+    {label: 'H5', style: 'header-five', icon: 'header'},
+    {label: 'H6', style: 'header-six', icon: 'header'},
+    {label: 'Blockquote', style: 'blockquote', icon: 'header'},
+    {label: 'UL', style: 'unordered-list-item', icon: 'unordered list'},
+    {label: 'OL', style: 'ordered-list-item', icon: 'ordered list'},
+    {label: 'Code Block', style: 'code-block', icon: 'code'},
 ];
 const BlockStyleControls = (props) => {
     const {editorState} = props;
@@ -635,7 +697,7 @@ const BlockStyleControls = (props) => {
         .getBlockForKey(selection.getStartKey())
         .getType();
     return (
-        <div  className="RichEditor-controls">
+        <div className="RichEditor-controls">
             {BLOCK_TYPES.map((type) =>
                 <StyleButton
                     key={type.label}
@@ -650,10 +712,10 @@ const BlockStyleControls = (props) => {
     );
 };
 let INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD',icon:'bold'},
-    {label: 'Italic', style: 'ITALIC',icon:'italic'},
-    {label: 'Underline', style: 'UNDERLINE',icon:'underline'},
-    {label: 'Monospace', style: 'CODE',icon:'font'},
+    {label: 'Bold', style: 'BOLD', icon: 'bold'},
+    {label: 'Italic', style: 'ITALIC', icon: 'italic'},
+    {label: 'Underline', style: 'UNDERLINE', icon: 'underline'},
+    {label: 'Monospace', style: 'CODE', icon: 'font'},
 ];
 const InlineStyleControls = (props) => {
     let currentStyle = props.editorState.getCurrentInlineStyle();
@@ -676,14 +738,14 @@ const InlineStyleControls = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        vars:state.vars
+        vars: state.vars
     }
 };
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        varsActions:bindActionCreators(VarsActions,dispatch)
+        varsActions: bindActionCreators(VarsActions, dispatch)
     }
 };
 
-export default connect(mapStateToProps,mapDispatchToProps) (RichEditorExample);
+export default connect(mapStateToProps, mapDispatchToProps)(RichEditorExample);
