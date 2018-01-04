@@ -294,6 +294,7 @@ a:hover{
 .chatContainer{
     background-color: white;
     padding: 10px;
+    border-radius: 1%;
 }
 .userMessContainer{
     padding: 4px;

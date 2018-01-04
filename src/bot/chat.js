@@ -148,9 +148,6 @@ class LiveChat extends React.Component {
 
                                             </div>
                                         </div>
-                                        <div ref='chat_dumy'>
-
-                                        </div>
                                         <Form>
                                             <Form.Field>
                                                 <TextArea
