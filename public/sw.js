@@ -21,7 +21,10 @@ const RUNTIME = 'sw-'+buildID+'-runtime';
 const PRECACHE_URLS = [
     "/index.html",
     '/manifest.json',
-    '/img/icons/icon.png',
+    '/img/icons/icon-192x192.png',
+    '/img/icons/icon-256x256.png',
+    '/img/icons/icon-384x384.png',
+    '/img/icons/icon-512x512.png',
     "/static/css/"+buildID+"main.zemuldo.css",
     "/static/js/"+buildID+"main.zemuldo.js",
     "/static/media/"+buildID+"flags.zemuldo.png",
