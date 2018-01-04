@@ -101,7 +101,7 @@
     </div>
     <script>
         if ('serviceWorker' in navigator && !window.location.origin.match('localhost:8070')) {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register('/sw.js')
                 .then(function (registration) {
                 }).catch(function (err) {
                 });
