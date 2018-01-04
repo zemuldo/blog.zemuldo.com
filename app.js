@@ -70,10 +70,10 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/sw.js', function(req, res) {
+app.get('/*sw.js', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', 'sw.js'));
 });
-app.get('/manifest.json', function(req, res) {
+app.get('/*manifest.json', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', 'manifest.json'));
 });
 app.get('*.js', function(req, res, next) {

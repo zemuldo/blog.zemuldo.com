@@ -90,30 +90,32 @@ module.exports = {
         dev:{
             name:'Development',
             icon:'code',
-            topTitle:"Dev articles"
+            topTitle:"Dev articles CODE"
         },
         tech:{
             name:'Technology',
             icon:'server',
-            topTitle:" Featured in Technology"
+            topTitle:" Featured Tech Articles"
         },
         business:{
             name:'Business',
             icon:'creative commons',
-            topTitle:" Popular in Bsuness"
+            topTitle:"Business Articles"
         },
         reviews:{
             name:'Reviews',
-            icon:'circle notched'
+            icon:'circle notched',
+            topTitle:"Reviews"
         },
         tuts:{
             name:'Tutorials',
             icon:'code',
-            topTitle:" Popular Tutorials"
+            topTitle:"Tutorials"
         },
         home:{
             name:'Home',
-            icon:'home'
+            icon:'home',
+            topTitle:"Great Blogs"
         },
         profile:{
             name:'Profile',
@@ -121,15 +123,18 @@ module.exports = {
         },
         about:{
             name:'About',
-            icon:'info'
+            icon:'info',
+            topTitle:"Great Blogs"
         },
         login:{
             name:'Login',
-            icon:'lock'
+            icon:'lock',
+            topTitle:"Great Blogs"
         },
         user:{
             name:'Profile',
-            icon:'user'
+            icon:'user',
+            topTitle:"Great Blogs"
         }
     },
     live:{
