@@ -48,6 +48,7 @@ class LiveChat extends React.Component {
                 x.push({by:'bot',text:mess.msg});
                 this.setState({chat:x});
                 this.setState({portalOpen:true});
+                this.scrollChat(ref)
             }
         }.bind(this);
     }
@@ -146,6 +147,9 @@ class LiveChat extends React.Component {
                                             <div ref='MessageEnd'>
 
                                             </div>
+                                        </div>
+                                        <div ref='chat_dumy'>
+
                                         </div>
                                         <Form>
                                             <Form.Field>
