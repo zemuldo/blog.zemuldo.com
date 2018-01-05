@@ -87,7 +87,7 @@
     "start":"pm2 start app.js --name ZEMULDO_BLOGS",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "standard && mocha"
+    "test": "mocha"
   },
   "jest": {
     "collectCoverageFrom": [
