@@ -1,18 +1,18 @@
 import React from 'react'
-import { Button,Loader, Form, Message, Segment } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import {Button, Loader, Form, Message, Segment} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 
 class LoginForm extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {};
     };
 
-    render(){
-        return(
-            <div className='login-content' >
+    render() {
+        return (
+            <div className='login-content'>
                 <h1 className='alignCenter'>Login</h1>
-                <Form  size='large'>
+                <Form size='large'>
                     <Segment stacked>
                         <Form.Input
                             fluid
@@ -30,15 +30,15 @@ class LoginForm extends React.Component {
                             onChange={this.props.handlePasswordChange}
                         />
                         {
-                            !this.props.logingin?
+                            !this.props.logingin ?
                                 <Button
                                     type="button"
                                     onClick={this.props.onLoginClick}
                                     color={this.props.color}
                                     fluid size='large'>
                                     Login
-                                </Button>:
-                                <Loader active inline='centered' />
+                                </Button> :
+                                <Loader active inline='centered'/>
                         }
                     </Segment>
                 </Form>
@@ -48,11 +48,11 @@ class LoginForm extends React.Component {
                     success={this.props.success}
                 >
                     <Message.Header>
-                        {this.props.errorDetails?this.props.errorDetails.message:'Something happened. Please check your Internet'}
+                        {this.props.errorDetails ? this.props.errorDetails.message : 'Something happened. Please check your Internet'}
                     </Message.Header>
                 </Message>
                 <Message>
-                    Want to Join Us?  <Link to='/signup' onClick={()=>this.props.handSwichReg(true)}> Sign Up</Link>
+                    Want to Join Us? <Link to='/signup' onClick={() => this.props.handSwichReg(true)}> Sign Up</Link>
                 </Message>
             </div>
         )

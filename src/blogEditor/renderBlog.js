@@ -1,6 +1,6 @@
 import React from 'react'
 import debounce from 'lodash/debounce';
-import {CompositeDecorator,convertFromRaw,convertToRaw, Editor, EditorState,RichUtils} from 'draft-js';
+import {CompositeDecorator, convertFromRaw, convertToRaw, Editor, EditorState, RichUtils} from 'draft-js';
 
 function mediaBlockRenderer(block) {
     if (block.getType() === 'atomic') {
@@ -11,14 +11,15 @@ function mediaBlockRenderer(block) {
     }
     return null;
 }
+
 const Audio = (props) => {
-    return <audio controls src={props.src} style={styles.media} />;
+    return <audio controls src={props.src} style={styles.media}/>;
 };
 const Image = (props) => {
-    return <img src={props.src} style={styles.media} />;
+    return <img src={props.src} style={styles.media}/>;
 };
 const Video = (props) => {
-    return <video controls src={props.src} style={styles.media} />;
+    return <video controls src={props.src} style={styles.media}/>;
 };
 const Media = (props) => {
     const entity = props.contentState.getEntity(
@@ -28,11 +29,11 @@ const Media = (props) => {
     const type = entity.getType();
     let media;
     if (type === 'audio') {
-        media = <Audio src={src} />;
+        media = <Audio src={src}/>;
     } else if (type === 'image') {
-        media = <Image src={src} />;
+        media = <Image src={src}/>;
     } else if (type === 'video') {
-        media = <Video src={src} />;
+        media = <Video src={src}/>;
     }
     return media;
 };
@@ -49,6 +50,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
         callback
     );
 }
+
 const Link = (props) => {
     const {url} = props.contentState.getEntity(props.entityKey).getData();
     return (
@@ -106,7 +108,7 @@ const styles = {
 class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {editorState:EditorState.createEmpty()};
+        this.state = {editorState: EditorState.createEmpty()};
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.onTab = this._onTab.bind(this);
         this.toggleBlockType = this.toggleBlockType.bind(this);
@@ -114,24 +116,27 @@ class RichEditorExample extends React.Component {
         this.saveContent = this.saveContent.bind(this);
         this.handleEditorState = this.handleEditorState.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
-        this.reinInitEditorState=this.reinInitEditorState.bind(this)
+        this.reinInitEditorState = this.reinInitEditorState.bind(this)
         this.onLinkInputKeyDown = this.onLinkInputKeyDown.bind(this);
     }
-    
+
     onLinkInputKeyDown(e) {
         if (e.which === 13) {
             this._confirmLink(e);
         }
     }
-    isLoading(value){
-        this.setState({ isLoaded: value });
+
+    isLoading(value) {
+        this.setState({isLoaded: value});
     };
-    onChange = (editorState) =>{
+
+    onChange = (editorState) => {
         this.setState({editorState});
-        this.setState({hasSavedContent:false})
+        this.setState({hasSavedContent: false})
 
     }
     focus = () => this.refs.editor.focus();
+
     _handleKeyCommand(command, editorState) {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
@@ -140,10 +145,12 @@ class RichEditorExample extends React.Component {
         }
         return false;
     }
+
     _onTab(e) {
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
     }
+
     toggleBlockType(blockType) {
         this.onChange(
             RichUtils.toggleBlockType(
@@ -152,6 +159,7 @@ class RichEditorExample extends React.Component {
             )
         );
     }
+
     toggleInlineStyle(inlineStyle) {
         this.onChange(
             RichUtils.toggleInlineStyle(
@@ -160,17 +168,21 @@ class RichEditorExample extends React.Component {
             )
         );
     }
+
     saveContent = debounce((content) => {
         window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
     }, 1000);
+
     componentDidMount() {
         this.handleEditorState()
     }
-    handleEditorState(){
-        this.setState({editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)),decorator)})
+
+    handleEditorState() {
+        this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)), decorator)})
     };
-    reinInitEditorState (state){
-        this.setState({editorState:state})
+
+    reinInitEditorState(state) {
+        this.setState({editorState: state})
     }
 
     render() {
@@ -204,6 +216,7 @@ class RichEditorExample extends React.Component {
         );
     }
 }
+
 // Custom overrides for "code" style.
 const styleMap = {
     CODE: {
@@ -213,10 +226,14 @@ const styleMap = {
         padding: 2,
     },
 };
+
 function getBlockStyle(block) {
     switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
+        case 'blockquote':
+            return 'RichEditor-blockquote';
+        default:
+            return null;
     }
 }
+
 export default RichEditorExample

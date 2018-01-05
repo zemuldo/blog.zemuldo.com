@@ -1,4 +1,5 @@
-import { UPDATE_VARS } from "../actions/vars";
+import {UPDATE_VARS} from "../actions/vars";
+
 const vars = {
     user: null,
     iKnowYou: false,
@@ -7,7 +8,7 @@ const vars = {
     createNew: false,
     editingMode: false,
     colors: ['green', 'blue', 'orange', 'violet', 'blue', 'orange'],
-    color:'green',
+    color: 'green',
     currentLocation: 'home',
     profilePic: null,
     blogsLoaded: false,
@@ -20,14 +21,14 @@ const vars = {
     loadFooter: false,
     topic: 'all',
     time: new Date().toDateString(),
-    signUp:false,
-    test:1
+    signUp: false,
+    test: 1
 };
 
-const varsReducer = (state = vars, action ) => {
+const varsReducer = (state = vars, action) => {
     switch (action.type) {
         case UPDATE_VARS:
-            return Object.assign({},state,action.vars);
+            return Object.assign({}, state, action.vars);
         default:
             return state;
     }

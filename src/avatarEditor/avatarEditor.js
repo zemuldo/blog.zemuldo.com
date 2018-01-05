@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 
 import retrieveImageUrl from './utils/retrieve-image-url'
 
-const isTouchDevice = ( typeof window !== 'undefined' && typeof navigator !== 'undefined' && ('ontouchstart' in window || navigator.msMaxTouchPoints > 0) )
+const isTouchDevice = (typeof window !== 'undefined' && typeof navigator !== 'undefined' && ('ontouchstart' in window || navigator.msMaxTouchPoints > 0))
 
 const isFileAPISupported = typeof File !== 'undefined'
 
@@ -145,14 +145,22 @@ class AvatarEditor extends React.Component {
         height: 200,
         color: [0, 0, 0, 0.5],
         style: {},
-        onDropFile () {},
-        onLoadFailure () {},
-        onLoadSuccess () {},
-        onImageReady () {},
-        onImageChange () {},
-        onMouseUp () {},
-        onMouseMove () {},
-        onPositionChange () {}
+        onDropFile() {
+        },
+        onLoadFailure() {
+        },
+        onLoadSuccess() {
+        },
+        onImageReady() {
+        },
+        onImageChange() {
+        },
+        onMouseUp() {
+        },
+        onMouseMove() {
+        },
+        onPositionChange() {
+        }
     }
 
     state = {
@@ -165,16 +173,16 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    isVertical () {
+    isVertical() {
         return this.props.rotate % 180 !== 0
     }
 
-    getBorders (border = this.props.border) {
+    getBorders(border = this.props.border) {
         return Array.isArray(border) ? border : [border, border]
     }
 
-    getDimensions () {
-        const { width, height, rotate, border } = this.props
+    getDimensions() {
+        const {width, height, rotate, border} = this.props
 
         const canvas = {}
 
@@ -203,7 +211,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    getImage () {
+    getImage() {
         // get relative coordinates (0 to 1)
         const cropRect = this.getCroppingRect()
         const image = this.state.image
@@ -249,8 +257,8 @@ class AvatarEditor extends React.Component {
      * Get the image scaled to original canvas size.
      * This was default in 4.x and is now kept as a legacy method.
      */
-    getImageScaledToCanvas () {
-        const { width, height } = this.getDimensions()
+    getImageScaledToCanvas() {
+        const {width, height} = this.getDimensions()
 
         const canvas = document.createElement('canvas')
 
@@ -268,21 +276,21 @@ class AvatarEditor extends React.Component {
         return canvas
     }
 
-    getXScale () {
+    getXScale() {
         const canvasAspect = this.props.width / this.props.height
         const imageAspect = this.state.image.width / this.state.image.height
 
         return Math.min(1, canvasAspect / imageAspect)
     }
 
-    getYScale () {
+    getYScale() {
         const canvasAspect = this.props.height / this.props.width
         const imageAspect = this.state.image.height / this.state.image.width
 
         return Math.min(1, canvasAspect / imageAspect)
     }
 
-    getCroppingRect () {
+    getCroppingRect() {
         const position = this.props.position || {
             x: this.state.image.x,
             y: this.state.image.y
@@ -321,7 +329,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    isDataURL (str) {
+    isDataURL(str) {
         if (str === null) {
             return false
         }
@@ -329,7 +337,7 @@ class AvatarEditor extends React.Component {
         return !!str.match(regex)
     }
 
-    loadImage (image) {
+    loadImage(image) {
         if (isFileAPISupported && image instanceof File) {
             this.loadImageFile(image)
         } else if (typeof image === 'string') {
@@ -337,21 +345,23 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    loadImageURL (imageURL) {
+    loadImageURL(imageURL) {
         const imageObj = new Image()
         imageObj.onload = this.handleImageReady.bind(this, imageObj)
         imageObj.onerror = this.props.onLoadFailure
-        if (!this.isDataURL(imageURL) && this.props.crossOrigin) { imageObj.crossOrigin = this.props.crossOrigin }
+        if (!this.isDataURL(imageURL) && this.props.crossOrigin) {
+            imageObj.crossOrigin = this.props.crossOrigin
+        }
         imageObj.src = imageURL
     }
 
-    loadImageFile (imageFile) {
+    loadImageFile(imageFile) {
         const reader = new FileReader()
         reader.onload = e => this.loadImageURL(e.target.result)
         reader.readAsDataURL(imageFile)
     }
 
-    componentDidMount () {
+    componentDidMount() {
         const context = ReactDOM.findDOMNode(this.canvas).getContext('2d')
         if (this.props.image) {
             this.loadImage(this.props.image)
@@ -376,7 +386,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         if (document) {
             const nativeEvents = deviceEvents.native
             document.removeEventListener(
@@ -400,7 +410,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    componentDidUpdate (prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         const canvas = ReactDOM.findDOMNode(this.canvas)
         const context = canvas.getContext('2d')
         context.clearRect(0, 0, canvas.width, canvas.height)
@@ -423,16 +433,16 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    handleImageReady (image) {
+    handleImageReady(image) {
         const imageState = this.getInitialSize(image.width, image.height)
         imageState.resource = image
         imageState.x = 0.5
         imageState.y = 0.5
-        this.setState({ drag: false, image: imageState }, this.props.onImageReady)
+        this.setState({drag: false, image: imageState}, this.props.onImageReady)
         this.props.onLoadSuccess(imageState)
     }
 
-    getInitialSize (width, height) {
+    getInitialSize(width, height) {
         let newHeight
         let newWidth
 
@@ -454,7 +464,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    componentWillReceiveProps (newProps) {
+    componentWillReceiveProps(newProps) {
         if (
             (newProps.image && this.props.image !== newProps.image) ||
             this.props.width !== newProps.width ||
@@ -464,7 +474,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    paintImage (context, image, border, scaleFactor = pixelRatio) {
+    paintImage(context, image, border, scaleFactor = pixelRatio) {
         if (image.resource) {
             const position = this.calculatePosition(image, border)
 
@@ -499,7 +509,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    calculatePosition (image, border) {
+    calculatePosition(image, border) {
         image = image || this.state.image
 
         const [borderX, borderY] = this.getBorders(border)
@@ -528,7 +538,7 @@ class AvatarEditor extends React.Component {
         }
     }
 
-    paint (context) {
+    paint(context) {
         context.save()
         context.scale(pixelRatio, pixelRatio)
         context.translate(0, 0)
@@ -578,7 +588,7 @@ class AvatarEditor extends React.Component {
     }
     handleMouseUp = () => {
         if (this.state.drag) {
-            this.setState({ drag: false })
+            this.setState({drag: false})
             this.props.onMouseUp()
         }
     }
@@ -613,7 +623,7 @@ class AvatarEditor extends React.Component {
             const width = this.state.image.width * this.props.scale
             const height = this.state.image.height * this.props.scale
 
-            let { x: lastX, y: lastY } = this.getCroppingRect()
+            let {x: lastX, y: lastY} = this.getCroppingRect()
 
             lastX *= width
             lastY *= height
@@ -657,7 +667,7 @@ class AvatarEditor extends React.Component {
         e.preventDefault()
 
         if (e.dataTransfer) {
-            const { files, items } = e.dataTransfer
+            const {files, items} = e.dataTransfer
 
             if (files && files.length) {
                 this.props.onDropFile(e)
@@ -672,7 +682,7 @@ class AvatarEditor extends React.Component {
         this.canvas = canvas
     }
 
-    render () {
+    render() {
         const dimensions = this.getDimensions()
         const defaultStyle = {
             width: dimensions.canvas.width,
@@ -691,8 +701,12 @@ class AvatarEditor extends React.Component {
 
         attributes[deviceEvents.react.down] = this.handleMouseDown
         attributes[deviceEvents.react.drag] = this.handleDragOver
-        if (!this.props.disableDrop) { attributes[deviceEvents.react.drop] = this.handleDrop }
-        if (isTouchDevice) { attributes[deviceEvents.react.mouseDown] = this.handleMouseDown }
+        if (!this.props.disableDrop) {
+            attributes[deviceEvents.react.drop] = this.handleDrop
+        }
+        if (isTouchDevice) {
+            attributes[deviceEvents.react.mouseDown] = this.handleMouseDown
+        }
 
         return <canvas ref={this.setCanvas} {...attributes} />
     }

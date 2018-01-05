@@ -2,10 +2,10 @@ let express = require('express');
 const spdy = require('spdy');
 const fs = require('fs');
 let path = require('path');
-let  app = express();
+let app = express();
 let bodyParser = require('body-parser');
 let helmet = require('helmet')
-let checkMe = require('cookie-session')
+let checkMe = require('cookie-session');
 const options = {
     key: fs.readFileSync(__dirname + '/keys/server.key'),
     cert: fs.readFileSync(__dirname + '/keys/server.crt')
@@ -16,73 +16,73 @@ let {getBlogTemplate} = require('./tools/tools');
 const conf = require('./src/environments/conf');
 let {getBlog} = require('./db/database');
 const pages = {
-    dev:{
-        title:"ZemuldO.COM-DEVELOPMENT",
-        description:'Software Development and Programming articles and insights',
-        imgSRC:'img/blogs/blogs_pic.jpg'
+    dev: {
+        title: "ZemuldO.COM-DEVELOPMENT",
+        description: 'Software Development and Programming articles and insights',
+        imgSRC: 'img/blogs/blogs_pic.jpg'
     },
-    tech:{
-        title:"ZemuldO.COM-TECHNOLOGY",
-        description:'Technology related articles and insights',
-        imgSRC:'img/blogs/blogs_pic.jpg'
+    tech: {
+        title: "ZemuldO.COM-TECHNOLOGY",
+        description: 'Technology related articles and insights',
+        imgSRC: 'img/blogs/blogs_pic.jpg'
     },
-    business:{
-        title:"ZemuldO.COM-BUSINESS",
-        description:'Business related articles',
-        imgSRC:'img/blogs/blogs_pic.jpg'
+    business: {
+        title: "ZemuldO.COM-BUSINESS",
+        description: 'Business related articles',
+        imgSRC: 'img/blogs/blogs_pic.jpg'
     },
-    reviews:{
-        title:"ZemuldO.COM-REVIEWS",
-        description:'Reviews on new products and devices',
-        imgSRC:'img/blogs/blogs_pic.jpg'
+    reviews: {
+        title: "ZemuldO.COM-REVIEWS",
+        description: 'Reviews on new products and devices',
+        imgSRC: 'img/blogs/blogs_pic.jpg'
     },
-    tuts:{
-        title:"ZemuldO.COM-TUTORIALS",
-        description:'Tutorials on Trending technologies and languages',
-        imgSRC:'img/blogs/blogs_pic.jpg'
+    tuts: {
+        title: "ZemuldO.COM-TUTORIALS",
+        description: 'Tutorials on Trending technologies and languages',
+        imgSRC: 'img/blogs/blogs_pic.jpg'
     },
-    home:{
-        title:"ZemuldO.COM-HOME",
-        description:'Best Place for your reading, Tech and Business articles. Here you find featured content on current technologies like BigData, ML, AI, Deep Learning, DataScience and more',
-        imgSRC:'img/blogs/blogs_pic.jpg'
+    home: {
+        title: "ZemuldO.COM-HOME",
+        description: 'Best Place for your reading, Tech and Business articles. Here you find featured content on current technologies like BigData, ML, AI, Deep Learning, DataScience and more',
+        imgSRC: 'img/blogs/blogs_pic.jpg'
     }
 };
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, Authorization, X-Requested-With, Content-Type, Accept");
-    res.header("Allow-Control-Access-Method","GET");
+    res.header("Allow-Control-Access-Method", "GET");
     next();
 });
 
 app.use(bodyParser.json());
 app.use(helmet());
-app.set('x-powered-by',false);
-app.set('X-Powered-By',false);
+app.set('x-powered-by', false);
+app.set('X-Powered-By', false);
 app.use(helmet.ieNoOpen());
 app.use(helmet.xssFilter());
 app.use(helmet.noSniff());
 app.use(helmet({
     frameguard: false,
-    noCache:true
+    noCache: true
 }));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     console.log(req.url)
     next();
 });
 
-app.get('/*sw.js', function(req, res) {
+app.get('/*sw.js', function (req, res) {
     res.sendFile(path.join(__dirname, 'public', 'sw.js'));
 });
-app.get('/*manifest.json', function(req, res) {
+app.get('/*manifest.json', function (req, res) {
     res.sendFile(path.join(__dirname, 'public', 'manifest.json'));
 });
-app.get('*.js', function(req, res, next) {
+app.get('*.js', function (req, res, next) {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
     res.set('Content-Type', 'text/javascript');
     next();
 });
-app.get('*.css', function(req, res, next) {
+app.get('*.css', function (req, res, next) {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
     res.set('Content-Type', 'text/css');
@@ -100,54 +100,54 @@ app.use(checkMe({
         expires: expiryDate
     }
 }))
-app.use(function(req, res, next) {
-    if(req.url[req.url.length-1]==='/' && req.url!=='/' ){
-        res.redirect(req.url.slice(0,req.url.length-1))
+app.use(function (req, res, next) {
+    if (req.url[req.url.length - 1] === '/' && req.url !== '/') {
+        res.redirect(req.url.slice(0, req.url.length - 1))
     }
     else {
         next();
     }
 });
 app.use(express.static(path.join(__dirname, 'build')));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.locals.ua = req.get('User-Agent');
     next();
 });
 app.get("/*", async function (req, res) {
     let url = req.url.split('/').join('');
     let incomingPath = 'home'
-    if(url.indexOf('-')!==-1){
+    if (url.indexOf('-') !== -1) {
         incomingPath = url.split('-').join(' ')
     }
-    if(url.indexOf('%20')!==-1){
+    if (url.indexOf('%20') !== -1) {
         incomingPath = url.split('%20').join(' ')
     }
-    if(url.indexOf('%2520')!==-1){
+    if (url.indexOf('%2520') !== -1) {
         incomingPath = url.split('%2520').join(' ')
     }
 
     let details = null
-    if(pages[incomingPath]){
+    if (pages[incomingPath]) {
         details = {
-            title:pages[incomingPath].title,
-            description:pages[incomingPath].description,
-            imgSRC:pages[incomingPath].imgSRC
+            title: pages[incomingPath].title,
+            description: pages[incomingPath].description,
+            imgSRC: pages[incomingPath].imgSRC
         }
     }
-    else{
+    else {
         let blog = await getBlog(incomingPath);
-        if(blog){
+        if (blog) {
             details = {
-                title:blog.title,
-                description:blog.body.slice(0,300),
-                imgSRC:pages['home'].imgSRC
+                title: blog.title,
+                description: blog.body.slice(0, 300),
+                imgSRC: pages['home'].imgSRC
             }
         }
-        else{
+        else {
             details = {
-                title:pages['home'].title,
-                description:pages['home'].description,
-                imgSRC:pages['home'].imgSRC
+                title: pages['home'].title,
+                description: pages['home'].description,
+                imgSRC: pages['home'].imgSRC
             }
         }
     }

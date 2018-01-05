@@ -1,15 +1,16 @@
 import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import {CompositeDecorator,convertFromRaw, Editor, EditorState} from 'draft-js';
+import {CompositeDecorator, convertFromRaw, Editor, EditorState} from 'draft-js';
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
-    Development:'dev',
-    Business:'business',
-    Technology:'tech'
+    Development: 'dev',
+    Business: 'business',
+    Technology: 'tech'
 }
 // Custom overrides for "code" style.
 const styleMap = {
@@ -20,12 +21,16 @@ const styleMap = {
         padding: 2,
     },
 };
+
 function getBlockStyle(block) {
     switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
+        case 'blockquote':
+            return 'RichEditor-blockquote';
+        default:
+            return null;
     }
 }
+
 function mediaBlockRenderer(block) {
     if (block.getType() === 'atomic') {
         return {
@@ -35,14 +40,15 @@ function mediaBlockRenderer(block) {
     }
     return null;
 }
+
 const Audio = (props) => {
-    return <audio controls src={props.src} style={styles.media} />;
+    return <audio controls src={props.src} style={styles.media}/>;
 };
 const Image = (props) => {
-    return <img alt="!This image might have been deleted" src={props.src} style={styles.media} />;
+    return <img alt="!This image might have been deleted" src={props.src} style={styles.media}/>;
 };
 const Video = (props) => {
-    return <video controls src={props.src} style={styles.media} />;
+    return <video controls src={props.src} style={styles.media}/>;
 };
 const Media = (props) => {
     const entity = props.contentState.getEntity(
@@ -52,11 +58,11 @@ const Media = (props) => {
     const type = entity.getType();
     let media;
     if (type === 'audio') {
-        media = <Audio src={src} />;
+        media = <Audio src={src}/>;
     } else if (type === 'image') {
-        media = <Image src={src} />;
+        media = <Image src={src}/>;
     } else if (type === 'video') {
-        media = <Video src={src} />;
+        media = <Video src={src}/>;
     }
     return media;
 };
@@ -73,6 +79,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
         callback
     );
 }
+
 const Link = (props) => {
     const {url} = props.contentState.getEntity(props.entityKey).getData();
     return (
@@ -130,14 +137,14 @@ class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState:EditorState.createEmpty(),
-            isLoaded:false,
-            category:this.props.category,
-            topics:this.props.topics,
-            filledForm:false,
-            continueEdit:false,
-            isPublished:false,
-            open:false,
+            editorState: EditorState.createEmpty(),
+            isLoaded: false,
+            category: this.props.category,
+            topics: this.props.topics,
+            filledForm: false,
+            continueEdit: false,
+            isPublished: false,
+            open: false,
             url: '',
             urlType: '',
         };
@@ -146,71 +153,88 @@ class RichEditorExample extends React.Component {
         this.handleEditorState = this.handleEditorState.bind(this);
         this.publish = this.publish.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
-        this.reinInitEditorState=this.reinInitEditorState.bind(this)
+        this.reinInitEditorState = this.reinInitEditorState.bind(this)
     }
-    isLoading(value){
-        this.setState({ isLoaded: value });
+
+    isLoading(value) {
+        this.setState({isLoaded: value});
     };
-    onChange = (editorState) =>{};
+
+    onChange = (editorState) => {
+    };
     focus = () => this.refs.editor.focus();
-    handleKeyCommand(command, editorState) {}
-    onTab(e) {}
+
+    handleKeyCommand(command, editorState) {
+    }
+
+    onTab(e) {
+    }
+
     publish = () => {
-        this.setState({ open: true })
+        this.setState({open: true})
         const content = localStorage.getItem('draftContent');
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        if(content && blogData){
+        if (content && blogData) {
             let obj = JSON.parse(content);
             let title = obj.blocks[0].text;
-            obj.blocks.splice(0,1);
+            obj.blocks.splice(0, 1);
             axios.post(env.httpURL, {
-                queryMethod:"publish",
-                "queryData":{
-                    type:cats[blogData.type],
-                    title:title,
-                    query:"publish",
-                    topics:blogData.topics,
-                    images:["blogs_pic.jpg"],
-                    author:"Danstan Onyango",
-                    userName:this.props.currentUser.name,
-                    body:JSON.stringify(obj)}
+                queryMethod: "publish",
+                "queryData": {
+                    type: cats[blogData.type],
+                    title: title,
+                    query: "publish",
+                    topics: blogData.topics,
+                    images: ["blogs_pic.jpg"],
+                    author: "Danstan Onyango",
+                    userName: this.props.currentUser.name,
+                    body: JSON.stringify(obj)
+                }
             })
                 .then(function (response) {
-                    if(response.data.state===true){
+                    if (response.data.state === true) {
                         window.localStorage.removeItem('blogData');
                         window.localStorage.removeItem('draftContent');
-                        this.setState({isPublished:true,filledForm:true});
-                        this.props.varsActions.updateVars({editingMode:true,createNew:true});
+                        this.setState({isPublished: true, filledForm: true});
+                        this.props.varsActions.updateVars({editingMode: true, createNew: true});
                     }
                     else {
-                        this.props.varsActions.updateVars({editingMode:true,createNew:true});
+                        this.props.varsActions.updateVars({editingMode: true, createNew: true});
                     }
                 }.bind(this))
 
                 .catch(function (err) {
-                    this.setState({filledForm:true});
-                    this.setState({isPublished:false})
+                    this.setState({filledForm: true});
+                    this.setState({isPublished: false})
                 }.bind(this))
         }
-        else{
+        else {
 
         }
     };
+
     componentDidMount() {
         this.handleEditorState()
     }
-    handleEditorState(){
+
+    handleEditorState() {
         const editorState = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
-        if(editorState && blogDataState){
-            this.setState({hasSavedContent:false,filledForm:true,continueEdit:true,editorState:EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)),decorator)});
+        if (editorState && blogDataState) {
+            this.setState({
+                hasSavedContent: false,
+                filledForm: true,
+                continueEdit: true,
+                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)), decorator)
+            });
         }
         else {
-            this.setState({filledForm:true,editorState : EditorState.createEmpty(decorator)});
+            this.setState({filledForm: true, editorState: EditorState.createEmpty(decorator)});
         }
     };
-    reinInitEditorState (state){
-        this.setState({editorState:state})
+
+    reinInitEditorState(state) {
+        this.setState({editorState: state})
     }
 
 
@@ -245,8 +269,8 @@ class RichEditorExample extends React.Component {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        varsActions:bindActionCreators(VarsActions,dispatch)
+        varsActions: bindActionCreators(VarsActions, dispatch)
     }
 };
 
-export default connect(mapDispatchToProps) (RichEditorExample);
+export default connect(mapDispatchToProps)(RichEditorExample);

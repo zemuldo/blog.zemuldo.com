@@ -1,15 +1,16 @@
 import React from 'react';
-import {  Header } from 'semantic-ui-react'
-import { Timeline } from 'react-twitter-widgets'
+import {Header} from 'semantic-ui-react'
+import {Timeline} from 'react-twitter-widgets'
 
 class TwitterProf extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {};
     };
+
     render() {
         return (
-            <div style={{textAlign:'centre',margin:'2em 0em 0em 0em'}}>
+            <div style={{textAlign: 'centre', margin: '2em 0em 0em 0em'}}>
                 <Header color='blue' as='h3'>On Twitter</Header>
                 <Timeline
                     dataSource={{

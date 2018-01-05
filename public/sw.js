@@ -10,7 +10,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-const buildID='2017-12-28';
+const buildID='2018-01-06';
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
@@ -19,17 +19,21 @@ const RUNTIME = 'sw-'+buildID+'-runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-    "index.html",
-    'manifest.json',
-    'img/icons/icon.png',
-    "static/css/"+buildID+"main.zemuldo.css",
-    "static/js/"+buildID+"main.zemuldo.js",
-    "static/media/"+buildID+"flags.zemuldo.png",
-    "static/media/"+buildID+".icons.zemuldo.eot",
-    "static/media/"+buildID+".icons.zemuldo.svg",
-    "static/media/"+buildID+".icons.zemuldo.ttf",
-    "static/media/"+buildID+".icons.zemuldo.woff",
-    "static/media/"+buildID+".icons.zemuldo.woff2",
+    "/index.html",
+    '/manifest.json',
+    '/img/icons/icon-192x192.png',
+    '/img/icons/icon-256x256.png',
+    '/img/icons/icon-384x384.png',
+    '/img/icons/icon-512x512.png',
+    '/img/bot/bot.gif',
+    "/static/css/"+buildID+"main.zemuldo.css",
+    "/static/js/"+buildID+"main.zemuldo.js",
+    "/static/media/"+buildID+"flags.zemuldo.png",
+    "/static/media/"+buildID+".icons.zemuldo.eot",
+    "/static/media/"+buildID+".icons.zemuldo.svg",
+    "/static/media/"+buildID+".icons.zemuldo.ttf",
+    "/static/media/"+buildID+".icons.zemuldo.woff",
+    "/static/media/"+buildID+".icons.zemuldo.woff2",
 ];
 
 // The install handler takes care of precaching the resources we always need.

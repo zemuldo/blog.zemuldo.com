@@ -1,16 +1,19 @@
 import React from 'react'
-import {Grid,Header,Image} from 'semantic-ui-react'
+import {Grid, Header, Image} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
 class About extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {}
     }
-    componentDidMount() {}
+
+    componentDidMount() {
+    }
+
     render() {
         return (
-            <div style={{ marginTop: '5em' }}>
+            <div style={{marginTop: '5em'}}>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={1}>
@@ -21,14 +24,17 @@ class About extends React.Component {
                             <Image alt='zemuldo blogs about banner' src='/img/banners/techBanner.jpg'/>
                             <br/>
                             <p>
-                                This amazing blog is for sharing content on tech topics. I write on trending issues like Big Data, Machine Learning, Artificial Intelligence,
+                                This amazing blog is for sharing content on tech topics. I write on trending issues like
+                                Big Data, Machine Learning, Artificial Intelligence,
                                 among others.
-                                The inspiration on pupular blog communities like medium inspired me and i decided to share my knowledge with other too, just not on
+                                The inspiration on pupular blog communities like medium inspired me and i decided to
+                                share my knowledge with other too, just not on
                                 on medium or a Wordpress blog.
 
                             </p>
                             <p>
-                                I decided to code this application for managing my content. So far, the content here is just an opinion of the witter
+                                I decided to code this application for managing my content. So far, the content here is
+                                just an opinion of the witter
                                 on the subject or topic. Everything shared is for learning, reference and fun reading.
                             </p>
                         </Grid.Column>
@@ -38,7 +44,7 @@ class About extends React.Component {
 
                         </Grid.Column>
                         <Grid.Column width={6}>
-                            <Header  color='green' as='h2'>Creator</Header>
+                            <Header color='green' as='h2'>Creator</Header>
                             <div>
                                 <Image alt={'zemuldo creator pic'} avatar size='small' src='/img/creator/dan.jpg'/>
                                 <br/>
@@ -61,14 +67,14 @@ class About extends React.Component {
                         </Grid.Column>
                         <Grid.Column width={6}>
                             <Header color='green' as='h2'>Contacts</Header>
-                            <div >
+                            <div>
                                 <p><a href="tel:+254732764915">Cell: (+254) 732 764 915</a></p>
                                 <p><a href="tel:+254728554638">Tele: (+254) 728 554 638</a></p>
                             </div>
-                            <div >
+                            <div>
                                 <p><a href="mailto:otis.eng.555@gmail.com">otis.eng.555@gmail.com</a></p>
                             </div>
-                            <div >
+                            <div>
                                 <p>Address: {' 24136, GPO, Nairobi, Kenya'}</p>
                             </div>
                             <br/>

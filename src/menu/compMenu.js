@@ -1,6 +1,6 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Menu,Icon, Dropdown,Image,Input} from 'semantic-ui-react'
+import {Menu, Icon, Dropdown, Image, Input} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom';
 import * as VarsActions from "../state/actions/vars";
@@ -10,57 +10,59 @@ import {bindActionCreators} from "redux";
 import axios from "axios/index";
 import config from '../environments/conf';
 import * as BlogActions from "../state/actions/blog";
+
 const env = config[process.env.NODE_ENV] || 'development';
 
 class ComMenu extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {
-        };
-        this.handleFilterChange=this.handleFilterChange.bind(this);
+        this.state = {};
+        this.handleFilterChange = this.handleFilterChange.bind(this);
     };
+
     handleHomeClick = () => {
         this.props.blogActions.resetBlog();
-        this.props.varsActions.updateVars({currentLocation:'home'});
+        this.props.varsActions.updateVars({currentLocation: 'home'});
     };
-    handleMenuItemClick = (e, { name }) => {
+    handleMenuItemClick = (e, {name}) => {
         this.props.blogActions.resetBlog();
         if (name === 'search') {
             return false
         }
         let newVars = this.props.vars;
-        newVars.blogsAreLoading=true;
+        newVars.blogsAreLoading = true;
         if (name !== 'home' || name !== 'login') {
-            this.props.varsActions.updateVars({currentLocation:name})
+            this.props.varsActions.updateVars({currentLocation: name})
         }
 
     };
     handleLogoutinButton = () => {
         localStorage.removeItem('user');
-        this.props.userActions.updateUser({id:null});
+        this.props.userActions.updateUser({id: null});
     };
     handleCreateNew = () => {
         let editorState = window.localStorage.getItem('draftContent');
         let blogData = window.localStorage.getItem('blogData');
         if (editorState && blogData) {
-            this.props.varsActions.updateVars({editingMode:true,createNew:true,currentLocation:'profile'});
+            this.props.varsActions.updateVars({editingMode: true, createNew: true, currentLocation: 'profile'});
         }
         else {
-            this.props.varsActions.updateVars({editingMode:false,createNew:true,currentLocation:'profile'});
+            this.props.varsActions.updateVars({editingMode: false, createNew: true, currentLocation: 'profile'});
         }
     };
-    handleProfile=()=>{
-        this.props.varsActions.updateVars({editingMode:false,createNew:false,currentLocation:'profile'});
+    handleProfile = () => {
+        this.props.varsActions.updateVars({editingMode: false, createNew: false, currentLocation: 'profile'});
     };
+
     handleFilterChange(e) {
-        let query={};
+        let query = {};
         let queryMthod = 'getAllPosts';
-        if(this.props.vars.currentLocation!=='home'){
-            query.type=this.props.vars.currentLocation
+        if (this.props.vars.currentLocation !== 'home') {
+            query.type = this.props.vars.currentLocation
         }
-        if(e.target.value !== ''){
+        if (e.target.value !== '') {
             query.filter = e.target.value;
-            queryMthod='getFiltered'
+            queryMthod = 'getFiltered'
         }
         e.preventDefault();
         axios.post(env.httpURL, {
@@ -75,12 +77,13 @@ class ComMenu extends React.Component {
                 return err
             });
     }
+
     render() {
         let urlDetails = 'all';
         return (
-            <div >
+            <div>
                 <Menu
-                    style={{backgroundColor:'black'}}
+                    style={{backgroundColor: 'black'}}
                     fixed='top'
                     size='tiny'
                     secondary={true}
@@ -93,7 +96,7 @@ class ComMenu extends React.Component {
                         name='home'
                         active={this.props.vars.currentLocation === 'home'}
                         onClick={this.handleHomeClick}>
-                        <Icon color={this.props.vars.colors[0]} name='home' />
+                        <Icon color={this.props.vars.colors[0]} name='home'/>
                         <span color={this.props.vars.colors[0]}><Link to="/">Home</Link></span>
                     </Menu.Item>
                     <Menu.Item
@@ -101,39 +104,41 @@ class ComMenu extends React.Component {
                         name='dev'
                         active={this.props.vars.currentLocation === 'dev'}
                         onClick={this.handleMenuItemClick}>
-                        <Icon color={this.props.vars.colors[0]} name='code' />
-                        <span color={this.props.vars.colors[0]}><Link to={"/dev/"+urlDetails}>Dev</Link></span>
+                        <Icon color={this.props.vars.colors[0]} name='code'/>
+                        <span color={this.props.vars.colors[0]}><Link to={"/dev/" + urlDetails}>Dev</Link></span>
                     </Menu.Item>
                     <Menu.Item
                         as='span'
                         name='business'
                         active={this.props.vars.currentLocation === 'business'}
                         onClick={this.handleMenuItemClick}>
-                        <Icon color={this.props.vars.colors[0]} name='creative commons' />
-                        <span color={this.props.vars.colors[0]}><Link to={"/business/"+urlDetails}>Business</Link></span>
+                        <Icon color={this.props.vars.colors[0]} name='creative commons'/>
+                        <span color={this.props.vars.colors[0]}><Link
+                            to={"/business/" + urlDetails}>Business</Link></span>
                     </Menu.Item>
                     <Menu.Item
                         as='span'
                         name='tech'
                         active={this.props.vars.currentLocation === 'tech'}
                         onClick={this.handleMenuItemClick}>
-                        <Icon color={this.props.vars.colors[0]} name='server' />
-                        <span color={this.props.vars.colors[0]}><Link to={"/tech/"+urlDetails}>Tech</Link></span>
+                        <Icon color={this.props.vars.colors[0]} name='server'/>
+                        <span color={this.props.vars.colors[0]}><Link to={"/tech/" + urlDetails}>Tech</Link></span>
                     </Menu.Item>
                     <Menu.Item
                         as='span'
                         name='reviews'
                         active={this.props.vars.currentLocation === 'reviews'}
                         onClick={this.handleMenuItemClick}>
-                        <Icon color={this.props.vars.colors[0]} name='circle notched' />
-                        <span color={this.props.vars.colors[0]}><Link to={"/reviews/"+urlDetails}>Reviews</Link></span>
+                        <Icon color={this.props.vars.colors[0]} name='circle notched'/>
+                        <span color={this.props.vars.colors[0]}><Link
+                            to={"/reviews/" + urlDetails}>Reviews</Link></span>
                     </Menu.Item>
                     <Menu.Menu position='right'>
                         <Menu.Item
                             name='search'
                             onClick={this.handleMenuItemClick}>
                             <Input
-                                icon={<Icon name='search' inverted circular link />}
+                                icon={<Icon name='search' inverted circular link/>}
                                 placeholder='Search...'
                                 onChange={this.handleFilterChange}
                             />
@@ -145,22 +150,24 @@ class ComMenu extends React.Component {
                                     position='right'
                                     name='login'
                                     color={this.props.vars.colors[0]}
-                                    onClick={() => { this.props.varsActions.updateVars({curentLocation:'login',signUp:false}) }}>
-                                    <Icon color={this.props.vars.colors[0]} name='unlock' />
-                                    <span style={{color:'black'}}><Link to="/login">Login</Link></span>
-                                </Menu.Item>:
+                                    onClick={() => {
+                                        this.props.varsActions.updateVars({curentLocation: 'login', signUp: false})
+                                    }}>
+                                    <Icon color={this.props.vars.colors[0]} name='unlock'/>
+                                    <span style={{color: 'black'}}><Link to="/login">Login</Link></span>
+                                </Menu.Item> :
                                 <Menu.Item>
                                     <Dropdown
                                         className='dropDown'
                                         trigger={<Image
-                                            alt={'blogd.zemuldo.com_'+this.props.user.userName+'+_profile_pic'}
+                                            alt={'blogd.zemuldo.com_' + this.props.user.userName + '+_profile_pic'}
                                             avatar={true}
                                             wrapped={true}
                                             id="photo"
                                             size='tiny'
                                             src={this.props.vars.profilePic}
                                             style={{
-                                                marginLeft:'50%',
+                                                marginLeft: '50%',
                                                 borderRadius: `${(Math.min(
                                                     JSON.parse(this.props.user.avatar).height,
                                                     JSON.parse(this.props.user.avatar).width
@@ -169,33 +176,38 @@ class ComMenu extends React.Component {
                                                 (JSON.parse(this.props.user.avatar).borderRadius / 2 / 100)}px`
                                             }}
                                         />}
-                                        style={{color:this.props.vars.colors[0]}}
+                                        style={{color: this.props.vars.colors[0]}}
                                         pointing='top right'
                                         item
                                     >
                                         <Dropdown.Menu>
                                             <Dropdown.Item as='span' onClick={this.handleProfile}>
-                                                <Icon color={this.props.vars.colors[0]} name='user circle' />
-                                                <Link to={'/user/'+this.props.user.userName} color={this.props.vars.colors[1]} >Your Profile</Link>
+                                                <Icon color={this.props.vars.colors[0]} name='user circle'/>
+                                                <Link to={'/user/' + this.props.user.userName}
+                                                      color={this.props.vars.colors[1]}>Your Profile</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
-                                                <Icon color={this.props.vars.colors[0]} name='users' />
-                                                <Link to={'/user/'+this.props.user.userName+'/followers'} color={this.props.vars.colors[2]} >Followers</Link>
+                                                <Icon color={this.props.vars.colors[0]} name='users'/>
+                                                <Link to={'/user/' + this.props.user.userName + '/followers'}
+                                                      color={this.props.vars.colors[2]}>Followers</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
-                                                <Icon color={this.props.vars.colors[0]} name='help' />
-                                                <Link to={'/user/'+this.props.user.userName+'/help'} color={this.props.vars.colors[0]} >Help</Link>
+                                                <Icon color={this.props.vars.colors[0]} name='help'/>
+                                                <Link to={'/user/' + this.props.user.userName + '/help'}
+                                                      color={this.props.vars.colors[0]}>Help</Link>
                                             </Dropdown.Item>
-                                            <Dropdown.Item  as='span' onClick={this.handleCreateNew}>
-                                                <Icon color={this.props.vars.colors[0]} name='plus'  />
-                                                <Link to={'/user/'+this.props.user.userName+'/editor'} color={this.props.vars.colors[0]} >New Article</Link>
+                                            <Dropdown.Item as='span' onClick={this.handleCreateNew}>
+                                                <Icon color={this.props.vars.colors[0]} name='plus'/>
+                                                <Link to={'/user/' + this.props.user.userName + '/editor'}
+                                                      color={this.props.vars.colors[0]}>New Article</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span'>
-                                                <Icon color={this.props.vars.colors[0]} name='setting' />
-                                                <Link to={'/user/'+this.props.user.userName+'/settings'} color={this.props.vars.colors[1]} >Settings</Link>
+                                                <Icon color={this.props.vars.colors[0]} name='setting'/>
+                                                <Link to={'/user/' + this.props.user.userName + '/settings'}
+                                                      color={this.props.vars.colors[1]}>Settings</Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
-                                                <Icon color={this.props.vars.colors[0]} name='sign out' />
+                                                <Icon color={this.props.vars.colors[0]} name='sign out'/>
                                                 <span color={this.props.vars.colors[0]}>Sign Out</span>
                                             </Dropdown.Item>
                                         </Dropdown.Menu>
@@ -208,19 +220,20 @@ class ComMenu extends React.Component {
         )
     }
 }
+
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        vars:state.vars
+        vars: state.vars
     }
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        blogActions: bindActionCreators(BlogActions,dispatch),
-        userActions:bindActionCreators(UserActions,dispatch),
-        varsActions:bindActionCreators(VarsActions,dispatch),
-        blogsActions:bindActionCreators(BlogsActions,dispatch)
+        blogActions: bindActionCreators(BlogActions, dispatch),
+        userActions: bindActionCreators(UserActions, dispatch),
+        varsActions: bindActionCreators(VarsActions, dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch)
     }
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)  (ComMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(ComMenu);

@@ -1,22 +1,25 @@
 import React from 'react'
-import { Button,Loader, Form, Header, Message } from 'semantic-ui-react'
+import {Button, Loader, Form, Header, Message} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
+
 class SignUpForm extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {};
-        
+
     };
-    render(){
-        return(
+
+    render() {
+        return (
             <div className='signup-content'>
                 <Header as='h2' color='teal' textAlign='center'>
                 </Header>
                 <Form size='large'>
                     <Form.Field>
                         {
-                            this.props.imagePreviewUrl===''?
-                                <Button color='green' onClick={()=>this.props.showCreateAvatar(true)}> Create Avatar</Button>:
+                            this.props.imagePreviewUrl === '' ?
+                                <Button color='green' onClick={() => this.props.showCreateAvatar(true)}> Create
+                                    Avatar</Button> :
                                 <div>
                                     {!!this.props.imagePreviewUrl &&
                                     <img
@@ -32,7 +35,8 @@ class SignUpForm extends React.Component {
                                         }}
                                     />}
                                     <br/>
-                                    <Button color='green' onClick={()=>this.props.showCreateAvatar(false)}> Change Avatar</Button>
+                                    <Button color='green' onClick={() => this.props.showCreateAvatar(false)}> Change
+                                        Avatar</Button>
                                 </div>
                         }
                     </Form.Field>
@@ -87,13 +91,13 @@ class SignUpForm extends React.Component {
                         />
                     </Form.Group>
                     {
-                        !this.props.registering?
+                        !this.props.registering ?
                             <Button
-                                onClick={()=>this.props.handleSignUp()}
+                                onClick={() => this.props.handleSignUp()}
                                 color='green' type='submit'>
                                 Submit
-                            </Button>:
-                            <Loader active inline='centered' />
+                            </Button> :
+                            <Loader active inline='centered'/>
                     }
                 </Form>
                 <Message
@@ -102,11 +106,11 @@ class SignUpForm extends React.Component {
                     success={this.props.success}
                 >
                     <Message.Header>
-                        {this.props.errorDetails?this.props.errorDetails.message:'There are errors in your Input'}
+                        {this.props.errorDetails ? this.props.errorDetails.message : 'There are errors in your Input'}
                     </Message.Header>
                 </Message>
                 <Message>
-                    Have an Account?  <Link to='/login' onClick={()=>this.props.handSwichReg(false)}> Login</Link>
+                    Have an Account? <Link to='/login' onClick={() => this.props.handSwichReg(false)}> Login</Link>
                 </Message>
             </div>
         )
