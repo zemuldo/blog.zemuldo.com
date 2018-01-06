@@ -31,6 +31,7 @@ class Footer extends React.Component {
     };
 
     handleHomeClick = () => {
+        window.scrollTo(0,0);
         let newVars = this.props.vars;
         newVars.blogsAreLoading = true;
         newVars.currentLocation = 'home';
@@ -38,6 +39,7 @@ class Footer extends React.Component {
         this.props.varsActions.updateVars(newVars);
     };
     handleMenuItemClick = (name) => {
+        window.scrollTo(0,0);
         if (name === 'search') {
             return false
         }

@@ -21,10 +21,12 @@ class ComMenu extends React.Component {
     };
 
     handleHomeClick = () => {
+        window.scrollTo(0,0);
         this.props.blogActions.resetBlog();
         this.props.varsActions.updateVars({currentLocation: 'home'});
     };
     handleMenuItemClick = (e, {name}) => {
+        window.scrollTo(0,0);
         this.props.blogActions.resetBlog();
         if (name === 'search') {
             return false
