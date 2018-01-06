@@ -40,7 +40,7 @@
     "semantic-ui-react": "^0.72.0",
     "serve": "^6.0.0",
     "spdy": "^3.4.7",
-    "ws": "^3.3.3"
+    "ws": "^4.0.0"
   },
   "devDependencies": {
     "autoprefixer": "7.1.0",
