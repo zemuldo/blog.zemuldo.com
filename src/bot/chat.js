@@ -74,7 +74,7 @@ class LiveChat extends React.Component {
             let x = this.state.chat;
             x.push({by: 'user', text: this.state.message});
             this.setState({chat: x});
-            let mess = {type: "user", sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
+            let mess = {type: "user", pups: 'chat', sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
             this.ws.send(JSON.stringify(mess));
             this.setState({message: ''});
             this.scrollChat('MessageEnd')
