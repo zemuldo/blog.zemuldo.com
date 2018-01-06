@@ -173,6 +173,13 @@ module.exports = {
                 name: 'e-commerce',
                 full: 'E-Commerce'
             },
+        development:{
+            key: 'development',
+            value: 'development',
+            text: 'development',
+            name: 'development',
+            full: 'Software Development'
+        },
         code:
             {
                 key: 'code',
@@ -303,6 +310,7 @@ module.exports = {
             }
     },
     topics: [
+        {key: 'development', value: 'development', text: 'development', name: 'development', full: 'Software Development'},
         {key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata', full: 'Big Data'},
         {key: 'iot', value: 'iot', text: 'iot', name: 'iot', full: 'Internet of Things'},
         {key: 'ml', value: 'ml', text: 'ml', name: 'ml', full: 'Machine Learning'},
