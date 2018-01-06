@@ -1,9 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Loader, Header} from 'semantic-ui-react'
+import {Link} from 'react-router-dom';
+import {Loader, Header, Card, Visibility} from 'semantic-ui-react'
+import _ from 'lodash'
 import Blog from '../posts/blog'
 import GridBlogs from "../posts/gridBlogs";
-import {pages} from '../environments/conf'
+import {pages, topicsOBJ} from '../environments/conf'
+import {bindActionCreators} from "redux";
+import * as VarsActions from "../state/actions/vars";
 
 class WelcomePage extends React.Component {
     constructor(props) {
@@ -45,8 +49,8 @@ class WelcomePage extends React.Component {
     linkdnShare() {
         window.open('https://www.linkedin.com/cws/share?url=http%3A%2F%2Fzemuldo.com/' + this.props.blog.title.split(' ').join('-') + '_' + this.props.blog.id.toString(), "", "height=550,width=525,left=100,top=100,menubar=0");
     }
-
     render() {
+        const t = 'Artiles on ';
         return (
             <div style={{margin: '2em 1em 3em 1em'}}>
                 {
@@ -56,7 +60,13 @@ class WelcomePage extends React.Component {
                                 this.props.blogs[0] ?
                                     <div>
                                         <Header color={this.props.vars.color} as='h2'>
-                                            {pages[this.props.vars.currentLocation].topTitle}
+                                            {
+                                                // this.props.vars.topic!=='all'?
+                                                // t + topicsOBJ[this.props.vars.topic].full:
+                                                //     this.props.vars.currentLocation!=='topics'?
+                                                //         t + topicsOBJ[this.props.vars.topic].full:
+                                                // null
+                                            }
                                         </Header>
                                         <hr color="green"/>
                                         <br/>
@@ -71,7 +81,7 @@ class WelcomePage extends React.Component {
                                     </div> :
                                     <div>
                                         <Header color={this.props.vars.color} as='h1'>
-                                            {pages[this.props.vars.currentLocation].topTitle}
+
                                         </Header>
                                         <hr color="green"/>
                                         <div style={{
@@ -80,8 +90,34 @@ class WelcomePage extends React.Component {
                                             padding: '0em 0em 2em 1em'
                                         }}>
                                             <p>
-                                                There is no content on the topic yet. You can explore more
+                                                There is no content on the selected topic, there are tons of topics
+                                                to read about
                                             </p>
+
+                                            <div>
+                                                <Card.Group>
+                                                    {
+                                                        _.times(this.props.topics.length, (i) =>
+                                                            <Card style={{
+                                                                width: 'auto',
+                                                                maxWidth: '200px',
+                                                                minWidth: '100px'
+                                                            }} key={i}>
+                                                                <Card.Content>
+                                                                    <Card.Header><Link
+                                                                        to={'/topics/' + this.props.topics[i].key}>
+                                                                        {topicsOBJ[this.props.topics[i].key].full}
+                                                                    </Link>
+                                                                    </Card.Header>
+                                                                    <Card.Meta><span className='colorBlue'>Articles:{this.props.topics[i].blogs}</span></Card.Meta>
+                                                                    <Card.Description>{this.props.topics[i].blogs+' '}articles to read on this topic.</Card.Description>
+                                                                </Card.Content>
+                                                            </Card>
+                                                        )
+                                                    }
+                                                </Card.Group>
+
+                                            </div>
                                         </div>
                                     </div>
                             }
@@ -115,8 +151,15 @@ const mapStateToProps = (state) => {
     return {
         blogs: state.blogs,
         blog: state.blog,
-        vars: state.vars
+        vars: state.vars,
+        topics:state.topics
     }
 }
 
-export default connect(mapStateToProps)(WelcomePage)
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        varsActions: bindActionCreators(VarsActions, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage)

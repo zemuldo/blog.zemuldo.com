@@ -19,7 +19,7 @@ const env = config[process.env.NODE_ENV] || 'development';
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {sessionId:null};
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
@@ -192,9 +192,29 @@ class App extends React.Component {
                     this.props.blogsActions.updateBlogs(response.data);
                     this.props.varsActions.updateVars({blogsLoaded:true});
                 }
+                if(response.data.length<1){
+                    this.props.vars.ws.send(JSON.stringify({type:'exploreBlogs', pups:'exploreBlogs',sessionId:sessionStorage.getItem('sessionId')}))
+                    if (!this.props.vars.wsFetchBlogDeatils) {
+                        this.props.varsActions.updateVars({wsFetchBlogDeatils:true});
+                        this.props.vars.ws.send(JSON.stringify({
+                            type: 'topicDetails',
+                            pups: 'topicDetails',
+                            sessionId: sessionStorage.getItem('sessionId')
+                        }))
+                    }
+                }
             }.bind(this))
             .catch(function (err) {
                 this.props.blogsActions.updateBlogs([]);
+                this.props.vars.ws.send(JSON.stringify({type:'exploreBlogs', pups:'exploreBlogs',sessionId:sessionStorage.getItem('sessionId')}))
+                if (!this.props.vars.wsFetchBlogDeatils) {
+                    this.props.varsActions.updateVars({wsFetchBlogDeatils:true});
+                    this.props.vars.ws.send(JSON.stringify({
+                        type: 'topicDetails',
+                        pups: 'topicDetails',
+                        sessionId: sessionStorage.getItem('sessionId')
+                    }))
+                }
                 this.props.varsActions.updateVars({blogsLoaded:true});
             }.bind(this))
     }
@@ -259,7 +279,7 @@ class App extends React.Component {
         if (topicsOBJ[topic]) {
             query.topics = topic
         }
-        if (pages[page] && page !== 'home') {
+        if (pages[page] && page !== 'home' && page!=='topics') {
             query.type = page
         }
         /*
@@ -331,7 +351,9 @@ class App extends React.Component {
             query.topics = topic
         }
         if (pages[page] && pages[page].name !== 'Home') {
-            query.type = page;
+            if( page!=='topics'){
+                query.type = page;
+            }
             this.props.varsActions.updateVars({currentLocation: page});
         }
         /*
