@@ -91,11 +91,19 @@ class WelcomePage extends React.Component {
                     !this.props.blog.id ?
                         null :
                         <div>
-                            <Blog
-                                color={this.props.vars.color}
-                                counts={this.props.counts}
-                                deletedBlog={this.props.deletedBlog}
-                            />
+                            {
+                                this.props.vars.blogsLoaded?
+                                    <Blog
+                                        color={this.props.vars.color}
+                                        counts={this.props.counts}
+                                        deletedBlog={this.props.deletedBlog}
+                                    />:
+                                    <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
+                                        <Loader active inline='centered'/>
+                                        <p>Loading Blogs...</p>
+                                    </div>
+
+                            }
                         </div>
                 }
             </div>
