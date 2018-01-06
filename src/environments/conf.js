@@ -355,6 +355,11 @@ module.exports = {
         {key: 'security', value: 'security', text: 'security', name: 'security', full: 'Security'}
     ],
     pages: {
+        topics:{
+            name:'Topics Page',
+            icon:'info',
+            topTitle:'Feature'
+        },
         dev: {
             name: 'Development',
             icon: 'code',
