@@ -309,9 +309,9 @@ class Login extends React.Component {
                         errorDetails: {field: 'Success', message: "Success"}
                     })
                     setTimeout(function () {
-                        this.setState({signUp: false, success: false, hideMessage: true, imagePreviewUrl: ''});
+                        this.setState({success: false, hideMessage: true, imagePreviewUrl: ''});
                         this.props.history.push('/login');
-                        this.props.varsActions.updateVars({signUp: true});
+                        this.props.varsActions.updateVars({signUp: false});
                     }.bind(this), 2000)
                 }
                 else {
@@ -468,6 +468,29 @@ class Login extends React.Component {
                                         />
                                     </div> :
                                     <div>
+                                        <Modal open ={this.state.creatAvatarOpen}>
+                                            <Modal.Header ><Header style={{ margin:'1em 0em 0em 0em', textAlign :'left',alignment:'center'}} color='green' as='h1'>
+                                                Create your Profile Picture.
+                                            </Header></Modal.Header>
+                                            <Modal.Content>
+                                                <div>
+                                                    <p>
+                                                        Click preview to see your picture as it will appear.
+                                                    </p>
+                                                </div>
+                                                <hr/>
+                                                <Modal.Description>
+                                                    <AvatarEditor setAvatar = {this.setAvatar}/>
+                                                </Modal.Description>
+                                            </Modal.Content>
+                                            <Modal.Actions>
+                                                <Button.Group>
+                                                    <Button color="blue" onClick={this.closeCreateAvatar}>Cancel</Button>
+                                                    <Button.Or />
+                                                    <Button color="green" onClick={this.closeCreateAvatar}>Save</Button>
+                                                </Button.Group>
+                                            </Modal.Actions>
+                                        </Modal>
                                         <div className='forms-ls'>
                                             {
                                                 this.props.vars.signUp ?
