@@ -27,13 +27,11 @@ class App extends React.Component {
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this);
         this._goToEditor = this._goToEditor.bind(this);
         this._exitEditMode = this._exitEditMode.bind(this);
-        this.handleNavigation = this.handleNavigation.bind(this);
         this.setHomeBlogs = this.setHomeBlogs.bind(this);
         this.navigateBlogs = this.navigateBlogs.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
         this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
-        this.blogIsLoading = this.blogIsLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
@@ -41,14 +39,6 @@ class App extends React.Component {
         this.deletedBlog = this.deletedBlog.bind(this);
         this.setTopic = this.setTopic.bind(this);
         this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this)
-    };
-
-    updateVars(vars) {
-        let newVars = this.props.vars;
-        for (let i = 0; i < vars.length; i++) {
-            newVars[vars[i].key] = vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
     };
 
     handleUpdateBlogs(blogs) {
@@ -66,10 +56,6 @@ class App extends React.Component {
 
     blogsAreLoading(state) {
         this.setState({blogsLoaded: !state});
-    }
-
-    blogIsLoading(state) {
-        this.setState({blogLoaded: !state});
     }
 
     setTopicPosts(topicBlogs, topic) {
@@ -213,8 +199,6 @@ class App extends React.Component {
             }.bind(this))
     }
 
-
-
     setHomeBlogs() {
         this.setState({blogsAreLoading: true});
         return axios.post(env.httpURL, {
@@ -251,16 +235,6 @@ class App extends React.Component {
                 this.setState({blogsAreLoading: false})
                 this.setState({loadFooter: true})
             }.bind(this))
-    }
-
-    handleNavigation(location) {
-        window.scrollTo(0, 0);
-        this.setState({currentLocation: location});
-        if (location === 'home') {
-            this.props.history.push('/')
-        } else {
-            this.props.history.push('/' + location)
-        }
     }
 
     resize = () => this.forceUpdate();
