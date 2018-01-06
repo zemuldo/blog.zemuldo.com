@@ -1,5 +1,6 @@
 import React from 'react'
-import {Loader, Grid, Button} from 'semantic-ui-react'
+import {Loader, Grid, Button} from 'semantic-ui-react';
+import _ from 'lodash'
 import GridBlog from "./gridBlog";
 import {connect} from "react-redux";
 
@@ -13,129 +14,48 @@ class GridBlogs extends React.Component {
         return (
             <div>
                 {
-                    this.props.blogs.length > 0 && !this.props.blog.id ?
+                    this.props.vars.blogsLoaded && !this.props.blog.id?
                         <div>
+                            <Grid>
+                                {
+                                    _.times(this.props.blogs.length,(i)=>
+                                        <GridBlog
+                                            key={this.props.blogs[i].id}
+                                            onReadMore={this.props.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[i]}
+                                        />
+                                    )
+                                }
+                            </Grid>
                             <div>
-                                <Grid>
-                                    {
-                                        this.props.blogs[0] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[0]}
-                                            /> : null
-                                    }
-                                    {
-                                        this.props.blogs[1] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[1]}
-                                            /> : null
-                                    }
-                                    {
-                                        this.props.blogs[2] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[2]}
-                                            /> : null
-                                    }
-                                </Grid>
-                                <Grid>
-                                    {
-                                        this.props.blogs[3] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[3]}
-                                            /> : null
-                                    }
-                                    {
-                                        this.props.blogs[4] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[4]}
-                                            /> : null
-                                    }
-                                    {
-                                        this.props.blogs[5] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[5]}
-                                            /> : null
-                                    }
-                                </Grid>
-                                <Grid>
-                                    {
-                                        this.props.blogs[6] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[6]}
-                                            /> : null
-                                    }
-                                    {
-                                        this.props.blogs[7] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[7]}
-                                            /> : null
-                                    }
-                                    {
-                                        this.props.blogs[8] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[8]}
-                                            /> : null
-                                    }
-                                </Grid>
-                                <Grid>
-                                    {
-                                        this.props.blogs[9] ?
-                                            <GridBlog
-                                                onReadMore={this.props.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[9]}
-                                            /> : null
-                                    }
-                                </Grid>
+                                <Button
+                                    color={this.props.color}
+                                    circular={true}
+                                    size='mini'
+                                    floated='left'
+                                    disabled={!this.props.next}
+                                    onClick={this.props.setNextBlogs.bind(this, 'next')}
+                                    name="next"
+                                >
+                                    See More
+                                </Button>
+                                <Button
+                                    color={this.props.color}
+                                    circular={true}
+                                    size='mini'
+                                    floated='right'
+                                    disabled={this.props.x === 0}
+                                    onClick={this.props.setPreviousBlogs.bind(this, 'previous')}
+                                    name="previous"
+                                >
+                                    Previous
+                                </Button>
                             </div>
-                            <div>
-                                <div>
-                                    <Button
-                                        color={this.props.color}
-                                        circular={true}
-                                        size='mini'
-                                        floated='left'
-                                        disabled={!this.props.next}
-                                        onClick={this.props.setNextBlogs.bind(this, 'next')}
-                                        name="next"
-                                    >
-                                        See More
-                                    </Button>
-                                    <Button
-                                        color={this.props.color}
-                                        circular={true}
-                                        size='mini'
-                                        floated='right'
-                                        disabled={this.props.x === 0}
-                                        onClick={this.props.setPreviousBlogs.bind(this, 'previous')}
-                                        name="previous"
-                                    >
-                                        Previous
-                                    </Button>
-                                </div>
-                            </div>
-
-                        </div> :
+                        </div>:
                         <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
                             <Loader active inline='centered'/>
-                            <p>Loading Blog...</p>
+                            <p>Loading Blogs...</p>
                         </div>
                 }
             </div>
@@ -146,7 +66,8 @@ class GridBlogs extends React.Component {
 const mapStateToProps = (state) => {
     return {
         blogs: state.blogs,
-        blog: state.blog
+        blog: state.blog,
+        vars:state.vars
     }
 }
 

@@ -29,7 +29,6 @@ class App extends React.Component {
         this._exitEditMode = this._exitEditMode.bind(this);
         this.handleNavigation = this.handleNavigation.bind(this);
         this.setHomeBlogs = this.setHomeBlogs.bind(this);
-        this.setPageBlogs = this.setPageBlogs.bind(this);
         this.navigateBlogs = this.navigateBlogs.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
         this.setCurrentBlog = this.setCurrentBlog.bind(this);
@@ -192,6 +191,7 @@ class App extends React.Component {
     }
 
     navigateBlogs(query) {
+        this.props.varsActions.updateVars({blogsLoaded:false});
         return axios.post(env.httpURL, {
             "queryMethod": "getPosts",
             "queryData": query
@@ -199,58 +199,21 @@ class App extends React.Component {
             .then(function (response) {
                 if (!response.data) {
                     this.props.blogsActions.updateBlogs([]);
+                    this.props.varsActions.updateVars({blogsLoaded:true});
                     return false
                 }
                 else {
                     this.props.blogsActions.updateBlogs(response.data);
+                    this.props.varsActions.updateVars({blogsLoaded:true});
                 }
             }.bind(this))
             .catch(function (err) {
                 this.props.blogsActions.updateBlogs([]);
+                this.props.varsActions.updateVars({blogsLoaded:true});
             }.bind(this))
     }
 
-    setPageBlogs(name) {
-        return axios.post(env.httpURL, {
-            "queryMethod": "getPosts",
-            "queryData": {
-                "type": name
-            }
-        })
-            .then(function (response) {
-                if (!response.data) {
-                    this.setState({blogs: [], blog: null, blogDetails: null});
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                    return false
-                }
-                if (!response.data[0]) {
-                    this.setState({blogs: [], blog: null, blogDetails: null});
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                    return false
-                }
-                if (response.data[0]) {
-                    this.handleUpdateBlogs(response.data)
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                }
-                else {
-                    this.setState({blogs: [], blog: null, blogDetails: null});
-                    this.setState({homePageLoaded: true});
-                    this.setState({blogs: []});
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                }
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({blogs: [], blog: null, blogDetails: null});
-                this.setState({homePageLoaded: true});
-                this.setState({blogs: []});
-                this.setState({blogsLoaded: true})
-                this.setState({blogsAreLoading: false})
-            }.bind(this))
-    }
+
 
     setHomeBlogs() {
         this.setState({blogsAreLoading: true});
