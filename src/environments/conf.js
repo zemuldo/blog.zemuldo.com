@@ -91,7 +91,7 @@ module.exports = {
         dev: {
             name: 'Development',
             icon: 'code',
-            topTitle: "Dev articles CODE"
+            topTitle: "Dev Articles"
         },
         tech: {
             name: 'Technology',
