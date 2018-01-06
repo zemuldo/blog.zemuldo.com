@@ -355,3 +355,10 @@ a:hover {
     color: blue;
     margin-right: 30%;
 }
+
+/*
+    Blogs
+*/
+.blogCard{
+    background-color: #7aa61a;
+}

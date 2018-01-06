@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom';
-import {Loader, Header, Card, Visibility} from 'semantic-ui-react'
+import {Loader, Header, Card, Image} from 'semantic-ui-react'
 import _ from 'lodash'
 import Blog from '../posts/blog'
 import GridBlogs from "../posts/gridBlogs";
@@ -61,14 +61,11 @@ class WelcomePage extends React.Component {
                                     <div>
                                         <Header color={this.props.vars.color} as='h2'>
                                             {
-                                                // this.props.vars.topic!=='all'?
-                                                // t + topicsOBJ[this.props.vars.topic].full:
-                                                //     this.props.vars.currentLocation!=='topics'?
-                                                //         t + topicsOBJ[this.props.vars.topic].full:
-                                                // null
+                                                this.props.vars.topic!=='all' && topicsOBJ[this.props.vars.topic]?
+                                                t + topicsOBJ[this.props.vars.topic].full:
+                                                    pages[this.props.vars.currentLocation].topTitle
                                             }
                                         </Header>
-                                        <hr color="green"/>
                                         <br/>
                                         <GridBlogs
                                             x={this.props.x}
@@ -83,7 +80,6 @@ class WelcomePage extends React.Component {
                                         <Header color={this.props.vars.color} as='h1'>
 
                                         </Header>
-                                        <hr color="green"/>
                                         <div style={{
                                             fontSize: "16px",
                                             fontFamily: "georgia",
@@ -93,21 +89,22 @@ class WelcomePage extends React.Component {
                                                 There is no content on the selected topic, there are tons of topics
                                                 to read about
                                             </p>
-
+                                                <br/>
                                             <div>
                                                 <Card.Group>
                                                     {
                                                         _.times(this.props.topics.length, (i) =>
-                                                            <Card style={{
+                                                            <Card className='blogCard' style={{
                                                                 width: 'auto',
                                                                 maxWidth: '200px',
-                                                                minWidth: '100px'
+                                                                minWidth: '100px',
                                                             }} key={i}>
                                                                 <Card.Content>
-                                                                    <Card.Header><Link
-                                                                        to={'/topics/' + this.props.topics[i].key}>
-                                                                        {topicsOBJ[this.props.topics[i].key].full}
-                                                                    </Link>
+                                                                    <Card.Header>
+                                                                        <Link
+                                                                            to={'/topics/' + this.props.topics[i].key}>
+                                                                            {topicsOBJ[this.props.topics[i].key].full}
+                                                                        </Link>
                                                                     </Card.Header>
                                                                     <Card.Meta><span className='colorBlue'>Articles:{this.props.topics[i].blogs}</span></Card.Meta>
                                                                     <Card.Description>{this.props.topics[i].blogs+' '}articles to read on this topic.</Card.Description>
