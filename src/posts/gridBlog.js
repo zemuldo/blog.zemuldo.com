@@ -13,10 +13,10 @@ const getTopiINfo = (topics)=>{
 
 class GridBlog extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             showInfo:false
-        }
+        };
         this.someHandler=this.someHandler.bind(this)
         this.someOtherHandler=this.someOtherHandler.bind(this)
     }
