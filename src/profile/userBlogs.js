@@ -45,7 +45,7 @@ class GridBlogs extends React.Component {
         return (
             <div>
                 {
-                    this.props.blogs.length > 0 && !this.props.blog.id ?
+                    !this.props.blog.id ?
                         <div>
                             <div>
                                 <Grid>
@@ -140,7 +140,7 @@ class GridBlogs extends React.Component {
                         </div> :
                         <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
                             <Loader active inline='centered'/>
-                            <p>Loading Blog...</p>
+                            <p>Loading Blogs...</p>
                         </div>
                 }
             </div>
