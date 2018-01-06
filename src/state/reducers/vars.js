@@ -1,4 +1,7 @@
 import {UPDATE_VARS} from "../actions/vars";
+import config from '../../environments/conf'
+
+const env = config[process.env.NODE_ENV] || 'development';
 
 const vars = {
     user: null,
@@ -22,7 +25,10 @@ const vars = {
     topic: 'all',
     time: new Date().toDateString(),
     signUp: false,
-    test: 1
+    ws:new WebSocket(env.wsURL),
+    exploreBlogs:null,
+    topicsDetails:[{key: 'java', posts:10},],
+    wsFetchBlogDeatils: false
 };
 
 const varsReducer = (state = vars, action) => {
