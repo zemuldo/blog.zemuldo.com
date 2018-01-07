@@ -327,6 +327,10 @@ a:hover {
 .colorBlue{
     color: blue;
 }
+.clear_button{
+    background-color: transparent;
+    border: none;
+}
 
 /*
     Chat

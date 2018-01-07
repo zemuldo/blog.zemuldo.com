@@ -1,6 +1,7 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
-import {Header,Icon,Input} from 'semantic-ui-react';
+import {Header,Button,Icon} from 'semantic-ui-react';
+import _ from 'lodash'
 import {Link} from 'react-router-dom';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -11,7 +12,7 @@ import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
 import PagesComponent from './page'
-import config from '../environments/conf'
+import config, {topics} from '../environments/conf'
 import {pages, topicsOBJ} from '../environments/conf'
 
 const env = config[process.env.NODE_ENV] || 'development';
@@ -19,7 +20,7 @@ const env = config[process.env.NODE_ENV] || 'development';
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {sessionId:null};
+        this.state = {sessionId:null,x:0,y:(window.innerWidth/100)-3,window:window.innerWidth,topics:(window.innerWidth/100)-3};
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
@@ -38,7 +39,9 @@ class App extends React.Component {
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
         this.deletedBlog = this.deletedBlog.bind(this);
         this.setTopic = this.setTopic.bind(this);
-        this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this)
+        this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this);
+        this.show_left=this.show_left.bind(this);
+        this.show_right=this.show_right.bind(this);
     };
 
     handleUpdateBlogs(blogs) {
@@ -257,6 +260,12 @@ class App extends React.Component {
 
     resize = () => this.forceUpdate();
 
+    componentWillUpdate(){
+        if(this.state.window!==window.innerWidth){
+            this.setState({y:(window.innerWidth/100)-3,x:0,window:window.innerWidth,topics:(window.innerWidth/100)-3})
+        }
+    }
+
     componentWillReceiveProps() {
         /*
            This method is used to detect navigation/actions from the user then update the UI.
@@ -441,9 +450,22 @@ class App extends React.Component {
         this.setState({editingMode: false, createNew: false})
     }
 
+    show_left=()=>{
+        this.setState({x:this.state.x===0?0:this.state.x-1,y:this.state.y===6?6:this.state.y-1});
+    };
+
+    show_right=()=>{
+        this.setState({x:this.state.y>=topics.length?this.state.x:this.state.x+1,y:this.state.y===topics.length?topics.length-1:this.state.y+1});
+        console.log(this.state.x);
+        console.log(this.state.y);
+    };
+
     render() {
+
+        let o=topics.slice(this.state.x,this.state.y);
+
         return (
-            <div>
+            <div className='main_body'>
                 <Helmet>
                     <meta name="theme-color" content="#4285f4"/>
                     <meta name="msapplication-navbutton-color" content="#4285f4"/>
@@ -451,6 +473,7 @@ class App extends React.Component {
                     <title>{'ZemuldO-' + util.toTitleCase(this.props.vars.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home"/>
                 </Helmet>
+
                 <div style={{marginTop: '5em'}}>
                     <div className='alignCenter'>
                         <h1>
@@ -459,7 +482,33 @@ class App extends React.Component {
                                     Zemuldo Blogs
                                 </Header>
                             </Link>
+
                         </h1>
+                    </div>
+
+                    <div className='alignCenter'>
+                        <Button disabled={this.state.x===0} style={{backgroundColor:'transparent',border:'none'}} onClick={this.show_left}>
+                            <Icon name='arrow left'/>
+                        </Button>
+                        {_.times(o.length, i =>
+                            <Link key={o[i].key} to={'/' + this.props.vars.currentLocation + '/' + o[i].name}>
+                                <Button
+                                    style={{backgroundColor:'green'}}
+                                    disabled={this.props.vars.topic === o[i].name}
+                                    className="topicButton"
+                                    onClick={()=>this.props.varsActions.updateVars({topic: o[i].text})}
+                                    name={o[i].name}
+                                >
+                            <span>
+                                {util.toTitleCase(o[i].name)}
+                            </span>
+                                </Button>
+                            </Link>
+                        )
+                        }
+                        <Button disabled={this.state.y>=topics.length} style={{backgroundColor:'transparent',border:'none'}} onClick={this.show_right}>
+                            <Icon name='arrow right'/>
+                        </Button>
                     </div>
                     <PagesComponent
                         history={this.props.history}

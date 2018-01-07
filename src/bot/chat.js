@@ -57,7 +57,9 @@ class LiveChat extends React.Component {
                 x.push({by: 'bot', text: mess.msg});
                 this.setState({chat: x});
                 this.setState({portalOpen: true});
-                this.scrollChat(ref)
+                if(this.refs[ref]){
+                    this.scrollChat(ref)
+                }
                 return true
             }
             if(mess.type==='exploreBlogs'){
