@@ -1,22 +1,41 @@
 import React from 'react'
-import {Loader, Grid, Button} from 'semantic-ui-react';
+import {Loader, Card, Button, Header} from 'semantic-ui-react';
 import _ from 'lodash'
 import GridBlog from "./gridBlog";
 import {connect} from "react-redux";
+import {topicsOBJ} from "../environments/conf";
+
+const getTopiINfo = (topics) => {
+    let info = []
+    topics.forEach(function (topic) {
+        info.push(topicsOBJ[topic].full)
+    })
+    return info
+}
 
 class GridBlogs extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {showInfo:false};
+        this.handleMouseEnter=this.handleMouseEnter.bind(this);
+        this.handleMouseLeave=this.handleMouseLeave.bind(this);
+    }
+
+    handleMouseEnter(o) {
+        this.setState({showInfo:true})
+    }
+
+    handleMouseLeave(o) {
+        this.setState({showInfo:false})
     }
 
     render() {
         return (
             <div>
                 {
-                    this.props.vars.blogsLoaded && !this.props.blog.id?
+                    this.props.vars.blogsLoaded && !this.props.blog.id ?
                         <div>
-                            <Grid>
+                            <Card.Group>
                                 {
                                     _.times(this.props.blogs.length,(i)=>
                                         <GridBlog
@@ -27,7 +46,7 @@ class GridBlogs extends React.Component {
                                         />
                                     )
                                 }
-                            </Grid>
+                            </Card.Group>
                             <div>
                                 <br/>
                                 <Button
@@ -53,7 +72,7 @@ class GridBlogs extends React.Component {
                                     Previous
                                 </Button>
                             </div>
-                        </div>:
+                        </div> :
                         <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
                             <Loader active inline='centered'/>
                             <p>Loading Blogs...</p>
@@ -68,7 +87,7 @@ const mapStateToProps = (state) => {
     return {
         blogs: state.blogs,
         blog: state.blog,
-        vars:state.vars
+        vars: state.vars
     }
 }
 

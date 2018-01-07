@@ -16,8 +16,7 @@ class WelcomePage extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
-    componentDidMount() {
-    }
+    componentDidMount() {}
 
     fbShare() {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -49,6 +48,7 @@ class WelcomePage extends React.Component {
     linkdnShare() {
         window.open('https://www.linkedin.com/cws/share?url=http%3A%2F%2Fzemuldo.com/' + this.props.blog.title.split(' ').join('-') + '_' + this.props.blog.id.toString(), "", "height=550,width=525,left=100,top=100,menubar=0");
     }
+
     render() {
         const t = 'Artiles on ';
         return (

@@ -27,7 +27,6 @@ const vars = {
     signUp: false,
     ws:new WebSocket(env.wsURL),
     exploreBlogs:null,
-    topicsDetails:[{key: 'java', posts:10},],
     wsFetchBlogDeatils: false
 };
 

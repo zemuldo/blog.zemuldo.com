@@ -1,6 +1,6 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
-import {Header} from 'semantic-ui-react';
+import {Header,Icon,Input} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -193,7 +193,6 @@ class App extends React.Component {
                     this.props.varsActions.updateVars({blogsLoaded:true});
                 }
                 if(response.data.length<1){
-                    this.props.vars.ws.send(JSON.stringify({type:'exploreBlogs', pups:'exploreBlogs',sessionId:sessionStorage.getItem('sessionId')}))
                     if (!this.props.vars.wsFetchBlogDeatils) {
                         this.props.varsActions.updateVars({wsFetchBlogDeatils:true});
                         this.props.vars.ws.send(JSON.stringify({
@@ -206,7 +205,6 @@ class App extends React.Component {
             }.bind(this))
             .catch(function (err) {
                 this.props.blogsActions.updateBlogs([]);
-                this.props.vars.ws.send(JSON.stringify({type:'exploreBlogs', pups:'exploreBlogs',sessionId:sessionStorage.getItem('sessionId')}))
                 if (!this.props.vars.wsFetchBlogDeatils) {
                     this.props.varsActions.updateVars({wsFetchBlogDeatils:true});
                     this.props.vars.ws.send(JSON.stringify({
