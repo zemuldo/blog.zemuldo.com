@@ -3,7 +3,7 @@ import {Card, Button, Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {topicsOBJ} from '../environments/conf'
 
-const getTopiINfo = (topics)=>{
+const getTopiINfo = (topics) => {
     let info = []
     topics.forEach(function (topic) {
         info.push(topicsOBJ[topic].full)
@@ -15,18 +15,8 @@ class GridBlog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showInfo:false
+            showInfo: false
         };
-        this.handleMouseEnter=this.handleMouseEnter.bind(this);
-        this.handleMouseLeave=this.handleMouseLeave.bind(this);
-    }
-
-    handleMouseEnter(o) {
-        this.setState({showInfo:true})
-    }
-
-    handleMouseLeave(o) {
-        this.setState({showInfo:false})
     }
 
     render() {
@@ -34,15 +24,13 @@ class GridBlog extends React.Component {
         return (
             <Card className='blogCard' style={{
                 width: 'auto',
-                maxWidth: '200px',
+                maxWidth: '250px',
                 minWidth: '100px',
-            }} key={this.props.key}
-
+            }}
             >
-                <Card.Content >
+                <Card.Content>
                     <Card.Header>
-                        <Header onMouseEnter={() => this.handleMouseEnter(o)}
-                                onMouseLeave={() => this.handleMouseLeave(o)} color='green' as='h3'>
+                        <Header color='green' as='h3'>
                             {o.title.split(' ').join(' ')}
                         </Header>
                     </Card.Header>
@@ -62,10 +50,24 @@ class GridBlog extends React.Component {
                             <br/>
                             Related to
                             <br/>
-                            {getTopiINfo(o.topics).join(',')}
+                            {getTopiINfo(o.topics).join(', ')}
                             <br/>
                             Published on {o.date}
                         </p>
+                        <Link
+                            to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString()}>
+                            <Button
+                                className="redMoreButton"
+                                ref={o._id}
+                                onClick={() => {
+                                    this.props.onReadMore(o)
+                                }}
+                                name="all"
+                                style={{color: 'blue', border: 'none', bottom: '1%'}}
+                            >
+                                <span>Read More</span>
+                            </Button>
+                        </Link>
                     </Card.Description>
                 </Card.Content>
             </Card>
