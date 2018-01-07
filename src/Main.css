@@ -4,6 +4,15 @@
     Website : http://www.zemuldo.com/
 */
 
+/*Body*/
+.main_body{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.blogs{
+    margin-left: 10px;
+}
+
 /*
     Navigation Bar
  */

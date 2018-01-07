@@ -129,12 +129,12 @@ class PagesComponent extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='main_body'>
                 <Grid columns={2}>
                     <Grid.Row>
                         {
                             (window.innerWidth > 600) ?
-                                <Grid.Column computer={4}>
+                                <Grid.Column computer={3}>
                                     <Topics
                                         currentLocation={this.props.vars.currentLocation}
                                         topic={this.state.topic}
@@ -208,8 +208,8 @@ class PagesComponent extends React.Component {
                                 </div>
 
                         }
-                        <Grid.Column mobile={window.innerWidth < 600 ? 16 : 9}
-                                     computer={window.innerWidth < 600 ? 16 : 9} width={9}>
+                        <Grid.Column mobile={window.innerWidth < 600 ? 16 : 10}
+                                     computer={window.innerWidth < 600 ? 16 : 10} width={10}>
                             {
                                 window.innerWidth < 600 ?
                                     <Topics

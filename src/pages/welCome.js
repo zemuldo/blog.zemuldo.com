@@ -67,14 +67,16 @@ class WelcomePage extends React.Component {
                                             }
                                         </Header>
                                         <br/>
-                                        <GridBlogs
-                                            x={this.props.x}
-                                            next={this.props.next}
-                                            setPreviousBlogs={this.props.setPreviousBlogs}
-                                            setNextBlogs={this.props.setNextBlogs}
-                                            onReadMore={this.props.onReadMore}
-                                            color={this.props.vars.color}
-                                        />
+                                        <div className='blogs'>
+                                            <GridBlogs
+                                                x={this.props.x}
+                                                next={this.props.next}
+                                                setPreviousBlogs={this.props.setPreviousBlogs}
+                                                setNextBlogs={this.props.setNextBlogs}
+                                                onReadMore={this.props.onReadMore}
+                                                color={this.props.vars.color}
+                                            />
+                                        </div>
                                     </div> :
                                     <div>
                                         <Header color={this.props.vars.color} as='h1'>
@@ -90,7 +92,7 @@ class WelcomePage extends React.Component {
                                                 to read about
                                             </p>
                                                 <br/>
-                                            <div>
+                                            <div className='blogs'>
                                                 <Card.Group>
                                                     {
                                                         _.times(this.props.topics.length, (i) =>
@@ -102,6 +104,7 @@ class WelcomePage extends React.Component {
                                                                 <Card.Content>
                                                                     <Card.Header>
                                                                         <Link
+                                                                            onClick={()=>this.props.varsActions.updateVars({blogsLoaded:false})}
                                                                             to={'/topics/' + this.props.topics[i].key}>
                                                                             {topicsOBJ[this.props.topics[i].key].full}
                                                                         </Link>
