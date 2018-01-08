@@ -456,8 +456,6 @@ class App extends React.Component {
 
     show_right=()=>{
         this.setState({x:this.state.y>=topics.length?this.state.x:this.state.x+1,y:this.state.y===topics.length?topics.length-1:this.state.y+1});
-        console.log(this.state.x);
-        console.log(this.state.y);
     };
 
     render() {
