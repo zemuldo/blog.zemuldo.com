@@ -136,8 +136,18 @@ class ComMenu extends React.Component {
                             to={"/reviews/" + urlDetails}>Reviews</Link></span>
                     </Menu.Item>
                     <Menu.Menu position='right'>
+                        <Menu.Item
+                            style={{fontSize:'12px'}}
+                            name='search'
+                            onClick={this.handleMenuItemClick}>
+                            <Input
+                                icon={<Icon name='search' inverted circular link />}
+                                placeholder='Search...'
+                                onChange={this.handleFilterChange}
+                            />
+                        </Menu.Item>
                         {
-                            (!this.props.user || !this.props.user.id) ?
+                            (!this.props.user) ?
                                 <Menu.Item
                                     as='span'
                                     position='right'
