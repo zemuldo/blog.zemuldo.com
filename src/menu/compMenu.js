@@ -85,7 +85,7 @@ class ComMenu extends React.Component {
         return (
             <div>
                 <Menu
-                    style={{backgroundColor: 'black', padding:'0px 10px 0px 10px',fontSize:'18px'}}
+                    style={!this.props.user || !this.props.user.id?{backgroundColor: 'black', padding:'0px 10px 0px 10px',fontSize:'18px'}:{backgroundColor: 'black'}}
                     fixed='top'
                     size='tiny'
                     secondary={true}
@@ -99,7 +99,7 @@ class ComMenu extends React.Component {
                         active={this.props.vars.currentLocation === 'home'}
                         onClick={this.handleHomeClick}>
                         <Icon color={this.props.vars.colors[0]} name='home'/>
-                        <span color={this.props.vars.colors[0]}><Link to="/">Home</Link></span>
+                        <span color={this.props.vars.colors[0]}><Link to="/home/all">Home</Link></span>
                     </Menu.Item>
                     <Menu.Item
                         as='span'
