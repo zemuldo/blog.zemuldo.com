@@ -1,6 +1,7 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
-import {Header} from 'semantic-ui-react';
+import {Header,Button,Icon} from 'semantic-ui-react';
+import _ from 'lodash'
 import {Link} from 'react-router-dom';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -11,7 +12,7 @@ import * as VarsActions from "../state/actions/vars";
 import axios from 'axios'
 import util from '../util'
 import PagesComponent from './page'
-import config from '../environments/conf'
+import config, {topics} from '../environments/conf'
 import {pages, topicsOBJ} from '../environments/conf'
 
 const env = config[process.env.NODE_ENV] || 'development';
@@ -19,7 +20,7 @@ const env = config[process.env.NODE_ENV] || 'development';
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {sessionId:null,x:0,y:(window.innerWidth/100)-3,window:window.innerWidth,topics:(window.innerWidth/100)-3};
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
@@ -27,29 +28,20 @@ class App extends React.Component {
         this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this);
         this._goToEditor = this._goToEditor.bind(this);
         this._exitEditMode = this._exitEditMode.bind(this);
-        this.handleNavigation = this.handleNavigation.bind(this);
         this.setHomeBlogs = this.setHomeBlogs.bind(this);
-        this.setPageBlogs = this.setPageBlogs.bind(this);
         this.navigateBlogs = this.navigateBlogs.bind(this);
         this.onReadMore = this.onReadMore.bind(this);
         this.setCurrentBlog = this.setCurrentBlog.bind(this);
         this.blogsAreLoading = this.blogsAreLoading.bind(this);
-        this.blogIsLoading = this.blogIsLoading.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.setTopicPosts = this.setTopicPosts.bind(this);
         this.setBlogHere = this.setBlogHere.bind(this);
         this.setTopicNextPosts = this.setTopicNextPosts.bind(this);
         this.deletedBlog = this.deletedBlog.bind(this);
         this.setTopic = this.setTopic.bind(this);
-        this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this)
-    };
-
-    updateVars(vars) {
-        let newVars = this.props.vars;
-        for (let i = 0; i < vars.length; i++) {
-            newVars[vars[i].key] = vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
+        this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this);
+        this.show_left=this.show_left.bind(this);
+        this.show_right=this.show_right.bind(this);
     };
 
     handleUpdateBlogs(blogs) {
@@ -67,10 +59,6 @@ class App extends React.Component {
 
     blogsAreLoading(state) {
         this.setState({blogsLoaded: !state});
-    }
-
-    blogIsLoading(state) {
-        this.setState({blogLoaded: !state});
     }
 
     setTopicPosts(topicBlogs, topic) {
@@ -192,6 +180,7 @@ class App extends React.Component {
     }
 
     navigateBlogs(query) {
+        this.props.varsActions.updateVars({blogsLoaded:false});
         return axios.post(env.httpURL, {
             "queryMethod": "getPosts",
             "queryData": query
@@ -199,56 +188,35 @@ class App extends React.Component {
             .then(function (response) {
                 if (!response.data) {
                     this.props.blogsActions.updateBlogs([]);
+                    this.props.varsActions.updateVars({blogsLoaded:true});
                     return false
                 }
                 else {
                     this.props.blogsActions.updateBlogs(response.data);
+                    this.props.varsActions.updateVars({blogsLoaded:true});
+                }
+                if(response.data.length<1){
+                    if (!this.props.vars.wsFetchBlogDeatils) {
+                        this.props.varsActions.updateVars({wsFetchBlogDeatils:true});
+                        this.props.vars.ws.send(JSON.stringify({
+                            type: 'topicDetails',
+                            pups: 'topicDetails',
+                            sessionId: sessionStorage.getItem('sessionId')
+                        }))
+                    }
                 }
             }.bind(this))
             .catch(function (err) {
                 this.props.blogsActions.updateBlogs([]);
-            }.bind(this))
-    }
-
-    setPageBlogs(name) {
-        return axios.post(env.httpURL, {
-            "queryMethod": "getPosts",
-            "queryData": {
-                "type": name
-            }
-        })
-            .then(function (response) {
-                if (!response.data) {
-                    this.setState({blogs: [], blog: null, blogDetails: null});
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                    return false
+                if (!this.props.vars.wsFetchBlogDeatils) {
+                    this.props.varsActions.updateVars({wsFetchBlogDeatils:true});
+                    this.props.vars.ws.send(JSON.stringify({
+                        type: 'topicDetails',
+                        pups: 'topicDetails',
+                        sessionId: sessionStorage.getItem('sessionId')
+                    }))
                 }
-                if (!response.data[0]) {
-                    this.setState({blogs: [], blog: null, blogDetails: null});
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                    return false
-                }
-                if (response.data[0]) {
-                    this.handleUpdateBlogs(response.data)
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                }
-                else {
-                    this.setState({blogs: [], blog: null, blogDetails: null});
-                    this.setState({homePageLoaded: true});
-                    this.setState({blogs: []});
-                    this.setState({blogsLoaded: true});
-                    this.setState({blogsAreLoading: false})
-                }
-            }.bind(this))
-            .catch(function (err) {
-                this.setState({blogs: [], blog: null, blogDetails: null});
-                this.setState({homePageLoaded: true});
-                this.setState({blogs: []});
-                this.setState({blogsLoaded: true})
-                this.setState({blogsAreLoading: false})
+                this.props.varsActions.updateVars({blogsLoaded:true});
             }.bind(this))
     }
 
@@ -290,17 +258,13 @@ class App extends React.Component {
             }.bind(this))
     }
 
-    handleNavigation(location) {
-        window.scrollTo(0, 0);
-        this.setState({currentLocation: location});
-        if (location === 'home') {
-            this.props.history.push('/')
-        } else {
-            this.props.history.push('/' + location)
+    resize = () => this.forceUpdate();
+
+    componentWillUpdate(){
+        if(this.state.window!==window.innerWidth){
+            this.setState({y:(window.innerWidth/100)-3,x:0,window:window.innerWidth,topics:(window.innerWidth/100)-3})
         }
     }
-
-    resize = () => this.forceUpdate();
 
     componentWillReceiveProps() {
         /*
@@ -322,7 +286,7 @@ class App extends React.Component {
         if (topicsOBJ[topic]) {
             query.topics = topic
         }
-        if (pages[page] && page !== 'home') {
+        if (pages[page] && page !== 'home' && page!=='topics') {
             query.type = page
         }
         /*
@@ -394,7 +358,9 @@ class App extends React.Component {
             query.topics = topic
         }
         if (pages[page] && pages[page].name !== 'Home') {
-            query.type = page;
+            if( page!=='topics'){
+                query.type = page;
+            }
             this.props.varsActions.updateVars({currentLocation: page});
         }
         /*
@@ -484,9 +450,22 @@ class App extends React.Component {
         this.setState({editingMode: false, createNew: false})
     }
 
+    show_left=()=>{
+        this.setState({x:this.state.x===0?0:this.state.x-1,y:this.state.y===6?6:this.state.y-1});
+    };
+
+    show_right=()=>{
+        this.setState({x:this.state.y>=topics.length?this.state.x:this.state.x+1,y:this.state.y===topics.length?topics.length-1:this.state.y+1});
+        console.log(this.state.x);
+        console.log(this.state.y);
+    };
+
     render() {
+
+        let o=topics.slice(this.state.x,this.state.y);
+
         return (
-            <div>
+            <div className='main_body'>
                 <Helmet>
                     <meta name="theme-color" content="#4285f4"/>
                     <meta name="msapplication-navbutton-color" content="#4285f4"/>
@@ -494,6 +473,7 @@ class App extends React.Component {
                     <title>{'ZemuldO-' + util.toTitleCase(this.props.vars.currentLocation)}</title>
                     <meta name="Danstan Otieno Onyango" content="ZemuldO-Home"/>
                 </Helmet>
+
                 <div style={{marginTop: '5em'}}>
                     <div className='alignCenter'>
                         <h1>
@@ -502,7 +482,34 @@ class App extends React.Component {
                                     Zemuldo Blogs
                                 </Header>
                             </Link>
+
                         </h1>
+                    </div>
+                    <br/>
+
+                    <div className='alignCenter'>
+                        <Button disabled={this.state.x===0} style={{backgroundColor:'transparent',border:'none'}} onClick={this.show_left}>
+                            <Icon name='chevron left'/>
+                        </Button>
+                        {_.times(o.length, i =>
+                            <Link key={o[i].key} to={'/' + this.props.vars.currentLocation + '/' + o[i].name}>
+                                <Button
+                                    style={{backgroundColor:'green'}}
+                                    disabled={this.props.vars.topic === o[i].name}
+                                    className="topicButton"
+                                    onClick={()=>this.props.varsActions.updateVars({topic: o[i].text})}
+                                    name={o[i].name}
+                                >
+                            <span>
+                                {util.toTitleCase(o[i].name)}
+                            </span>
+                                </Button>
+                            </Link>
+                        )
+                        }
+                        <Button disabled={this.state.y>=topics.length} style={{backgroundColor:'transparent',border:'none'}} onClick={this.show_right}>
+                            <Icon name='chevron right'/>
+                        </Button>
                     </div>
                     <PagesComponent
                         history={this.props.history}

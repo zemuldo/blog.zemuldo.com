@@ -447,7 +447,7 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='main_body'>
                 {
                     this.state.validatingKnounUser ?
                         <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>

@@ -2,6 +2,10 @@ import React from 'react'
 import {Button, Header, Segment, Portal, Form, TextArea, Comment, Image} from 'semantic-ui-react'
 import _ from 'lodash'
 import config from '../environments/conf'
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import * as VarsActions from "../state/actions/vars";
+import * as TopicsActions from '../state/actions/topics'
 
 const env = config[process.env.NODE_ENV] || 'development';
 
@@ -29,7 +33,6 @@ class LiveChat extends React.Component {
         this.handlePortalOpen = this.handlePortalOpen.bind(this);
         this.chat = this.chat.bind(this);
         this.scrollChat = this.scrollChat.bind(this);
-        this.ws = new WebSocket(env.wsURL);
     }
 
     scrollChat = function (i) {
@@ -41,18 +44,31 @@ class LiveChat extends React.Component {
     }
 
     chat() {
-        this.ws.onmessage = function (message) {
+        this.props.vars.ws.onmessage = function (message) {
             let mess = JSON.parse(message.data);
             if (mess.type === 'sessionId') {
                 this.setState({sessionId: mess.msg})
+                sessionStorage.setItem('sessionId',mess.msg)
+                return true
             }
-            else {
+            if(mess.pups==='bot' && mess.type !== 'sessionId'){
                 let x = this.state.chat;
                 let ref = x.length;
                 x.push({by: 'bot', text: mess.msg});
                 this.setState({chat: x});
                 this.setState({portalOpen: true});
-                this.scrollChat(ref)
+                if(this.refs[ref]){
+                    this.scrollChat(ref)
+                }
+                return true
+            }
+            if(mess.type==='exploreBlogs'){
+                this.props.varsActions.updateVars({exploreBlogs:mess.msg})
+                return true
+            }
+            if(mess.type==='topicDetails'){
+                this.props.topicsActions.updateTopics(mess.msg)
+                return true
             }
         }.bind(this);
     }
@@ -74,8 +90,8 @@ class LiveChat extends React.Component {
             let x = this.state.chat;
             x.push({by: 'user', text: this.state.message});
             this.setState({chat: x});
-            let mess = {type: "user", sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
-            this.ws.send(JSON.stringify(mess));
+            let mess = {type: "user", pups: 'chat', sessionId: this.state.sessionId, msg: this.state.message, tz: "Africa/Nairobi"}
+            this.props.vars.ws.send(JSON.stringify(mess));
             this.setState({message: ''});
             this.scrollChat('MessageEnd')
         }
@@ -195,4 +211,17 @@ class LiveChat extends React.Component {
     }
 }
 
-export default LiveChat;
+const mapStateToProps = (state) => {
+    return {
+        vars: state.vars
+    }
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        varsActions: bindActionCreators(VarsActions, dispatch),
+        topicsActions: bindActionCreators(TopicsActions, dispatch),
+    }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(LiveChat);

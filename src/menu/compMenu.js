@@ -21,10 +21,12 @@ class ComMenu extends React.Component {
     };
 
     handleHomeClick = () => {
+        window.scrollTo(0,0);
         this.props.blogActions.resetBlog();
-        this.props.varsActions.updateVars({currentLocation: 'home'});
+        this.props.varsActions.updateVars({currentLocation: 'home', topic:'all'});
     };
     handleMenuItemClick = (e, {name}) => {
+        window.scrollTo(0,0);
         this.props.blogActions.resetBlog();
         if (name === 'search') {
             return false
@@ -32,7 +34,7 @@ class ComMenu extends React.Component {
         let newVars = this.props.vars;
         newVars.blogsAreLoading = true;
         if (name !== 'home' || name !== 'login') {
-            this.props.varsActions.updateVars({currentLocation: name})
+            this.props.varsActions.updateVars({currentLocation: name, topic:'all'})
         }
 
     };
@@ -83,7 +85,7 @@ class ComMenu extends React.Component {
         return (
             <div>
                 <Menu
-                    style={{backgroundColor: 'black'}}
+                    style={!this.props.user || !this.props.user.id?{backgroundColor: 'black', padding:'0px 10px 0px 10px',fontSize:'18px'}:{backgroundColor: 'black'}}
                     fixed='top'
                     size='tiny'
                     secondary={true}
@@ -97,7 +99,7 @@ class ComMenu extends React.Component {
                         active={this.props.vars.currentLocation === 'home'}
                         onClick={this.handleHomeClick}>
                         <Icon color={this.props.vars.colors[0]} name='home'/>
-                        <span color={this.props.vars.colors[0]}><Link to="/">Home</Link></span>
+                        <span color={this.props.vars.colors[0]}><Link to="/home/all">Home</Link></span>
                     </Menu.Item>
                     <Menu.Item
                         as='span'
@@ -134,15 +136,6 @@ class ComMenu extends React.Component {
                             to={"/reviews/" + urlDetails}>Reviews</Link></span>
                     </Menu.Item>
                     <Menu.Menu position='right'>
-                        <Menu.Item
-                            name='search'
-                            onClick={this.handleMenuItemClick}>
-                            <Input
-                                icon={<Icon name='search' inverted circular link/>}
-                                placeholder='Search...'
-                                onChange={this.handleFilterChange}
-                            />
-                        </Menu.Item>
                         {
                             (!this.props.user || !this.props.user.id) ?
                                 <Menu.Item

@@ -19,6 +19,8 @@ class NavBar extends React.Component {
                         <CompMenu/> :
                         <MobileMenu/>
                 }
+                <br/>
+
             </div>
         )
     }

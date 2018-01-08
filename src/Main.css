@@ -4,6 +4,15 @@
     Website : http://www.zemuldo.com/
 */
 
+/*Body*/
+.main_body{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.blogs{
+    margin-left: 10px;
+}
+
 /*
     Navigation Bar
  */
@@ -315,6 +324,13 @@ a:hover {
 .marginTop2 {
     margin-top: 2%;
 }
+.colorBlue{
+    color: blue;
+}
+.clear_button{
+    background-color: transparent;
+    border: none;
+}
 
 /*
     Chat
@@ -351,4 +367,11 @@ a:hover {
 .botTyping {
     color: blue;
     margin-right: 30%;
+}
+
+/*
+    Blogs
+*/
+.blogCard{
+    background-color: #7aa61a;
 }

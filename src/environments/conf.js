@@ -1,97 +1,369 @@
 module.exports = {
     topicsOBJ: {
-        bigdata: {key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata'},
-        iot: {key: 'iot', value: 'iot', text: 'iot', name: 'iot'},
-        ml: {key: 'ml', value: 'ml', text: 'ml', name: 'ml'},
-        ai: {key: 'ai', value: 'ai', text: 'ai', name: 'ai'},
-        python: {key: 'python', value: 'python', text: 'python', name: 'python'},
-        javascript: {key: 'javascript', value: 'javascript', text: 'javascript', name: 'javascript'},
-        r: {key: 'r', value: 'r', text: 'r', name: 'r'},
-        marketing: {key: 'marketing', value: 'marketing', text: 'marketing', name: 'marketing'},
-        fintech: {key: 'fintech', value: 'fintech', text: 'fintech', name: 'fintech'},
-        startup: {key: 'startup', value: 'startup', text: 'startup', name: 'startup'},
-        bot: {key: 'bot', value: 'bot', text: 'bot', name: 'bot'},
-        linux: {key: 'linux', value: 'linux', text: 'linux', name: 'linux'},
-        go: {key: 'go', value: 'go', text: 'go', name: 'go'},
-        growthhack: {key: 'growthhack', value: 'growthhack', text: 'growthhack', name: 'growthhack'},
-        cloud: {key: 'cloud', value: 'cloud', text: 'cloud', name: 'cloud'},
-        nodejs: {key: 'nodejs', value: 'nodejs', text: 'nodejs', name: 'nodejs'},
-        express: {key: 'express', value: 'express', text: 'express', name: 'express'},
-        mongodb: {key: 'mongodb', value: 'mongodb', text: 'mongodb', name: 'mongodb'},
-        sql: {key: 'sql', value: 'sql', text: 'sql', name: 'sql'},
-        adf: {key: 'adf', value: 'adf', text: 'adf', name: 'adf'},
-        git: {key: 'git', value: 'git', text: 'git', name: 'git'},
-        react: {key: 'react', value: 'react', text: 'react', name: 'react'},
-        ui: {key: 'ui', value: 'ui', text: 'ui', name: 'ui'},
-        ux: {key: 'ux', value: 'ux', text: 'ux', name: 'ux'},
-        angular: {key: 'angular', value: 'angular', text: 'angular', name: 'angular'},
-        'e-commerce': {key: 'e-commerce', value: 'e-commerce', text: 'e-commerce', name: 'e-commerce'},
-        code: {key: 'code', value: 'code', text: 'code', name: 'code'},
-        programming: {key: 'programming', value: 'programming', text: 'programming', name: 'programming'},
-        wearables: {key: 'wearables', value: 'wearables', text: 'wearables', name: 'wearables'},
-        laptops: {key: 'laptops', value: 'laptops', text: 'laptops', name: 'laptops'},
-        phones: {key: 'phones', value: 'phones', text: 'phones', name: 'phones'},
-        hadoop: {key: 'hadoop', value: 'hadoop', text: 'hadoop', name: 'hadoop'},
-        servers: {key: 'servers', value: 'servers', text: 'servers', name: 'servers'},
-        analytics: {key: 'analytics', value: 'analytics', text: 'analytics', name: 'analytics'},
-        devops: {key: 'devops', value: 'devops', text: 'devops', name: 'devops'},
-        datascience: {key: 'datascience', value: 'datascience', text: 'datascience', name: 'datascience'},
-        seo: {key: 'seo', value: 'seo', text: 'seo', name: 'seo'},
-        'html-css': {key: 'html-css', value: 'html-css', text: 'html-css', name: 'html-css'},
-        oracle: {key: 'oracle', value: 'oracle', text: 'oracle', name: 'oracle'},
-        pentesting: {key: 'pentesting', value: 'pentesting', text: 'pentesting', name: 'pentesting'},
-        java: {key: 'java', value: 'java', text: 'java', name: 'java'},
-        security: {key: 'security', value: 'security', text: 'security', name: 'security'}
+        bigdata:
+            {
+                key: 'bigdata',
+                value: 'bigdata',
+                text: 'bigdata',
+                name: 'bigdata',
+                full: 'Big Data'
+            },
+        iot:
+            {
+                key: 'iot',
+                value: 'iot',
+                text: 'iot',
+                name: 'iot',
+                full: 'Internet of Things'
+            },
+        ml:
+            {
+                key: 'ml',
+                value: 'ml',
+                text: 'ml',
+                name: 'ml',
+                full: 'Machine Learning'
+            },
+        ai:
+            {
+                key: 'ai',
+                value: 'ai',
+                text: 'ai',
+                name: 'ai',
+                full: 'Artificial Inteligence'
+            },
+        python:
+            {
+                key: 'python',
+                value: 'python',
+                text: 'python',
+                name: 'python',
+                full: 'Python'
+            },
+        javascript:
+            {
+                key: 'javascript',
+                value: 'javascript',
+                text: 'javascript',
+                name: 'javascript',
+                full: 'JavaScript'
+            },
+        r: {key: 'r', value: 'r', text: 'r', name: 'r', full: 'R Language'},
+        marketing:
+            {
+                key: 'marketing',
+                value: 'marketing',
+                text: 'marketing',
+                name: 'marketing',
+                full: 'Marketing'
+            },
+        fintech:
+            {
+                key: 'fintech',
+                value: 'fintech',
+                text: 'fintech',
+                name: 'fintech',
+                full: 'Financial Tech'
+            },
+        startup:
+            {
+                key: 'startup',
+                value: 'startup',
+                text: 'startup',
+                name: 'startup',
+                full: 'Startups'
+            },
+        bot: {key: 'bot', value: 'bot', text: 'bot', name: 'bot', full: 'Bot'},
+        linux:
+            {
+                key: 'linux',
+                value: 'linux',
+                text: 'linux',
+                name: 'linux',
+                full: 'Linux, GNU'
+            },
+        go: {key: 'go', value: 'go', text: 'go', name: 'go', full: 'Golang'},
+        growthhack:
+            {
+                key: 'growthhack',
+                value: 'growthhack',
+                text: 'growthhack',
+                name: 'growthhack',
+                full: 'Growth Hacking'
+            },
+        cloud:
+            {
+                key: 'cloud',
+                value: 'cloud',
+                text: 'cloud',
+                name: 'cloud',
+                full: 'Cloud Computing'
+            },
+        nodejs:
+            {
+                key: 'nodejs',
+                value: 'nodejs',
+                text: 'nodejs',
+                name: 'nodejs',
+                full: 'Node'
+            },
+        express:
+            {
+                key: 'express',
+                value: 'express',
+                text: 'express',
+                name: 'express',
+                full: 'ExpressJS'
+            },
+        mongodb:
+            {
+                key: 'mongodb',
+                value: 'mongodb',
+                text: 'mongodb',
+                name: 'mongodb',
+                full: 'Mongo Database'
+            },
+        sql: {key: 'sql', value: 'sql', text: 'sql', name: 'sql', full: 'SQL'},
+        adf:
+            {
+                key: 'adf',
+                value: 'adf',
+                text: 'adf',
+                name: 'adf',
+                full: 'Oracle ADF'
+            },
+        git: {key: 'git', value: 'git', text: 'git', name: 'git', full: 'Git'},
+        react:
+            {
+                key: 'react',
+                value: 'react',
+                text: 'react',
+                name: 'react',
+                full: 'ReactJS'
+            },
+        ui:
+            {
+                key: 'ui',
+                value: 'ui',
+                text: 'ui',
+                name: 'ui',
+                full: 'User Interface Design'
+            },
+        ux:
+            {
+                key: 'ux',
+                value: 'ux',
+                text: 'ux',
+                name: 'ux',
+                full: 'User Experience Design'
+            },
+        angular:
+            {
+                key: 'angular',
+                value: 'angular',
+                text: 'angular',
+                name: 'angular',
+                full: 'AngularJS'
+            },
+        'e-commerce':
+            {
+                key: 'e-commerce',
+                value: 'e-commerce',
+                text: 'e-commerce',
+                name: 'e-commerce',
+                full: 'E-Commerce'
+            },
+        development:{
+            key: 'development',
+            value: 'development',
+            text: 'development',
+            name: 'development',
+            full: 'Software Development'
+        },
+        code:
+            {
+                key: 'code',
+                value: 'code',
+                text: 'code',
+                name: 'code',
+                full: 'Coding'
+            },
+        programming:
+            {
+                key: 'programming',
+                value: 'programming',
+                text: 'programming',
+                name: 'programming',
+                full: 'Programming'
+            },
+        wearables:
+            {
+                key: 'wearables',
+                value: 'wearables',
+                text: 'wearables',
+                name: 'wearables',
+                full: 'Wearable Gadgets'
+            },
+        laptops:
+            {
+                key: 'laptops',
+                value: 'laptops',
+                text: 'laptops',
+                name: 'laptops',
+                full: 'Laptops'
+            },
+        phones:
+            {
+                key: 'phones',
+                value: 'phones',
+                text: 'phones',
+                name: 'phones',
+                full: 'Mobile Phones'
+            },
+        hadoop:
+            {
+                key: 'hadoop',
+                value: 'hadoop',
+                text: 'hadoop',
+                name: 'hadoop',
+                full: 'Hadoop'
+            },
+        servers:
+            {
+                key: 'servers',
+                value: 'servers',
+                text: 'servers',
+                name: 'servers',
+                full: 'Servers'
+            },
+        analytics:
+            {
+                key: 'analytics',
+                value: 'analytics',
+                text: 'analytics',
+                name: 'analytics',
+                full: 'Analytics'
+            },
+        devops:
+            {
+                key: 'devops',
+                value: 'devops',
+                text: 'devops',
+                name: 'devops',
+                full: 'DevOps'
+            },
+        datascience:
+            {
+                key: 'datascience',
+                value: 'datascience',
+                text: 'datascience',
+                name: 'datascience',
+                full: 'DataScience'
+            },
+        seo:
+            {
+                key: 'seo',
+                value: 'seo',
+                text: 'seo',
+                name: 'seo',
+                full: 'Search Engine Opt'
+            },
+        'html-css':
+            {
+                key: 'html-css',
+                value: 'html-css',
+                text: 'html-css',
+                name: 'html-css',
+                full: 'Html & CSS'
+            },
+        oracle:
+            {
+                key: 'oracle',
+                value: 'oracle',
+                text: 'oracle',
+                name: 'oracle',
+                full: 'Oracle'
+            },
+        pentesting:
+            {
+                key: 'pentesting',
+                value: 'pentesting',
+                text: 'pentesting',
+                name: 'pentesting',
+                full: 'Penetration Testing'
+            },
+        java:
+            {
+                key: 'java',
+                value: 'java',
+                text: 'java',
+                name: 'java',
+                full: 'Java'
+            },
+        security:
+            {
+                key: 'security',
+                value: 'security',
+                text: 'security',
+                name: 'security',
+                full: 'Security'
+            }
     },
     topics: [
-        {key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata'},
-        {key: 'iot', value: 'iot', text: 'iot', name: 'iot'},
-        {key: 'ml', value: 'ml', text: 'ml', name: 'ml'},
-        {key: 'ai', value: 'ai', text: 'ai', name: 'ai'},
-        {key: 'python', value: 'python', text: 'python', name: 'python'},
-        {key: 'javascript', value: 'javascript', text: 'javascript', name: 'javascript'},
-        {key: 'r', value: 'r', text: 'r', name: 'r'},
-        {key: 'marketing', value: 'marketing', text: 'marketing', name: 'marketing'},
-        {key: 'fintech', value: 'fintech', text: 'fintech', name: 'fintech'},
-        {key: 'startup', value: 'startup', text: 'startup', name: 'startup'},
-        {key: 'bot', value: 'bot', text: 'bot', name: 'bot'},
-        {key: 'linux', value: 'linux', text: 'linux', name: 'linux'},
-        {key: 'go', value: 'go', text: 'go', name: 'go'},
-        {key: 'growthhack', value: 'growthhack', text: 'growthhack', name: 'growthhack'},
-        {key: 'cloud', value: 'cloud', text: 'cloud', name: 'cloud'},
-        {key: 'nodejs', value: 'nodejs', text: 'nodejs', name: 'nodejs'},
-        {key: 'express', value: 'express', text: 'express', name: 'express'},
-        {key: 'mongodb', value: 'mongodb', text: 'mongodb', name: 'mongodb'},
-        {key: 'sql', value: 'sql', text: 'sql', name: 'sql'},
-        {key: 'adf', value: 'adf', text: 'adf', name: 'adf'},
-        {key: 'git', value: 'git', text: 'git', name: 'git'},
-        {key: 'react', value: 'react', text: 'react', name: 'react'},
-        {key: 'ui', value: 'ui', text: 'ui', name: 'ui'},
-        {key: 'ux', value: 'ux', text: 'ux', name: 'ux'},
-        {key: 'angular', value: 'angular', text: 'angular', name: 'angular'},
-        {key: 'e-commerce', value: 'e-commerce', text: 'e-commerce', name: 'e-commerce'},
-        {key: 'code', value: 'code', text: 'code', name: 'code'},
-        {key: 'programming', value: 'programming', text: 'programming', name: 'programming'},
-        {key: 'wearables', value: 'wearables', text: 'wearables', name: 'wearables'},
-        {key: 'laptops', value: 'laptops', text: 'laptops', name: 'laptops'},
-        {key: 'phones', value: 'phones', text: 'phones', name: 'phones'},
-        {key: 'hadoop', value: 'hadoop', text: 'hadoop', name: 'hadoop'},
-        {key: 'servers', value: 'servers', text: 'servers', name: 'servers'},
-        {key: 'analytics', value: 'analytics', text: 'analytics', name: 'analytics'},
-        {key: 'devops', value: 'devops', text: 'devops', name: 'devops'},
-        {key: 'datascience', value: 'datascience', text: 'datascience', name: 'datascience'},
-        {key: 'seo', value: 'seo', text: 'seo', name: 'seo'},
-        {key: 'html-css', value: 'html-css', text: 'html-css', name: 'html-css'},
-        {key: 'oracle', value: 'oracle', text: 'oracle', name: 'oracle'},
-        {key: 'pentesting', value: 'pentesting', text: 'pentesting', name: 'pentesting'},
-        {key: 'java', value: 'java', text: 'java', name: 'java'},
-        {key: 'security', value: 'security', text: 'security', name: 'security'}
+        {key: 'development', value: 'development', text: 'development', name: 'development', full: 'Software Development'},
+        {key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata', full: 'Big Data'},
+        {key: 'iot', value: 'iot', text: 'iot', name: 'iot', full: 'Internet of Things'},
+        {key: 'ml', value: 'ml', text: 'ml', name: 'ml', full: 'Machine Learning'},
+        {key: 'ai', value: 'ai', text: 'ai', name: 'ai', full: 'Artificial Inteligence'},
+        {key: 'python', value: 'python', text: 'python', name: 'python', full: 'Python'},
+        {key: 'javascript', value: 'javascript', text: 'javascript', name: 'javascript', full: 'JavaScript'},
+        {key: 'r', value: 'r', text: 'r', name: 'r', full: 'R Language'},
+        {key: 'marketing', value: 'marketing', text: 'marketing', name: 'marketing', full: 'Marketing'},
+        {key: 'fintech', value: 'fintech', text: 'fintech', name: 'fintech', full: 'Financial Tech'},
+        {key: 'startup', value: 'startup', text: 'startup', name: 'startup', full: 'Startups'},
+        {key: 'bot', value: 'bot', text: 'bot', name: 'bot', full: 'Bot'},
+        {key: 'linux', value: 'linux', text: 'linux', name: 'linux', full: 'Linux, GNU'},
+        {key: 'go', value: 'go', text: 'go', name: 'go', full: 'Golang'},
+        {key: 'growthhack', value: 'growthhack', text: 'growthhack', name: 'growthhack', full: 'Growth Hacking'},
+        {key: 'cloud', value: 'cloud', text: 'cloud', name: 'cloud', full: 'Cloud Computing'},
+        {key: 'nodejs', value: 'nodejs', text: 'nodejs', name: 'nodejs', full: 'Node'},
+        {key: 'express', value: 'express', text: 'express', name: 'express', full: 'ExpressJS'},
+        {key: 'mongodb', value: 'mongodb', text: 'mongodb', name: 'mongodb', full: 'Mongo Database'},
+        {key: 'sql', value: 'sql', text: 'sql', name: 'sql', full: 'SQL'},
+        {key: 'adf', value: 'adf', text: 'adf', name: 'adf', full: 'Oracle ADF'},
+        {key: 'git', value: 'git', text: 'git', name: 'git', full: 'Git'},
+        {key: 'react', value: 'react', text: 'react', name: 'react', full: 'ReactJS'},
+        {key: 'ui', value: 'ui', text: 'ui', name: 'ui', full: 'User Interface Design'},
+        {key: 'ux', value: 'ux', text: 'ux', name: 'ux', full: 'User Experience Design'},
+        {key: 'angular', value: 'angular', text: 'angular', name: 'angular', full: 'AngularJS'},
+        {key: 'e-commerce', value: 'e-commerce', text: 'e-commerce', name: 'e-commerce', full: 'E-Commerce'},
+        {key: 'code', value: 'code', text: 'code', name: 'code', full: 'Coding'},
+        {key: 'programming', value: 'programming', text: 'programming', name: 'programming', full: 'Programming'},
+        {key: 'wearables', value: 'wearables', text: 'wearables', name: 'wearables', full: 'Wearable Gadgets'},
+        {key: 'laptops', value: 'laptops', text: 'laptops', name: 'laptops', full: 'Laptops'},
+        {key: 'phones', value: 'phones', text: 'phones', name: 'phones', full: 'Mobile Phones'},
+        {key: 'hadoop', value: 'hadoop', text: 'hadoop', name: 'hadoop', full: 'Hadoop'},
+        {key: 'servers', value: 'servers', text: 'servers', name: 'servers', full: 'Servers'},
+        {key: 'analytics', value: 'analytics', text: 'analytics', name: 'analytics', full: 'Analytics'},
+        {key: 'devops', value: 'devops', text: 'devops', name: 'devops', full: 'DevOps'},
+        {key: 'datascience', value: 'datascience', text: 'datascience', name: 'datascience', full: 'DataScience'},
+        {key: 'seo', value: 'seo', text: 'seo', name: 'seo', full: 'Search Engine Opt'},
+        {key: 'html-css', value: 'html-css', text: 'html-css', name: 'html-css', full: 'Html & CSS'},
+        {key: 'oracle', value: 'oracle', text: 'oracle', name: 'oracle', full: 'Oracle'},
+        {key: 'pentesting', value: 'pentesting', text: 'pentesting', name: 'pentesting', full: 'Penetration Testing'},
+        {key: 'java', value: 'java', text: 'java', name: 'java', full: 'Java'},
+        {key: 'security', value: 'security', text: 'security', name: 'security', full: 'Security'}
     ],
     pages: {
+        topics:{
+            name:'Topics Page',
+            icon:'info',
+            topTitle:'Feature'
+        },
         dev: {
             name: 'Development',
             icon: 'code',
-            topTitle: "Dev articles CODE"
+            topTitle: "Dev Articles"
         },
         tech: {
             name: 'Technology',
