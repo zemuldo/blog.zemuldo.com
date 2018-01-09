@@ -47,12 +47,12 @@ class Footer extends React.Component {
     render() {
         let urlDetails = 'all';
         return (
-            <div>
+            <div className={'footerContainer'}>
                 <br/>
                 <br/>
                 <Segment
                     vertical
-                    style={{margin: '0em 0em 0em 0em', padding: '0em 0em 0em 0em'}}
+                    style={{fontSize: "20px", margin: '0em 0em 0em 0em', padding: '0em 0em 0em 0em'}}
                 >
                     <Container textAlign='left'>
                         <Grid divided stackable>

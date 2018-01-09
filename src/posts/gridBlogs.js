@@ -49,6 +49,7 @@ class GridBlogs extends React.Component {
                         </Card.Group>
                         <div>
                           <br />
+                           <br/>
                           <Button
                             color={this.props.color}
                             circular

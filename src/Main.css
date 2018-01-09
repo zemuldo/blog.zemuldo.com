@@ -33,6 +33,10 @@
 /*
     Footer
 */
+.footerContainer{
+    font-size: 20px;
+    background-color: ghostwhite;
+}
 .footer {
     margin-top: 90%;
     left: 0;

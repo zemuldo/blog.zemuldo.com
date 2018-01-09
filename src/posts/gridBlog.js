@@ -25,7 +25,7 @@ class GridBlog extends React.Component {
           <Card className='blogCard' style={{
                 width: 'auto',
                 maxWidth: '250px',
-                minWidth: '100px',
+                minWidth: '100px'
             }}
             >
             <Card.Content>
@@ -57,6 +57,7 @@ class GridBlog extends React.Component {
                 <Link
                   to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString()}>
                   <Button
+                      color={'green'}
                     className='redMoreButton'
                     ref={o._id}
                     onClick={() => {

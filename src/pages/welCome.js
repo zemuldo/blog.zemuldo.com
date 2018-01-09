@@ -87,9 +87,10 @@ class WelcomePage extends React.Component {
                                             fontFamily: "georgia",
                                             padding: '0em 0em 2em 1em'
                                         }}>
-                                      <p>
+                                      <p style={{
+                                         fontSize: "24px"}}>
                                                 There is no content on the selected topic, there are tons of topics
-                                                to read about
+                                                to read about.
                                       </p>
                                       <br />
                                       <div className='blogs'>

@@ -492,6 +492,7 @@ class App extends React.Component {
                         {_.times(o.length, i =>
                             <Link key={o[i].key} to={'/' + this.props.vars.currentLocation + '/' + o[i].name}>
                                 <Button
+                                    size={'small'}
                                     style={{backgroundColor:'green'}}
                                     disabled={this.props.vars.topic === o[i].name}
                                     className="topicButton"
