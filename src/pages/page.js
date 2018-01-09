@@ -43,7 +43,7 @@ class PagesComponent extends React.Component {
     resize = () => this.forceUpdate();
 
     componentDidMount() {
-
+       window.addEventListener('resize', this.resize);
     }
 
     componentWillUnmount() {
@@ -133,7 +133,7 @@ class PagesComponent extends React.Component {
                 <Grid columns={2}>
                     <Grid.Row>
                         {
-                            (window.innerWidth > 600) ?
+                            (window.innerWidth >1030) ?
                                 <Grid.Column computer={3}>
                                     <Topics
                                         currentLocation={this.props.vars.currentLocation}
@@ -208,8 +208,8 @@ class PagesComponent extends React.Component {
                                 </div>
 
                         }
-                        <Grid.Column mobile={window.innerWidth < 600 ? 16 : 10}
-                                     computer={window.innerWidth < 600 ? 16 : 10} width={10}>
+                        <Grid.Column mobile={window.innerWidth < 1030 ? 16 : 10}
+                                     computer={window.innerWidth < 1030 ? 16 : 10} width={10}>
                             {
                                 window.innerWidth < 600 ?
                                     <Topics
