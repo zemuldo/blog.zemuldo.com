@@ -159,7 +159,7 @@ class MobileMenu extends React.Component {
                             />
                         </Menu.Item>
                         {
-                            (!this.props.user) ?
+                           (!this.props.user || !this.props.user.id) ?
                                 <Menu.Item
                                     as='span'
                                     position='right'
