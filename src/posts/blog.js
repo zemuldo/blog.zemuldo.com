@@ -240,7 +240,7 @@ class Blog extends React.Component {
                     }
                 }.bind(this))
                 .catch(function (err) {
-                }.bind(this));
+                });
         }
 
     };

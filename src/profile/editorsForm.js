@@ -128,56 +128,56 @@ class EditorsForm extends Component {
 
     render() {
         return (
-            <div>
-                {
+          <div>
+            {
                     !this.props.vars.editingMode ?
-                        <div>
-                            <Header color='green' as='h3'>
+                      <div>
+                        <Header color='green' as='h3'>
                                 Creating your Article is easy. Save and continue where you left..
-                            </Header>
+                        </Header>
                             Lets get a few things ready first. this.
                             Fill the form below to feed details of your article.
-                            <Form style={{padding: '2em 2em 2em 2em'}}>
-                                <br/>
-                                <Form.Group widths='equal'>
-                                    <Form.Field inline>
-                                        <Label style={{border: 'none'}} as='a' size="large" color='blue'>Select
+                        <Form style={{padding: '2em 2em 2em 2em'}}>
+                          <br />
+                          <Form.Group widths='equal'>
+                            <Form.Field inline>
+                              <Label style={{border: 'none'}} as='a' size='large' color='blue'>Select
                                             Category</Label>{'   '}
-                                        <Select style={{margin: '0em 0em 1em 0em', color: 'green'}}
-                                                onChange={this.handleCategoryChange} placeholder='Select Category'
-                                                options={categories}/>
-                                    </Form.Field>
-                                </Form.Group>
-                                <Form.Group inline>
-                                    <Form.Field>
-                                        <Label style={{border: 'none'}} as='a' size="large" color='blue'>Select
+                              <Select style={{margin: '0em 0em 1em 0em', color: 'green'}}
+                                onChange={this.handleCategoryChange} placeholder='Select Category'
+                                options={categories} />
+                            </Form.Field>
+                          </Form.Group>
+                          <Form.Group inline>
+                            <Form.Field>
+                              <Label style={{border: 'none'}} as='a' size='large' color='blue'>Select
                                             Tags</Label>{'   '}
-                                        <Dropdown style={{margin: '0em 0em 1em 0em', color: 'green'}}
-                                                  onChange={this.handleTopicChange} multiple search selection
-                                                  closeOnChange options={topics} placeholder='Select topics'/>
-                                    </Form.Field>
-                                </Form.Group>
-                                <Form.TextArea maxLength="140" onChange={this.handleAboutChange} label='About your blog'
-                                               placeholder='Small details about your article...upto 140 Characters'/>
-                                <Form.Checkbox onChange={this.handleUTAChange}
-                                               label='I agree to the Community Terms and Conditions'/>
-                                <Form.Button
-                                    disabled={this.state.topics.length < 1 || this.state.about.length < 139 || !this.state.category || !this.state.termsAccept}
-                                    type="button" onClick={this.onFinishClick} color='green'
-                                    size='large'>Submit</Form.Button>
-                                <Form.Button type="button" onClick={() => this.updateVars([{
+                              <Dropdown style={{margin: '0em 0em 1em 0em', color: 'green'}}
+                                onChange={this.handleTopicChange} multiple search selection
+                                closeOnChange options={topics} placeholder='Select topics' />
+                            </Form.Field>
+                          </Form.Group>
+                          <Form.TextArea maxLength='140' onChange={this.handleAboutChange} label='About your blog'
+                            placeholder='Small details about your article...upto 140 Characters' />
+                          <Form.Checkbox onChange={this.handleUTAChange}
+                            label='I agree to the Community Terms and Conditions' />
+                          <Form.Button
+                            disabled={this.state.topics.length < 1 || this.state.about.length < 139 || !this.state.category || !this.state.termsAccept}
+                            type='button' onClick={this.onFinishClick} color='green'
+                            size='large'>Submit</Form.Button>
+                          <Form.Button type='button' onClick={() => this.updateVars([{
                                     key: 'editingMode',
                                     value: false
                                 }, {key: 'createNew', value: false}])} color='green' size='large'>Exit</Form.Button>
-                            </Form>
-                        </div> :
-                        <Creator
-                            currentUser={this.props.currentUser}
-                            topics={this.state.topics}
-                            category={this.state.category}
+                        </Form>
+                      </div> :
+                      <Creator
+                        currentUser={this.props.currentUser}
+                        topics={this.state.topics}
+                        category={this.state.category}
                         />
                 }
-            </div>
+          </div>
 
         )
     }

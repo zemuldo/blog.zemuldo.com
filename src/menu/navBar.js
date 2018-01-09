@@ -13,15 +13,15 @@ class NavBar extends React.Component {
 
     render() {
         return (
-            <div>
-                {
+          <div>
+            {
                     window.innerWidth > 800 ?
-                        <CompMenu/> :
-                        <MobileMenu/>
+                      <CompMenu /> :
+                      <MobileMenu />
                 }
-                <br/>
+            <br />
 
-            </div>
+          </div>
         )
     }
 }

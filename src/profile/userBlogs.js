@@ -43,107 +43,107 @@ class GridBlogs extends React.Component {
 
     render() {
         return (
-            <div>
-                {
+          <div>
+            {
                     !this.props.blog.id ?
+                      <div>
                         <div>
-                            <div>
-                                <Grid>
-                                    {
+                          <Grid>
+                            {
                                         this.props.blogs[0] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[0]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[0]}
                                             /> : null
                                     }
-                                    {
+                            {
                                         this.props.blogs[1] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[1]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[1]}
                                             /> : null
                                     }
-                                    {
+                            {
                                         this.props.blogs[2] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[2]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[2]}
                                             /> : null
                                     }
-                                </Grid>
-                                <Grid>
-                                    {
+                          </Grid>
+                          <Grid>
+                            {
                                         this.props.blogs[3] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[3]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[3]}
                                             /> : null
                                     }
-                                    {
+                            {
                                         this.props.blogs[4] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[4]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[4]}
                                             /> : null
                                     }
-                                    {
+                            {
                                         this.props.blogs[5] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[5]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[5]}
                                             /> : null
                                     }
-                                </Grid>
-                                <Grid>
-                                    {
+                          </Grid>
+                          <Grid>
+                            {
                                         this.props.blogs[6] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[6]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[6]}
                                             /> : null
                                     }
-                                    {
+                            {
                                         this.props.blogs[7] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[7]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[7]}
                                             /> : null
                                     }
-                                    {
+                            {
                                         this.props.blogs[8] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[8]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[8]}
                                             /> : null
                                     }
-                                </Grid>
-                                <Grid>
-                                    {
+                          </Grid>
+                          <Grid>
+                            {
                                         this.props.blogs[9] ?
-                                            <GridBlog
-                                                onReadMore={this.onReadMore}
-                                                color={this.props.color}
-                                                blog={this.props.blogs[9]}
+                                          <GridBlog
+                                            onReadMore={this.onReadMore}
+                                            color={this.props.color}
+                                            blog={this.props.blogs[9]}
                                             /> : null
                                     }
-                                </Grid>
-                            </div>
-                        </div> :
-                        <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
-                            <Loader active inline='centered'/>
-                            <p>Loading Blogs...</p>
+                          </Grid>
                         </div>
+                      </div> :
+                      <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
+                        <Loader active inline='centered' />
+                        <p>Loading Blogs...</p>
+                      </div>
                 }
-            </div>
+          </div>
         )
     }
 }

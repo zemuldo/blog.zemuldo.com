@@ -48,95 +48,95 @@ class Blogs extends React.Component {
     render() {
         let o = this.props.blogs
         return (
-            <div>
-                {
+          <div>
+            {
                     (this.props.blogs.length > 10) ?
-                        <div>
-                            {_.times(this.props.blogs.length, i =>
-                                <List.Item key={this.props.blogs[i]._id}>
-                                    <List.Icon name='leaf'/>
+                      <div>
+                        {_.times(this.props.blogs.length, i =>
+                          <List.Item key={this.props.blogs[i]._id}>
+                            <List.Icon name='leaf' />
+                            <List.Content>
+                              <Header color='green' as='h3'>
+                                {this.props.blogs[i].title.split(' ').join(' ')}
+                              </Header>
+                            </List.Content>
+                            <List.Content>
+                                        Author: {this.props.blogs[i].author}
+                            </List.Content>
+                            <span>
+                                            Likes:
+                              <span>
+                                <i style={{color: 'orange'}}>
+                                                ~{this.props.blogs[i].likes}
+                                </i>
+                              </span>
+                            </span>
+                            <Link
+                              to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
+                              <Button
+                                className='redMoreButton'
+                                ref={this.props.blogs[i]._id}
+                                onClick={() => {
+                                                this.onReadMore(this.props.blogs[i])
+                                            }}
+                                name='all'
+                                style={{color: 'blue', backgroundColor: 'transparent', border: 'none'}}
+                                        >
+                                <span>Read</span>
+                              </Button>
+                            </Link>
+                            <hr />
+                          </List.Item>
+                            )
+                            }
+                      </div>
+                        :
+                      <div>
+                        {
+                                this.props.blogs.map((x, i) =>
+                                  <List.Item key={this.props.blogs[i]._id}>
+                                    <List.Icon name='leaf' />
                                     <List.Content>
-                                        <Header color='green' as='h3'>
-                                            {this.props.blogs[i].title.split(' ').join(' ')}
-                                        </Header>
+                                      <Header color='green' as='h3'>
+                                        {this.props.blogs[i].title.split(' ').join(' ')}
+                                      </Header>
                                     </List.Content>
                                     <List.Content>
-                                        Author: {this.props.blogs[i].author}
+                                            Author: {this.props.blogs[i].author}
                                     </List.Content>
                                     <span>
                                             Likes:
-                                            <span>
-                                                <i style={{color: 'orange'}}>
-                                                ~{this.props.blogs[i].likes}
-                                                </i>
-                                            </span>
-                                        </span>
+                                    </span>
+                                    <span>
+                                      <i style={{color: 'orange'}}>
+                                        {this.props.blogs[i].likes}
+                                      </i>
+                                    </span>
                                     <Link
-                                        to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
-                                        <Button
-                                            className="redMoreButton"
-                                            ref={this.props.blogs[i]._id}
-                                            onClick={() => {
-                                                this.onReadMore(this.props.blogs[i])
-                                            }}
-                                            name="all"
-                                            style={{color: 'blue', backgroundColor: 'transparent', border: 'none'}}
-                                        >
-                                            <span>Read</span>
-                                        </Button>
-                                    </Link>
-                                    <hr/>
-                                </List.Item>
-                            )
-                            }
-                        </div>
-                        :
-                        <div>
-                            {
-                                this.props.blogs.map((x, i) =>
-                                    <List.Item key={this.props.blogs[i]._id}>
-                                        <List.Icon name='leaf'/>
-                                        <List.Content>
-                                            <Header color='green' as='h3'>
-                                                {this.props.blogs[i].title.split(' ').join(' ')}
-                                            </Header>
-                                        </List.Content>
-                                        <List.Content>
-                                            Author: {this.props.blogs[i].author}
-                                        </List.Content>
-                                        <span>
-                                            Likes:
-                                        </span>
-                                        <span>
-                                                <i style={{color: 'orange'}}>
-                                                    {this.props.blogs[i].likes}
-                                                </i>
-                                            </span>
-                                        <Link
-                                            to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
-                                            <Button
-                                                circular
-                                                size="mini"
-                                                disabled={!this.props.blog ? false : this.props.blog._id === this.props.blogs[i]._id}
-                                                className="redMoreButton"
-                                                ref={this.props.blogs[i]._id}
-                                                onClick={() => {
+                                      to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
+                                      <Button
+                                        circular
+                                        size='mini'
+                                        disabled={!this.props.blog ? false : this.props.blog._id === this.props.blogs[i]._id}
+                                        className='redMoreButton'
+                                        ref={this.props.blogs[i]._id}
+                                        onClick={() => {
                                                     this.onReadMore(this.props.blogs[i])
                                                 }}
-                                                name="all"
-                                                style={{color: 'blue', backgroundColor: 'transparent', border: 'none'}}
+                                        name='all'
+                                        style={{color: 'blue', backgroundColor: 'transparent', border: 'none'}}
                                             >
-                                                <span>Read More</span>
-                                            </Button>
-                                        </Link>
+                                        <span>Read More</span>
+                                      </Button>
+                                    </Link>
 
-                                        <hr/>
-                                    </List.Item>
+                                    <hr />
+                                  </List.Item>
                                 )
                             }
-                        </div>
+                      </div>
                 }
-            </div>
+          </div>
         )
     }
 }

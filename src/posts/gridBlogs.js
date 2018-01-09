@@ -31,54 +31,54 @@ class GridBlogs extends React.Component {
 
     render() {
         return (
-            <div>
-                {
+          <div>
+            {
                     this.props.vars.blogsLoaded && !this.props.blog.id ?
-                        <div>
-                            <Card.Group>
-                                {
+                      <div>
+                        <Card.Group>
+                          {
                                     _.times(this.props.blogs.length,(i)=>
-                                        <GridBlog
-                                            key={this.props.blogs[i].id}
-                                            onReadMore={this.props.onReadMore}
-                                            color={this.props.color}
-                                            blog={this.props.blogs[i]}
+                                      <GridBlog
+                                        key={this.props.blogs[i].id}
+                                        onReadMore={this.props.onReadMore}
+                                        color={this.props.color}
+                                        blog={this.props.blogs[i]}
                                         />
                                     )
                                 }
-                            </Card.Group>
-                            <div>
-                                <br/>
-                                <Button
-                                    color={this.props.color}
-                                    circular={true}
-                                    size='mini'
-                                    floated='left'
-                                    disabled={!this.props.next}
-                                    onClick={this.props.setNextBlogs.bind(this, 'next')}
-                                    name="next"
+                        </Card.Group>
+                        <div>
+                          <br />
+                          <Button
+                            color={this.props.color}
+                            circular
+                            size='mini'
+                            floated='left'
+                            disabled={!this.props.next}
+                            onClick={this.props.setNextBlogs.bind(this, 'next')}
+                            name='next'
                                 >
                                     See More
-                                </Button>
-                                <Button
-                                    color={this.props.color}
-                                    circular={true}
-                                    size='mini'
-                                    floated='right'
-                                    disabled={this.props.x === 0}
-                                    onClick={this.props.setPreviousBlogs.bind(this, 'previous')}
-                                    name="previous"
+                          </Button>
+                          <Button
+                            color={this.props.color}
+                            circular
+                            size='mini'
+                            floated='right'
+                            disabled={this.props.x === 0}
+                            onClick={this.props.setPreviousBlogs.bind(this, 'previous')}
+                            name='previous'
                                 >
                                     Previous
-                                </Button>
-                            </div>
-                        </div> :
-                        <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
-                            <Loader active inline='centered'/>
-                            <p>Loading Blogs...</p>
+                          </Button>
                         </div>
+                      </div> :
+                      <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
+                        <Loader active inline='centered' />
+                        <p>Loading Blogs...</p>
+                      </div>
                 }
-            </div>
+          </div>
         )
     }
 }

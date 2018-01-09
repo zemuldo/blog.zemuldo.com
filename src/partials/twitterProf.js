@@ -10,20 +10,20 @@ class TwitterProf extends React.Component {
 
     render() {
         return (
-            <div style={{textAlign: 'centre', margin: '2em 0em 0em 0em'}}>
-                <Header color='blue' as='h3'>On Twitter</Header>
-                <Timeline
-                    dataSource={{
+          <div style={{textAlign: 'centre', margin: '2em 0em 0em 0em'}}>
+            <Header color='blue' as='h3'>On Twitter</Header>
+            <Timeline
+              dataSource={{
                         sourceType: 'profile',
                         screenName: 'zemuldo'
                     }}
-                    options={{
+              options={{
                         username: 'zemuldo',
                         height: '300',
                         width: '30'
                     }}
                 />
-            </div>
+          </div>
         )
     }
 }

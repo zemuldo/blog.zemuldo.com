@@ -52,20 +52,20 @@ class WelcomePage extends React.Component {
 
     render() {
         return (
-            <div>
-                {
+          <div>
+            {
                     this.props.blog.id ?
-                        <div>Blog</div> :
-                        <UserBlogs
-                            x={this.props.x}
-                            next={this.props.next}
-                            setPreviousBlogs={this.props.setPreviousBlogs}
-                            setNextBlogs={this.props.setNextBlogs}
-                            onReadMore={this.props.onReadMore}
-                            color={this.props.vars.color}
+                      <div>Blog</div> :
+                      <UserBlogs
+                        x={this.props.x}
+                        next={this.props.next}
+                        setPreviousBlogs={this.props.setPreviousBlogs}
+                        setNextBlogs={this.props.setNextBlogs}
+                        onReadMore={this.props.onReadMore}
+                        color={this.props.vars.color}
                         />
                 }
-            </div>
+          </div>
         )
     }
 }
