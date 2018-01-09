@@ -85,7 +85,7 @@ class ComMenu extends React.Component {
         return (
             <div>
                 <Menu
-                    style={!this.props.user || !this.props.user.id?{backgroundColor: 'black', padding:'0px 10px 0px 10px',fontSize:'18px'}:{backgroundColor: 'black'}}
+                    style={{backgroundColor: 'black', padding:'0px 10px 0px 10px',fontSize:'18px'}}
                     fixed='top'
                     size='tiny'
                     secondary={true}
