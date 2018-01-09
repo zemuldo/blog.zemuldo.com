@@ -16,7 +16,9 @@ class WelcomePage extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        
+    }
 
     fbShare() {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
@@ -58,7 +60,7 @@ class WelcomePage extends React.Component {
                       <div>
                         {
                                 this.props.blogs[0] ?
-                                  <div>
+                                  <div ref={'blogs-views'}>
                                     <Header color={this.props.vars.color} as='h2'>
                                       {
                                                 this.props.vars.topic!=='all' && topicsOBJ[this.props.vars.topic]?
@@ -107,7 +109,7 @@ class WelcomePage extends React.Component {
                                                                   {topicsOBJ[this.props.topics[i].key].full}
                                                                 </Link>
                                                               </Card.Header>
-                                                              <Card.Meta><span className='colorBlue'>{'Articles:'+this.props.topics[i].blogs}</span></Card.Meta>
+                                                              <Card.Meta><span className='colorBlue'>{'Articles: '+this.props.topics[i].blogs}</span></Card.Meta>
                                                               <Card.Description>{this.props.topics[i].blogs+' '}articles to read on this topic.</Card.Description>
                                                             </Card.Content>
                                                           </Card>
