@@ -107,7 +107,7 @@ class WelcomePage extends React.Component {
                                                                   {topicsOBJ[this.props.topics[i].key].full}
                                                                 </Link>
                                                               </Card.Header>
-                                                              <Card.Meta><span className='colorBlue'>{'Articles: '+this.props.topics[i].blogs}</span></Card.Meta>
+                                                              <Card.Meta><span className='colorBlue'>{'Articles:'+this.props.topics[i].blogs}</span></Card.Meta>
                                                               <Card.Description>{this.props.topics[i].blogs+' '}articles to read on this topic.</Card.Description>
                                                             </Card.Content>
                                                           </Card>
