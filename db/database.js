@@ -1,4 +1,4 @@
-'use strict'
+
 let server = require('mongodb')
 let moment = require('moment')
 let mongodb = require('mongodb')
