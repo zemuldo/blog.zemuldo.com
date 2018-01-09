@@ -370,6 +370,11 @@ module.exports = {
             icon: 'server',
             topTitle: " Featured Tech Articles"
         },
+       tutorials: {
+          name: 'Tutorials',
+          icon: 'server',
+          topTitle: " Tutorials"
+       },
         business: {
             name: 'Business',
             icon: 'creative commons',
