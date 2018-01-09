@@ -402,7 +402,16 @@ class Blog extends React.Component {
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item color='red'
                                                                    onClick={() => this.openDelete()}>Delete</Dropdown.Item>
-                                                    <Dropdown.Item>Edit</Dropdown.Item>
+                                                    <Dropdown.Item
+                                                        onClick={()=>this.props.blogActions.updateBlog({editMode:true})}
+                                                    >
+                                                       Edit
+                                                    </Dropdown.Item>
+                                                   <Dropdown.Item
+                                                       onClick={()=>this.props.blogActions.updateBlog({editMode:false})}
+                                                   >
+                                                      Save
+                                                   </Dropdown.Item>
                                                     <Dropdown.Item>Hide</Dropdown.Item>
                                                 </Dropdown.Menu>
                                             </Dropdown>
