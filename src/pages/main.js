@@ -477,7 +477,7 @@ class App extends React.Component {
                         <h1>
                             <Link to='/'>
                                 <Header color={this.props.vars.color} as={'h1'}>
-                                    Zemuldo Blogs
+                                    Zemuldo Blogs-{pages[this.props.vars.currentLocation].name}
                                 </Header>
                             </Link>
 
@@ -487,7 +487,7 @@ class App extends React.Component {
 
                     <div className='alignCenter'>
                         <Button disabled={this.state.x===0} style={{backgroundColor:'transparent',border:'none'}} onClick={this.show_left}>
-                            <Icon size='big' color='blue' name='chevron left'/>
+                            <Icon size='big' color='orange' name='chevron left'/>
                         </Button>
                         {_.times(o.length, i =>
                             <Link key={o[i].key} to={'/' + this.props.vars.currentLocation + '/' + o[i].name}>
@@ -506,7 +506,7 @@ class App extends React.Component {
                         )
                         }
                         <Button disabled={this.state.y>=topics.length} style={{backgroundColor:'transparent',border:'none'}} onClick={this.show_right}>
-                            <Icon size='big' color='blue' name='chevron right'/>
+                            <Icon size='big' color='orange' name='chevron right'/>
                         </Button>
                     </div>
                     <PagesComponent

@@ -5,6 +5,7 @@ import {Menu, Button, Icon, Header, Modal, List, Grid, Container, Segment} from 
 import config, {pages} from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+import * as BlogActions from "../state/actions/blog";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -22,37 +23,21 @@ class Footer extends React.Component {
     handleUlerOpen = () => this.setState({ulerModalaOpen: true})
     handleUlerClose = () => this.setState({ulerModalaOpen: false});
 
-    updateVars(vars) {
-        let newVars = this.props.vars;
-        for (let i = 0; i < vars.length; i++) {
-            newVars[vars[i].key] = vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
-    };
-
     handleHomeClick = () => {
         window.scrollTo(0,0);
-        let newVars = this.props.vars;
-        newVars.blogsAreLoading = true;
-        newVars.currentLocation = 'home';
-        newVars.blog = null;
-        this.props.varsActions.updateVars(newVars);
+        this.props.blogActions.resetBlog();
+        this.props.varsActions.updateVars({currentLocation: 'home', topic:'all'});
     };
     handleMenuItemClick = (name) => {
         window.scrollTo(0,0);
+        this.props.blogActions.resetBlog();
         if (name === 'search') {
             return false
         }
         let newVars = this.props.vars;
         newVars.blogsAreLoading = true;
-        if (name === 'home' || name === 'login') {
-            newVars.currentLocation = name;
-        }
-        else {
-            if (pages[name]) {
-            }
-            newVars.currentLocation = name;
-            this.props.varsActions.updateVars(newVars);
+        if (name !== 'home' || name !== 'login') {
+            this.props.varsActions.updateVars({currentLocation: name, topic:'all'})
         }
     };
 
@@ -289,6 +274,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
     return {
         varsActions: bindActionCreators(VarsActions, dispatch),
+        blogActions: bindActionCreators(BlogActions, dispatch),
     }
 }
 

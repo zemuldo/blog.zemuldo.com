@@ -21,86 +21,52 @@ class MobileMenu extends React.Component {
         this.handleFilterChange = this.handleFilterChange.bind(this)
     };
 
-    updateVars(vars) {
-        let newVars = this.props.vars;
-        for (let i = 0; i < vars.length; i++) {
-            newVars[vars[i].key] = vars[i].value
-        }
-        this.props.varsActions.updateVars(newVars);
-    };
-
     handleHomeClick = () => {
+        window.scrollTo(0,0);
         this.props.blogActions.resetBlog();
-        this.props.varsActions.updateVars({blogLoaded: true});
-        let newVars = this.props.vars;
-        newVars.blogsAreLoading = true;
-        newVars.currentLocation = 'home';
-        newVars.blog = null;
-        this.props.varsActions.updateVars(newVars);
+        this.props.varsActions.updateVars({currentLocation: 'home', topic:'all'});
     };
     handleMenuItemClick = (e, {name}) => {
+        window.scrollTo(0,0);
         this.props.blogActions.resetBlog();
-        this.props.varsActions.updateVars({blogLoaded: true});
         if (name === 'search') {
             return false
         }
         let newVars = this.props.vars;
         newVars.blogsAreLoading = true;
-        if (name === 'home' || name === 'login') {
-            newVars.currentLocation = name;
+        if (name !== 'home' || name !== 'login') {
+            this.props.varsActions.updateVars({currentLocation: name, topic:'all'})
         }
-        else {
-            if (pages[name]) {
-            }
-            newVars.currentLocation = name;
-            this.props.varsActions.updateVars(newVars);
-        }
+
     };
     handleLogoutinButton = () => {
         localStorage.removeItem('user');
-        this.props.userActions.updateUser(null);
-        this.updateVars([{key: 'currentLocation', value: 'home'}])
+        this.props.userActions.updateUser({id: null});
     };
     handleCreateNew = () => {
-        let editorState = window.localStorage.getItem('draftContent')
-        let blogData = window.localStorage.getItem('blogData')
+        let editorState = window.localStorage.getItem('draftContent');
+        let blogData = window.localStorage.getItem('blogData');
         if (editorState && blogData) {
-            this.updateVars([
-                {key: 'editingMode', value: true},
-                {key: 'createNew', value: true},
-                {key: 'currentLocation', value: 'profile'}
-            ])
+            this.props.varsActions.updateVars({editingMode: true, createNew: true, currentLocation: 'profile'});
         }
         else {
-            this.updateVars([
-                {key: 'editingMode', value: false},
-                {key: 'createNew', value: true},
-                {key: 'currentLocation', value: 'profile'}
-            ])
+            this.props.varsActions.updateVars({editingMode: false, createNew: true, currentLocation: 'profile'});
         }
-        console.log(this.props.vars.createNew)
-
     };
     handleProfile = () => {
-        this.updateVars([
-            {key: 'currentLocation', value: 'profile'},
-            {key: 'createNew', value: false},
-            {key: 'editingMode', value: false}
-        ])
-        console.log(this.props.vars.createNew)
+        this.props.varsActions.updateVars({editingMode: false, createNew: false, currentLocation: 'profile'});
     };
 
     handleFilterChange(e) {
-        let query = {}
+        let query = {};
         let queryMthod = 'getAllPosts';
         if (this.props.vars.currentLocation !== 'home') {
-            query.type = this.state.currentLocation
+            query.type = this.props.vars.currentLocation
         }
         if (e.target.value !== '') {
             query.filter = e.target.value;
             queryMthod = 'getFiltered'
         }
-        this.updateVars([{key: 'blogsAreLoading', value: true}])
         e.preventDefault();
         axios.post(env.httpURL, {
             "queryMethod": queryMthod,
@@ -108,11 +74,10 @@ class MobileMenu extends React.Component {
         })
             .then(response => {
                 this.props.blogsActions.updateBlogs(response.data);
-                this.updateVars([{key: 'blogsAreLoading', value: false}])
             })
             .catch(err => {
                 this.props.blogsActions.updateBlogs([]);
-                this.updateVars([{key: 'blogsAreLoading', value: false}])
+                return err
             });
     }
 
@@ -130,7 +95,7 @@ class MobileMenu extends React.Component {
                 >
                     <Dropdown
                         className='dropDown'
-                        trigger={'MENU'}
+                        trigger={<Icon name ='bars'/>}
                         style={{color: this.props.vars.colors[0]}}
                         pointing='top left'
                         item
@@ -201,10 +166,7 @@ class MobileMenu extends React.Component {
                                     name='login'
                                     color={this.props.vars.colors[0]}
                                     onClick={() => {
-                                        this.updateVars([{key: 'currentLocation', value: 'login'}, {
-                                            key: 'signUp',
-                                            value: false
-                                        }])
+                                        this.props.varsActions.updateVars({curentLocation: 'login', signUp: false})
                                     }}>
                                     <Icon color={this.props.vars.colors[0]} name='unlock'/>
                                     <span style={{color: 'black'}}><Link to="/login">Login</Link></span>

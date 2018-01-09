@@ -356,7 +356,7 @@ module.exports = {
     ],
     pages: {
         topics:{
-            name:'Topics Page',
+            name:'Topics',
             icon:'info',
             topTitle:'Feature'
         },
