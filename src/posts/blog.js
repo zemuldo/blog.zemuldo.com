@@ -451,7 +451,10 @@ const mapDispatchToProps = (dispatch) => {
 
 Blog.propTypes = {
    blog: PropTypes.object.isRequired,
-   user: PropTypes.object.isRequired,
+   user: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.oneOf([null])
+   ]),
    vars: PropTypes.object.isRequired,
    blogActions: PropTypes.object.isRequired,
    deletedBlog: PropTypes.func.isRequired,
