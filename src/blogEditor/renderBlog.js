@@ -694,8 +694,8 @@ StyleButton.propTypes = {
    onToggle: PropTypes.func.isRequired,
    icon: PropTypes.string.isRequired,
    label: PropTypes.string.isRequired,
-   active: PropTypes.string.isRequired,
-   style: PropTypes.object.isRequired,
+   active: PropTypes.bool.isRequired,
+   style: PropTypes.string.isRequired,
 };
 
 const BLOCK_TYPES = [
