@@ -134,7 +134,10 @@ SignUpForm.propTypes = {
    handleEmailChange: PropTypes.func.isRequired,
    handleFNameChange: PropTypes.func.isRequired,
    handleLNameChange: PropTypes.func.isRequired,
-   imagePreviewUrl: PropTypes.object.isRequired,
+   imagePreviewUrl: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.oneOf([''])
+   ]),
    showCreateAvatar: PropTypes.func.isRequired,
 };
 
