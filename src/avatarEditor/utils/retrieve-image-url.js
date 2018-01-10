@@ -8,20 +8,20 @@ import parseDOM from './parse-dom'
  * attribute off the image.
  */
 const retrieveImageURL = (dataTransferItems, callback) => {
-    for (let i = 0; i < dataTransferItems.length; i++) {
-        let item = dataTransferItems[i]
+  for (let i = 0; i < dataTransferItems.length; i++) {
+    let item = dataTransferItems[i]
 
-        if (item.type === 'text/html') {
-            item.getAsString(value => {
-                const doc = parseDOM(value)
-                const img = doc.querySelector('img')
-                if (img && img.src) {
-                    callback(img.src)
-                }
-            })
-            break
+    if (item.type === 'text/html') {
+      item.getAsString(value => {
+        const doc = parseDOM(value)
+        const img = doc.querySelector('img')
+        if (img && img.src) {
+          callback(img.src)
         }
+      })
+      break
     }
+  }
 }
 
 export default retrieveImageURL

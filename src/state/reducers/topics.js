@@ -1,16 +1,16 @@
-import {UPDATE_TOPICS} from "../actions/topics";
+import {UPDATE_TOPICS} from '../actions/topics'
 
-const initialState = [];
+const initialState = []
 
 const blogsReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case UPDATE_TOPICS:
-            return [
-                ...state.concat(action.topics)
-            ];
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case UPDATE_TOPICS:
+      return [
+        ...state.concat(action.topics)
+      ]
+    default:
+      return state
+  }
 }
 
-export default blogsReducer;
+export default blogsReducer

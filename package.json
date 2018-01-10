@@ -89,7 +89,7 @@
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "mocha",
-    "standard": "standard"
+    "standard": "standard --fix"
   },
   "jest": {
     "collectCoverageFrom": [
