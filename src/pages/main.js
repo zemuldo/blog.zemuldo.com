@@ -14,6 +14,7 @@ import util from '../util'
 import PagesComponent from './page'
 import config, {topics} from '../environments/conf'
 import {pages, topicsOBJ} from '../environments/conf'
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development';
 
@@ -533,14 +534,25 @@ const mapStateToProps = (state) => {
         user: state.user,
         vars: state.vars
     }
-}
-const mapDispatchToProps = (dispatch, props) => {
+};
+const mapDispatchToProps = (dispatch) => {
     return {
         blogActions: bindActionCreators(BlogActions, dispatch),
         blogsActions: bindActionCreators(BlogsActions, dispatch),
         userActions: bindActionCreators(UserActions, dispatch),
         varsActions: bindActionCreators(VarsActions, dispatch)
     }
-}
+};
+
+App.propTypes = {
+   history: PropTypes.object.isRequired,
+   blog: PropTypes.object.isRequired,
+   blogs: PropTypes.array.isRequired,
+   vars: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+   blogActions: PropTypes.object.isRequired,
+   blogsActions: PropTypes.object.isRequired,
+   userActions: PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

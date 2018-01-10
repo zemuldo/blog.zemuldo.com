@@ -16,6 +16,7 @@ import {Button, Header, Icon, Modal} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
@@ -37,11 +38,20 @@ function mediaBlockRenderer(block) {
 const Audio = (props) => {
    return <audio controls src={props.src} style={styles.media}/>;
 };
+Audio.propTypes = {
+   src: PropTypes.object.isRequired,
+};
 const Image = (props) => {
    return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'}/>;
 };
+Image.propTypes = {
+   src: PropTypes.object.isRequired,
+};
 const Video = (props) => {
    return <video controls src={props.src} style={styles.media}/>;
+};
+Video.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Media = (props) => {
    const entity = props.contentState.getEntity(
@@ -80,6 +90,11 @@ const Link = (props) => {
           {props.children}
        </a>
    );
+};
+Link.propTypes = {
+   contentState: PropTypes.object.isRequired,
+   children: PropTypes.object.isRequired,
+   entityKey: PropTypes.object.isRequired,
 };
 const decorator = new CompositeDecorator([
    {
@@ -127,7 +142,7 @@ const styles = {
 };
 
 
-class RichEditorExample extends React.Component {
+class RenderBlog extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
@@ -373,9 +388,9 @@ class RichEditorExample extends React.Component {
                topics: blogData.topics,
                about: blogData.about,
                images: ["blogs_pic.jpg"],
-               authorID: this.props.currentUser.id,
-               author: this.props.currentUser.firstName + ' ' + this.props.currentUser.lastName,
-               userName: this.props.currentUser.userName,
+               authorID: this.props.user.id,
+               author: this.props.user.firstName + ' ' + this.props.user.lastName,
+               userName: this.props.user.userName,
                body: JSON.stringify(obj)
             }
 
@@ -411,7 +426,7 @@ class RichEditorExample extends React.Component {
    }
 
    handleEditorState() {
-      this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.body)), decorator)})
+      this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.editorState)), decorator)})
    };
 
    reinInitEditorState(state) {
@@ -675,6 +690,14 @@ class StyleButton extends React.Component {
    }
 }
 
+StyleButton.propTypes = {
+   onToggle: PropTypes.func.isRequired,
+   icon: PropTypes.string.isRequired,
+   label: PropTypes.string.isRequired,
+   active: PropTypes.string.isRequired,
+   style: PropTypes.object.isRequired,
+};
+
 const BLOCK_TYPES = [
    {label: 'H1', style: 'header-one', icon: 'header'},
    {label: 'H2', style: 'header-two', icon: 'header'},
@@ -709,6 +732,10 @@ const BlockStyleControls = (props) => {
        </div>
    );
 };
+BlockStyleControls.propTypes = {
+   editorState: PropTypes.object.isRequired,
+   onToggle: PropTypes.func.isRequired,
+};
 let INLINE_STYLES = [
    {label: 'Bold', style: 'BOLD', icon: 'bold'},
    {label: 'Italic', style: 'ITALIC', icon: 'italic'},
@@ -733,18 +760,30 @@ const InlineStyleControls = (props) => {
    );
 };
 
+InlineStyleControls.propTypes = {
+   editorState: PropTypes.object.isRequired,
+   onToggle: PropTypes.func.isRequired,
+};
+
 
 const mapStateToProps = (state) => {
    return {
-      vars: state.vars,
-      blog:state.blog
+      blog:state.blog,
+      user:state.user
    }
 };
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
    return {
       varsActions: bindActionCreators(VarsActions, dispatch)
    }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RichEditorExample);
+RenderBlog.propTypes = {
+   editorState: PropTypes.string.isRequired,
+   blog: PropTypes.object.isRequired,
+   user: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RenderBlog);

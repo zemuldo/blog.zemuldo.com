@@ -2,14 +2,15 @@ import React from 'react'
 import {Card, Button, Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {topicsOBJ} from '../environments/conf'
+import PropTypes from "prop-types";
 
 const getTopiINfo = (topics) => {
-    let info = []
+    let info = [];
     topics.forEach(function (topic) {
         info.push(topicsOBJ[topic].full)
-    })
+    });
     return info
-}
+};
 
 class GridBlog extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class GridBlog extends React.Component {
     }
 
     render() {
-        let o = this.props.blog
+        let o = this.props.blog;
         return (
           <Card className='blogCard' style={{
                 width: 'auto',
@@ -75,5 +76,11 @@ class GridBlog extends React.Component {
         )
     }
 }
+
+GridBlog.propTypes = {
+   blog: PropTypes.object.isRequired,
+   color: PropTypes.string.isRequired,
+   onReadMore: PropTypes.func.isRequired,
+};
 
 export default GridBlog

@@ -6,6 +6,7 @@ import axios from 'axios'
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as BlogActions from "../state/actions/blog";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development';
 
@@ -270,7 +271,7 @@ class Blog extends React.Component {
                     <Modal.Header>This Post will be deleted</Modal.Header>
                     <Modal.Content image>
                         <Modal.Description>
-                            <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.color} as='h1'>
+                            <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.vars.color} as='h1'>
                                 {
                                     this.props.blog.title
                                 }
@@ -302,7 +303,7 @@ class Blog extends React.Component {
                 {
                     this.props.blog ?
                         <div>
-                            <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.color} as='h1'>
+                            <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.vars.color} as='h1'>
                                 {
                                     this.props.blog.title
                                 }
@@ -314,7 +315,7 @@ class Blog extends React.Component {
                                         <span>
                                             {
                                                 this.state.youLike ?
-                                                    <Icon color={this.props.color} name="like"/> :
+                                                    <Icon color={this.props.vars.color} name="like"/> :
                                                     <button onClick={() => this.updateLikes(this.props.blog.id)}>
                                                         <Icon color='green' name="thumbs up"/>
                                                     </button>
@@ -325,7 +326,7 @@ class Blog extends React.Component {
                                         </span>
                                 }
                                 <span>
-                                    <span style={{color: this.props.color}}>
+                                    <span style={{color: this.props.vars.color}}>
                                         {' '}{this.state.likes}
                                     </span>
                                 </span>
@@ -422,7 +423,7 @@ class Blog extends React.Component {
                             <hr color="green"/>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: "16px", fontFamily: "georgia"}}>
                                 <br/>
-                                <BlogEditor body={this.props.blog.body}/>
+                                <BlogEditor editorState={this.props.blog.body}/>
                             </div>
                         </div> :
                         <div>
@@ -440,12 +441,20 @@ const mapStateToProps = (state) => {
         vars: state.vars,
         user: state.user
     }
-}
+};
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         blogActions: bindActionCreators(BlogActions, dispatch),
     }
-}
+};
+
+Blog.propTypes = {
+   blog: PropTypes.object.isRequired,
+   user: PropTypes.object.isRequired,
+   vars: PropTypes.object.isRequired,
+   blogActions: PropTypes.object.isRequired,
+   deletedBlog: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blog);

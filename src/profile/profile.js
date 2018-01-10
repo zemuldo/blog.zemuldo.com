@@ -6,10 +6,11 @@ import EditorsForm from './editorsForm'
 import Welcome from './profile_wellcome'
 import Blogs from '../posts/blogs'
 import config from '../environments/conf'
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
-class RichEditorExample extends React.Component {
+class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -121,7 +122,7 @@ class RichEditorExample extends React.Component {
                                         {
                                             this.props.blogs[0] ?
                                                 <Blogs
-                                                    color={this.props.color}
+                                                    color={this.props.vars.color}
                                                     onReadMore={this.onReadMore}
                                                 /> :
                                                 <div>
@@ -142,8 +143,6 @@ class RichEditorExample extends React.Component {
                                         this.props.vars.createNew ?
                                             <EditorsForm
                                                 currentUser={this.props.user}
-                                                _goToEditor={this.props._goToEditor}
-                                                editingMode={this.props.editingMode}
                                                 onFinishClick={this.onFinishClick}
                                                 handleUTAChange={this.handleUTAChange}
                                                 handleCategoryChange={this.handleCategoryChange}
@@ -155,7 +154,7 @@ class RichEditorExample extends React.Component {
                                                 </Header>
                                                 <Welcome
                                                     richViewerState={this.state.richViewerState}
-                                                    color={this.props.colors[1]}
+                                                    color={this.props.vars.colors[1]}
                                                     blogIsLoading={this.state.blogIsLoading}
                                                     blogDetails={this.state.blogDetails}
                                                     blog={this.state.blog}
@@ -172,8 +171,6 @@ class RichEditorExample extends React.Component {
                                         this.props.vars.createNew ?
                                             <EditorsForm
                                                 currentUser={this.props.user}
-                                                _goToEditor={this.props._goToEditor}
-                                                editingMode={this.props.editingMode}
                                                 onFinishClick={this.onFinishClick}
                                                 handleUTAChange={this.handleUTAChange}
                                                 handleCategoryChange={this.handleCategoryChange}
@@ -212,4 +209,10 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(RichEditorExample);
+Profile.propTypes = {
+   user: PropTypes.object.isRequired,
+   blogs: PropTypes.array.isRequired,
+   vars: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps)(Profile);

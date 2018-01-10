@@ -16,118 +16,134 @@ import {Button, Header, Icon, Modal} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
-    Development: 'dev',
-    Business: 'business',
-    Technology: 'tech'
+   Development: 'dev',
+   Business: 'business',
+   Technology: 'tech'
 }
 
 function mediaBlockRenderer(block) {
-    if (block.getType() === 'atomic') {
-        return {
-            component: Media,
-            editable: false,
-        };
-    }
-    return null;
+   if (block.getType() === 'atomic') {
+      return {
+         component: Media,
+         editable: false,
+      };
+   }
+   return null;
 }
 
 const Audio = (props) => {
-    return <audio controls src={props.src} style={styles.media}/>;
+   return <audio controls src={props.src} style={styles.media}/>;
+};
+Audio.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Image = (props) => {
-    return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'}/>;
+   return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'}/>;
+};
+Image.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Video = (props) => {
-    return <video controls src={props.src} style={styles.media}/>;
+   return <video controls src={props.src} style={styles.media}/>;
+};
+Video.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Media = (props) => {
-    const entity = props.contentState.getEntity(
-        props.block.getEntityAt(0)
-    );
-    const {src} = entity.getData();
-    const type = entity.getType();
-    let media;
-    if (type === 'audio') {
-        media = <Audio src={src}/>;
-    } else if (type === 'image') {
-        media = <Image src={src}/>;
-    } else if (type === 'video') {
-        media = <Video src={src}/>;
-    }
-    return media;
+   const entity = props.contentState.getEntity(
+       props.block.getEntityAt(0)
+   );
+   const {src} = entity.getData();
+   const type = entity.getType();
+   let media;
+   if (type === 'audio') {
+      media = <Audio src={src}/>;
+   } else if (type === 'image') {
+      media = <Image src={src}/>;
+   } else if (type === 'video') {
+      media = <Video src={src}/>;
+   }
+   return media;
 };
 
 function findLinkEntities(contentBlock, callback, contentState) {
-    contentBlock.findEntityRanges(
-        (character) => {
-            const entityKey = character.getEntity();
-            return (
-                entityKey !== null &&
-                contentState.getEntity(entityKey).getType() === 'LINK'
-            );
-        },
-        callback
-    );
+   contentBlock.findEntityRanges(
+       (character) => {
+          const entityKey = character.getEntity();
+          return (
+              entityKey !== null &&
+              contentState.getEntity(entityKey).getType() === 'LINK'
+          );
+       },
+       callback
+   );
 }
 
 const Link = (props) => {
-    const {url} = props.contentState.getEntity(props.entityKey).getData();
-    return (
-        <a href={url} style={styles.link}>
-            {props.children}
-        </a>
-    );
+   const {url} = props.contentState.getEntity(props.entityKey).getData();
+   return (
+       <a href={url} style={styles.link}>
+          {props.children}
+       </a>
+   );
+};
+Link.propTypes = {
+   contentState: PropTypes.object.isRequired,
+   children: PropTypes.object.isRequired,
+   entityKey: PropTypes.object.isRequired,
 };
 const decorator = new CompositeDecorator([
-    {
-        strategy: findLinkEntities,
-        component: Link,
-    },
+   {
+      strategy: findLinkEntities,
+      component: Link,
+   },
 ]);
 const styles = {
-    root: {
-        fontFamily: '\'Georgia\', serif',
-        padding: 20,
-        width: 600,
-    },
-    buttons: {
-        marginBottom: 10,
-    },
-    urlInputContainer: {
-        marginBottom: 10,
-    },
-    urlInput: {
-        fontFamily: '\'Georgia\', serif',
-        marginRight: 10,
-        padding: 3,
-    },
-    editor: {
-        border: '1px solid #ccc',
-        cursor: 'text',
-        minHeight: 80,
-        padding: 10,
-    },
-    button: {
-        marginTop: 10,
-        textAlign: 'center',
-    },
-    link: {
-        color: '#3b5998',
-        textDecoration: 'underline'
-    },
-    media: {
-        width: '100%',
-        // Fix an issue with Firefox rendering video controls
-        // with 'pre-wrap' white-space
-        whiteSpace: 'initial'
-    },
+   root: {
+      fontFamily: '\'Georgia\', serif',
+      padding: 20,
+      width: 600,
+   },
+   buttons: {
+      marginBottom: 10,
+   },
+   urlInputContainer: {
+      marginBottom: 10,
+   },
+   urlInput: {
+      fontFamily: '\'Georgia\', serif',
+      marginRight: 10,
+      padding: 3,
+   },
+   editor: {
+      border: '1px solid #ccc',
+      cursor: 'text',
+      minHeight: 80,
+      padding: 10,
+   },
+   button: {
+      marginTop: 10,
+      textAlign: 'center',
+   },
+   link: {
+      color: '#3b5998',
+      textDecoration: 'underline'
+   },
+   media: {
+      width: '100%',
+      // Fix an issue with Firefox rendering video controls
+      // with 'pre-wrap' white-space
+      whiteSpace: 'initial'
+   },
 };
 
 
-class RichEditorExample extends React.Component {
+
+class CreateBlog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -373,9 +389,9 @@ class RichEditorExample extends React.Component {
                     topics: blogData.topics,
                     about: blogData.about,
                     images: ["blogs_pic.jpg"],
-                    authorID: this.props.currentUser.id,
-                    author: this.props.currentUser.firstName + ' ' + this.props.currentUser.lastName,
-                    userName: this.props.currentUser.userName,
+                    authorID: this.props.user.id,
+                    author: this.props.user.firstName + ' ' + this.props.user.lastName,
+                    userName: this.props.user.userName,
                     body: JSON.stringify(obj)
                 }
 
@@ -634,118 +650,140 @@ class RichEditorExample extends React.Component {
         );
     }
 }
-
 // Custom overrides for "code" style.
 const styleMap = {
-    CODE: {
-        backgroundColor: 'red',
-        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 16,
-        padding: 2,
-    },
+   CODE: {
+      backgroundColor: 'red',
+      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+      fontSize: 16,
+      padding: 2,
+   },
 };
 
 function getBlockStyle(block) {
-    switch (block.getType()) {
-        case 'blockquote':
-            return 'RichEditor-blockquote';
-        default:
-            return null;
-    }
+   switch (block.getType()) {
+      case 'blockquote':
+         return 'RichEditor-blockquote';
+      default:
+         return null;
+   }
 }
 
 class StyleButton extends React.Component {
-    constructor() {
-        super();
-        this.onToggle = (e) => {
-            e.preventDefault();
-            this.props.onToggle(this.props.style);
-        };
-    }
+   constructor() {
+      super();
+      this.onToggle = (e) => {
+         e.preventDefault();
+         this.props.onToggle(this.props.style);
+      };
+   }
 
-    render() {
-        let className = 'RichEditor-styleButton';
-        if (this.props.active) {
-            className += ' RichEditor-activeButton';
-        }
-        return (
-            <span className={className} onMouseDown={this.onToggle}>
+   render() {
+      let className = 'RichEditor-styleButton';
+      if (this.props.active) {
+         className += ' RichEditor-activeButton';
+      }
+      return (
+          <span className={className} onMouseDown={this.onToggle}>
                 <Icon color="black" name={this.props.icon}/>
-                {this.props.label}
+             {this.props.label}
             </span>
-        );
-    }
+      );
+   }
 }
 
+StyleButton.propTypes = {
+   onToggle: PropTypes.func.isRequired,
+   icon: PropTypes.string.isRequired,
+   label: PropTypes.string.isRequired,
+   active: PropTypes.bool.isRequired,
+   style: PropTypes.string.isRequired,
+};
+
 const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one', icon: 'header'},
-    {label: 'H2', style: 'header-two', icon: 'header'},
-    {label: 'H3', style: 'header-three', icon: 'header'},
-    {label: 'H4', style: 'header-four', icon: 'header'},
-    {label: 'H5', style: 'header-five', icon: 'header'},
-    {label: 'H6', style: 'header-six', icon: 'header'},
-    {label: 'Blockquote', style: 'blockquote', icon: 'header'},
-    {label: 'UL', style: 'unordered-list-item', icon: 'unordered list'},
-    {label: 'OL', style: 'ordered-list-item', icon: 'ordered list'},
-    {label: 'Code Block', style: 'code-block', icon: 'code'},
+   {label: 'H1', style: 'header-one', icon: 'header'},
+   {label: 'H2', style: 'header-two', icon: 'header'},
+   {label: 'H3', style: 'header-three', icon: 'header'},
+   {label: 'H4', style: 'header-four', icon: 'header'},
+   {label: 'H5', style: 'header-five', icon: 'header'},
+   {label: 'H6', style: 'header-six', icon: 'header'},
+   {label: 'Blockquote', style: 'blockquote', icon: 'header'},
+   {label: 'UL', style: 'unordered-list-item', icon: 'unordered list'},
+   {label: 'OL', style: 'ordered-list-item', icon: 'ordered list'},
+   {label: 'Code Block', style: 'code-block', icon: 'code'},
 ];
 const BlockStyleControls = (props) => {
-    const {editorState} = props;
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-    return (
-        <div className="RichEditor-controls">
-            {BLOCK_TYPES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={type.style === blockType}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                    icon={type.icon}
-                />
-            )}
-        </div>
-    );
+   const {editorState} = props;
+   const selection = editorState.getSelection();
+   const blockType = editorState
+       .getCurrentContent()
+       .getBlockForKey(selection.getStartKey())
+       .getType();
+   return (
+       <div className="RichEditor-controls">
+          {BLOCK_TYPES.map((type) =>
+              <StyleButton
+                  key={type.label}
+                  active={type.style === blockType}
+                  label={type.label}
+                  onToggle={props.onToggle}
+                  style={type.style}
+                  icon={type.icon}
+              />
+          )}
+       </div>
+   );
+};
+BlockStyleControls.propTypes = {
+   editorState: PropTypes.object.isRequired,
+   onToggle: PropTypes.func.isRequired,
 };
 let INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD', icon: 'bold'},
-    {label: 'Italic', style: 'ITALIC', icon: 'italic'},
-    {label: 'Underline', style: 'UNDERLINE', icon: 'underline'},
-    {label: 'Monospace', style: 'CODE', icon: 'font'},
+   {label: 'Bold', style: 'BOLD', icon: 'bold'},
+   {label: 'Italic', style: 'ITALIC', icon: 'italic'},
+   {label: 'Underline', style: 'UNDERLINE', icon: 'underline'},
+   {label: 'Monospace', style: 'CODE', icon: 'font'},
 ];
 const InlineStyleControls = (props) => {
-    let currentStyle = props.editorState.getCurrentInlineStyle();
-    return (
-        <div className="RichEditor-controls">
-            {INLINE_STYLES.map(type =>
-                <StyleButton
-                    key={type.label}
-                    active={currentStyle.has(type.style)}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                    icon={type.icon}
-                />
-            )}
-        </div>
-    );
+   let currentStyle = props.editorState.getCurrentInlineStyle();
+   return (
+       <div className="RichEditor-controls">
+          {INLINE_STYLES.map(type =>
+              <StyleButton
+                  key={type.label}
+                  active={currentStyle.has(type.style)}
+                  label={type.label}
+                  onToggle={props.onToggle}
+                  style={type.style}
+                  icon={type.icon}
+              />
+          )}
+       </div>
+   );
+};
+
+InlineStyleControls.propTypes = {
+   editorState: PropTypes.object.isRequired,
+   onToggle: PropTypes.func.isRequired,
 };
 
 
 const mapStateToProps = (state) => {
-    return {
-        vars: state.vars
-    }
+   return {
+      blog:state.blog,
+      user:state.user
+   }
 };
 
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        varsActions: bindActionCreators(VarsActions, dispatch)
-    }
+const mapDispatchToProps = (dispatch) => {
+   return {
+      varsActions: bindActionCreators(VarsActions, dispatch)
+   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RichEditorExample);
+CreateBlog.propTypes = {
+   user: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBlog)

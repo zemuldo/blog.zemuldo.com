@@ -1,6 +1,8 @@
 import React from 'react'
 import {Button, Loader, Form, Message, Segment} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
+import PropTypes from "prop-types";
+import SignUpForm from "./signUpForm";
 
 class LoginForm extends React.Component {
    constructor(props) {
@@ -58,5 +60,22 @@ class LoginForm extends React.Component {
       )
    }
 }
+
+
+LoginForm.propTypes = {
+   errorDetails: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.oneOf([null])
+   ]),
+   hideMessage: PropTypes.bool.isRequired,
+   error: PropTypes.bool.isRequired,
+   handSwichReg: PropTypes.func.isRequired,
+   success: PropTypes.bool.isRequired,
+   handleUnameChange: PropTypes.func.isRequired,
+   handlePasswordChange: PropTypes.func.isRequired,
+   onLoginClick: PropTypes.func.isRequired,
+   logingin: PropTypes.bool.isRequired,
+   color: PropTypes.string.isRequired,
+};
 
 export default LoginForm;

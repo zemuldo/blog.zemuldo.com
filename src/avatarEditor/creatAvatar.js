@@ -2,6 +2,7 @@ import React from 'react'
 import ReactAvatarEditor from './avatarEditor'
 import {Button, Grid} from 'semantic-ui-react'
 import util from '../util'
+import PropTypes from "prop-types";
 
 class AvaratEditor extends React.Component {
     constructor(props) {
@@ -132,11 +133,11 @@ class AvaratEditor extends React.Component {
                         rotate={parseFloat(this.state.rotate)}
                         borderRadius={this.state.borderRadius}
                         onSave={this.handleSave}
-                        onLoadFailure={this.logCallback.bind(this, 'onLoadFailed')}
-                        onLoadSuccess={this.logCallback.bind(this, 'onLoadSuccess')}
-                        onImageReady={this.logCallback.bind(this, 'onImageReady')}
-                        onImageLoad={this.logCallback.bind(this, 'onImageLoad')}
-                        onDropFile={this.logCallback.bind(this, 'onDropFile')}
+                        onLoadFailure={()=>this.logCallback('onLoadFailed')}
+                        onLoadSuccess={()=>this.logCallback('onLoadSuccess')}
+                        onImageReady={()=>this.logCallback('onImageReady')}
+                        onImageLoad={()=>this.logCallback('onImageLoad')}
+                        onDropFile={()=>this.logCallback('onDropFile')}
                         image={this.state.image || '/img/login/login.png'}
                     />
                     New File:
@@ -233,5 +234,9 @@ class AvaratEditor extends React.Component {
         )
     }
 }
+
+AvaratEditor.propTypes = {
+   setAvatar: PropTypes.func.isRequired,
+};
 
 export default AvaratEditor

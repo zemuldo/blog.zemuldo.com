@@ -10,8 +10,9 @@ import * as VarsActions from "../state/actions/vars";
 import * as UserActions from "../state/actions/user";
 import {bindActionCreators} from "redux";
 import * as BlogActions from "../state/actions/blog";
+import PropTypes from "prop-types";
 
-const env = config[process.env.NODE_ENV] || 'development'
+const env = config[process.env.NODE_ENV] || 'development';
 
 class Blogs extends React.Component {
     constructor(props) {
@@ -146,15 +147,22 @@ const mapStateToProps = (state) => {
         blogs: state.blogs,
         blog: state.blog
     }
-}
+};
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         blogActions: bindActionCreators(BlogActions, dispatch),
         blogsActions: bindActionCreators(BlogsActions, dispatch),
         userActions: bindActionCreators(UserActions, dispatch),
         varsActions: bindActionCreators(VarsActions, dispatch)
     }
-}
+};
+
+Blogs.propTypes = {
+   blog: PropTypes.object.isRequired,
+   blogs: PropTypes.array,
+   blogActions: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blogs);

@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
 import * as TopicsActions from '../state/actions/topics'
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development';
 
@@ -217,11 +218,17 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         varsActions: bindActionCreators(VarsActions, dispatch),
         topicsActions: bindActionCreators(TopicsActions, dispatch),
     }
+};
+
+LiveChat.propTypes = {
+   vars: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+   topicsActions: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(LiveChat);

@@ -6,6 +6,7 @@ import config, {pages} from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
 import * as BlogActions from "../state/actions/blog";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -276,6 +277,12 @@ const mapDispatchToProps = (dispatch, props) => {
         varsActions: bindActionCreators(VarsActions, dispatch),
         blogActions: bindActionCreators(BlogActions, dispatch),
     }
-}
+};
+
+Footer.propTypes = {
+   vars: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+   blogActions: PropTypes.object.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);

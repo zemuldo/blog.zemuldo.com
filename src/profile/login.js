@@ -13,6 +13,7 @@ import util from "../util";
 import LoginForm from "./lognForm";
 import * as BlogsActions from "../state/actions/blogs";
 import * as BlogActions from '../state/actions/blog';
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -459,11 +460,7 @@ class Login extends React.Component {
                                     <div>
                                         <Pofile
                                             userBlogs={this.state.userBlogs}
-                                            _goToEditor={this.props._goToEditor}
-                                            _exitEditMode={this.props._exitEditMode}
-                                            editingMode={this.props.vars.editingMode}
                                             createNew={this.props.vars.createNew}
-                                            _handleCreateNew={this.props._handleCreateNew}
                                             colors={this.props.vars.colors}
                                         />
                                     </div> :
@@ -545,13 +542,27 @@ const mapStateToProps = (state) => {
         vars: state.vars,
     }
 };
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         blogActions: bindActionCreators(BlogActions, dispatch),
         blogsActions: bindActionCreators(BlogsActions, dispatch),
         userActions: bindActionCreators(UserActions, dispatch),
         varsActions: bindActionCreators(VarsActions, dispatch)
     }
-}
+};
+
+Login.propTypes = {
+   user: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.oneOf([null])
+   ]),
+   vars: PropTypes.object.isRequired,
+   blogsActions: PropTypes.object.isRequired,
+   userActions: PropTypes.object.isRequired,
+   blogActions: PropTypes.object.isRequired,
+   history: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

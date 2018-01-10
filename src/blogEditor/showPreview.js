@@ -5,6 +5,7 @@ import {CompositeDecorator, convertFromRaw, Editor, EditorState} from 'draft-js'
 import config from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 const cats = {
@@ -42,13 +43,22 @@ function mediaBlockRenderer(block) {
 }
 
 const Audio = (props) => {
-    return <audio controls src={props.src} style={styles.media}/>;
+   return <audio controls src={props.src} style={styles.media}/>;
+};
+Audio.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Image = (props) => {
-    return <img alt="!This image might have been deleted" src={props.src} style={styles.media}/>;
+   return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'}/>;
+};
+Image.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Video = (props) => {
-    return <video controls src={props.src} style={styles.media}/>;
+   return <video controls src={props.src} style={styles.media}/>;
+};
+Video.propTypes = {
+   src: PropTypes.object.isRequired,
 };
 const Media = (props) => {
     const entity = props.contentState.getEntity(
@@ -81,12 +91,17 @@ function findLinkEntities(contentBlock, callback, contentState) {
 }
 
 const Link = (props) => {
-    const {url} = props.contentState.getEntity(props.entityKey).getData();
-    return (
-        <a href={url} rel="noreferrer noopener" target="_blank" style={styles.link}>
-            {props.children}
-        </a>
-    );
+   const {url} = props.contentState.getEntity(props.entityKey).getData();
+   return (
+       <a href={url} style={styles.link}>
+          {props.children}
+       </a>
+   );
+};
+Link.propTypes = {
+   contentState: PropTypes.object.isRequired,
+   children: PropTypes.object.isRequired,
+   entityKey: PropTypes.object.isRequired,
 };
 const decorator = new CompositeDecorator([
     {
@@ -139,8 +154,6 @@ class RichEditorExample extends React.Component {
         this.state = {
             editorState: EditorState.createEmpty(),
             isLoaded: false,
-            category: this.props.category,
-            topics: this.props.topics,
             filledForm: false,
             continueEdit: false,
             isPublished: false,
@@ -187,7 +200,7 @@ class RichEditorExample extends React.Component {
                     topics: blogData.topics,
                     images: ["blogs_pic.jpg"],
                     author: "Danstan Onyango",
-                    userName: this.props.currentUser.name,
+                    userName: this.props.user.userName,
                     body: JSON.stringify(obj)
                 }
             })
@@ -267,10 +280,21 @@ class RichEditorExample extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapStateToProps = (state) => {
+   return {
+      user: state.user,
+   }
+};
+
+const mapDispatchToProps = (dispatch) => {
     return {
         varsActions: bindActionCreators(VarsActions, dispatch)
     }
 };
 
-export default connect(mapDispatchToProps)(RichEditorExample);
+RichEditorExample.propTypes = {
+   user: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(RichEditorExample);

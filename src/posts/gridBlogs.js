@@ -1,31 +1,23 @@
 import React from 'react'
-import {Loader, Card, Button, Header} from 'semantic-ui-react';
+import {Loader, Card, Button } from 'semantic-ui-react';
 import _ from 'lodash'
 import GridBlog from "./gridBlog";
 import {connect} from "react-redux";
-import {topicsOBJ} from "../environments/conf";
-
-const getTopiINfo = (topics) => {
-    let info = []
-    topics.forEach(function (topic) {
-        info.push(topicsOBJ[topic].full)
-    })
-    return info
-}
+import PropTypes from "prop-types";
 
 class GridBlogs extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {showInfo:false};
         this.handleMouseEnter=this.handleMouseEnter.bind(this);
         this.handleMouseLeave=this.handleMouseLeave.bind(this);
     }
 
-    handleMouseEnter(o) {
+    handleMouseEnter() {
         this.setState({showInfo:true})
     }
 
-    handleMouseLeave(o) {
+    handleMouseLeave() {
         this.setState({showInfo:false})
     }
 
@@ -41,7 +33,7 @@ class GridBlogs extends React.Component {
                                       <GridBlog
                                         key={this.props.blogs[i].id}
                                         onReadMore={this.props.onReadMore}
-                                        color={this.props.color}
+                                        color={this.props.vars.color}
                                         blog={this.props.blogs[i]}
                                         />
                                     )
@@ -51,23 +43,21 @@ class GridBlogs extends React.Component {
                           <br />
                            <br/>
                           <Button
-                            color={this.props.color}
+                            color={this.props.vars.color}
                             circular
                             size='mini'
                             floated='left'
-                            disabled={!this.props.next}
-                            onClick={this.props.setNextBlogs.bind(this, 'next')}
+                            onClick={()=>this.props.setNextBlogs('next')}
                             name='next'
                                 >
                                     See More
                           </Button>
                           <Button
-                            color={this.props.color}
+                            color={this.props.vars.color}
                             circular
                             size='mini'
                             floated='right'
-                            disabled={this.props.x === 0}
-                            onClick={this.props.setPreviousBlogs.bind(this, 'previous')}
+                            onClick={()=>this.props.setPreviousBlogs('previous')}
                             name='previous'
                                 >
                                     Previous
@@ -90,6 +80,15 @@ const mapStateToProps = (state) => {
         blog: state.blog,
         vars: state.vars
     }
-}
+};
+
+GridBlogs.propTypes = {
+   blog: PropTypes.object.isRequired,
+   blogs: PropTypes.array.isRequired,
+   vars: PropTypes.object.isRequired,
+   setNextBlogs: PropTypes.func.isRequired,
+   setPreviousBlogs: PropTypes.func.isRequired,
+   onReadMore: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps)(GridBlogs)

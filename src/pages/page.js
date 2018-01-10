@@ -9,6 +9,7 @@ import config from '../environments/conf'
 import {pages} from '../environments/conf'
 import {topicsOBJ} from '../environments/conf'
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development'
 let x = 0
@@ -140,7 +141,6 @@ class PagesComponent extends React.Component {
                                         topic={this.state.topic}
                                         onTopicClick={this.onTopicClick}
                                         onAllcClick={this.onAllcClick}
-                                        blogsAreLoading={this.props.blogsAreLoading}
                                         setTopicPosts={this.props.setTopicPosts}
                                         setTopicNextPosts={this.props.setTopicNextPosts}
                                         onReadMore={this.props.onReadMore}
@@ -178,7 +178,7 @@ class PagesComponent extends React.Component {
                                                                 size='mini'
                                                                 floated='left'
                                                                 disabled={!this.state.next}
-                                                                onClick={this.setNextBlogs.bind(this, 'next')}
+                                                                onClick={()=>this.setNextBlogs('next')}
                                                                 name="next"
                                                             >
                                                                 Next
@@ -189,7 +189,7 @@ class PagesComponent extends React.Component {
                                                                 size='mini'
                                                                 floated='right'
                                                                 disabled={x === 0}
-                                                                onClick={this.setPreviousBlogs.bind(this, 'previous')}
+                                                                onClick={()=>this.setPreviousBlogs('previous')}
                                                                 name="previous"
                                                             >
                                                                 Prev
@@ -217,7 +217,6 @@ class PagesComponent extends React.Component {
                                         topic={this.state.topic}
                                         onTopicClick={this.onTopicClick}
                                         onAllcClick={this.onAllcClick}
-                                        blogsAreLoading={this.props.blogsAreLoading}
                                         setTopicPosts={this.props.setTopicPosts}
                                         setTopicNextPosts={this.props.setTopicNextPosts}
                                         onReadMore={this.props.onReadMore}
@@ -242,7 +241,6 @@ class PagesComponent extends React.Component {
                                         onReadMore={this.props.onReadMore}
                                         color={this.props.vars.colors[1]}
                                         deletedBlog={this.props.deletedBlog}
-                                        user={this.props.user}
                                     />
                             }
                         </Grid.Column>
@@ -264,6 +262,18 @@ const mapStateToProps = (state) => {
         blogs: state.blogs,
         blog: state.blog
     }
-}
+};
+
+PagesComponent.propTypes = {
+   blog: PropTypes.object,
+   blogs: PropTypes.array,
+   vars: PropTypes.object,
+   handleFilterChange: PropTypes.func.isRequired,
+   setTopicNextPosts: PropTypes.func.isRequired,
+   setTopicPosts: PropTypes.func.isRequired,
+   onReadMore: PropTypes.func.isRequired,
+   deletedBlog: PropTypes.func.isRequired,
+   setTopic: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps)(PagesComponent);

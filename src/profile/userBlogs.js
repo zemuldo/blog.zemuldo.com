@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {Loader, Card, Header, Button} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import _ from "lodash";
@@ -6,25 +7,24 @@ import {connect} from "react-redux";
 import axios from "axios/index";
 import * as BlogsActions from "../state/actions/blogs";
 import * as VarsActions from "../state/actions/vars";
-import * as UserActions from "../state/actions/user";
 import {bindActionCreators} from "redux";
 import * as BlogActions from "../state/actions/blog";
 import config, {topicsOBJ} from '../environments/conf'
 
 
 const getTopiINfo = (topics) => {
-   let info = []
+   let info = [];
    topics.forEach(function (topic) {
       info.push(topicsOBJ[topic].full)
-   })
+   });
    return info
-}
-const env = config[process.env.NODE_ENV] || 'development'
+};
+const env = config[process.env.NODE_ENV] || 'development';
 
 class GridBlogs extends React.Component {
    constructor(props) {
-      super(props)
-      this.state = {}
+      super(props);
+      this.state = {};
       this.onReadMore = this.onReadMore.bind(this)
    }
 
@@ -51,7 +51,7 @@ class GridBlogs extends React.Component {
    }
 
    render() {
-      let o = this.props.blogs
+      let o = this.props.blogs;
       return (
           <div>
              {
@@ -75,7 +75,7 @@ class GridBlogs extends React.Component {
                                        Likes:
                                        <span><i style={{color: 'orange'}}>
                                                                 ~{o[i].likes}</i></span>
-                                       <hr color={this.props.color}/>
+                                       <hr color={this.props.vars.color}/>
                                     </Card.Meta>
                                     <Card.Description>
                                        <p>{o[i].about}</p>
@@ -119,16 +119,24 @@ class GridBlogs extends React.Component {
 const mapStateToProps = (state) => {
    return {
       blogs: state.blogs,
-      blog: state.blog
+      blog: state.blog,
+      vars: state.vars
    }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
    return {
       blogActions: bindActionCreators(BlogActions, dispatch),
       blogsActions: bindActionCreators(BlogsActions, dispatch),
-      userActions: bindActionCreators(UserActions, dispatch),
       varsActions: bindActionCreators(VarsActions, dispatch)
    }
-}
+};
+
+GridBlogs.propTypes = {
+   blog: PropTypes.object.isRequired,
+   blogs: PropTypes.array.isRequired,
+   vars: PropTypes.object.isRequired,
+   blogActions: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(GridBlogs)

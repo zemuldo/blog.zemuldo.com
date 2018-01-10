@@ -11,6 +11,7 @@ import {pages} from "../environments/conf";
 import axios from "axios/index";
 import config from '../environments/conf'
 import * as BlogActions from "../state/actions/blog";
+import PropTypes from "prop-types";
 
 const env = config[process.env.NODE_ENV] || 'development';
 
@@ -256,13 +257,25 @@ const mapStateToProps = (state) => {
       vars: state.vars
    }
 };
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
    return {
       blogActions: bindActionCreators(BlogActions, dispatch),
       userActions: bindActionCreators(UserActions, dispatch),
       varsActions: bindActionCreators(VarsActions, dispatch),
       blogsActions: bindActionCreators(BlogsActions, dispatch)
    }
-}
+};
+
+MobileMenu.propTypes = {
+   user: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.oneOf([null])
+   ]),
+   vars: PropTypes.object.isRequired,
+   blogActions: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+   blogsActions: PropTypes.object.isRequired,
+   userActions: PropTypes.object.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MobileMenu);

@@ -7,6 +7,7 @@ import {topics} from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
 class Topics extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class Topics extends React.Component {
         return (
           <div className='topicsWrapper'>
             <Header color='blue' as='h3'>Topics</Header>
-            <Link to={'/' + this.props.currentLocation + '/all'}>
+            <Link to={'/' + this.props.vars.currentLocation + '/all'}>
               <button
                 disabled={this.props.vars.topic === 'all' || !window.location.pathname.split('/')[2]}
                 className='topicButton'
@@ -30,7 +31,7 @@ class Topics extends React.Component {
               </button>
             </Link>
             {_.times(topics.length, i =>
-              <Link key={topics[i].key} to={'/' + this.props.currentLocation + '/' + topics[i].name}>
+              <Link key={topics[i].key} to={'/' + this.props.vars.currentLocation + '/' + topics[i].name}>
                 <button
                   disabled={this.props.vars.topic === topics[i].name}
                   className='topicButton'
@@ -52,17 +53,20 @@ class Topics extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        blog: state.blog,
         blogs: state.blogs,
-        user: state.user,
         vars: state.vars
     }
-}
-const mapDispatchToProps = (dispatch, props) => {
+};
+const mapDispatchToProps = (dispatch) => {
     return {
         varsActions: bindActionCreators(VarsActions, dispatch)
     }
-}
+};
+
+Topics.propTypes = {
+   vars: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Topics)

@@ -8,6 +8,7 @@ import GridBlogs from "../posts/gridBlogs";
 import {pages, topicsOBJ} from '../environments/conf'
 import {bindActionCreators} from "redux";
 import * as VarsActions from "../state/actions/vars";
+import PropTypes from "prop-types";
 
 class WelcomePage extends React.Component {
     constructor(props) {
@@ -18,37 +19,6 @@ class WelcomePage extends React.Component {
 
     componentDidMount() {
         
-    }
-
-    fbShare() {
-        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fzemuldo.com%2F';
-        if (this.props.blog) {
-            let postURL = this.props.blog.title.split(' ').join('%2520') + '_' + this.props.blog.date.split(' ').join('%2520') + '_' + this.props.blog.id.toString();
-            let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
-            window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
-        }
-    }
-
-    tweetShare() {
-        if (this.props.blog) {
-            let hashTgs = '%2F&hashtags=' + this.props.blog.topics.join(',');
-            let via = '&via=zemuldo';
-            let related = '&related=http%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F';
-            let url = '&url=http%3A%2F%2Fzemuldo.com/' + this.props.blog.title.split(' ').join('-') + '_' + this.props.blog.date.split(' ').join('-') + '_' + this.props.blog.id.toString()
-            let fullURL = url + related + hashTgs + via
-            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
-            window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325');
-
-        }
-    }
-
-    gplusShare() {
-        window.open('https://plus.google.com/share?url=http://zemuldo.com/' + this.props.blog.title.split(' ').join('-'), "", "height=550,width=525,left=100,top=100,menubar=0");
-        return false;
-    }
-
-    linkdnShare() {
-        window.open('https://www.linkedin.com/cws/share?url=http%3A%2F%2Fzemuldo.com/' + this.props.blog.title.split(' ').join('-') + '_' + this.props.blog.id.toString(), "", "height=550,width=525,left=100,top=100,menubar=0");
     }
 
     render() {
@@ -71,8 +41,6 @@ class WelcomePage extends React.Component {
                                     <br />
                                     <div className='blogs'>
                                       <GridBlogs
-                                        x={this.props.x}
-                                        next={this.props.next}
                                         setPreviousBlogs={this.props.setPreviousBlogs}
                                         setNextBlogs={this.props.setNextBlogs}
                                         onReadMore={this.props.onReadMore}
@@ -132,7 +100,6 @@ class WelcomePage extends React.Component {
                                 this.props.vars.blogsLoaded ?
                                   <Blog
                                     color={this.props.vars.color}
-                                    counts={this.props.counts}
                                     deletedBlog={this.props.deletedBlog}
                                     /> :
                                   <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
@@ -155,12 +122,24 @@ const mapStateToProps = (state) => {
         vars: state.vars,
         topics:state.topics
     }
-}
+};
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         varsActions: bindActionCreators(VarsActions, dispatch)
     }
-}
+};
+
+WelcomePage.propTypes = {
+   blog: PropTypes.object.isRequired,
+   blogs: PropTypes.array,
+   topics: PropTypes.array,
+   vars: PropTypes.object.isRequired,
+   varsActions: PropTypes.object.isRequired,
+   deletedBlog: PropTypes.func.isRequired,
+   setPreviousBlogs: PropTypes.func.isRequired,
+   setNextBlogs: PropTypes.func.isRequired,
+   onReadMore: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage)
