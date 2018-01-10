@@ -124,6 +124,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "standard":{
+    "plugins": ["flowwtype"],
+    "parser": "babel-eslint"
+  },
   "description": "Zemuldo Blogs User Interface",
   "main": "build.js",
   "repository": {
