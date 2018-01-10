@@ -134,6 +134,7 @@ class Blog extends React.Component {
     }
 
     componentDidMount() {
+        this.props.blogActions.updateBlog({editMode:false});
         if (this.props.blog) {
             this.getAauthorAvatar();
             this.setBlogCounts()
