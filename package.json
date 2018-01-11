@@ -15,6 +15,7 @@
     "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.31",
     "npm": "^5.4.1",
+    "prop-types": "^15.6.0",
     "queueing-subject": "^0.1.1",
     "react": "^15.6.2",
     "react-avatar-editor": "^10.3.0",
@@ -87,7 +88,8 @@
     "start": "pm2 start app.js --name ZEMULDO_BLOGS",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "mocha"
+    "test": "mocha",
+    "standard": "standard --fix"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -121,6 +123,10 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "standard":{
+    "plugins": ["flowwtype"],
+    "parser": "babel-eslint"
   },
   "description": "Zemuldo Blogs User Interface",
   "main": "build.js",

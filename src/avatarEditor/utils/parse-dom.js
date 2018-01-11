@@ -12,13 +12,13 @@
  * as wide - IE10 and up along with evergreen browsers.
  */
 const parseDOM = (str) => {
-    const parser = typeof DOMParser === 'undefined' ? null : new DOMParser()
+  const parser = typeof DOMParser === 'undefined' ? null : new DOMParser()
 
-    if (!parser) {
-        return null
-    }
+  if (!parser) {
+    return null
+  }
 
-    return parser.parseFromString(str, 'text/html')
+  return parser.parseFromString(str, 'text/html')
 }
 
 export default parseDOM

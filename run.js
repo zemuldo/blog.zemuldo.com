@@ -1,4 +1,4 @@
-let topics= [
+let topics = [
     {key: 'bigdata', value: 'bigdata', text: 'bigdata', name: 'bigdata', full: 'Big Data'},
     {key: 'iot', value: 'iot', text: 'iot', name: 'iot', full: 'Internet of Things'},
     {key: 'ml', value: 'ml', text: 'ml', name: 'ml', full: 'Machine Learning'},
@@ -41,12 +41,12 @@ let topics= [
     {key: 'pentesting', value: 'pentesting', text: 'pentesting', name: 'pentesting', full: 'Penetration Testing'},
     {key: 'java', value: 'java', text: 'java', name: 'java', full: 'Java'},
     {key: 'security', value: 'security', text: 'security', name: 'security', full: 'Security'}
-    ]
+]
 let t = {}
 
-for (let i=0;i<topics.length;i++){
-    t[topics[i].key]=topics[i]
-    if(i===topics.length-1){
-        console.log(t)
-    }
+for (let i = 0; i < topics.length; i++) {
+  t[topics[i].key] = topics[i]
+  if (i === topics.length - 1) {
+    console.log(t)
+  }
 }

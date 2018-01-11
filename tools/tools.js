@@ -1,7 +1,7 @@
 module.exports = {
 
-    getBlogTemplate: (details) => {
-        let html =
+  getBlogTemplate: (details) => {
+    let html =
             '<!doctype html>\n' +
             '<html lang="en">\n' +
             '<head>\n' +
@@ -28,6 +28,6 @@ module.exports = {
             '\n' +
             '</html>\n'
 
-        return html
-    }
+    return html
+  }
 }

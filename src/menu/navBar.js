@@ -1,29 +1,29 @@
 import React from 'react'
-import CompMenu from './compMenu';
+import CompMenu from './compMenu'
 import MobileMenu from './mobileMenu'
 
 class NavBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    };
+  constructor (props) {
+    super(props)
+    this.state = {}
+  };
 
-    componentDidMount() {
-    }
+  componentDidMount () {
+  }
 
-    render() {
-        return (
-            <div>
-                {
-                    window.innerWidth > 800 ?
-                        <CompMenu/> :
-                        <MobileMenu/>
+  render () {
+    return (
+      <div>
+        {
+                    window.innerWidth > 800
+                      ? <CompMenu />
+                      : <MobileMenu />
                 }
-                <br/>
+        <br />
 
-            </div>
-        )
-    }
+      </div>
+    )
+  }
 }
 
 export default NavBar

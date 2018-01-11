@@ -2,36 +2,36 @@ import React from 'react'
 import Main from './routes'
 import NavBar from './menu/navBar'
 import Footer from './partials/footer'
-import ReviewPortal from "./partials/portal";
+import ReviewPortal from './partials/portal'
 import LiveChat from './bot/chat'
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    };
+  constructor (props) {
+    super(props)
+    this.state = {}
+  };
 
-    resize = () => this.forceUpdate();
+  resize = () => this.forceUpdate();
 
-    componentDidMount() {
-        window.addEventListener('resize', this.resize);
-    };
+  componentDidMount () {
+    window.addEventListener('resize', this.resize)
+  };
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.resize)
-    };
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.resize)
+  };
 
-    render() {
-        return (
-            <div>
-                <NavBar/>
-                <Main/>
-                <Footer/>
-                <ReviewPortal/>
-                <LiveChat/>
-            </div>
-        )
-    }
+  render () {
+    return (
+      <div>
+        <NavBar />
+        <Main />
+        <Footer />
+        <ReviewPortal />
+        <LiveChat />
+      </div>
+    )
+  }
 }
 
 export default App
