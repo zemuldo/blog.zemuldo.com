@@ -331,6 +331,9 @@ a:hover {
 .colorBlue{
     color: blue;
 }
+.colorRed{
+    color: red;
+}
 .clear_button{
     background-color: transparent;
     border: none;

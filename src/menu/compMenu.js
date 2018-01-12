@@ -152,8 +152,10 @@ class ComMenu extends React.Component {
                               name='search'
                               onClick={this.handleMenuItemClick}>
                              <Input
-                                 icon={<Icon name='search' inverted circular link/>}
+                                 action={{ color: 'green', labelPosition: 'left', icon: 'search', content: 'Search' }}
+                                 actionPosition='left'
                                  placeholder='Search...'
+                                 defaultValue='Search...'
                                  onChange={this.handleFilterChange}
                              />
                           </Menu.Item>:null
@@ -176,15 +178,13 @@ class ComMenu extends React.Component {
                                  className='dropDown'
                                  trigger={<Image
                                      alt={'blogd.zemuldo.com_' + this.props.user.userName + '+_profile_pic'}
-                                     avatar
-                                     wrapped
+
                                      id='photo'
-                                     size='tiny'
+                                     size='mini'
                                      src={this.props.vars.profilePic}
                                      style={{
-                                        marginLeft: '50%',
                                         borderStyle: 'solid',
-                                        borderWidth: '1px',
+                                        borderWidth: '2px',
                                         borderRadius: `${(Math.min(
                                             JSON.parse(this.props.user.avatar).height,
                                             JSON.parse(this.props.user.avatar).width
@@ -225,7 +225,7 @@ class ComMenu extends React.Component {
                                    </Dropdown.Item>
                                    <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
                                       <Icon color={this.props.vars.colors[0]} name='sign out'/>
-                                      <span color={this.props.vars.colors[0]}>Sign Out</span>
+                                      <span className='colorRed' color={this.props.vars.colors[0]}>Sign Out</span>
                                    </Dropdown.Item>
                                 </Dropdown.Menu>
                              </Dropdown>

@@ -176,15 +176,13 @@ class MobileMenu extends React.Component {
                                  className='dropDown'
                                  trigger={<Image
                                      alt={'blogd.zemuldo.com_' + this.props.user.userName + '+_profile_pic'}
-                                     avatar
-                                     wrapped
+
                                      id='photo'
-                                     size='tiny'
+                                     size='mini'
                                      src={this.props.vars.profilePic}
                                      style={{
-                                        marginLeft: '50%',
                                         borderStyle: 'solid',
-                                        borderWidth: '1px',
+                                        borderWidth: '2px',
                                         borderRadius: `${(Math.min(
                                             JSON.parse(this.props.user.avatar).height,
                                             JSON.parse(this.props.user.avatar).width
@@ -225,7 +223,7 @@ class MobileMenu extends React.Component {
                                    </Dropdown.Item>
                                    <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
                                       <Icon color={this.props.vars.colors[0]} name='sign out'/>
-                                      <Link to={'/'} color={this.props.vars.colors[0]}>Sign Out</Link>
+                                      <span className='colorRed'>Sign Out</span>
                                    </Dropdown.Item>
                                 </Dropdown.Menu>
                              </Dropdown>
