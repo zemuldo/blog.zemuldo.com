@@ -9,6 +9,12 @@
     "sourceType": "module"
   },
 
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+
   "plugins": [
     "react"
   ],
@@ -16,18 +22,24 @@
   "parser": "babel-eslint",
 
   "rules": {
-    "react/jsx-no-bind": ["error", {
-      "allowArrowFunctions": true,
-      "allowBind": false,
-      "ignoreRefs": true
-    }],
+    "strict": 0,
+    "comma-dangle": "warn",
     "no-unused-vars": [
-      "warn",
+      "error",
       {
         "vars": "local",
         "args": "none"
       }
     ],
+    "react/jsx-filename-extension": 0,
+    "jsx-a11y/anchor-is-valid": ["error", {
+      "specialLink": ["to"]
+    }],
+    "react/jsx-no-bind": ["error", {
+      "allowArrowFunctions": true,
+      "allowBind": false,
+      "ignoreRefs": true
+    }],
     "react/no-did-update-set-state": "error",
     "react/no-unknown-property": "error",
     "react/no-unused-prop-types": "error",

@@ -4,8 +4,14 @@ import NavBar from './menu/navBar'
 import Footer from './partials/footer'
 import ReviewPortal from './partials/portal'
 import LiveChat from './bot/chat'
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-class App extends React.Component {
+@withRouter
+@connect(({ blog,vars }) => ({
+   blog,vars
+}))
+export default class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -14,6 +20,7 @@ class App extends React.Component {
   resize = () => this.forceUpdate();
 
   componentDidMount () {
+     console.log(this.props)
     window.addEventListener('resize', this.resize)
   };
 
@@ -33,5 +40,3 @@ class App extends React.Component {
     )
   }
 }
-
-export default App
