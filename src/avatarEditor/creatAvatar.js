@@ -84,27 +84,27 @@ class AvaratEditor extends React.Component {
   };
 
   handleBorderRadius = e => {
-    const borderRadius = parseInt(e.target.value, 10)
+    const borderRadius = parseInt(e.target.value, 10);
     this.setState({borderRadius})
   };
 
   handleXPosition = e => {
-    const x = parseFloat(e.target.value)
+    const x = parseFloat(e.target.value);
     this.setState({position: {...this.state.position, x}})
   };
 
   handleYPosition = e => {
-    const y = parseFloat(e.target.value)
+    const y = parseFloat(e.target.value);
     this.setState({position: {...this.state.position, y}})
   };
 
   handleWidth = e => {
-    const width = parseInt(e.target.value, 10)
+    const width = parseInt(e.target.value, 10);
     this.setState({width})
   };
 
   handleHeight = e => {
-    const height = parseInt(e.target.value, 10)
+    const height = parseInt(e.target.value, 10);
     this.setState({height})
   };
 

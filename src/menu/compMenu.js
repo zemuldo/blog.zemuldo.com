@@ -170,6 +170,8 @@ class ComMenu extends React.Component {
                                       src={this.props.vars.profilePic}
                                       style={{
                                         marginLeft: '50%',
+                                         borderStyle:'solid',
+                                         borderWidth:'1px',
                                         borderRadius: `${(Math.min(
                                                     JSON.parse(this.props.user.avatar).height,
                                                     JSON.parse(this.props.user.avatar).width
