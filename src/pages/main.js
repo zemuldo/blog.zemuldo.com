@@ -484,10 +484,10 @@ class App extends React.Component {
                       window.innerWidth < 1030 ?
                           <span style={window.innerWidth>600?{float: 'right', marginTop: '0px'}:{marginTop: '0px'}}>
                           <Input
+                              icon={<Icon name='search' inverted circular link />}
                               action={{ color: 'green', labelPosition: 'left', icon: 'search', content: 'Search' }}
                               actionPosition='left'
-                              placeholder='Search...'
-                              defaultValue='Search...'
+                              placeholder='Everything...'
                               onChange={this.handleFilterChange}
                           />
                        </span> : null

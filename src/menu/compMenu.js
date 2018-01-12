@@ -94,7 +94,7 @@ class ComMenu extends React.Component {
       return (
           <div>
              <Menu
-                 style={{backgroundColor: 'black', padding: '0px 10px 0px 10px', fontSize: '18px'}}
+                 style={{backgroundColor: 'black', opacity:'0.8', padding: '0px 10px 0px 10px', fontSize: '18px',maxHeight:'60px'}}
                  fixed='top'
                  size='tiny'
                  secondary
@@ -150,12 +150,12 @@ class ComMenu extends React.Component {
                           <Menu.Item
                               style={{fontSize: '12px'}}
                               name='search'
-                              onClick={this.handleMenuItemClick}>
+                          >
                              <Input
+                                 icon={<Icon name='search' inverted circular link />}
                                  action={{ color: 'green', labelPosition: 'left', icon: 'search', content: 'Search' }}
                                  actionPosition='left'
-                                 placeholder='Search...'
-                                 defaultValue='Search...'
+                                 placeholder='Everything...'
                                  onChange={this.handleFilterChange}
                              />
                           </Menu.Item>:null
