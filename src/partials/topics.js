@@ -5,7 +5,7 @@ import _ from 'lodash'
 import util from '../util'
 import {topics} from '../environments/conf'
 import {bindActionCreators} from 'redux'
-import * as VarsActions from '../state/actions/vars'
+import * as VarsActions from '../store/actions/vars'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 

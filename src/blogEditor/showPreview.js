@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {CompositeDecorator, convertFromRaw, Editor, EditorState} from 'draft-js'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
-import * as VarsActions from '../state/actions/vars'
+import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'

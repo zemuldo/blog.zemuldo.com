@@ -6,7 +6,7 @@ import {BrowserRouter} from 'react-router-dom'
 import App from './App'
 import './Main.css'
 import {Provider} from 'react-redux'
-import reducers from './state/reducers/index'
+import reducers from './store/reducers/index'
 import 'semantic-ui-css/semantic.min.css'
 
 const store = createStore(

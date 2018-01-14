@@ -21,13 +21,6 @@
       "allowBind": false,
       "ignoreRefs": true
     }],
-    "no-unused-vars": [
-      "warn",
-      {
-        "vars": "local",
-        "args": "none"
-      }
-    ],
     "react/no-did-update-set-state": "error",
     "react/no-unknown-property": "error",
     "react/no-unused-prop-types": "error",

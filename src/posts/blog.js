@@ -5,7 +5,7 @@ import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
-import * as BlogActions from '../state/actions/blog'
+import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -28,6 +28,7 @@ class Blog extends React.Component {
     this.getFBCount = this.getFBCount.bind(this)
     this.getTWTCount = this.getTWTCount.bind(this)
     this.getGCCount = this.getGCCount.bind(this)
+     this.saveEdit=this.saveEdit.bind(this)
   }
 
   closeDelete () {
@@ -62,7 +63,7 @@ class Blog extends React.Component {
   }
 
   getFBCount (shareURL) {
-    return axios.get('https://graph.facebook.com/?id=https://zemuldo.com/' + shareURL, {})
+    return axios.get('https://graph.facebook.com/?id=https://blog.zemuldo.com/' + shareURL, {})
             .then((res) => {
               this.props.blogActions.updateBlog({
                 fbC: (res.data.share.share_count) ? res.data.share.share_count : 0
@@ -79,7 +80,7 @@ class Blog extends React.Component {
   twtC
 
   getTWTCount (shareURL) {
-    return axios.get('https://public.newsharecounts.com/count.json?url=https://zemuldo.com/' + shareURL, {})
+    return axios.get('https://public.newsharecounts.com/count.json?url=https://blog.zemuldo.com/' + shareURL, {})
             .then((res) => {
               this.props.blogActions.updateBlog({
                 twtC: (res.data.count) ? res.data.count : 0
@@ -130,6 +131,11 @@ class Blog extends React.Component {
             })
   }
 
+  saveEdit(){
+     this.props.blogActions.updateBlog({editMode: true})
+     localStorage.removeItem('editBlog')
+  }
+
   componentDidMount () {
     this.props.blogActions.updateBlog({editMode: false})
     if (this.props.blog) {
@@ -177,7 +183,7 @@ class Blog extends React.Component {
   }
 
   fbShare () {
-    let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fzemuldo.com%2F'
+    let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.zemuldo.com%2F'
     if (this.props.blog) {
       let thisBlog = this.props.blog
       let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
@@ -192,7 +198,7 @@ class Blog extends React.Component {
       let via = '&via=zemuldo'
       let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
       let thisBlog = this.props.blog
-      let url = '&url=https%3A%2F%2Fzemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+      let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
       let fullURL = url + related + hashTgs + via
       let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
       window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
@@ -201,17 +207,17 @@ class Blog extends React.Component {
 
   gplusShare () {
     let thisBlog = this.props.blog
-    let url = '&url=https%3A%2F%2Fzemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+    let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
     if (this.props.blog) {
-      url = 'https://plus.google.com/share?url=https://zemuldo.com/' + url
+      url = 'https://plus.google.com/share?url=https://blog.zemuldo.com/' + url
       window.open(url)
     }
   }
 
   linkdnShare () {
     let thisBlog = this.props.blog
-    let url = '&url=https%3A%2F%2Fzemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
-    window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fzemuldo.com/' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
+    let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+    window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.zemuldo.com  /' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
   }
 
   updateLikes = (id) => {
@@ -395,7 +401,7 @@ class Blog extends React.Component {
                                               <Dropdown.Item color='red'
                                                 onClick={() => this.openDelete()}>Delete</Dropdown.Item>
                                               <Dropdown.Item
-                                                onClick={() => this.props.blogActions.updateBlog({editMode: true})}
+                                                onClick={() => this.saveEdit()}
                                                     >
                                                        Edit
                                                     </Dropdown.Item>
@@ -414,7 +420,7 @@ class Blog extends React.Component {
                           <hr color='green' />
                           <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                             <br />
-                            <BlogEditor editorState={this.props.blog.body} />
+                            <BlogEditor className='editor' editorState={this.props.blog.body} />
                           </div>
                         </div>
                         : <div>

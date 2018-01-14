@@ -20,7 +20,6 @@ export default class App extends React.Component {
   resize = () => this.forceUpdate();
 
   componentDidMount () {
-     console.log(this.props)
     window.addEventListener('resize', this.resize)
   };
 

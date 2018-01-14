@@ -101,6 +101,9 @@ a:hover {
 /*
     Rich Text Editor
 */
+.editor{
+    background-color: red;
+}
 
 .RichEditor-root {
     background: #fff;
