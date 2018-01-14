@@ -34,19 +34,19 @@ const Audio = (props) => {
   return <audio controls src={props.src} style={styles.media} />
 }
 Audio.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Image = (props) => {
   return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'} />
 }
 Image.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Video = (props) => {
   return <video controls src={props.src} style={styles.media} />
 }
 Video.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Media = (props) => {
   const entity = props.contentState.getEntity(
@@ -615,7 +615,7 @@ class CreateBlog extends React.Component {
             <hr />
             <Modal.Description>
               <div>
-                <ShowPreview reinInitEditorState={this.reinInitEditorState}
+                <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState}
                   editorState={this.state.editorState} />
               </div>
             </Modal.Description>

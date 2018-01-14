@@ -484,8 +484,9 @@ class App extends React.Component {
                       window.innerWidth < 1030 ?
                           <span style={window.innerWidth>600?{float: 'right', marginTop: '0px'}:{marginTop: '0px'}}>
                           <Input
+                              style={{maxWidth: '700px'}}
                               icon={<Icon name='search' inverted circular link />}
-                              action={{ color: 'green', labelPosition: 'left', icon: 'search', content: 'Search' }}
+                              action={{ color: 'green',  icon: 'search' }}
                               actionPosition='left'
                               placeholder='Everything...'
                               onChange={this.handleFilterChange}

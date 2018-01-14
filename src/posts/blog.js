@@ -348,7 +348,11 @@ class Blog extends React.Component {
                                        this.props.blog.title
                                     }
                                  </Header>:
-                                 <Input onChange={this.handleTitleChange} value={this.state.title} />
+                                 <div>
+                                    <span>Title: </span>
+                                    <Input onChange={this.handleTitleChange} value={this.state.title} />
+                                 </div>
+
                            }
                           <div className='shareIcon clearElem'
                             style={{display: 'block', fontSize: '16px', fontFamily: 'georgia'}}>
