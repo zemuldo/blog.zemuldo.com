@@ -189,7 +189,7 @@ class Blog extends React.Component {
     let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.zemuldo.com%2F'
     if (this.props.blog) {
       let thisBlog = this.props.blog
-      let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+      let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
       let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
       window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
     }
@@ -201,7 +201,7 @@ class Blog extends React.Component {
       let via = '&via=zemuldo'
       let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
       let thisBlog = this.props.blog
-      let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+      let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
       let fullURL = url + related + hashTgs + via
       let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
       window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
@@ -210,7 +210,7 @@ class Blog extends React.Component {
 
   gplusShare () {
     let thisBlog = this.props.blog
-    let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+    let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
     if (this.props.blog) {
       url = 'https://plus.google.com/share?url=https://blog.zemuldo.com/' + url
       window.open(url)
@@ -219,7 +219,7 @@ class Blog extends React.Component {
 
   linkdnShare () {
     let thisBlog = this.props.blog
-    let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+    let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
     window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.zemuldo.com  /' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
   }
 

@@ -280,7 +280,7 @@ class App extends React.Component {
           Build variables from the window pathname
       */
       let url = window.location.pathname.split('/')
-      let id = Number(window.location.pathname.split('_')[window.location.pathname.split('_').length - 1])
+      let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
       let query = {}
       let page = window.location.pathname.split('/')[1]
       let topic = window.location.pathname.split('/')[2]

@@ -56,7 +56,7 @@ class GridBlog extends React.Component {
                             Published on {o.date}
             </p>
             <Link
-              to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '_' + o.title.split(' ').join('-') + '_' + o.date.split(' ').join('-') + '_' + o.id.toString()}>
+              to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString()}>
               <Button
                 color={'green'}
                 className='redMoreButton'
