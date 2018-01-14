@@ -12,7 +12,7 @@ import {
     EditorState,
     RichUtils
 } from 'draft-js'
-import {Button, Header, Icon, Modal} from 'semantic-ui-react'
+import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
@@ -154,7 +154,8 @@ class CreateBlog extends React.Component {
       confirmOpen: false,
       showMedURLInput: false,
       url: '',
-      urlType: ''
+      urlType: '',
+       title:''
 
     }
     this.handleKeyCommand = this._handleKeyCommand.bind(this)
@@ -366,12 +367,11 @@ class CreateBlog extends React.Component {
 
   publish = () => {
     this.setState({open: true})
+     const title = localStorage.getItem('title')
     const content = localStorage.getItem('draftContent')
     const blogData = JSON.parse(localStorage.getItem('blogData'))
-    if (content && blogData) {
+    if (content && blogData && title) {
       let obj = JSON.parse(content)
-      let title = obj.blocks[0].text
-      obj.blocks.splice(0, 1)
       axios.post(env.httpURL, {
         queryMethod: 'publish',
         'queryData': {
@@ -416,10 +416,12 @@ class CreateBlog extends React.Component {
   }
 
   handleEditorState () {
+    const title = localStorage.getItem('title')
     const editorState = window.localStorage.getItem('draftContent')
     const blogDataState = window.localStorage.getItem('blogData')
     if (editorState && blogDataState) {
       this.setState({
+         title:title?title:'',
         hasSavedContent: false,
         filledForm: true,
         continueEdit: true,
@@ -487,6 +489,11 @@ class CreateBlog extends React.Component {
     this.setState({editorState: state})
   }
 
+   handleTitleChange = (e) =>{
+      this.setState({title:e.target.value})
+      localStorage.setItem('title',e.target.value)
+   }
+
   render () {
     let mediaInput
     if (this.state.showMedURLInput) {
@@ -552,6 +559,7 @@ class CreateBlog extends React.Component {
                         Draft an article on the fly.
                     </Header>
           <br />
+          <span>Title: <Input onChange={this.handleTitleChange} value={this.state.title} /></span>
           <div>
             <BlockStyleControls
               editorState={editorState}
