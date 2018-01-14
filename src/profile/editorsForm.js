@@ -8,11 +8,11 @@ import {topics} from '../environments/conf'
 import PropTypes from 'prop-types'
 
 const categories = [
-   {key: 'dev', value: 'Development', text: 'Development', name: 'development'},
-   {key: 'tech', value: 'Technology', text: 'Technology', name: 'technology'},
-   {key: 'tutorials', value: 'Tutorials', text: 'Tutorials', name: 'tutorials'},
-   {key: 'reviews', value: 'Reviews', text: 'Reviews', name: 'reviews'},
-   {key: 'business', value: 'Business', text: 'Business', name: 'business'}
+   {key: 'dev', value: 'dev', text: 'Development', name: 'development'},
+   {key: 'tech', value: 'tech', text: 'Technology', name: 'technology'},
+   {key: 'tutorials', value: 'tutorials', text: 'Tutorials', name: 'tutorials'},
+   {key: 'reviews', value: 'reviews', text: 'Reviews', name: 'reviews'},
+   {key: 'business', value: 'business', text: 'Business', name: 'business'}
 ]
 
 class EditorsForm extends React.Component {
@@ -40,7 +40,8 @@ class EditorsForm extends React.Component {
   }
 
   handleCategoryChange (e, data) {
-    this.setState({
+     console.log(data);
+     this.setState({
       category: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })

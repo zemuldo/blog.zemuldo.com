@@ -19,11 +19,6 @@ import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
-const cats = {
-  Development: 'dev',
-  Business: 'business',
-  Technology: 'tech'
-}
 
 function mediaBlockRenderer (block) {
   if (block.getType() === 'atomic') {
@@ -380,7 +375,7 @@ class CreateBlog extends React.Component {
       axios.post(env.httpURL, {
         queryMethod: 'publish',
         'queryData': {
-          type: cats[blogData.type],
+          type: blogData.type,
           title: title,
           query: 'publish',
           topics: blogData.topics,

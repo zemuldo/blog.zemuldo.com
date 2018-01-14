@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/renderBlog'
 import axios from 'axios'
@@ -18,7 +18,8 @@ class Blog extends React.Component {
       showDelete: false,
       userLoggedIn: false,
       likes: this.props.blog ? this.props.blog.likes : 0,
-      authorAvatar: null
+      authorAvatar: null,
+       title:this.props.blog.title
     }
     this.componentDidMount = this.componentDidMount.bind(this)
     this.updateLikes = this.updateLikes.bind(this)
@@ -29,6 +30,8 @@ class Blog extends React.Component {
     this.getTWTCount = this.getTWTCount.bind(this)
     this.getGCCount = this.getGCCount.bind(this)
      this.saveEdit=this.saveEdit.bind(this)
+     this.handleTitleChange=this.handleTitleChange.bind(this)
+     this.handleSave=this.handleSave.bind(this)
   }
 
   closeDelete () {
@@ -253,7 +256,7 @@ class Blog extends React.Component {
         }
       })
                 .then(function (response) {
-                  this.closeDelete()
+                  this.closeDelete();
                   this.props.deletedBlog()
                 }.bind(this))
                 .catch(function (err) {
@@ -261,6 +264,43 @@ class Blog extends React.Component {
                 }.bind(this))
     }
   };
+
+  handleTitleChange = (e) =>{
+     this.setState({title:e.target.value})
+  }
+  handleSave = ()=>{
+    let body = localStorage.getItem('editBlog')
+     let o ={editMode: false, title:this.state.title}
+     if(body){
+      o.body= body
+     }
+     this.props.blogActions.updateBlog(o);
+     this.setState({open: true});
+     if (body) {
+        let obj = JSON.parse(body);
+        obj.blocks.splice(0, 1);
+        axios.post(env.httpURL, {
+           queryMethod: 'updateBlog',
+           'queryData': {
+              _id: this.props.blog.post_ID,
+              update: {
+                 body: body,
+                 title: this.state.title
+              }
+           }
+
+        })
+            .then(function (response) {
+               localStorage.removeItem('editBlog')
+            }.bind(this))
+
+            .catch(function (err) {
+
+            }.bind(this))
+     } else {
+
+     }
+  }
 
   render () {
     return (
@@ -301,11 +341,15 @@ class Blog extends React.Component {
         {
                     this.props.blog
                         ? <div>
-                          <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.vars.color} as='h1'>
-                            {
-                                    this.props.blog.title
-                                }
-                          </Header>
+                           {
+                             !this.props.blog.editMode?
+                                 <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.vars.color} as='h1'>
+                                    {
+                                       this.props.blog.title
+                                    }
+                                 </Header>:
+                                 <Input onChange={this.handleTitleChange} value={this.state.title} />
+                           }
                           <div className='shareIcon clearElem'
                             style={{display: 'block', fontSize: '16px', fontFamily: 'georgia'}}>
                             {
@@ -406,7 +450,7 @@ class Blog extends React.Component {
                                                        Edit
                                                     </Dropdown.Item>
                                               <Dropdown.Item
-                                                onClick={() => this.props.blogActions.updateBlog({editMode: false})}
+                                                onClick={this.handleSave}
                                                    >
                                                       Save
                                                    </Dropdown.Item>
