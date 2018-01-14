@@ -134,6 +134,7 @@ const styles = {
       textDecoration: 'underline'
    },
    media: {
+      maxHeight:'350px',
       width: '100%',
       // Fix an issue with Firefox rendering video controls
       // with 'pre-wrap' white-space
