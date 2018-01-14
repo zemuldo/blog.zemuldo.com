@@ -256,8 +256,8 @@ class Blog extends React.Component {
         }
       })
                 .then(function (response) {
+                   this.props.blogActions.resetBlog({id:null})
                   this.closeDelete();
-                  this.props.deletedBlog()
                 }.bind(this))
                 .catch(function (err) {
                   this.closeDelete()
@@ -326,7 +326,7 @@ class Blog extends React.Component {
               </span>
               <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                 <br />
-                <BlogEditor body={this.props.blog.body} />
+                <BlogEditor editorState={this.props.blog.body} />
               </div>
             </Modal.Description>
           </Modal.Content>
@@ -429,15 +429,15 @@ class Blog extends React.Component {
                             </span>
                             <span className='info'>
                                    Published on:
-                                   <br />
-                              {this.props.blog.date}
+                               {' '}{this.props.blog.date}
                             </span>
-                            <br />
                             <br />
                             <span className='info'>
                               {this.props.blog.author} {' '}
                             </span>
-                            {
+                             <br />
+                             <br />
+                             {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.userName
                                         ? <div>
                                           <Dropdown text='Manage' pointing className='link item info'>
