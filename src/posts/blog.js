@@ -44,7 +44,7 @@ class Blog extends React.Component {
 
   setBlogCounts () {
     let thisBlog = this.props.blog
-    let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '_' + thisBlog.title.split(' ').join('-') + '_' + thisBlog.date.split(' ').join('-') + '_' + thisBlog.id.toString()
+    let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
     let gplusPost = {
       'method': 'pos.plusones.get',
       'id': 'p',
