@@ -502,7 +502,7 @@ Blog.propTypes = {
   ]),
   vars: PropTypes.object.isRequired,
   blogActions: PropTypes.object.isRequired,
-  deletedBlog: PropTypes.func.isRequired
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blog)
