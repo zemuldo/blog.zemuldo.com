@@ -7,9 +7,6 @@ import LiveChat from './bot/chat'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-@connect(({ blog,vars }) => ({
-   blog,vars
-}))
 export default class App extends React.Component {
   constructor (props) {
     super(props)
