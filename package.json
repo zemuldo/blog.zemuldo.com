@@ -1,5 +1,5 @@
 {
-  "name": "blogs.zemuldo.com",
+  "name": "blog.zemuldo.com",
   "version": "0.0.4",
   "private": true,
   "dependencies": {
@@ -127,12 +127,12 @@
     "react-site",
     "zemuld",
     "zemuldo.com",
-    "blogs.zemuldo.com"
+    "blog.zemuldo.com"
   ],
   "author": "Danstan Otieno Onyango",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/zemuldo/blogs.zemuldo.com/issues"
   },
-  "homepage": "https://blogs.zemuldo.com"
+  "homepage": "https://blog.zemuldo.com"
 }

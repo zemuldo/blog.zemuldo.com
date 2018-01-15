@@ -5,10 +5,10 @@ import _ from 'lodash'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import * as BlogsActions from '../state/actions/blogs'
-import * as BlogActions from '../state/actions/blog'
-import * as UserActions from '../state/actions/user'
-import * as VarsActions from '../state/actions/vars'
+import * as BlogsActions from '../store/actions/blogs'
+import * as BlogActions from '../store/actions/blog'
+import * as UserActions from '../store/actions/user'
+import * as VarsActions from '../store/actions/vars'
 import axios from 'axios'
 import util from '../util'
 import PagesComponent from './page'
@@ -280,7 +280,7 @@ class App extends React.Component {
           Build variables from the window pathname
       */
       let url = window.location.pathname.split('/')
-      let id = Number(window.location.pathname.split('_')[window.location.pathname.split('_').length - 1])
+      let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
       let query = {}
       let page = window.location.pathname.split('/')[1]
       let topic = window.location.pathname.split('/')[2]
@@ -296,7 +296,7 @@ class App extends React.Component {
       }
       /*
           Navigate to home from page.
-          User navigated to home but state current location is not home.
+          User navigated to home but store current location is not home.
           Set current location to home and update blogs
       */
       if (page === '' && this.props.vars.currentLocation !== 'home') {
@@ -305,7 +305,7 @@ class App extends React.Component {
       }
       /*
           Navigate to page from home
-          User navigated to page but state current location is home.
+          User navigated to page but store current location is home.
           Set current location to page and update blogs
       */
       if (pages[page] && this.props.vars.currentLocation === 'home' && this.props.vars.currentLocation !== page) {
@@ -314,7 +314,7 @@ class App extends React.Component {
       }
       /*
           Navigate to another page from page
-          User navigated to another page but state current location is page.
+          User navigated to another page but store current location is page.
           Set current location to another page and update blogs
       */
       if (page !== '' && pages[page] && this.props.vars.currentLocation !== 'home' && page !== this.props.vars.currentLocation) {
@@ -341,12 +341,12 @@ class App extends React.Component {
 
    componentDidMount() {
       /*
-          Initialize state variables for loading.
+          Initialize store variables for loading.
       */
       this.props.varsActions.updateVars({blogsLoaded: false})
 
       /*
-          Take state variable from url. currrent location, topic and blog
+          Take store variable from url. currrent location, topic and blog
           And update blogs
       */
       let url = window.location.pathname.split('/').join('')
@@ -484,9 +484,11 @@ class App extends React.Component {
                       window.innerWidth < 1030 ?
                           <span style={window.innerWidth>600?{float: 'right', marginTop: '0px'}:{marginTop: '0px'}}>
                           <Input
-                              focus
-                              icon={<Icon name='search' inverted circular link/>}
-                              placeholder='Search...'
+                              style={{maxWidth: '700px'}}
+                              icon={<Icon name='search' inverted circular link />}
+                              action={{ color: 'green',  icon: 'search' }}
+                              actionPosition='left'
+                              placeholder='Everything...'
                               onChange={this.handleFilterChange}
                           />
                        </span> : null

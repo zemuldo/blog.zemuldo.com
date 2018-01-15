@@ -5,10 +5,10 @@ import {Link} from 'react-router-dom'
 import _ from 'lodash'
 import {connect} from 'react-redux'
 import axios from 'axios/index'
-import * as BlogsActions from '../state/actions/blogs'
-import * as VarsActions from '../state/actions/vars'
+import * as BlogsActions from '../store/actions/blogs'
+import * as VarsActions from '../store/actions/vars'
 import {bindActionCreators} from 'redux'
-import * as BlogActions from '../state/actions/blog'
+import * as BlogActions from '../store/actions/blog'
 import config, {topicsOBJ} from '../environments/conf'
 
 const getTopiINfo = (topics) => {

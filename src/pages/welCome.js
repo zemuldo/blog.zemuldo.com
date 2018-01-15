@@ -7,7 +7,7 @@ import Blog from '../posts/blog'
 import GridBlogs from '../posts/gridBlogs'
 import {pages, topicsOBJ} from '../environments/conf'
 import {bindActionCreators} from 'redux'
-import * as VarsActions from '../state/actions/vars'
+import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
 
 class WelcomePage extends React.Component {

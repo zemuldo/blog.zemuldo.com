@@ -12,18 +12,13 @@ import {
     EditorState,
     RichUtils
 } from 'draft-js'
-import {Button, Header, Icon, Modal} from 'semantic-ui-react'
+import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
-import * as VarsActions from '../state/actions/vars'
+import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
-const cats = {
-  Development: 'dev',
-  Business: 'business',
-  Technology: 'tech'
-}
 
 function mediaBlockRenderer (block) {
   if (block.getType() === 'atomic') {
@@ -39,19 +34,19 @@ const Audio = (props) => {
   return <audio controls src={props.src} style={styles.media} />
 }
 Audio.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Image = (props) => {
   return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'} />
 }
 Image.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Video = (props) => {
   return <video controls src={props.src} style={styles.media} />
 }
 Video.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Media = (props) => {
   const entity = props.contentState.getEntity(
@@ -134,6 +129,7 @@ const styles = {
     textDecoration: 'underline'
   },
   media: {
+     maxHeight:'350px',
     width: '100%',
       // Fix an issue with Firefox rendering video controls
       // with 'pre-wrap' white-space
@@ -159,7 +155,8 @@ class CreateBlog extends React.Component {
       confirmOpen: false,
       showMedURLInput: false,
       url: '',
-      urlType: ''
+      urlType: '',
+       title:''
 
     }
     this.handleKeyCommand = this._handleKeyCommand.bind(this)
@@ -371,16 +368,15 @@ class CreateBlog extends React.Component {
 
   publish = () => {
     this.setState({open: true})
+     const title = localStorage.getItem('title')
     const content = localStorage.getItem('draftContent')
     const blogData = JSON.parse(localStorage.getItem('blogData'))
-    if (content && blogData) {
+    if (content && blogData && title) {
       let obj = JSON.parse(content)
-      let title = obj.blocks[0].text
-      obj.blocks.splice(0, 1)
       axios.post(env.httpURL, {
         queryMethod: 'publish',
         'queryData': {
-          type: cats[blogData.type],
+          type: blogData.type,
           title: title,
           query: 'publish',
           topics: blogData.topics,
@@ -421,10 +417,12 @@ class CreateBlog extends React.Component {
   }
 
   handleEditorState () {
+    const title = localStorage.getItem('title')
     const editorState = window.localStorage.getItem('draftContent')
     const blogDataState = window.localStorage.getItem('blogData')
     if (editorState && blogDataState) {
       this.setState({
+         title:title?title:'',
         hasSavedContent: false,
         filledForm: true,
         continueEdit: true,
@@ -492,6 +490,11 @@ class CreateBlog extends React.Component {
     this.setState({editorState: state})
   }
 
+   handleTitleChange = (e) =>{
+      this.setState({title:e.target.value})
+      localStorage.setItem('title',e.target.value)
+   }
+
   render () {
     let mediaInput
     if (this.state.showMedURLInput) {
@@ -557,6 +560,7 @@ class CreateBlog extends React.Component {
                         Draft an article on the fly.
                     </Header>
           <br />
+          <span>Title: <Input onChange={this.handleTitleChange} value={this.state.title} /></span>
           <div>
             <BlockStyleControls
               editorState={editorState}
@@ -612,7 +616,7 @@ class CreateBlog extends React.Component {
             <hr />
             <Modal.Description>
               <div>
-                <ShowPreview reinInitEditorState={this.reinInitEditorState}
+                <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState}
                   editorState={this.state.editorState} />
               </div>
             </Modal.Description>

@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {CompositeDecorator, convertFromRaw, Editor, EditorState} from 'draft-js'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
-import * as VarsActions from '../state/actions/vars'
+import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -46,19 +46,19 @@ const Audio = (props) => {
   return <audio controls src={props.src} style={styles.media} />
 }
 Audio.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Image = (props) => {
   return <img src={props.src} style={styles.media} alt={'zemldo blogpost image'} />
 }
 Image.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Video = (props) => {
   return <video controls src={props.src} style={styles.media} />
 }
 Video.propTypes = {
-  src: PropTypes.object.isRequired
+  src: PropTypes.string.isRequired
 }
 const Media = (props) => {
   const entity = props.contentState.getEntity(
@@ -258,6 +258,7 @@ class RichEditorExample extends React.Component {
     }
     return (
       <div className={className} onClick={this.focus}>
+         <h1 className='alignCenter'>{this.props.title}</h1>
         <Editor
           readOnly
           blockRendererFn={mediaBlockRenderer}
@@ -289,6 +290,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 RichEditorExample.propTypes = {
+  title:PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
   varsActions: PropTypes.object.isRequired
 }
