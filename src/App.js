@@ -7,7 +7,6 @@ import LiveChat from './bot/chat'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-@withRouter
 @connect(({ blog,vars }) => ({
    blog,vars
 }))
