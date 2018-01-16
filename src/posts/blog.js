@@ -435,7 +435,8 @@ class Blog extends React.Component {
                                    Published on:
                                {' '}{this.props.blog.date}
                             </span>
-                            <br />
+                             <br />
+                             <br />
                             <span className='info'>
                               {this.props.blog.author} {' '}
                             </span>

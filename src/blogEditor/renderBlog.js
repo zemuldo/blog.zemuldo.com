@@ -3,12 +3,17 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import ShowPreview from './showPreview'
 import debounce from 'lodash/debounce'
+import Editor from 'draft-js-plugins-editor';
+import createHashtagPlugin from 'draft-js-hashtag-plugin';
+import createLinkifyPlugin from 'draft-js-linkify-plugin';
+import createCounterPlugin from 'draft-js-counter-plugin';
+import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
+import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import {
    CompositeDecorator,
    AtomicBlockUtils,
    convertFromRaw,
    convertToRaw,
-   Editor,
    EditorState,
    RichUtils
 } from 'draft-js'
@@ -17,19 +22,32 @@ import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
+import editorStyles from './editorStyle.css';
 
-const env = config[process.env.NODE_ENV] || 'development'
-const cats = {
-   Development: 'dev',
-   Business: 'business',
-   Technology: 'tech'
-};
+const hashtagPlugin = createHashtagPlugin();
+const linkifyPlugin = createLinkifyPlugin();
+const counterPlugin = createCounterPlugin();
+const sideToolbarPlugin = createSideToolbarPlugin();
+
+
+const { CharCounter, WordCounter, LineCounter } = counterPlugin;
+const { SideToolbar } = sideToolbarPlugin;
+
+
+const plugins = [
+   hashtagPlugin,
+   linkifyPlugin,
+   counterPlugin,
+   sideToolbarPlugin,
+];
+
+const env = config[process.env.NODE_ENV] || 'development';
 
 function mediaBlockRenderer(block) {
    if (block.getType() === 'atomic') {
       return {
          component: Media,
-         editable: false
+         editable: false,
       }
    }
    return null
@@ -93,8 +111,8 @@ const Link = (props) => {
 };
 Link.propTypes = {
    contentState: PropTypes.object.isRequired,
-   children: PropTypes.object.isRequired,
-   entityKey: PropTypes.object.isRequired
+   children: PropTypes.array.isRequired,
+   entityKey: PropTypes.string.isRequired
 };
 const decorator = new CompositeDecorator([
    {
@@ -160,7 +178,8 @@ class RenderBlog extends React.Component {
          confirmOpen: false,
          showMedURLInput: false,
          url: '',
-         urlType: ''
+         urlType: '',
+         words:<CharCounter limit={10000} />,
 
       };
       this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -336,7 +355,9 @@ class RenderBlog extends React.Component {
       this.saveContent(contentState);
       this.setState({hasSavedContent: false})
    };
-   focus = () => this.refs.editor.focus();
+   focus = () => {
+      this.editor.focus();
+   };
 
    _handleKeyCommand(command, editorState) {
       const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -400,11 +421,16 @@ class RenderBlog extends React.Component {
    };
    saveContent = debounce((content) => {
       window.localStorage.setItem('editBlog', JSON.stringify(convertToRaw(content)))
+      this.setState({words:<WordCounter/>})
    }, 1000);
 
    componentDidMount() {
       this.handleEditorState()
    };
+
+   componentWillUpdate(){
+
+   }
 
    handleEditorState() {
       this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.editorState)), decorator)})
@@ -505,7 +531,7 @@ class RenderBlog extends React.Component {
       const {editorState} = this.state;
       // If the user changes block type before entering any text, we can
       // either style the placeholder or hide it. Let's just hide it now.
-      let className = 'RichEditor-editor';
+      let className = 'RichEditor-editor '+ editorStyles.editor;
       let contentState = editorState.getCurrentContent();
       if (!contentState.hasText()) {
          if (contentState.getBlockMap().first().getType() !== 'unstyled') {
@@ -555,10 +581,17 @@ class RenderBlog extends React.Component {
                                    Add Video
                                 </Button>
                              </div>
+                             {
+                                this.props.blog.editMode?
+                                    <div >
+                                       <div><CharCounter limit={10} /> characters {this.state.words}</div>
+                                       <div><WordCounter limit={500} /> words</div>
+                                       <div><LineCounter limit={100} /> lines</div>
+                                    </div>:null
+                             }
                              {mediaInput}
                           </div>
                        </div>
-                       <hr/>
                        <Modal open={this.state.previewOpen}>
                           <Modal.Header><Header style={{margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center'}}
                                                 color='green' as='h1'>
@@ -588,21 +621,30 @@ class RenderBlog extends React.Component {
                        </Modal>
                     </div> : null
              }
-             <div className={className}>
-                <Editor
-                    readOnly={!this.props.blog.editMode}
-                    blockRendererFn={mediaBlockRenderer}
-                    blockStyleFn={getBlockStyle}
-                    customStyleMap={styleMap}
-                    editorState={editorState}
-                    handleKeyCommand={this.handleKeyCommand}
-                    onChange={this.onChange}
-                    onTab={this.onTab}
-                    placeholder='Start putting it down...'
-                    ref='editor'
-                    spellCheck
-                />
+             <div  style={this.props.blog.editMode?{height:window.innerHeight*0.7,width:'inherit',lineHeight:'3em',overflowY:'scroll',padding:'5px',border:'1px solid #DEBB07'}:null}>
+
+                <div className={className}>
+                   <Editor
+                       onClick={this.focus}
+                       readOnly={!this.props.blog.editMode}
+                       blockRendererFn={mediaBlockRenderer}
+                       blockStyleFn={getBlockStyle}
+                       customStyleMap={styleMap}
+                       editorState={editorState}
+                       handleKeyCommand={this.handleKeyCommand}
+                       onChange={this.onChange}
+                       onTab={this.onTab}
+                       placeholder='Start putting it down...'
+                       ref={(element) => { this.editor = element; }}
+                       spellCheck
+                       plugins={plugins}
+                   />
+                   <div className = {'toobar'} >
+                      <SideToolbar />
+                   </div>
+                </div>
              </div>
+
           </div>
       )
    }
