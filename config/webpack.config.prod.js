@@ -1,5 +1,5 @@
 
-const buildID = '2018-01-15'
+const buildID = '2018-01-16'
 const autoprefixer = require('autoprefixer')
 const path = require('path')
 const webpack = require('webpack')
@@ -289,7 +289,7 @@ module.exports = {
             // If a URL is already hashed by Webpack, then there is no concern
             // about it being stale, and the cache-busting can be skipped.
             dontCacheBustUrlsMatching: /\.\w{8}\./,
-            filename: 'service-worker.js',
+            filename: 'aw.js',
             logger (message) {
                 if (message.indexOf('Total precache size is') === 0) {
                     // This message occurs for every build and is a bit too noisy.
