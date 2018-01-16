@@ -24,29 +24,6 @@ class GridBlogs extends React.Component {
   constructor (props) {
     super(props)
     this.state = {}
-    this.onReadMore = this.onReadMore.bind(this)
-  }
-
-  onReadMore (thisBlog) {
-    this.props.varsActions.updateVars({blogLoaded: false})
-    axios.post(env.httpURL, {
-      'queryMethod': 'getPost',
-      'queryData': {
-        'id': thisBlog.id
-      }
-    })
-          .then(response => {
-            let blog = response.data
-            Object.assign(blog, thisBlog)
-            this.props.blogActions.updateBlog(blog)
-            this.props.varsActions.updateVars({blogLoaded: true})
-            window.scrollTo(0, 0)
-          })
-          .catch(function (err) {
-            this.props.blogActions.updateBlog({})
-            this.props.varsActions.updateVars({blogLoaded: true})
-            return err
-          }.bind(this))
   }
 
   render () {
@@ -135,7 +112,5 @@ GridBlogs.propTypes = {
   blog: PropTypes.object.isRequired,
   blogs: PropTypes.array.isRequired,
   vars: PropTypes.object.isRequired,
-  blogActions: PropTypes.object.isRequired,
-  varsActions: PropTypes.object.isRequired
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GridBlogs)
