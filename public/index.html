@@ -31,45 +31,73 @@
     <title>Zemuldo Blogs</title>
     <link rel="manifest" href="/manifest.json">
     <style>
-        body{
-            font-size: 16px;
-        }
-        .textAlignCenter {
-            text-align: center;
-        }
 
-        .fontWhite {
-            color: white;
-        }
-
-        .fullScreen {
-            position: absolute;
+        /* The Loader */
+        #loader-wrapper {
+            background-color: black;
+            position: fixed;
             top: 0;
             left: 0;
-            background-color: black;
-            opacity: 0.9;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 10;
+            overflow: hidden;
+        }
+        .no-js #loader-wrapper {
+            display: none;
         }
 
-        .center {
-            position: absolute;
-            top: 45%;
-            left: 45%;
-            background-color: transparent;
-            opacity: 0.7;
-        }
-
-        .preLoader {
+        .loaderText{
+            color: white;
+            position: fixed;
+            left: 48%;
+            top: 65%;
+            margin: -75px 0 0 -75px;
             border-radius: 50%;
-            border: 5px solid blue;
-            border-right: 5px solid green;
-            border-left: 5px solid orange;
-            width: 60px;
-            height: 60px;
-            -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
+            border-top-color: #16a085;
+            z-index: 13;
+        }
+
+        #loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 120px;
+            height: 120px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #16a085;
+            -webkit-animation: spin 1.7s linear infinite;
+            animation: spin 1.7s linear infinite;
+            z-index: 11;
+        }
+        #loader:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #e74c3c;
+            -webkit-animation: spin-reverse .6s linear infinite;
+            animation: spin-reverse .6s linear infinite;
+        }
+        #loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #f9c922;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite;
         }
 
         @-webkit-keyframes spin {
@@ -80,26 +108,93 @@
                 -webkit-transform: rotate(360deg);
             }
         }
-
         @keyframes spin {
             0% {
+                -webkit-transform: rotate(0deg);
                 transform: rotate(0deg);
             }
             100% {
+                -webkit-transform: rotate(360deg);
                 transform: rotate(360deg);
             }
+        }
+        @-webkit-keyframes spin-reverse {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(-360deg);
+            }
+        }
+        @keyframes spin-reverse {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(-360deg);
+                transform: rotate(-360deg);
+            }
+        }
+        #loader-wrapper .loader-section {
+            position: fixed;
+            top: 0;
+            width: 51%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        #loader-wrapper .loader-section.section-left {
+            left: 0;
+        }
+
+        #loader-wrapper .loader-section.section-right {
+            right: 0;
+        }
+
+        /* Loaded styles */
+        .loaded #loader-wrapper .loader-section.section-left {
+            -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+            -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .loaded #loader-wrapper .loader-section.section-right {
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+            -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .loaded #loader {
+            opacity: 0;
+            -webkit-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+        }
+
+        .loaded #loader-wrapper {
+            visibility: hidden;
+            -webkit-transform: translateY(-100%);
+            transform: translateY(-100%);
+            -webkit-transition: all 0.3s 1s ease-out;
+            transition: all 0.3s 1s ease-out;
         }
     </style>
 </head>
 
 <body>
     <div id="main-app">
-        <div class="fullScreen">
-            <div class="center">
-                <div class="preLoader">
-                </div>
-                <p class=" textAlignCenter fontWhite">Loading Zemuldo Blogs...</p>
-            </div>
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+
+        </div>
+        <div class="loaderText">
+            <p>
+                Loading app...Be done in a few
+            </p>
         </div>
     </div>
     <script>
