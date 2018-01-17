@@ -584,7 +584,7 @@ class RenderBlog extends React.Component {
                              {
                                 this.props.blog.editMode?
                                     <div >
-                                       <div><CharCounter limit={10} /> characters {this.state.words}</div>
+                                       <div><CharCounter limit={10} /> characters</div>
                                        <div><WordCounter limit={500} /> words</div>
                                        <div><LineCounter limit={100} /> lines</div>
                                     </div>:null
