@@ -4,8 +4,6 @@ import NavBar from './menu/navBar'
 import Footer from './partials/footer'
 import ReviewPortal from './partials/portal'
 import LiveChat from './bot/chat'
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 export default class App extends React.Component {
   constructor (props) {

@@ -8,6 +8,7 @@ import './Main.css'
 import {Provider} from 'react-redux'
 import reducers from './store/reducers/index'
 import 'semantic-ui-css/semantic.min.css'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const store = createStore(
     reducers,
@@ -17,7 +18,9 @@ const store = createStore(
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+        <MuiThemeProvider>
+            <App />
+        </MuiThemeProvider>
     </BrowserRouter>
   </Provider>,
     document.getElementById('main-app'))
