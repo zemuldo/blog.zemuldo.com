@@ -24,18 +24,11 @@ import PropTypes from 'prop-types'
 import editorStyles from './editorStyle.css';
 import {
     styles,
-    Video,
-    Image,
-    Audio,
     mediaBlockRenderer,
-    decorator, BLOCK_TYPES,
+    decorator,
     BlockStyleControls,
-    findLinkEntities,
     getBlockStyle,
     InlineStyleControls,
-    Link,
-    Media,
-    StyleButton,
     styleMap
 } from './editorToolkit'
 
@@ -254,7 +247,7 @@ class RenderBlog extends React.Component {
         this.setState({hasSavedContent: false})
     };
     focus = () => {
-        this.editor.focus();
+        this.refs.editor.focus();
     };
 
     _handleKeyCommand(command, editorState) {
