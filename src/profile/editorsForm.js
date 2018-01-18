@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Label, Header, Form, Select, Dropdown} from 'semantic-ui-react'
-import Creator from '../blogEditor/renderBlog'
+import Creator from '../blogEditor/editor'
 import * as VarsActions from '../store/actions/vars'
 import {bindActionCreators} from 'redux'
 import {topics} from '../environments/conf'

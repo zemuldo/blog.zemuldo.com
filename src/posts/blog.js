@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button, Modal, Header, Icon, Image, Dropdown, Input} from 'semantic-ui-react'
 import {connect} from 'react-redux'
-import BlogEditor from '../blogEditor/renderBlog'
+import BlogEditor from '../blogEditor/editor'
 import axios from 'axios'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
