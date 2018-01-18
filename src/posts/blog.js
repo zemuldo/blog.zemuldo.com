@@ -20,7 +20,7 @@ class Blog extends React.Component {
             likes: this.props.blog ? this.props.blog.likes : 0,
             authorAvatar: null,
             title: this.props.blog.title,
-            wordCount:0
+            wordCount: 0
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -483,7 +483,7 @@ class Blog extends React.Component {
                             <hr color='green'/>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
-                                <BlogEditor className='editor' editorState={this.props.blog.body}/>
+                                <BlogEditor mode={'edit'} className='editor' editorState={this.props.blog.body}/>
                             </div>
                         </div>
                         : <div>

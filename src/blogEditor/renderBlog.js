@@ -16,7 +16,7 @@ import {
     EditorState,
     RichUtils
 } from 'draft-js'
-import {Button, Header, Icon, Modal} from 'semantic-ui-react'
+import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
@@ -71,6 +71,8 @@ class RenderBlog extends React.Component {
             showMedURLInput: false,
             url: '',
             urlType: '',
+            title: '',
+            wordCount: 0
 
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -78,7 +80,8 @@ class RenderBlog extends React.Component {
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
         this.saveContent = this.saveContent.bind(this);
-        this.handleEditorState = this.handleEditorState.bind(this);
+        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this);
+        this.handleEditorStateCreate = this.handleEditorStateCreate.bind(this);
         this.publish = this.publish.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleTopicChange = this.handleTopicChange.bind(this);
@@ -96,6 +99,17 @@ class RenderBlog extends React.Component {
         this._addVideo = this._addVideo.bind(this);
         this.__promptForMedia = this.__promptForMedia.bind(this);
         this._confirmMedia = this._confirmMedia.bind(this)
+        this.handleTitleChange = this.handleTitleChange.bind(this)
+        this.handleWordChange = this.handleWordChange.bind(this)
+    }
+
+    handleTitleChange = (e) => {
+        this.setState({title: e.target.value})
+        localStorage.setItem('blogTitle',e.target.value)
+    }
+
+    handleWordChange = (e) => {
+        this.setState({wordCount: e.target.value})
     }
 
     __promptForMedia(type) {
@@ -283,48 +297,81 @@ class RenderBlog extends React.Component {
     }
 
     publish = () => {
-        this.setState({open: true});
-        const content = localStorage.getItem('editBlog');
-        if (content) {
-            let obj = JSON.parse(content);
-            obj.blocks.splice(0, 1);
+        this.setState({open: true})
+        const title = localStorage.getItem('blogTitle')
+        const content = localStorage.getItem('draftContent')
+        const blogData = JSON.parse(localStorage.getItem('blogData'))
+        if (content && blogData && title) {
+            let obj = JSON.parse(content)
             axios.post(env.httpURL, {
-                queryMethod: 'updateBlog',
+                queryMethod: 'publish',
                 'queryData': {
-                    _id: this.props.blog.post_ID,
-                    update: {
-                        body: this.props.blog.body,
-                        title: this.props.blog.title
-                    }
+                    type: blogData.type,
+                    title: title,
+                    query: 'publish',
+                    topics: blogData.topics,
+                    about: blogData.about,
+                    images: ['blogs_pic.jpg'],
+                    authorID: this.props.user.id,
+                    author: this.props.user.firstName + ' ' + this.props.user.lastName,
+                    userName: this.props.user.userName,
+                    body: JSON.stringify(obj)
                 }
 
             })
                 .then(function (response) {
-                    console.log(response)
+                    if (response.data.state === true) {
+                        window.localStorage.removeItem('blogData')
+                        window.localStorage.removeItem('draftContent')
+                        localStorage.removeItem('blogTitle')
+                        this.setState({isPublished: true, filledForm: true})
+                        this.props.varsActions.updateVars({editingMode: false, createNew: false})
+                    } else {
+                        this.props.varsActions.updateVars({editingMode: false, createNew: false})
+                    }
                 }.bind(this))
 
                 .catch(function (err) {
-
+                    this.setState({filledForm: true})
+                    this.setState({isPublished: false})
                 }.bind(this))
         } else {
 
         }
     };
     saveContent = debounce((content) => {
-        window.localStorage.setItem('editBlog', JSON.stringify(convertToRaw(content)))
-        this.setState({words: <WordCounter/>})
+        this.props.mode === 'edit' ?
+            window.localStorage.setItem('editBlog', JSON.stringify(convertToRaw(content))) :
+            window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)))
     }, 1000);
 
     componentDidMount() {
-        this.handleEditorState()
+        this.props.mode === 'edit' ? this.handleEditorStateEdit() : this.handleEditorStateCreate()
     };
 
     componentWillUpdate() {
 
     }
 
-    handleEditorState() {
+    handleEditorStateEdit() {
         this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.editorState)), decorator)})
+    };
+
+    handleEditorStateCreate() {
+        const title = localStorage.getItem('title')
+        const editorState = window.localStorage.getItem('draftContent')
+        const blogDataState = window.localStorage.getItem('blogData')
+        if (editorState && blogDataState) {
+            this.setState({
+                title: title ? title : '',
+                hasSavedContent: false,
+                filledForm: true,
+                continueEdit: true,
+                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)), decorator)
+            })
+        } else {
+            this.setState({filledForm: true, editorState: EditorState.createEmpty(decorator)})
+        }
     };
 
     handleCategoryChange(e, data) {
@@ -432,9 +479,33 @@ class RenderBlog extends React.Component {
         return (
             <div className='RichEditor-root'>
                 {
-                    this.props.blog.editMode
+                    this.props.blog.editMode || this.props.mode === 'create'
                         ? <div>
                             <div>
+                                {
+                                    this.props.mode === 'create' ?
+                                        <div>
+                                            <Button
+                                                disabled={this.state.hasSavedContent}
+                                                style={{float: 'right'}} type='button'
+                                                onClick={this.startPublish}
+                                                color='green' size='mini'>Publish
+                                            </Button>
+                                            <Button
+                                                disabled={this.state.hasSavedContent}
+                                                style={{float: 'left'}} type='button'
+                                                onClick={this.handleGoBackToProfile}
+                                                color='green' size='mini'>Exit
+                                            </Button>
+                                            <span>Title: </span>
+                                            <Input onChange={this.handleTitleChange} value={this.state.title}/>
+                                            {' '}
+                                            <span>Words </span>
+                                            <Input onChange={this.handleWordChange} value={this.state.words}/>
+                                            <br/>
+                                            <br/>
+                                        </div> : null
+                                }
                                 <div>
                                     <BlockStyleControls
                                         editorState={editorState}
@@ -517,7 +588,7 @@ class RenderBlog extends React.Component {
                             </Modal>
                         </div> : null
                 }
-                <div style={this.props.blog.editMode ? {
+                <div style={this.props.blog.editMode || this.props.mode==='create'? {
                     height: window.innerHeight * 0.7,
                     minHeight: '300px',
                     width: 'inherit',
@@ -528,10 +599,39 @@ class RenderBlog extends React.Component {
                     borderRadius: '1%'
                 } : null}>
 
+                    <Modal open={this.state.previewOpen}>
+                        <Modal.Header><Header
+                            style={{margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center'}}
+                            color='green' as='h1'>
+                            You are about to publish this article.
+                        </Header></Modal.Header>
+                        <Modal.Content>
+                            <div>
+                                <p>
+                                    This is how will appear. Review and publish. Click back if you need to make changes
+                                </p>
+                            </div>
+                            <hr/>
+                            <Modal.Description>
+                                <div>
+                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState}
+                                                 editorState={this.state.editorState}/>
+                                </div>
+                            </Modal.Description>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button.Group>
+                                <Button color='blue' onClick={this.closePreview}>Back</Button>
+                                <Button.Or/>
+                                <Button color='green' onClick={this.handleConfirm}>Publish</Button>
+                            </Button.Group>
+                        </Modal.Actions>
+                    </Modal>
+
                     <div className={className}>
                         <Editor
                             onClick={this.focus}
-                            readOnly={!this.props.blog.editMode}
+                            readOnly={!this.props.blog.editMode && this.props.mode !== 'create'}
                             blockRendererFn={mediaBlockRenderer}
                             blockStyleFn={getBlockStyle}
                             customStyleMap={styleMap}
@@ -558,7 +658,7 @@ class RenderBlog extends React.Component {
 const mapStateToProps = (state) => {
     return {
         blog: state.blog,
-        user: state.user
+        user: state.user,
     }
 };
 
@@ -570,7 +670,10 @@ const mapDispatchToProps = (dispatch) => {
 
 RenderBlog.propTypes = {
     editorState: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
     blog: PropTypes.object.isRequired,
+    mode: PropTypes.string.isRequired,
+    varsActions: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderBlog)

@@ -164,7 +164,6 @@ class RichEditorExample extends React.Component {
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
     this.onTab = this.onTab.bind(this)
     this.handleEditorState = this.handleEditorState.bind(this)
-    this.publish = this.publish.bind(this)
     this.componentDidMount = this.componentDidMount.bind(this)
     this.reinInitEditorState = this.reinInitEditorState.bind(this)
   }
@@ -183,54 +182,13 @@ class RichEditorExample extends React.Component {
   onTab (e) {
   }
 
-  publish = () => {
-    this.setState({open: true})
-    const content = localStorage.getItem('draftContent')
-    const blogData = JSON.parse(localStorage.getItem('blogData'))
-    if (content && blogData) {
-      let obj = JSON.parse(content)
-      let title = obj.blocks[0].text
-      obj.blocks.splice(0, 1)
-      axios.post(env.httpURL, {
-        queryMethod: 'publish',
-        'queryData': {
-          type: cats[blogData.type],
-          title: title,
-          query: 'publish',
-          topics: blogData.topics,
-          images: ['blogs_pic.jpg'],
-          author: 'Danstan Onyango',
-          userName: this.props.user.userName,
-          body: JSON.stringify(obj)
-        }
-      })
-                .then(function (response) {
-                  if (response.data.state === true) {
-                    window.localStorage.removeItem('blogData')
-                    window.localStorage.removeItem('draftContent')
-                    this.setState({isPublished: true, filledForm: true})
-                    this.props.varsActions.updateVars({editingMode: true, createNew: true})
-                  } else {
-                    this.props.varsActions.updateVars({editingMode: true, createNew: true})
-                  }
-                }.bind(this))
-
-                .catch(function (err) {
-                  this.setState({filledForm: true})
-                  this.setState({isPublished: false})
-                }.bind(this))
-    } else {
-
-    }
-  };
-
   componentDidMount () {
     this.handleEditorState()
   }
 
   handleEditorState () {
-    const editorState = window.localStorage.getItem('draftContent')
-    const blogDataState = window.localStorage.getItem('blogData')
+    const editorState = window.localStorage.getItem('draftContent');
+    const blogDataState = window.localStorage.getItem('blogData');
     if (editorState && blogDataState) {
       this.setState({
         hasSavedContent: false,
@@ -291,8 +249,6 @@ const mapDispatchToProps = (dispatch) => {
 
 RichEditorExample.propTypes = {
   title:PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
-  varsActions: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RichEditorExample)

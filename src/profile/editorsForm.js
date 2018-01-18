@@ -1,11 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Label, Header, Form, Select, Dropdown} from 'semantic-ui-react'
-import Creator from '../blogEditor/createBlog'
+import Creator from '../blogEditor/renderBlog'
 import * as VarsActions from '../store/actions/vars'
 import {bindActionCreators} from 'redux'
 import {topics} from '../environments/conf'
 import PropTypes from 'prop-types'
+import {
+    EditorState,
+} from 'draft-js'
 
 const categories = [
    {key: 'dev', value: 'dev', text: 'Development', name: 'development'},
@@ -133,6 +136,8 @@ class EditorsForm extends React.Component {
                        </Form>
                     </div>
                     : <Creator
+                      editorState = {EditorState.createEmpty()}
+                      mode = 'create'
                       currentUser={this.props.currentUser}
                       topics={this.state.topics}
                       category={this.state.category}
