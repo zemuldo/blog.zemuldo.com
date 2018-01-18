@@ -136,7 +136,7 @@ class EditorsForm extends React.Component {
                        </Form>
                     </div>
                     : <Creator
-                      editorState = {EditorState.createEmpty()}
+                      editorState = {JSON.stringify(EditorState.createEmpty())}
                       mode = 'create'
                       currentUser={this.props.currentUser}
                       topics={this.state.topics}
