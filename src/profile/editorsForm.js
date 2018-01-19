@@ -43,7 +43,6 @@ class EditorsForm extends React.Component {
   }
 
   handleCategoryChange (e, data) {
-     console.log(data);
      this.setState({
       category: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)

@@ -2,6 +2,8 @@ import React from 'react'
 import {CompositeDecorator} from "draft-js";
 import PropTypes from "prop-types";
 import {Icon} from 'semantic-ui-react'
+import PrismDecorator from 'draft-js-prism'
+import Prism from 'prismjs'
 
 
 export function findLinkEntities(contentBlock, callback, contentState) {
@@ -33,7 +35,8 @@ Link.propTypes = {
 export const decorator = new CompositeDecorator([
     {
         strategy: findLinkEntities,
-        component: Link
+        component: Link,
+        prism: PrismDecorator,
     }
 ]);
 export const styles = {
@@ -125,17 +128,21 @@ export const Media = (props) => {
 /*Custom overrides for "code" style.*/
 export const styleMap = {
     CODE: {
-        backgroundColor: 'red',
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
         fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
         fontSize: 16,
-        padding: 2
-    }
+        padding: 2,
+    },
 };
 
 export function getBlockStyle(block) {
     switch (block.getType()) {
         case 'blockquote':
             return 'RichEditor-blockquote';
+        case 'code-block':
+            return 'RichEditor-Code';
+        case 'code-block-section':
+            return 'RichEditor-Code-Wrap'
         default:
             return null
     }
@@ -182,7 +189,8 @@ export const BLOCK_TYPES = [
     {label: 'Blockquote', style: 'blockquote', icon: 'header'},
     {label: 'UL', style: 'unordered-list-item', icon: 'unordered list'},
     {label: 'OL', style: 'ordered-list-item', icon: 'ordered list'},
-    {label: 'Code Block', style: 'code-block', icon: 'code'}
+    {label: 'Code Block', style: 'code-block', icon: 'code'},
+    {label: 'Code Section', style: 'code-block-section', icon: 'code'}
 ];
 export const BlockStyleControls = (props) => {
     const {editorState} = props;
