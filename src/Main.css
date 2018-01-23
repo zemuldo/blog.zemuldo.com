@@ -6,8 +6,7 @@
 
 /*Body*/
 .main_body{
-    margin-left: 30px;
-    margin-right: 30px;
+
 }
 .blogs{
     margin-left: 10px;
@@ -147,11 +146,34 @@ a:hover {
 }
 
 .RichEditor-editor .public-DraftStyleDefault-pre {
-    background-color: rgba(0, 0, 0, 0.05);
-    font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
-    font-size: 16px;
-    padding: 20px;
+    background-color: rgb(68,68,68); /* Needed for IEs */
+
+    -moz-box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
+    -webkit-box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
+    box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
+
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";
+    zoom: 1;
+    margin: 5px 10px 5px 10px;
+    padding: 5px;
+    list-style: none;
+    color: #45D40C;
+    font: 0.8em 'Andale Mono', Consolas, 'Courier New';
+    line-height: 1.6em;
+
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
 }
+
+.RichEditor-editor .public-DraftStyleDefault-pre .content {
+    position: relative; /* This protects the inner element from being blurred */
+    padding: 100px;
+    background-color: #DDD;
+}
+
 
 .RichEditor-controls {
     font-family: 'Helvetica', sans-serif;
@@ -306,16 +328,6 @@ a:hover {
     margin: 3em 0em 0em 0em;
 }
 
-.preloader {
-    border-radius: 50%;
-    border: 5px solid blue;
-    border-right: 5px solid green;
-    border-left: 5px solid orange;
-    width: 60px;
-    height: 60px;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
-}
 
 /*
     Common
@@ -341,7 +353,6 @@ a:hover {
     background-color: transparent;
     border: none;
 }
-
 /*
     Chat
 */

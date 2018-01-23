@@ -24,7 +24,7 @@ class App extends React.Component {
       this.state = {
          sessionId: null,
          x: 0,
-         y: (window.innerWidth / 100) - 3,
+         y: ((window.innerWidth / 100) - 3)<=1?1:(window.innerWidth / 100) - 3,
          window: window.innerWidth,
          topics: (window.innerWidth / 100) - 3
       }

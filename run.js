@@ -45,8 +45,10 @@ let topics = [
 let t = {}
 
 for (let i = 0; i < topics.length; i++) {
-  t[topics[i].key] = topics[i]
+    //topics[i].text = topics[i].full
+    //t[topics[i].key] = topics[i]
+    delete topics[i].full
   if (i === topics.length - 1) {
-    console.log(t)
+    console.log(topics)
   }
 }

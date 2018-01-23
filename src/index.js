@@ -12,7 +12,7 @@ import 'semantic-ui-css/semantic.min.css'
 const store = createStore(
     reducers,
     applyMiddleware(thunk)
-)
+);
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,4 +20,4 @@ ReactDOM.render(
       <App />
     </BrowserRouter>
   </Provider>,
-    document.getElementById('main-app'))
+    document.getElementById('main-app'));

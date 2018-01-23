@@ -152,7 +152,7 @@ class LiveChat extends React.Component {
                                   <Image avatar size={'small'} src={'/img/bot/bot.gif'} />
                                   <hr color='blue' />
                                 </div>
-                                <div className='chatContainer' style={{overflowX: 'scroll', height: '300px'}}>
+                                <div className='chatContainer' style={{overflowX: 'hidden',overflowY: 'scroll', height: '300px'}}>
                                   {
                                                 _.times(this.state.chat.length, (i) =>
                                                   <div ref={i} key={i}>

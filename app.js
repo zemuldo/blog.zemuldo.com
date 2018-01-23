@@ -70,6 +70,9 @@ app.use(function (req, res, next) {
   next()
 })
 
+app.get('/*service-worker.js', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'service-worker.js'))
+})
 app.get('/*sw.js', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'sw.js'))
 })
@@ -158,16 +161,16 @@ app.get('/*', async function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
   }
 })
-/* app.listen(conf[env].httpPort,()=>{
+ app.listen(conf[env].httpPort,()=>{
     console.log("**Server started at http://localhost:"+conf[env].httpPort)
-}); */
-spdy
-    .createServer(options, app)
-    .listen(conf[env].httpPort, (error) => {
-      if (error) {
-        console.error(error)
-        return process.exit(1)
-      } else {
-        console.log('Listening on port: ' + conf[env].httpPort + '.')
-      }
-    })
+});
+// spdy
+//     .createServer(options, app)
+//     .listen(conf[env].httpPort, (error) => {
+//       if (error) {
+//         console.error(error)
+//         return process.exit(1)
+//       } else {
+//         console.log('Listening on port: ' + conf[env].httpPort + '.')
+//       }
+//     })
