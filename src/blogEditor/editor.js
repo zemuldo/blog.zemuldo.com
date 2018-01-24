@@ -80,7 +80,8 @@ class RenderBlog extends React.Component {
             url: '',
             urlType: '',
             title: '',
-            wordCount: 0
+            wordCount: 0,
+            firstBlock:{}
 
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -347,10 +348,12 @@ class RenderBlog extends React.Component {
 
         }
     };
-    saveContent = debounce((content) => {
+    saveContent = debounce((state) => {
+        let content = convertToRaw(state);
         this.props.mode === 'edit' ?
-            window.localStorage.setItem('editBlog', JSON.stringify(convertToRaw(content))) :
-            window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)))
+            window.localStorage.setItem('editBlog', JSON.stringify(content)) :
+            window.localStorage.setItem('draftContent', JSON.stringify(content))
+        !this.state.firstBlock.text?this.setState({firstBlock:content.blocks[0]}):null
     }, 1000);
 
     componentDidMount() {
@@ -358,25 +361,29 @@ class RenderBlog extends React.Component {
     };
 
     componentWillUpdate() {
-
     }
 
     handleEditorStateEdit() {
-        this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.editorState)), decorator)})
+        let editorState = JSON.parse(this.props.editorState);
+        this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
+        !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
     };
 
     handleEditorStateCreate() {
         const title = localStorage.getItem('title')
-        const editorState = window.localStorage.getItem('draftContent')
+        const state = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
-        if (editorState && blogDataState) {
+        if (state && blogDataState) {
+            let editorState = JSON.parse(state);
             this.setState({
                 title: title ? title : '',
                 hasSavedContent: false,
                 filledForm: true,
                 continueEdit: true,
-                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)), decorator)
+                firstBlock:editorState.blocks[0],
+                editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)
             })
+            !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
         } else {
             this.setState({filledForm: true, editorState: EditorState.createEmpty(decorator)})
         }
@@ -505,13 +512,13 @@ class RenderBlog extends React.Component {
                                                 onClick={this.handleGoBackToProfile}
                                                 color='green' size='mini'>Exit
                                             </Button>
+                                            <br/>
+                                            <br/>
                                             <span>Title: </span>
                                             <Input onChange={this.handleTitleChange} value={this.state.title}/>
                                             {' '}
                                             <span>Words </span>
                                             <Input onChange={this.handleWordChange} value={this.state.words}/>
-                                            <br/>
-                                            <br/>
                                         </div> : null
                                 }
                                 <div>
@@ -555,7 +562,7 @@ class RenderBlog extends React.Component {
                                         </Button>
                                     </div>
                                     {
-                                        this.props.blog.editMode ?
+                                        (this.props.blog.editMode || this.props.mode==='create') && this.state.firstBlock.text?
                                             <div>
                                                 <div><CharCounter limit={10}/> characters</div>
                                                 <div><WordCounter limit={500}/> words</div>
