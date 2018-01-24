@@ -22,6 +22,7 @@ import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
+import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import editorStyles from './editorStyle.css';
 import {
@@ -320,6 +321,7 @@ class RenderBlog extends React.Component {
                     query: 'publish',
                     topics: blogData.topics,
                     about: blogData.about,
+                    wordCount:this.state.wordCount,
                     images: ['blogs_pic.jpg'],
                     authorID: this.props.user.id,
                     author: this.props.user.firstName + ' ' + this.props.user.lastName,
@@ -364,6 +366,7 @@ class RenderBlog extends React.Component {
     }
 
     handleEditorStateEdit() {
+        this.setState({wordCount:this.props.blog.wordCount})
         let editorState = JSON.parse(this.props.editorState);
         this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
         !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
@@ -518,7 +521,7 @@ class RenderBlog extends React.Component {
                                             <Input onChange={this.handleTitleChange} value={this.state.title}/>
                                             {' '}
                                             <span>Words </span>
-                                            <Input onChange={this.handleWordChange} value={this.state.words}/>
+                                            <Input onChange={this.handleWordChange} value={this.state.wordCount}/>
                                         </div> : null
                                 }
                                 <div>
@@ -679,7 +682,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        varsActions: bindActionCreators(VarsActions, dispatch)
+        varsActions: bindActionCreators(VarsActions, dispatch),
+        blogActions: bindActionCreators(BlogActions, dispatch)
     }
 };
 

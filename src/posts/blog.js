@@ -270,7 +270,7 @@ class Blog extends React.Component {
     }
 
     handleWordChange = (e) => {
-        this.setState({wordCount: e.target.value})
+        this.props.blogActions.updateBlog({wordCount:e.target.value})
     }
 
     handleSave = () => {
@@ -362,7 +362,7 @@ class Blog extends React.Component {
                                                                         value={this.state.title}/>
                                             {' '}
                                             <span>Words </span> <Input onChange={this.handleWordChange}
-                                                                       value={this.state.words}/>
+                                                                       value={this.props.blog.wordCount}/>
                                         </Header>
 
                                     </div>
