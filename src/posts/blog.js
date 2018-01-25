@@ -270,7 +270,7 @@ class Blog extends React.Component {
     }
 
     handleWordChange = (e) => {
-        this.setState({wordCount: e.target.value})
+        this.props.blogActions.updateBlog({wordCount:e.target.value})
     }
 
     handleSave = () => {
@@ -324,12 +324,12 @@ class Blog extends React.Component {
                                    Published on:
                                    <br/>
                                 {this.props.blog.date}
-              </span>
+                            </span>
                             <br/>
                             <br/>
                             <span className='info'>
-                {this.props.blog.author} {' '}
-              </span>
+                                {this.props.blog.author} {' '}
+                            </span>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
                                 <BlogEditor editorState={this.props.blog.body}/>
@@ -362,7 +362,7 @@ class Blog extends React.Component {
                                                                         value={this.state.title}/>
                                             {' '}
                                             <span>Words </span> <Input onChange={this.handleWordChange}
-                                                                       value={this.state.words}/>
+                                                                       value={this.props.blog.wordCount}/>
                                         </Header>
 
                                     </div>

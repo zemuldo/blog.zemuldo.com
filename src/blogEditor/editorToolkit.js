@@ -22,7 +22,7 @@ export function findLinkEntities(contentBlock, callback, contentState) {
 export const Link = (props) => {
     const {url} = props.contentState.getEntity(props.entityKey).getData()
     return (
-        <a href={url} style={styles.link}>
+        <a href={url} target='_blank' style={styles.link}>
             {props.children}
         </a>
     )
