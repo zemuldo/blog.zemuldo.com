@@ -26,7 +26,7 @@ const categories = [
 ]
 
 class EditorsForm extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       category: null,
@@ -34,7 +34,7 @@ class EditorsForm extends React.Component {
       termsAccept: false,
       about: '',
       dialogInComplete: true,
-      editorState:null
+      editorState: null
     }
     this.handleTopicChange = this.handleTopicChange.bind(this)
     this.handleUTAChange = this.handleUTAChange.bind(this)
@@ -43,54 +43,54 @@ class EditorsForm extends React.Component {
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
   };
 
-  componentDidMount () {
+  componentDidMount() {
     this.handleEditorStateCreate()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.removeEventListener('resize', this.resize)
   }
 
-  handleCategoryChange (e, data) {
-     this.setState({
+  handleCategoryChange(e, data) {
+    this.setState({
       category: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  handleAboutChange (e, data) {
+  handleAboutChange(e, data) {
     this.setState({
       about: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  handleTopicChange (e, data) {
+  handleTopicChange(e, data) {
     this.setState({
       topics: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  handleUTAChange (e, data) {
+  handleUTAChange(e, data) {
     this.setState({
       termsAccept: data.checked,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  onFinishClick () {
+  onFinishClick() {
     let blogDta = {
       type: this.state.category,
       topics: this.state.topics,
       about: this.state.about
     }
     window.localStorage.setItem('blogData', JSON.stringify(blogDta))
-    this.setState({filledForm: false})
-    this.updateVars([{key: 'editingMode', value: true}])
+    this.setState({ filledForm: false })
+    this.updateVars([{ key: 'editingMode', value: true }])
   }
 
-  updateVars (vars) {
+  updateVars(vars) {
     let newVars = this.props.vars
     for (let i = 0; i < vars.length; i++) {
       newVars[vars[i].key] = vars[i].value
@@ -172,7 +172,7 @@ class EditorsForm extends React.Component {
                     topics={this.state.topics}
                     category={this.state.category}
                   /> :
-                  <div>LOading state</div>
+                  <div>Loading state</div>
               }
             </div>
              }

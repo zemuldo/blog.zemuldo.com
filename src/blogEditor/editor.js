@@ -115,11 +115,11 @@ class RenderBlog extends React.Component {
 
     handleTitleChange = (e) => {
         this.setState({title: e.target.value})
-        localStorage.setItem('blogTitle',e.target.value)
+        this.props.mode==='create'?localStorage.setItem('creatTitle',e.target.value):null
     }
 
     handleWordChange = (e) => {
-        this.setState({wordCount: e.target.value})
+        this.setState({wordCount:Number(e.target.value)})
     }
 
     __promptForMedia(type) {
@@ -308,10 +308,10 @@ class RenderBlog extends React.Component {
 
     publish = () => {
         this.setState({open: true})
-        const title = localStorage.getItem('blogTitle')
+        const title = localStorage.getItem('creatTitle')
         const content = localStorage.getItem('draftContent')
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        if (content && blogData && title) {
+        if (content && blogData && title && this.state.wordCount>2) {
             let obj = JSON.parse(content)
             axios.post(env.httpURL, {
                 queryMethod: 'publish',
@@ -373,7 +373,7 @@ class RenderBlog extends React.Component {
     };
 
     handleEditorStateCreate() {
-        const title = localStorage.getItem('title')
+        const title = localStorage.getItem('creatTitle')
         const state = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
         if (state && blogDataState) {
@@ -423,6 +423,14 @@ class RenderBlog extends React.Component {
     };
 
     startPublish = () => {
+        if(this.state.title.length<5){
+            alert('title error')
+            return false
+        }
+        if(this.state.words<1){
+            alert('title error')
+            return false
+        }
         this.showPreview()
     };
     showConfirm = () => {
@@ -518,10 +526,10 @@ class RenderBlog extends React.Component {
                                             <br/>
                                             <br/>
                                             <span>Title: </span>
-                                            <Input onChange={this.handleTitleChange} value={this.state.title}/>
+                                            <Input error={this.state.title.length<5} onChange={this.handleTitleChange} value={this.state.title}/>
                                             {' '}
                                             <span>Words </span>
-                                            <Input onChange={this.handleWordChange} value={this.state.wordCount}/>
+                                            <Input error={this.state.wordCount<200} onChange={this.handleWordChange} value={this.state.wordCount}/>
                                         </div> : null
                                 }
                                 <div>

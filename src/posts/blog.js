@@ -7,6 +7,16 @@ import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
+import {
+    AtomicBlockUtils,
+    convertFromRaw,
+    convertToRaw,
+    EditorState,
+    RichUtils
+  } from 'draft-js'
+  import {
+    decorator
+  } from '../blogEditor/editorToolkit'
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -20,7 +30,8 @@ class Blog extends React.Component {
             likes: this.props.blog ? this.props.blog.likes : 0,
             authorAvatar: null,
             title: this.props.blog.title,
-            wordCount: 0
+            wordCount: 0,
+            editorState: null
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -34,7 +45,14 @@ class Blog extends React.Component {
         this.handleTitleChange = this.handleTitleChange.bind(this)
         this.handleSave = this.handleSave.bind(this)
         this.handleWordChange = this.handleWordChange.bind(this)
+        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
     }
+
+    handleEditorStateEdit() {
+        this.setState({wordCount:this.props.blog.wordCount})
+        let editorState = JSON.parse(this.props.blog.body);
+        this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
+    };
 
     closeDelete() {
         this.setState({showDelete: false})
@@ -140,6 +158,7 @@ class Blog extends React.Component {
     }
 
     componentDidMount() {
+        this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
             this.getAauthorAvatar()
@@ -483,7 +502,11 @@ class Blog extends React.Component {
                             <hr color='green'/>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
-                                <BlogEditor mode={'edit'} className='editor' editorState={this.props.blog.body}/>
+                                {
+                                    this.state.editorState ?
+                                        <BlogEditor initEditorState={this.state.editorState} mode={'edit'} className='editor' editorState={this.props.blog.body} /> :
+                                        <div>Loading state</div>
+                                }
                             </div>
                         </div>
                         : <div>
