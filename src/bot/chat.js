@@ -104,7 +104,6 @@ class LiveChat extends React.Component {
       x.push({by: 'user', text: this.state.message})
       this.setState({chat: x})
       let mess = {type: 'user', pups: 'chat', sessionId: this.state.sessionId, msg: this.state.message, tz: 'Africa/Nairobi'}
-      console.log(this.props.vars.ws.readyState)
       if(this.props.vars.ws.readyState===1){
         this.props.vars.ws.send(JSON.stringify(mess))
       }
