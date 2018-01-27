@@ -7,8 +7,15 @@ import {bindActionCreators} from 'redux'
 import {topics} from '../environments/conf'
 import PropTypes from 'prop-types'
 import {
-    EditorState,
+  AtomicBlockUtils,
+  convertFromRaw,
+  convertToRaw,
+  EditorState,
+  RichUtils
 } from 'draft-js'
+import {
+  decorator
+} from '../blogEditor/editorToolkit'
 
 const categories = [
    {key: 'dev', value: 'dev', text: 'Development', name: 'development'},
@@ -26,7 +33,8 @@ class EditorsForm extends React.Component {
       topics: [],
       termsAccept: false,
       about: '',
-      dialogInComplete: true
+      dialogInComplete: true,
+      editorState:null
     }
     this.handleTopicChange = this.handleTopicChange.bind(this)
     this.handleUTAChange = this.handleUTAChange.bind(this)
@@ -36,6 +44,7 @@ class EditorsForm extends React.Component {
   };
 
   componentDidMount () {
+    this.handleEditorStateCreate()
   }
 
   componentWillUnmount () {
@@ -88,6 +97,24 @@ class EditorsForm extends React.Component {
     }
     this.props.varsActions.updateVars(newVars)
   };
+  handleEditorStateCreate() {
+    const title = localStorage.getItem('title')
+    const state = window.localStorage.getItem('draftContent')
+    const blogDataState = window.localStorage.getItem('blogData')
+    if (state && blogDataState) {
+      let editorState = JSON.parse(state);
+      this.setState({
+        title: title ? title : '',
+        hasSavedContent: false,
+        filledForm: true,
+        continueEdit: true,
+        firstBlock: editorState.blocks[0],
+        editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)
+      })
+    } else {
+      this.setState({ filledForm: true, editorState: EditorState.createEmpty(decorator) })
+    }
+  };
 
   render () {
     return (
@@ -134,13 +161,20 @@ class EditorsForm extends React.Component {
                          }, {key: 'createNew', value: false}])} color='green' size='large'>Exit</Form.Button>
                        </Form>
                     </div>
-                    : <Creator
-                      editorState = {JSON.stringify(EditorState.createEmpty())}
-                      mode = 'create'
-                      currentUser={this.props.currentUser}
-                      topics={this.state.topics}
-                      category={this.state.category}
-                    />
+            : <div>
+              {
+                this.state.editorState ?
+                  <Creator
+                    initEditorState={this.state.editorState}
+                    editorState={JSON.stringify(EditorState.createEmpty())}
+                    mode='create'
+                    currentUser={this.props.currentUser}
+                    topics={this.state.topics}
+                    category={this.state.category}
+                  /> :
+                  <div>LOading state</div>
+              }
+            </div>
              }
       </div>
 
