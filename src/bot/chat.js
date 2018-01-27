@@ -1,14 +1,11 @@
 import React from 'react'
 import {Button, Header, Segment, Portal, Form, TextArea, Comment, Image} from 'semantic-ui-react'
 import _ from 'lodash'
-import config from '../environments/conf'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import * as TopicsActions from '../store/actions/topics'
-import PropTypes from 'prop-types'
-
-const env = config[process.env.NODE_ENV] || 'development'
+import PropTypes, { func } from 'prop-types'
 
 let imets = []
 for (let i = 0; i < 100; i++) {
@@ -25,7 +22,8 @@ class LiveChat extends React.Component {
       message: '',
       checked: false,
       sessionId: null,
-      chat: []
+      chat: [],
+      unsent:[]
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
@@ -42,6 +40,11 @@ class LiveChat extends React.Component {
 
   componentDidMount () {
     this.chat()
+    setInterval(()=>{
+      if(this.props.vars.ws.readyState!==1 && this.props.vars.ws.readyState!==0){
+        this.connectHandler()
+      }
+    },5000)
   }
 
   chat () {
@@ -86,13 +89,25 @@ class LiveChat extends React.Component {
   handlePortalClose = () => {
     this.setState({portalOpen: false, checked: false})
   };
+  connectHandler(){
+    this.props.varsActions.updateVars({ws:new WebSocket(this.props.vars.env.wsURL)})
+    this.chat()
+  }
   handleSubmit = (e) => {
     if (this.state.message.length > 1) {
       let x = this.state.chat
       x.push({by: 'user', text: this.state.message})
       this.setState({chat: x})
       let mess = {type: 'user', pups: 'chat', sessionId: this.state.sessionId, msg: this.state.message, tz: 'Africa/Nairobi'}
-      this.props.vars.ws.send(JSON.stringify(mess))
+      console.log(this.props.vars.ws.readyState)
+      if(this.props.vars.ws.readyState===1){
+        this.props.vars.ws.send(JSON.stringify(mess))
+      }
+      else{
+        let unsent = this.state.unsent
+        unsent.push(mess)
+        this.setState({unsent:unsent})
+      }
       this.setState({message: ''})
       this.scrollChat('MessageEnd')
     }
