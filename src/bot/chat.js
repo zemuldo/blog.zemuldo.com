@@ -32,6 +32,7 @@ class LiveChat extends React.Component {
     this.handlePortalOpen = this.handlePortalOpen.bind(this)
     this.chat = this.chat.bind(this)
     this.scrollChat = this.scrollChat.bind(this)
+    this.resendUnsent=this.resendUnsent.bind(this)
   }
 
   scrollChat = function (i) {
@@ -45,6 +46,9 @@ class LiveChat extends React.Component {
         this.connectHandler()
       }
     },5000)
+  }
+
+  componentWillUpdate(){
   }
 
   chat () {
@@ -92,6 +96,7 @@ class LiveChat extends React.Component {
   connectHandler(){
     this.props.varsActions.updateVars({ws:new WebSocket(this.props.vars.env.wsURL)})
     this.chat()
+    this.resendUnsent()
   }
   handleSubmit = (e) => {
     if (this.state.message.length > 1) {
@@ -104,6 +109,7 @@ class LiveChat extends React.Component {
         this.props.vars.ws.send(JSON.stringify(mess))
       }
       else{
+        this.connectHandler()
         let unsent = this.state.unsent
         unsent.push(mess)
         this.setState({unsent:unsent})
@@ -112,6 +118,19 @@ class LiveChat extends React.Component {
       this.scrollChat('MessageEnd')
     }
   };
+
+  resendUnsent (){
+    for(let i = 0; i<this.state.unsent.length;i++){
+      setTimeout(()=>{
+        if(this.props.vars.ws.readyState===1){
+          this.props.vars.ws.send(JSON.stringify(this.state.unsent[i]))
+          if(i===this.state.unsent.length-1){
+            this.setState({unsent:[]})
+          }
+        }
+      },1000)
+    }
+  }
 
   handleTextChange (event) {
     this.setState({message: event.target.value})
