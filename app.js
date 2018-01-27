@@ -167,11 +167,11 @@ app.get('/*', async function (req, res) {
 });*/
 spdy
     .createServer(options, app)
-    .listen(conf[env].httpPort, (error) => {
+    .listen(process.env.PORT, (error) => {
       if (error) {
         console.error(error)
         return process.exit(1)
       } else {
-        console.log('Listening on port: ' + conf[env].httpPort + '.')
+        console.log('Listening on port: ' + process.env.PORT + '.')
       }
     })
