@@ -362,11 +362,10 @@ class Blog extends React.Component {
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button color='black' onClick={() => this.closeDelete()}>
+                        <Button color='green' onClick={() => this.closeDelete()}>
                             Cancel
                         </Button>
-                        <Button color='red' positive icon='checkmark' labelPosition='right' content='Delete'
-                                onClick={() => this.deletBlog(this.props.blog.id)}/>
+                        <Button color='red' icon='checkmark' labelPosition='right' content='Delete' onClick={() => this.deletBlog(this.props.blog.id)}/>
                     </Modal.Actions>
                 </Modal>
                 {
@@ -506,7 +505,7 @@ class Blog extends React.Component {
                                 }
                             </div>
                             <hr color='green'/>
-                            <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
+                            <div style={{margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
                                 {
                                     this.state.editorState ?
