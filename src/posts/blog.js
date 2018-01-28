@@ -310,7 +310,8 @@ class Blog extends React.Component {
                     _id: this.props.blog.post_ID,
                     update: {
                         body: body,
-                        title: this.state.title
+                        title: this.state.title,
+                        wordCount:this.props.blog.wordCount
                     }
                 }
 

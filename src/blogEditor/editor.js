@@ -620,8 +620,7 @@ class RenderBlog extends React.Component {
                     lineHeight: '3em',
                     overflowY: 'scroll',
                     padding: '5px',
-                    border: '1px solid #DEBB07',
-                    borderRadius: '1%'
+                    border: '1px solid green',
                 } : null}>
 
                     <Modal open={this.state.previewOpen}>
