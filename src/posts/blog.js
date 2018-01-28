@@ -2,6 +2,7 @@ import React from 'react'
 import {Button, Modal, Header, Icon, Image, Dropdown, Input} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
+import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
@@ -351,7 +352,11 @@ class Blog extends React.Component {
                             </span>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
-                                <BlogEditor editorState={this.props.blog.body}/>
+                                <div>{
+                                    this.state.editorState?
+                                    <PreviewEditor editorState={this.state.editorState}/>:
+                                    <div>Loading editor state</div>
+                                }</div>
                             </div>
                         </Modal.Description>
                     </Modal.Content>

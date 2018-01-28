@@ -152,7 +152,7 @@ class RichEditorExample extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editorState: EditorState.createEmpty(),
+      editorState: this.props.editorState,
       isLoaded: false,
       filledForm: false,
       continueEdit: false,

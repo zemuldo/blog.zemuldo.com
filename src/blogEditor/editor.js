@@ -599,8 +599,7 @@ class RenderBlog extends React.Component {
                                     <hr/>
                                     <Modal.Description>
                                         <div>
-                                            <ShowPreview reinInitEditorState={this.reinInitEditorState}
-                                                         editorState={this.state.editorState}/>
+                                            <ShowPreview  editorState={this.state.editorState}/>
                                         </div>
                                     </Modal.Description>
                                 </Modal.Content>
@@ -640,8 +639,7 @@ class RenderBlog extends React.Component {
                             <hr/>
                             <Modal.Description>
                                 <div>
-                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState}
-                                                 editorState={this.state.editorState}/>
+                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState} editorState={this.state.editorState}/>
                                 </div>
                             </Modal.Description>
                         </Modal.Content>
