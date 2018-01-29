@@ -12,39 +12,43 @@ const options = {
 }
 let ENV = require('./config/env')
 let env = ENV().raw.NODE_ENV
-let {getBlogTemplate} = require('./tools/tools')
+let {
+  getBlogTemplate
+} = require('./tools/tools')
 const conf = require('./src/environments/conf')
-let {getBlog} = require('./db/database')
+let {
+  getBlog
+} = require('./db/database')
 const pages = {
   dev: {
-    title: 'ZemuldO.COM-DEVELOPMENT',
+    title: 'ZemuldO.COM-Development',
     description: 'Software Development and Programming articles and insights',
-    imgSRC: 'img/blogs/blogs_pic.jpg'
+    imgSRC: '/static/img/banners/cap.png'
   },
   tech: {
-    title: 'ZemuldO.COM-TECHNOLOGY',
+    title: 'ZemuldO.COM-Technology',
     description: 'Technology related articles and insights',
-    imgSRC: 'img/blogs/blogs_pic.jpg'
+    imgSRC: '/static/img/banners/techBanner.jpg'
   },
   business: {
-    title: 'ZemuldO.COM-BUSINESS',
+    title: 'ZemuldO.COM-Business',
     description: 'Business related articles',
-    imgSRC: 'img/blogs/blogs_pic.jpg'
+    imgSRC: '/static/img/banners/cap.png'
   },
   reviews: {
-    title: 'ZemuldO.COM-REVIEWS',
+    title: 'ZemuldO.COM-Reviews',
     description: 'Reviews on new products and devices',
-    imgSRC: 'img/blogs/blogs_pic.jpg'
+    imgSRC: '/static/img/banners/cap.png'
   },
   tuts: {
-    title: 'ZemuldO.COM-TUTORIALS',
+    title: 'ZemuldO.COM-Tutorials',
     description: 'Tutorials on Trending technologies and languages',
-    imgSRC: 'img/blogs/blogs_pic.jpg'
+    imgSRC: '/static/img/banners/cap.png'
   },
   home: {
-    title: 'ZemuldO.COM-HOME',
+    title: 'ZemuldO.COM',
     description: 'Best Place for your reading, Tech and Business articles. Here you find featured content on current technologies like BigData, ML, AI, Deep Learning, DataScience and more',
-    imgSRC: 'img/blogs/blogs_pic.jpg'
+    imgSRC: '/static/img/banners/cap.png'
   }
 }
 app.use((req, res, next) => {
@@ -71,7 +75,7 @@ app.use(function (req, res, next) {
 })
 
 app.get('/*service-worker.js', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'service-worker.js'))
+  res.sendFile(path.join(__dirname, 'build', 'service-worker.js'))
 })
 app.get('/*sw.js', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'sw.js'))
@@ -110,37 +114,40 @@ app.use(function (req, res, next) {
     next()
   }
 })
-app.use('/static',express.static(path.join(__dirname, 'build')))
+app.use('/static', express.static(path.join(__dirname, 'build')))
 app.use(function (req, res, next) {
   res.locals.ua = req.get('User-Agent')
   next()
 })
 app.get('/*', async function (req, res) {
   let url = req.url.split('/').join('')
-  let incomingPath = 'home'
+  let query = {}
+  let blog = null
+  let incomingPath = ''
+  let page = url.split('/')[0]
   if (url.indexOf('-') !== -1) {
-    incomingPath = url.split('-').join(' ')
+    incomingPath = url.split('-')
   }
-  if (url.indexOf('%20') !== -1) {
-    incomingPath = url.split('%20').join(' ')
-  }
-  if (url.indexOf('%2520') !== -1) {
-    incomingPath = url.split('%2520').join(' ')
+
+  if (incomingPath) {
+    query.id = Number(incomingPath[incomingPath.length - 1])
   }
 
   let details = null
-  if (pages[incomingPath]) {
+  if (pages[page]) {
     details = {
-      title: pages[incomingPath].title,
-      description: pages[incomingPath].description,
-      imgSRC: pages[incomingPath].imgSRC
+      title: pages[page].title,
+      description: pages[page].description,
+      imgSRC: pages[page].imgSRC
     }
   } else {
-    let blog = await getBlog(incomingPath)
+    blog = await getBlog(query)
+    console.log(blog)
+    console.log(query)
     if (blog) {
       details = {
         title: blog.title,
-        description: blog.body.slice(0, 300),
+        description: blog.about,
         imgSRC: pages['home'].imgSRC
       }
     } else {
@@ -158,12 +165,15 @@ app.get('/*', async function (req, res) {
     res.send(html)
     console.log('the user agent is a crawler!')
   } else {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+    let html = getBlogTemplate(details)
+    res.send(html)
+    console.log('the user agent is a crawler!')
+    //res.sendFile(path.join(__dirname, 'build', 'index.html'))
   }
 })
 
- app.listen(conf[env].httpPort,()=>{
-    console.log("**Server started at http://localhost:"+conf[env].httpPort)
+app.listen(conf[env].httpPort, () => {
+  console.log("**Server started at http://localhost:" + conf[env].httpPort)
 });
 // spdy
 //     .createServer(options, app)
