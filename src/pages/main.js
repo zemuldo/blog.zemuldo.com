@@ -211,11 +211,14 @@ class App extends React.Component {
              this.props.blogsActions.updateBlogs([])
              if (!this.props.vars.wsFetchBlogDeatils) {
                 this.props.varsActions.updateVars({wsFetchBlogDeatils: true})
-                this.props.vars.ws.send(JSON.stringify({
-                   type: 'topicDetails',
-                   pups: 'topicDetails',
-                   sessionId: sessionStorage.getItem('sessionId')
-                }))
+                if(this.props.vars.ws.readyState===1){
+                    this.props.vars.ws.send(JSON.stringify({
+                        type: 'topicDetails',
+                        pups: 'topicDetails',
+                        sessionId: sessionStorage.getItem('sessionId')
+                     }))
+                  }
+                
              }
              this.props.varsActions.updateVars({blogsLoaded: true})
           }.bind(this))
@@ -272,7 +275,7 @@ class App extends React.Component {
    }
 
    componentWillReceiveProps() {
-      /*
+          /*
          This method is used to detect navigation/actions from the user then update the UI.
          ie. Page navigation, Page crops etc
       */
