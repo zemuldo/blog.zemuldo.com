@@ -41,7 +41,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/' + buildID + '.[name].zemuldo.css'
+const cssFilename = 'css/' + buildID + '.[name].zemuldo.css'
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -69,10 +69,10 @@ module.exports = {
         // Generated JS file names (with nested folders).
         // There will be one main bundle, and one file per asynchronous chunk.
         // We don't currently advertise code splitting but Webpack supports it.
-        filename: 'static/js/' + buildID + '.[name].zemuldo.js',
-        chunkFilename: 'static/js/' + buildID + '.[name].zemuldo.chunk.js',
+        filename: 'js/' + buildID + '.[name].zemuldo.js',
+        chunkFilename: 'js/' + buildID + '.[name].zemuldo.chunk.js',
         // We inferred the "public path" (such as / or /my-project) from homepage.
-        publicPath: publicPath,
+        publicPath: "/static/",
         // Point sourcemap entries to original disk location
         devtoolModuleFilenameTemplate: info =>
             path.relative(paths.appSrc, info.absoluteResourcePath)
@@ -151,7 +151,7 @@ module.exports = {
                 ],
                 loader: require.resolve('file-loader'),
                 options: {
-                    name: 'static/media/' + buildID + '.[name].zemuldo.[ext]'
+                    name: 'media/' + buildID + '.[name].zemuldo.[ext]'
                 }
             },
             // "url" loader works just like "file" loader but it also embeds
@@ -161,7 +161,7 @@ module.exports = {
                 loader: require.resolve('url-loader'),
                 options: {
                     limit: 10000,
-                    name: 'static/media/[name].zemuldo.[ext]'
+                    name: 'media/[name].zemuldo.[ext]'
                 }
             },
             // Process JS with Babel.
@@ -289,7 +289,7 @@ module.exports = {
             // If a URL is already hashed by Webpack, then there is no concern
             // about it being stale, and the cache-busting can be skipped.
             dontCacheBustUrlsMatching: /\.\w{8}\./,
-            filename: 'aw.js',
+            filename: 'service-worker.js',
             logger (message) {
                 if (message.indexOf('Total precache size is') === 0) {
                     // This message occurs for every build and is a bit too noisy.
