@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -47,7 +47,11 @@ class Blog extends React.Component {
         this.handleSave = this.handleSave.bind(this)
         this.handleWordChange = this.handleWordChange.bind(this)
         this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
+        this.handleAboutChange = this.handleAboutChange.bind(this)
     }
+    handleAboutChange(e, data) {
+        this.props.blogActions.updateBlog({about:data.value})
+      }
 
     handleEditorStateEdit() {
         this.setState({wordCount:this.props.blog.wordCount})
@@ -295,37 +299,34 @@ class Blog extends React.Component {
 
     handleSave = () => {
         let body = localStorage.getItem('editBlog')
-        let o = {editMode: false, title: this.state.title}
+        let update = {
+            title: this.state.title,
+            wordCount: this.props.blog.wordCount,
+            about: this.props.blog.about
+        }
+        let o = { editMode: false, title: this.state.title }
+        update.body = this.props.blog.body
         if (body) {
             o.body = body
+            update.body = body
         }
+
         this.props.blogActions.updateBlog(o);
-        this.setState({open: true});
-        if (body) {
-            let obj = JSON.parse(body);
-            obj.blocks.splice(0, 1);
-            axios.post(env.httpURL, {
-                queryMethod: 'updateBlog',
-                'queryData': {
-                    _id: this.props.blog.post_ID,
-                    update: {
-                        body: body,
-                        title: this.state.title,
-                        wordCount:this.props.blog.wordCount
-                    }
-                }
+        axios.post(env.httpURL, {
+            queryMethod: 'updateBlog',
+            'queryData': {
+                _id: this.props.blog.post_ID,
+                update: update
+            }
 
-            })
-                .then(function (response) {
-                    localStorage.removeItem('editBlog')
-                }.bind(this))
+        })
+            .then(function (response) {
+                localStorage.removeItem('editBlog')
+            }.bind(this))
 
-                .catch(function (err) {
+            .catch(function (err) {
 
-                }.bind(this))
-        } else {
-
-        }
+            }.bind(this))
     }
 
     render() {
@@ -511,6 +512,16 @@ class Blog extends React.Component {
                                     this.state.editorState ?
                                         <BlogEditor initEditorState={this.state.editorState} mode={'edit'} className='editor' editorState={this.props.blog.body} /> :
                                         <div>Loading state</div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    this.props.blog.editMode ?
+                                        <Form style={{ padding: '2em 2em 2em 2em' }}>
+                                        <Form.TextArea maxLength='140' onChange={this.handleAboutChange} label='About your blog'
+                                            value={this.props.blog.about} />
+                                        </Form>
+                                        : null
                                 }
                             </div>
                         </div>
