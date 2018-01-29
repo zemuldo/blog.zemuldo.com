@@ -86,7 +86,9 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "start": "pm2 start app.js --name ZEMULDO_BLOGS",
+    "start": "pm2 start ecosystem.config.js --env production",
+    "reload":"pm2 reload ecosystem.config.js --update-env",
+    "restart":"pm2 restart ecosystem.config.js --update-env",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "mocha",
@@ -105,7 +107,7 @@
       "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
     ],
     "testEnvironment": "node",
-    "testURL": "http://localhost",
+    "testURL": "http://localhost:8070",
     "transform": {
       "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
@@ -134,7 +136,7 @@
   "main": "build.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/zemuldo/blogs.zemuldo.com.git"
+    "url": "git+ssh://git@github.com/zemuldo/blog.zemuldo.com.git"
   },
   "keywords": [
     "react",
@@ -146,7 +148,7 @@
   "author": "Danstan Otieno Onyango",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zemuldo/blogs.zemuldo.com/issues"
+    "url": "https://github.com/zemuldo/blog.zemuldo.com/issues"
   },
   "homepage": "https://blog.zemuldo.com"
 }
