@@ -163,23 +163,20 @@ app.get('/*', async function (req, res) {
     res.send(html)
     console.log('the user agent is a crawler!')
   } else {
-    let html = getBlogTemplate(details)
-    res.send(html)
-    console.log('the user agent is a crawler!')
-    //res.sendFile(path.join(__dirname, 'build', 'index.html'))
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
   }
 })
 
-app.listen(conf[env].httpPort, () => {
-  console.log("**Server started at http://localhost:" + conf[env].httpPort)
-});
-// spdy
-//     .createServer(options, app)
-//     .listen(process.env.PORT, (error) => {
-//       if (error) {
-//         console.error(error)
-//         return process.exit(1)
-//       } else {
-//         console.log('Listening on port: ' + process.env.PORT + '.')
-//       }
-//     })
+// app.listen(conf[env].httpPort, () => {
+//   console.log("**Server started at http://localhost:" + conf[env].httpPort)
+// });
+spdy
+    .createServer(options, app)
+    .listen(process.env.PORT, (error) => {
+      if (error) {
+        console.error(error)
+        return process.exit(1)
+      } else {
+        console.log('Listening on port: ' + process.env.PORT + '.')
+      }
+    })
