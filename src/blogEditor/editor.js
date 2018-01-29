@@ -22,6 +22,7 @@ import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
+import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import editorStyles from './editorStyle.css';
 import {
@@ -64,7 +65,7 @@ class RenderBlog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState: EditorState.createEmpty(),
+            editorState: this.props.initEditorState,
             isLoaded: false,
             category: null,
             topics: null,
@@ -80,7 +81,8 @@ class RenderBlog extends React.Component {
             url: '',
             urlType: '',
             title: '',
-            wordCount: 0
+            wordCount: 0,
+            firstBlock:{}
 
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -113,11 +115,11 @@ class RenderBlog extends React.Component {
 
     handleTitleChange = (e) => {
         this.setState({title: e.target.value})
-        localStorage.setItem('blogTitle',e.target.value)
+        this.props.mode==='create'?localStorage.setItem('creatTitle',e.target.value):null
     }
 
     handleWordChange = (e) => {
-        this.setState({wordCount: e.target.value})
+        this.setState({wordCount:Number(e.target.value)})
     }
 
     __promptForMedia(type) {
@@ -306,10 +308,10 @@ class RenderBlog extends React.Component {
 
     publish = () => {
         this.setState({open: true})
-        const title = localStorage.getItem('blogTitle')
+        const title = localStorage.getItem('creatTitle')
         const content = localStorage.getItem('draftContent')
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        if (content && blogData && title) {
+        if (content && blogData && title && this.state.wordCount>2) {
             let obj = JSON.parse(content)
             axios.post(env.httpURL, {
                 queryMethod: 'publish',
@@ -319,6 +321,7 @@ class RenderBlog extends React.Component {
                     query: 'publish',
                     topics: blogData.topics,
                     about: blogData.about,
+                    wordCount:this.state.wordCount,
                     images: ['blogs_pic.jpg'],
                     authorID: this.props.user.id,
                     author: this.props.user.firstName + ' ' + this.props.user.lastName,
@@ -347,10 +350,12 @@ class RenderBlog extends React.Component {
 
         }
     };
-    saveContent = debounce((content) => {
+    saveContent = debounce((state) => {
+        let content = convertToRaw(state);
         this.props.mode === 'edit' ?
-            window.localStorage.setItem('editBlog', JSON.stringify(convertToRaw(content))) :
-            window.localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)))
+            window.localStorage.setItem('editBlog', JSON.stringify(content)) :
+            window.localStorage.setItem('draftContent', JSON.stringify(content))
+        !this.state.firstBlock.text?this.setState({firstBlock:content.blocks[0]}):null
     }, 1000);
 
     componentDidMount() {
@@ -358,25 +363,30 @@ class RenderBlog extends React.Component {
     };
 
     componentWillUpdate() {
-
     }
 
     handleEditorStateEdit() {
-        this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.editorState)), decorator)})
+        this.setState({wordCount:this.props.blog.wordCount})
+        let editorState = JSON.parse(this.props.editorState);
+        this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
+        !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
     };
 
     handleEditorStateCreate() {
-        const title = localStorage.getItem('title')
-        const editorState = window.localStorage.getItem('draftContent')
+        const title = localStorage.getItem('creatTitle')
+        const state = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
-        if (editorState && blogDataState) {
+        if (state && blogDataState) {
+            let editorState = JSON.parse(state);
             this.setState({
                 title: title ? title : '',
                 hasSavedContent: false,
                 filledForm: true,
                 continueEdit: true,
-                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(editorState)), decorator)
+                firstBlock:editorState.blocks[0],
+                editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)
             })
+            !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
         } else {
             this.setState({filledForm: true, editorState: EditorState.createEmpty(decorator)})
         }
@@ -413,6 +423,14 @@ class RenderBlog extends React.Component {
     };
 
     startPublish = () => {
+        if(this.state.title.length<5){
+            alert('title error')
+            return false
+        }
+        if(this.state.words<1){
+            alert('title error')
+            return false
+        }
         this.showPreview()
     };
     showConfirm = () => {
@@ -505,13 +523,13 @@ class RenderBlog extends React.Component {
                                                 onClick={this.handleGoBackToProfile}
                                                 color='green' size='mini'>Exit
                                             </Button>
+                                            <br/>
+                                            <br/>
                                             <span>Title: </span>
-                                            <Input onChange={this.handleTitleChange} value={this.state.title}/>
+                                            <Input error={this.state.title.length<5} onChange={this.handleTitleChange} value={this.state.title}/>
                                             {' '}
                                             <span>Words </span>
-                                            <Input onChange={this.handleWordChange} value={this.state.words}/>
-                                            <br/>
-                                            <br/>
+                                            <Input error={this.state.wordCount<200} onChange={this.handleWordChange} value={this.state.wordCount}/>
                                         </div> : null
                                 }
                                 <div>
@@ -555,7 +573,7 @@ class RenderBlog extends React.Component {
                                         </Button>
                                     </div>
                                     {
-                                        this.props.blog.editMode ?
+                                        (this.props.blog.editMode || this.props.mode==='create') && this.state.firstBlock.text?
                                             <div>
                                                 <div><CharCounter limit={10}/> characters</div>
                                                 <div><WordCounter limit={500}/> words</div>
@@ -581,8 +599,7 @@ class RenderBlog extends React.Component {
                                     <hr/>
                                     <Modal.Description>
                                         <div>
-                                            <ShowPreview reinInitEditorState={this.reinInitEditorState}
-                                                         editorState={this.state.editorState}/>
+                                            <ShowPreview  editorState={this.state.editorState}/>
                                         </div>
                                     </Modal.Description>
                                 </Modal.Content>
@@ -603,8 +620,7 @@ class RenderBlog extends React.Component {
                     lineHeight: '3em',
                     overflowY: 'scroll',
                     padding: '5px',
-                    border: '1px solid #DEBB07',
-                    borderRadius: '1%'
+                    border: '1px solid green',
                 } : null}>
 
                     <Modal open={this.state.previewOpen}>
@@ -622,8 +638,7 @@ class RenderBlog extends React.Component {
                             <hr/>
                             <Modal.Description>
                                 <div>
-                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState}
-                                                 editorState={this.state.editorState}/>
+                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState} editorState={this.state.editorState}/>
                                 </div>
                             </Modal.Description>
                         </Modal.Content>
@@ -672,7 +687,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        varsActions: bindActionCreators(VarsActions, dispatch)
+        varsActions: bindActionCreators(VarsActions, dispatch),
+        blogActions: bindActionCreators(BlogActions, dispatch)
     }
 };
 

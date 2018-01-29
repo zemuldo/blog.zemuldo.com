@@ -114,7 +114,6 @@ a:hover {
 .RichEditor-editor {
     cursor: text;
     font-size: 16px;
-    margin-top: 10px;
     margin-bottom: 10%;
 }
 
@@ -155,7 +154,6 @@ a:hover {
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);
     -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";
     zoom: 1;
-    margin: 5px 10px 5px 10px;
     padding: 5px;
     list-style: none;
     color: #45D40C;

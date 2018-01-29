@@ -2,11 +2,22 @@ import React from 'react'
 import {Button, Modal, Header, Icon, Image, Dropdown, Input} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
+import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
 import config from '../environments/conf'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
+import {
+    AtomicBlockUtils,
+    convertFromRaw,
+    convertToRaw,
+    EditorState,
+    RichUtils
+  } from 'draft-js'
+  import {
+    decorator
+  } from '../blogEditor/editorToolkit'
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -20,7 +31,8 @@ class Blog extends React.Component {
             likes: this.props.blog ? this.props.blog.likes : 0,
             authorAvatar: null,
             title: this.props.blog.title,
-            wordCount: 0
+            wordCount: 0,
+            editorState: null
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -34,7 +46,14 @@ class Blog extends React.Component {
         this.handleTitleChange = this.handleTitleChange.bind(this)
         this.handleSave = this.handleSave.bind(this)
         this.handleWordChange = this.handleWordChange.bind(this)
+        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
     }
+
+    handleEditorStateEdit() {
+        this.setState({wordCount:this.props.blog.wordCount})
+        let editorState = JSON.parse(this.props.blog.body);
+        this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
+    };
 
     closeDelete() {
         this.setState({showDelete: false})
@@ -140,6 +159,7 @@ class Blog extends React.Component {
     }
 
     componentDidMount() {
+        this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
             this.getAauthorAvatar()
@@ -270,7 +290,7 @@ class Blog extends React.Component {
     }
 
     handleWordChange = (e) => {
-        this.setState({wordCount: e.target.value})
+        this.props.blogActions.updateBlog({wordCount:e.target.value})
     }
 
     handleSave = () => {
@@ -290,7 +310,8 @@ class Blog extends React.Component {
                     _id: this.props.blog.post_ID,
                     update: {
                         body: body,
-                        title: this.state.title
+                        title: this.state.title,
+                        wordCount:this.props.blog.wordCount
                     }
                 }
 
@@ -324,24 +345,27 @@ class Blog extends React.Component {
                                    Published on:
                                    <br/>
                                 {this.props.blog.date}
-              </span>
+                            </span>
                             <br/>
                             <br/>
                             <span className='info'>
-                {this.props.blog.author} {' '}
-              </span>
+                                {this.props.blog.author} {' '}
+                            </span>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
-                                <BlogEditor editorState={this.props.blog.body}/>
+                                <div>{
+                                    this.state.editorState?
+                                    <PreviewEditor editorState={this.state.editorState}/>:
+                                    <div>Loading editor state</div>
+                                }</div>
                             </div>
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button color='black' onClick={() => this.closeDelete()}>
+                        <Button color='green' onClick={() => this.closeDelete()}>
                             Cancel
                         </Button>
-                        <Button color='red' positive icon='checkmark' labelPosition='right' content='Delete'
-                                onClick={() => this.deletBlog(this.props.blog.id)}/>
+                        <Button color='red' icon='checkmark' labelPosition='right' content='Delete' onClick={() => this.deletBlog(this.props.blog.id)}/>
                     </Modal.Actions>
                 </Modal>
                 {
@@ -362,7 +386,7 @@ class Blog extends React.Component {
                                                                         value={this.state.title}/>
                                             {' '}
                                             <span>Words </span> <Input onChange={this.handleWordChange}
-                                                                       value={this.state.words}/>
+                                                                       value={this.props.blog.wordCount}/>
                                         </Header>
 
                                     </div>
@@ -481,9 +505,13 @@ class Blog extends React.Component {
                                 }
                             </div>
                             <hr color='green'/>
-                            <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
+                            <div style={{margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
-                                <BlogEditor mode={'edit'} className='editor' editorState={this.props.blog.body}/>
+                                {
+                                    this.state.editorState ?
+                                        <BlogEditor initEditorState={this.state.editorState} mode={'edit'} className='editor' editorState={this.props.blog.body} /> :
+                                        <div>Loading state</div>
+                                }
                             </div>
                         </div>
                         : <div>
