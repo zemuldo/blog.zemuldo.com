@@ -20,12 +20,12 @@ const RUNTIME = 'sw-' + buildID + '-runtime'
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
   '/index.html',
-  '/manifest.json',
-  '/img/icons/icon-192x192.png',
-  '/img/icons/icon-256x256.png',
-  '/img/icons/icon-384x384.png',
-  '/img/icons/icon-512x512.png',
-  '/img/bot/bot.gif',
+  '/static/manifest.json',
+  '/static/img/icons/icon-192x192.png',
+  '/static/img/icons/icon-256x256.png',
+  '/static/img/icons/icon-384x384.png',
+  '/static/img/icons/icon-512x512.png',
+  '/static/img/bot/bot.gif',
   '/static/css/' + buildID + 'main.zemuldo.css',
   '/static/js/' + buildID + 'main.zemuldo.js',
   '/static/media/' + buildID + 'flags.zemuldo.png',
