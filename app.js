@@ -74,18 +74,18 @@ app.get('/*service-worker.js', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'service-worker.js'))
 })
 app.get('/*sw.js', function (req, res) {
-  res.sendFile(path.join(__dirname, 'public', 'sw.js'))
+  res.sendFile(path.join(__dirname, 'build', 'sw.js'))
 })
 app.get('/*manifest.json', function (req, res) {
-  res.sendFile(path.join(__dirname, 'public', 'manifest.json'))
+  res.sendFile(path.join(__dirname, 'build', 'manifest.json'))
 })
-app.get('*.js', function (req, res, next) {
+app.get('/static/*.js', function (req, res, next) {
   req.url = req.url + '.gz'
   res.set('Content-Encoding', 'gzip')
   res.set('Content-Type', 'text/javascript')
   next()
 })
-app.get('*.css', function (req, res, next) {
+app.get('/static/*.css', function (req, res, next) {
   req.url = req.url + '.gz'
   res.set('Content-Encoding', 'gzip')
   res.set('Content-Type', 'text/css')
@@ -110,7 +110,7 @@ app.use(function (req, res, next) {
     next()
   }
 })
-app.use(express.static(path.join(__dirname, 'build')))
+app.use('/static',express.static(path.join(__dirname, 'build')))
 app.use(function (req, res, next) {
   res.locals.ua = req.get('User-Agent')
   next()
@@ -161,17 +161,17 @@ app.get('/*', async function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
   }
 })
-/*
+
  app.listen(conf[env].httpPort,()=>{
     console.log("**Server started at http://localhost:"+conf[env].httpPort)
-});*/
-spdy
-    .createServer(options, app)
-    .listen(process.env.PORT, (error) => {
-      if (error) {
-        console.error(error)
-        return process.exit(1)
-      } else {
-        console.log('Listening on port: ' + process.env.PORT + '.')
-      }
-    })
+});
+// spdy
+//     .createServer(options, app)
+//     .listen(process.env.PORT, (error) => {
+//       if (error) {
+//         console.error(error)
+//         return process.exit(1)
+//       } else {
+//         console.log('Listening on port: ' + process.env.PORT + '.')
+//       }
+//     })
