@@ -121,7 +121,7 @@ app.use(function (req, res, next) {
 })
 app.get('/*', async function (req, res) {
   let url = req.url.split('/').join('')
-  let query = {}
+  let query = {id:null}
   let blog = null
   let incomingPath = ''
   let page = url.split('/')[0]
@@ -142,8 +142,6 @@ app.get('/*', async function (req, res) {
     }
   } else {
     blog = await getBlog(query)
-    console.log(blog)
-    console.log(query)
     if (blog) {
       details = {
         title: blog.title,
