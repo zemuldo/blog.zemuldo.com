@@ -694,7 +694,10 @@ const mapDispatchToProps = (dispatch) => {
 
 RenderBlog.propTypes = {
     editorState: PropTypes.string.isRequired,
-    user: PropTypes.object.isRequired,
+    user: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.oneOf([null])
+    ]),
     blog: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired,
     varsActions: PropTypes.object.isRequired

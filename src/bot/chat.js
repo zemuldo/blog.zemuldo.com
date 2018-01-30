@@ -49,8 +49,7 @@ class LiveChat extends React.Component {
     },5000)
   }
 
-  componentWillUpdate(){
-  }
+  componentWillUpdate(){}
 
   chat () {
     this.props.vars.ws.onmessage = function (message) {
