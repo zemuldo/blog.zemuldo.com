@@ -120,7 +120,6 @@ class App extends React.Component {
                 this.props.varsActions.updateVars({ blogLoaded: true })
             }.bind(this))
             .catch(function (err) {
-                console.log(err)
                 this.props.history.push('/')
                 this.props.blogActions.updateBlog({})
                 this.props.varsActions.updateVars({ blogLoaded: true })
@@ -343,9 +342,7 @@ class App extends React.Component {
                 this.props.blogActions.resetBlog({ id: null })
             }
             if(this.state.location!==window.location.pathname){
-                console.log('updating....')
                 if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded===true) {
-                    console.log('updating....blog...')
                     this.props.varsActions.updateVars({ blogLoaded: false })
                     this.setBlogHere(id, page)
                 }
