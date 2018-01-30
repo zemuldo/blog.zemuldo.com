@@ -149,9 +149,9 @@ module.exports = {
               return e
             })
   },
-  getBlog: (queryString) => {
+  getBlog: (query) => {
     return new Promise(function (resolve, reject) {
-      posts.findOne({title: queryString}, (e, o) => {
+      titles.findOne(query, (e, o) => {
         if (e) {
           reject({error: 'error in db'})
         } else {

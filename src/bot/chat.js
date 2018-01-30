@@ -40,6 +40,7 @@ class LiveChat extends React.Component {
   };
 
   componentDidMount () {
+    this.handleSocketClose()
     this.chat()
     setInterval(()=>{
       if(this.props.vars.ws.readyState!==1 && this.props.vars.ws.readyState!==0){
@@ -48,8 +49,7 @@ class LiveChat extends React.Component {
     },5000)
   }
 
-  componentWillUpdate(){
-  }
+  componentWillUpdate(){}
 
   chat () {
     this.props.vars.ws.onmessage = function (message) {
@@ -118,6 +118,18 @@ class LiveChat extends React.Component {
     }
   };
 
+  handleSocketClose(){
+    this.props.vars.ws.onclose = ()=>{
+      this.props.varsActions.updateVars({offline:true})
+    }
+    this.props.vars.ws.onopen = ()=>{
+      this.props.varsActions.updateVars({offline:null})
+    }
+    this.props.vars.ws.error = ()=>{
+      this.props.varsActions.updateVars({offline:true})
+    }
+  }
+
   resendUnsent (){
     for(let i = 0; i<this.state.unsent.length;i++){
       setTimeout(()=>{
@@ -182,7 +194,7 @@ class LiveChat extends React.Component {
                               <div>
                                 <div className='alignCenter'>
                                   <Header>Zemuldo Profile Bot</Header>
-                                  <Image avatar size={'small'} src={'/img/bot/bot.gif'} />
+                                  <Image avatar size={'small'} src={'/static/img/bot/bot.gif'} />
                                   <hr color='blue' />
                                 </div>
                                 <div className='chatContainer' style={{overflowX: 'hidden',overflowY: 'scroll', height: '300px'}}>
