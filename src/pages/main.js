@@ -276,7 +276,6 @@ class App extends React.Component {
             topics: (window.innerWidth / 100) - 3
          })
       }
-      console.log(this.props.blog)
    }
 
     componentWillReceiveProps() {
