@@ -28,7 +28,8 @@ const vars = {
   ws: new WebSocket(env.wsURL),
   exploreBlogs: null,
   wsFetchBlogDeatils: false,
-  env:env
+  env:env,
+  offline:null
 }
 
 const varsReducer = (state = vars, action) => {

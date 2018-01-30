@@ -40,6 +40,7 @@ class LiveChat extends React.Component {
   };
 
   componentDidMount () {
+    this.handleSocketClose()
     this.chat()
     setInterval(()=>{
       if(this.props.vars.ws.readyState!==1 && this.props.vars.ws.readyState!==0){
@@ -117,6 +118,18 @@ class LiveChat extends React.Component {
       this.scrollChat('MessageEnd')
     }
   };
+
+  handleSocketClose(){
+    this.props.vars.ws.onclose = ()=>{
+      this.props.varsActions.updateVars({offline:true})
+    }
+    this.props.vars.ws.onopen = ()=>{
+      this.props.varsActions.updateVars({offline:null})
+    }
+    this.props.vars.ws.error = ()=>{
+      this.props.varsActions.updateVars({offline:true})
+    }
+  }
 
   resendUnsent (){
     for(let i = 0; i<this.state.unsent.length;i++){
