@@ -211,14 +211,11 @@ class App extends React.Component {
              this.props.blogsActions.updateBlogs([])
              if (!this.props.vars.wsFetchBlogDeatils) {
                 this.props.varsActions.updateVars({wsFetchBlogDeatils: true})
-                if(this.props.vars.ws.readyState===1){
-                    this.props.vars.ws.send(JSON.stringify({
-                        type: 'topicDetails',
-                        pups: 'topicDetails',
-                        sessionId: sessionStorage.getItem('sessionId')
-                     }))
-                  }
-                
+                this.props.vars.ws.send(JSON.stringify({
+                   type: 'topicDetails',
+                   pups: 'topicDetails',
+                   sessionId: sessionStorage.getItem('sessionId')
+                }))
              }
              this.props.varsActions.updateVars({blogsLoaded: true})
           }.bind(this))
@@ -274,73 +271,76 @@ class App extends React.Component {
       }
    }
 
-   componentWillReceiveProps() {
-          /*
-         This method is used to detect navigation/actions from the user then update the UI.
-         ie. Page navigation, Page crops etc
-      */
-      /*
-          Build variables from the window pathname
-      */
-      let url = window.location.pathname.split('/')
-      let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
-      let query = {}
-      let page = window.location.pathname.split('/')[1]
-      let topic = window.location.pathname.split('/')[2]
+    componentWillReceiveProps() {
+        if (!this.props.vars.offline) {
+            /*
+            This method is used to detect navigation/actions from the user then update the UI.
+            ie. Page navigation, Page crops etc
+         */
+            /*
+                Build variables from the window pathname
+            */
+            let url = window.location.pathname.split('/')
+            let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
+            let query = {}
+            let page = window.location.pathname.split('/')[1]
+            let topic = window.location.pathname.split('/')[2]
 
-      if (url.length < 4) {
-         this.setState({blog: null})
-      }
-      if (topicsOBJ[topic]) {
-         query.topics = topic
-      }
-      if (pages[page] && page !== 'home' && page !== 'topics') {
-         query.type = page
-      }
-      /*
-          Navigate to home from page.
-          User navigated to home but store current location is not home.
-          Set current location to home and update blogs
-      */
-      if (page === '' && this.props.vars.currentLocation !== 'home') {
-         this.navigateBlogs(query)
-         this.props.varsActions.updateVars({currentLocation: 'home'})
-      }
-      /*
-          Navigate to page from home
-          User navigated to page but store current location is home.
-          Set current location to page and update blogs
-      */
-      if (pages[page] && this.props.vars.currentLocation === 'home' && this.props.vars.currentLocation !== page) {
-         this.props.varsActions.updateVars({currentLocation: page})
-         this.navigateBlogs(query)
-      }
-      /*
-          Navigate to another page from page
-          User navigated to another page but store current location is page.
-          Set current location to another page and update blogs
-      */
-      if (page !== '' && pages[page] && this.props.vars.currentLocation !== 'home' && page !== this.props.vars.currentLocation) {
-         query.type = page
-         this.props.varsActions.updateVars({currentLocation: page})
-         if (!this.props.blogs[0] || this.props.blogs[0].type !== page) {
-            if (page !== this.props.vars.currentLocation && page !== '') {
-               this.navigateBlogs(query)
+            if (url.length < 4) {
+                this.setState({ blog: null })
             }
-         }
-      }
-      if (this.props.blog.id && this.props.vars.blogLoaded && (id.toString() === 'NaN' || !id)) {
-         this.props.blogActions.resetBlog({id: null})
-      }
-      if (page === this.props.vars.currentLocation && topic && topic !== this.props.vars.topic) {
-         this.props.varsActions.updateVars({topic: topic})
-         this.navigateBlogs(query)
-      }
-      if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded) {
-         this.props.varsActions.updateVars({blogLoaded: false})
-         this.setBlogHere(id, page)
-      }
-   }
+            if (topicsOBJ[topic]) {
+                query.topics = topic
+            }
+            if (pages[page] && page !== 'home' && page !== 'topics') {
+                query.type = page
+            }
+            /*
+                Navigate to home from page.
+                User navigated to home but store current location is not home.
+                Set current location to home and update blogs
+            */
+            if (page === '' && this.props.vars.currentLocation !== 'home') {
+                this.navigateBlogs(query)
+                this.props.varsActions.updateVars({ currentLocation: 'home' })
+            }
+            /*
+                Navigate to page from home
+                User navigated to page but store current location is home.
+                Set current location to page and update blogs
+            */
+            if (pages[page] && this.props.vars.currentLocation === 'home' && this.props.vars.currentLocation !== page) {
+                this.props.varsActions.updateVars({ currentLocation: page })
+                this.navigateBlogs(query)
+            }
+            /*
+                Navigate to another page from page
+                User navigated to another page but store current location is page.
+                Set current location to another page and update blogs
+            */
+            if (page !== '' && pages[page] && this.props.vars.currentLocation !== 'home' && page !== this.props.vars.currentLocation) {
+                query.type = page
+                this.props.varsActions.updateVars({ currentLocation: page })
+                if (!this.props.blogs[0] || this.props.blogs[0].type !== page) {
+                    if (page !== this.props.vars.currentLocation && page !== '') {
+                        this.navigateBlogs(query)
+                    }
+                }
+            }
+            if (this.props.blog.id && this.props.vars.blogLoaded && (id.toString() === 'NaN' || !id)) {
+                this.props.blogActions.resetBlog({ id: null })
+            }
+            if (page === this.props.vars.currentLocation && topic && topic !== this.props.vars.topic) {
+                this.props.varsActions.updateVars({ topic: topic })
+                this.navigateBlogs(query)
+            }
+            if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded) {
+                this.props.varsActions.updateVars({ blogLoaded: false })
+                this.setBlogHere(id, page)
+            }
+        }
+
+    }
 
    componentDidMount() {
       /*
