@@ -151,13 +151,11 @@ class ComMenu extends React.Component {
                               style={{fontSize: '12px'}}
                               name='search'
                           >
-                             <Input
-                                 icon={<Icon name='search' inverted circular link />}
-                                 action={{ color: 'green', labelPosition: 'left', icon: 'search', content: 'Search' }}
-                                 actionPosition='left'
-                                 placeholder='Everything...'
-                                 onChange={this.handleFilterChange}
-                             />
+                                  <Input
+                                      icon={<Icon color='green' name='search' inverted circular link />}
+                                      placeholder='Search...'
+                                      onChange={this.handleFilterChange}
+                                  />
                           </Menu.Item>:null
                    }
                    {
