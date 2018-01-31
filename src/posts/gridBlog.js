@@ -28,7 +28,7 @@ class GridBlog extends React.Component {
       className='blogCard' style={{
         width: 'auto',
         maxWidth: '250px',
-        minWidth: '100px'
+        minWidth: '100px',
       }}
             >
         <Card.Content>
@@ -49,13 +49,15 @@ class GridBlog extends React.Component {
           <Card.Description>
             <p>{o.about}</p>
             <p>
-                            15 Minutes read,
+              <span className='colorGreen'>
+              {Math.round((o.wordCount/200))} Minutes read
+              </span>,
                   <br />
-                            Related to
+              Related to
                   <br />
               {getTopiINfo(o.topics).join(', ')}
               <br />
-                            Published on {o.date}
+              Published on {o.date}
             </p>
             <Link
               to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString()}>
@@ -64,8 +66,8 @@ class GridBlog extends React.Component {
                 className='redMoreButton'
                 ref={o._id}
                 name='all'
-                style={{color: 'blue', border: 'none', bottom: '1%'}}
-                            >
+                style={{ color: 'blue', border: 'none', bottom: '1%' }}
+              >
                 <span>Read More</span>
               </Button>
             </Link>
