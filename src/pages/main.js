@@ -414,7 +414,7 @@ class App extends React.Component {
                       <Icon size='big' color='orange' name='chevron left'/>
                    </Button>
                    {_.times(o.length, i =>
-                           <Link key={o[i].key} to={'/' + this.props.vars.currentLocation + '/' + o[i].name}>
+                           <Link key={o[i].key} to={'/topics/'+ o[i].name}>
                               <Button
                                   size={'small'}
                                   style={{backgroundColor: 'green'}}

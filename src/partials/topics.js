@@ -18,7 +18,7 @@ class Topics extends React.Component {
     return (
       <div className='topicsWrapper'>
         <Header color='blue' as='h3'>Topics</Header>
-        <Link to={'/' + this.props.vars.currentLocation + '/all'}>
+        <Link to={'/'}>
           <button
             disabled={this.props.vars.topic === 'all' || !window.location.pathname.split('/')[2]}
             className='topicButton'
@@ -31,7 +31,7 @@ class Topics extends React.Component {
           </button>
         </Link>
         {_.times(topics.length, i =>
-          <Link key={topics[i].key} to={'/' + this.props.vars.currentLocation + '/' + topics[i].name}>
+          <Link key={topics[i].key} to={'/topics/'+ topics[i].name}>
             <button
               disabled={this.props.vars.topic === topics[i].name}
               className='topicButton'
