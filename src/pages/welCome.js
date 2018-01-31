@@ -40,12 +40,19 @@ class WelcomePage extends React.Component {
                                     </Header>
                                     <br />
                                     <div className='blogs'>
-                                      <GridBlogs
+                                      {
+                                        this.props.vars.blogsLoaded===true?
+                                        <GridBlogs
                                         setPreviousBlogs={this.props.setPreviousBlogs}
                                         setNextBlogs={this.props.setNextBlogs}
                                         onReadMore={this.props.onReadMore}
                                         color={this.props.vars.color}
-                                            />
+                                            />:
+                                            <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
+                                            <Loader active inline='centered' />
+                                            <p>Loading Blogs...</p>
+                                          </div>
+                                      }
                                     </div>
                                   </div>
                                   : <div>

@@ -138,7 +138,6 @@ class PagesComponent extends React.Component {
                                     topic={this.state.topic}
                                     onTopicClick={this.onTopicClick}
                                     onAllcClick={this.onAllcClick}
-                                    setTopicPosts={this.props.setTopicPosts}
                                     setTopicNextPosts={this.props.setTopicNextPosts}
                                     onReadMore={this.props.onReadMore}
                                     blog={this.props.blog}
@@ -212,7 +211,6 @@ class PagesComponent extends React.Component {
                                       topic={this.state.topic}
                                       onTopicClick={this.onTopicClick}
                                       onAllcClick={this.onAllcClick}
-                                      setTopicPosts={this.props.setTopicPosts}
                                       setTopicNextPosts={this.props.setTopicNextPosts}
                                       onReadMore={this.props.onReadMore}
                                       blog={this.props.blog}
@@ -265,7 +263,6 @@ PagesComponent.propTypes = {
   vars: PropTypes.object,
   handleFilterChange: PropTypes.func.isRequired,
   setTopicNextPosts: PropTypes.func.isRequired,
-  setTopicPosts: PropTypes.func.isRequired,
   onReadMore: PropTypes.func.isRequired,
   deletedBlog: PropTypes.func.isRequired,
   setTopic: PropTypes.func.isRequired
