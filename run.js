@@ -40,15 +40,20 @@ let topics = [
     {key: 'oracle', value: 'oracle', text: 'oracle', name: 'oracle', full: 'Oracle'},
     {key: 'pentesting', value: 'pentesting', text: 'pentesting', name: 'pentesting', full: 'Penetration Testing'},
     {key: 'java', value: 'java', text: 'java', name: 'java', full: 'Java'},
-    {key: 'security', value: 'security', text: 'security', name: 'security', full: 'Security'}
+    {key: 'security', value: 'security', text: 'security', name: 'security', full: 'Security'},
+    {key: 'nginx', value: 'nginx', text: 'nginx', name: 'nginx', full: 'Nginx'},
+    {key: 'jenkins', value: 'jenkins', text: 'jenkins', name: 'jenkins', full: 'Jenkins'},
+    {key: 'ci', value: 'ci', text: 'ci', name: 'ci', full: 'Continuous Integration'},
+    {key: 'proxy', value: 'proxy', text: 'proxy', name: 'proxy', full: 'Proxy'},
+    {key: 'loadbalancing', value: 'loadbalancing', text: 'loadbalancing', name: 'loadbalancing', full: 'Load Balancing'}
 ]
 let t = {}
 
 for (let i = 0; i < topics.length; i++) {
     //topics[i].text = topics[i].full
-    //t[topics[i].key] = topics[i]
-    delete topics[i].full
+    t[topics[i].key] = topics[i]
+    //delete topics[i].full
   if (i === topics.length - 1) {
-    console.log(topics)
+    console.log(t)
   }
 }

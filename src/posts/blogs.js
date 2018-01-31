@@ -24,28 +24,6 @@ class Blogs extends React.Component {
   componentDidMount () {
   }
 
-  onReadMore (thisBlog) {
-    this.props.varsActions.updateVars({blogLoaded: false})
-    axios.post(env.httpURL, {
-      'queryMethod': 'getPost',
-      'queryData': {
-        'id': thisBlog.id
-      }
-    })
-            .then(response => {
-              let blog = response.data
-              Object.assign(blog, thisBlog)
-              this.props.blogActions.updateBlog(blog)
-              this.props.varsActions.updateVars({blogLoaded: true})
-              window.scrollTo(0, 0)
-            })
-            .catch(function (err) {
-              this.props.blogActions.updateBlog({})
-              this.props.varsActions.updateVars({blogLoaded: true})
-              return err
-            }.bind(this))
-  }
-
   render () {
     let o = this.props.blogs
     return (
@@ -73,13 +51,10 @@ class Blogs extends React.Component {
                               </span>
                             </span>
                             <Link
-                              to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
+                              to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '-' + o[i].title.split(' ').join('-') + '-' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
                               <Button
                                 className='redMoreButton'
                                 ref={this.props.blogs[i]._id}
-                                onClick={() => {
-                                  this.onReadMore(this.props.blogs[i])
-                                }}
                                 name='all'
                                 style={{color: 'blue', backgroundColor: 'transparent', border: 'none'}}
                                         >
@@ -113,16 +88,13 @@ class Blogs extends React.Component {
                                       </i>
                                     </span>
                                     <Link
-                                      to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '_' + o[i].id.toString()}>
+                                      to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '-' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
                                       <Button
                                         circular
                                         size='mini'
                                         disabled={!this.props.blog ? false : this.props.blog._id === this.props.blogs[i]._id}
                                         className='redMoreButton'
                                         ref={this.props.blogs[i]._id}
-                                        onClick={() => {
-                                          this.onReadMore(this.props.blogs[i])
-                                        }}
                                         name='all'
                                         style={{color: 'blue', backgroundColor: 'transparent', border: 'none'}}
                                             >
@@ -160,8 +132,6 @@ const mapDispatchToProps = (dispatch) => {
 Blogs.propTypes = {
   blog: PropTypes.object.isRequired,
   blogs: PropTypes.array,
-  blogActions: PropTypes.object.isRequired,
-  varsActions: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blogs)

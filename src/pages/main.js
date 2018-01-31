@@ -37,34 +37,16 @@ class App extends React.Component {
       this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
       this._goToEditor = this._goToEditor.bind(this)
       this._exitEditMode = this._exitEditMode.bind(this)
-      this.setHomeBlogs = this.setHomeBlogs.bind(this)
       this.navigateBlogs = this.navigateBlogs.bind(this)
-      this.onReadMore = this.onReadMore.bind(this)
       this.setCurrentBlog = this.setCurrentBlog.bind(this)
       this.blogsAreLoading = this.blogsAreLoading.bind(this)
       this.handleFilterChange = this.handleFilterChange.bind(this)
       this.setTopicPosts = this.setTopicPosts.bind(this)
       this.setBlogHere = this.setBlogHere.bind(this)
       this.setTopicNextPosts = this.setTopicNextPosts.bind(this)
-      this.deletedBlog = this.deletedBlog.bind(this)
-      this.setTopic = this.setTopic.bind(this)
-      this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this)
       this.show_left = this.show_left.bind(this)
       this.show_right = this.show_right.bind(this)
    };
-
-   handleUpdateBlogs(blogs) {
-      this.props.blogsActions.updateBlogs(blogs)
-   }
-
-   setTopic(topic) {
-      this.setState({topic: topic})
-   }
-
-   deletedBlog() {
-      this.setState({blog: null})
-      this.setHomeBlogs()
-   }
 
    blogsAreLoading(state) {
       this.setState({blogsLoaded: !state})
@@ -165,28 +147,6 @@ class App extends React.Component {
           })
    }
 
-   onReadMore(thisBlog) {
-      this.props.varsActions.updateVars({blogLoaded: false})
-      axios.post(env.httpURL, {
-         'queryMethod': 'getPost',
-         'queryData': {
-            'id': thisBlog.id
-         }
-      })
-          .then(response => {
-             let blog = response.data
-             Object.assign(blog, thisBlog)
-             this.props.blogActions.updateBlog(blog)
-             this.props.varsActions.updateVars({blogLoaded: true})
-             window.scrollTo(0, 0)
-          })
-          .catch(function (err) {
-             this.props.blogActions.updateBlog({})
-             this.props.varsActions.updateVars({blogLoaded: true})
-             return err
-          }.bind(this))
-   }
-
    navigateBlogs(query) {
       this.props.varsActions.updateVars({blogsLoaded: false})
       return axios.post(env.httpURL, {
@@ -227,43 +187,6 @@ class App extends React.Component {
           }.bind(this))
    }
 
-   setHomeBlogs() {
-      this.setState({blogsAreLoading: true})
-      return axios.post(env.httpURL, {
-         'queryMethod': 'getAllPosts',
-         'queryData': {}
-      })
-          .then(function (response) {
-             this.setState({loadFooter: true})
-             if (!response.data) {
-                this.setState({blogsLoaded: true, homePageLoaded: true})
-                this.setState({blogsAreLoading: false})
-                return false
-             }
-             if (!response.data[0]) {
-                this.setState({blogsLoaded: true, homePageLoaded: true})
-                this.setState({blogsAreLoading: false})
-                return false
-             }
-             if (response.data[0]) {
-                this.handleUpdateBlogs(response.data)
-                this.setState({blogsLoaded: true, homePageLoaded: true})
-                this.setState({blogsAreLoading: false})
-             } else {
-                this.setState({blogs: []})
-                this.setState({blogsLoaded: true, homePageLoaded: true})
-                this.setState({blogsAreLoading: false})
-             }
-          }.bind(this))
-          .catch(function (err) {
-             this.setState({loadFooter: true})
-             this.setState({blogs: []})
-             this.setState({blogsLoaded: true, homePageLoaded: true})
-             this.setState({blogsAreLoading: false})
-             this.setState({loadFooter: true})
-          }.bind(this))
-   }
-
    resize = () => this.forceUpdate();
 
    componentWillUpdate() {
@@ -278,8 +201,6 @@ class App extends React.Component {
    }
 
     componentWillReceiveProps() {
-       
-        if (!this.props.vars.offline) {
             /*
             This method is used to detect navigation/actions from the user then update the UI.
             ie. Page navigation, Page crops etc
@@ -305,39 +226,16 @@ class App extends React.Component {
                  }
             }
             /*
-                Navigate to home from page.
-                User navigated to home but store current location is not home.
-                Set current location to home and update blogs
-            */
-            if (page === '' && this.props.vars.currentLocation !== 'home') {
-                this.navigateBlogs(query)
-                this.props.varsActions.updateVars({ currentLocation: 'home' })
-            }
-            /*
-                Navigate to page from home
-                User navigated to page but store current location is home.
+                Navigate to Page.
+                User navigated to page from one URL TO ANOTHER.
                 Set current location to page and update blogs
+                Set current state location to this location
             */
-            if (pages[page] && this.props.vars.currentLocation === 'home' && this.props.vars.currentLocation !== page) {
-                this.props.varsActions.updateVars({ currentLocation: page })
+            if(this.state.location!==window.location.pathname){
                 this.navigateBlogs(query)
+                this.setState({location:window.location.pathname})
             }
-            /*
-                Navigate to another page from page
-                User navigated to another page but store current location is page.
-                Set current location to another page and update blogs
-            */
-            if (page !== '' && pages[page] && this.props.vars.currentLocation !== 'home' && this.props.vars.currentLocation !== 'topic'  && page !== this.props.vars.currentLocation) {
-                if (page !== 'topics') {
-                    query.type = page
-                 }
-                this.props.varsActions.updateVars({ currentLocation: page })
-                if (!this.props.blogs[0] || this.props.blogs[0].type !== page) {
-                    if (page !== this.props.vars.currentLocation && page !== '') {
-                        this.navigateBlogs(query)
-                    }
-                }
-            }
+
             if (this.props.blog.id && this.props.vars.blogLoaded && (id.toString() === 'NaN' || !id)) {
                 this.props.blogActions.resetBlog({ id: null })
             }
@@ -347,11 +245,6 @@ class App extends React.Component {
                     this.setBlogHere(id, page)
                 }
             }
-            if(this.state.location!==window.location.pathname){
-                this.setState({location:window.location.pathname})
-            }
-            
-        }
 
     }
 
@@ -521,7 +414,7 @@ class App extends React.Component {
                       <Icon size='big' color='orange' name='chevron left'/>
                    </Button>
                    {_.times(o.length, i =>
-                           <Link key={o[i].key} to={'/' + this.props.vars.currentLocation + '/' + o[i].name}>
+                           <Link key={o[i].key} to={'/topics/'+ o[i].name}>
                               <Button
                                   size={'small'}
                                   style={{backgroundColor: 'green'}}
@@ -546,11 +439,7 @@ class App extends React.Component {
                     history={this.props.history}
                     handleFilterChange={this.handleFilterChange}
                     blogsAreLoading={this.blogsAreLoading}
-                    onReadMore={this.onReadMore}
-                    setTopicPosts={this.setTopicPosts}
                     setTopicNextPosts={this.setTopicNextPosts}
-                    deletedBlog={this.deletedBlog}
-                    setTopic={this.setTopic}
                 />
              </div>
           </div>

@@ -40,12 +40,18 @@ class WelcomePage extends React.Component {
                                     </Header>
                                     <br />
                                     <div className='blogs'>
-                                      <GridBlogs
+                                      {
+                                        this.props.vars.blogsLoaded===true?
+                                        <GridBlogs
                                         setPreviousBlogs={this.props.setPreviousBlogs}
                                         setNextBlogs={this.props.setNextBlogs}
-                                        onReadMore={this.props.onReadMore}
                                         color={this.props.vars.color}
-                                            />
+                                            />:
+                                            <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
+                                            <Loader active inline='centered' />
+                                            <p>Loading Blogs...</p>
+                                          </div>
+                                      }
                                     </div>
                                   </div>
                                   : <div>
@@ -100,7 +106,6 @@ class WelcomePage extends React.Component {
                                 this.props.vars.blogsLoaded
                                   ? <Blog
                                     color={this.props.vars.color}
-                                    deletedBlog={this.props.deletedBlog}
                                     />
                                   : <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
                                     <Loader active inline='centered' />
@@ -136,10 +141,8 @@ WelcomePage.propTypes = {
   topics: PropTypes.array,
   vars: PropTypes.object.isRequired,
   varsActions: PropTypes.object.isRequired,
-  deletedBlog: PropTypes.func.isRequired,
   setPreviousBlogs: PropTypes.func.isRequired,
   setNextBlogs: PropTypes.func.isRequired,
-  onReadMore: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage)
