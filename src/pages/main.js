@@ -38,32 +38,15 @@ class App extends React.Component {
       this._goToEditor = this._goToEditor.bind(this)
       this._exitEditMode = this._exitEditMode.bind(this)
       this.navigateBlogs = this.navigateBlogs.bind(this)
-      this.onReadMore = this.onReadMore.bind(this)
       this.setCurrentBlog = this.setCurrentBlog.bind(this)
       this.blogsAreLoading = this.blogsAreLoading.bind(this)
       this.handleFilterChange = this.handleFilterChange.bind(this)
       this.setTopicPosts = this.setTopicPosts.bind(this)
       this.setBlogHere = this.setBlogHere.bind(this)
       this.setTopicNextPosts = this.setTopicNextPosts.bind(this)
-      this.deletedBlog = this.deletedBlog.bind(this)
-      this.setTopic = this.setTopic.bind(this)
-      this.handleUpdateBlogs = this.handleUpdateBlogs.bind(this)
       this.show_left = this.show_left.bind(this)
       this.show_right = this.show_right.bind(this)
    };
-
-   handleUpdateBlogs(blogs) {
-      this.props.blogsActions.updateBlogs(blogs)
-   }
-
-   setTopic(topic) {
-      this.setState({topic: topic})
-   }
-
-   deletedBlog() {
-      this.setState({blog: null})
-      this.props.history.push('/')
-   }
 
    blogsAreLoading(state) {
       this.setState({blogsLoaded: !state})
@@ -164,28 +147,6 @@ class App extends React.Component {
           })
    }
 
-   onReadMore(thisBlog) {
-      this.props.varsActions.updateVars({blogLoaded: false})
-      axios.post(env.httpURL, {
-         'queryMethod': 'getPost',
-         'queryData': {
-            'id': thisBlog.id
-         }
-      })
-          .then(response => {
-             let blog = response.data
-             Object.assign(blog, thisBlog)
-             this.props.blogActions.updateBlog(blog)
-             this.props.varsActions.updateVars({blogLoaded: true})
-             window.scrollTo(0, 0)
-          })
-          .catch(function (err) {
-             this.props.blogActions.updateBlog({})
-             this.props.varsActions.updateVars({blogLoaded: true})
-             return err
-          }.bind(this))
-   }
-
    navigateBlogs(query) {
       this.props.varsActions.updateVars({blogsLoaded: false})
       return axios.post(env.httpURL, {
@@ -279,8 +240,10 @@ class App extends React.Component {
                 this.props.blogActions.resetBlog({ id: null })
             }
             if(this.state.location!==window.location.pathname){
+                console.log('updating blog....')
                 if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded===true) {
                     this.props.varsActions.updateVars({ blogLoaded: false })
+                    console.log('updating blog')
                     this.setBlogHere(id, page)
                 }
             }
@@ -478,10 +441,7 @@ class App extends React.Component {
                     history={this.props.history}
                     handleFilterChange={this.handleFilterChange}
                     blogsAreLoading={this.blogsAreLoading}
-                    onReadMore={this.onReadMore}
                     setTopicNextPosts={this.setTopicNextPosts}
-                    deletedBlog={this.deletedBlog}
-                    setTopic={this.setTopic}
                 />
              </div>
           </div>

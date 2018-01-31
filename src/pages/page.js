@@ -27,15 +27,7 @@ class PagesComponent extends React.Component {
     this.setNextBlogs = this.setNextBlogs.bind(this)
     this.setPreviousBlogs = this.setPreviousBlogs.bind(this)
     this.resetNav = this.resetNav.bind(this)
-    this.onTopicClick = this.onTopicClick.bind(this)
   };
-
-  onTopicClick = (e) => {
-    this.props.setTopic(e)
-  }
-  onAllcClick = (e) => {
-    this.props.setTopic('all')
-  }
 
   _handleChangeBodySize (size) {
     this.setState({bodySize: size})
@@ -139,7 +131,6 @@ class PagesComponent extends React.Component {
                                     onTopicClick={this.onTopicClick}
                                     onAllcClick={this.onAllcClick}
                                     setTopicNextPosts={this.props.setTopicNextPosts}
-                                    onReadMore={this.props.onReadMore}
                                     blog={this.props.blog}
                                     color={this.props.vars.color}
                                     blogs={this.props.blogs}
@@ -164,7 +155,6 @@ class PagesComponent extends React.Component {
                                                     ? <div>
                                                       <Blogs
                                                         color={this.props.vars.color}
-                                                        onReadMore={this.props.onReadMore}
                                                         />
                                                       <div>
                                                         <br />
@@ -212,7 +202,6 @@ class PagesComponent extends React.Component {
                                       onTopicClick={this.onTopicClick}
                                       onAllcClick={this.onAllcClick}
                                       setTopicNextPosts={this.props.setTopicNextPosts}
-                                      onReadMore={this.props.onReadMore}
                                       blog={this.props.blog}
                                       color={this.props.vars.color}
                                       blogs={this.props.blogs}
@@ -231,9 +220,7 @@ class PagesComponent extends React.Component {
                                       next={this.state.next}
                                       setPreviousBlogs={this.setPreviousBlogs}
                                       setNextBlogs={this.setNextBlogs}
-                                      onReadMore={this.props.onReadMore}
                                       color={this.props.vars.colors[1]}
-                                      deletedBlog={this.props.deletedBlog}
                                     />
                             }
             </Grid.Column>
@@ -263,9 +250,6 @@ PagesComponent.propTypes = {
   vars: PropTypes.object,
   handleFilterChange: PropTypes.func.isRequired,
   setTopicNextPosts: PropTypes.func.isRequired,
-  onReadMore: PropTypes.func.isRequired,
-  deletedBlog: PropTypes.func.isRequired,
-  setTopic: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps)(PagesComponent)
