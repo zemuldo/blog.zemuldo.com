@@ -248,6 +248,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 RichEditorExample.propTypes = {
+  editorState:PropTypes.object.isRequired,
   title:PropTypes.string.isRequired,
 }
 
