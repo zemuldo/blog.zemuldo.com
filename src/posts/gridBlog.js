@@ -61,9 +61,6 @@ class GridBlog extends React.Component {
                 color={'green'}
                 className='redMoreButton'
                 ref={o._id}
-                onClick={() => {
-                  this.props.onReadMore(o)
-                }}
                 name='all'
                 style={{color: 'blue', border: 'none', bottom: '1%'}}
                             >
@@ -80,7 +77,6 @@ class GridBlog extends React.Component {
 GridBlog.propTypes = {
   blog: PropTypes.object.isRequired,
   color: PropTypes.string.isRequired,
-  onReadMore: PropTypes.func.isRequired
 }
 
 export default GridBlog

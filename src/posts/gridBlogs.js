@@ -32,7 +32,6 @@ class GridBlogs extends React.Component {
                                     _.times(this.props.blogs.length, (i) =>
                                       <GridBlog
                                         key={this.props.blogs[i].id}
-                                        onReadMore={this.props.onReadMore}
                                         color={this.props.vars.color}
                                         blog={this.props.blogs[i]}
                                         />
@@ -88,7 +87,6 @@ GridBlogs.propTypes = {
   vars: PropTypes.object.isRequired,
   setNextBlogs: PropTypes.func.isRequired,
   setPreviousBlogs: PropTypes.func.isRequired,
-  onReadMore: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps)(GridBlogs)
