@@ -599,7 +599,7 @@ class RenderBlog extends React.Component {
                                     <hr/>
                                     <Modal.Description>
                                         <div>
-                                            <ShowPreview  editorState={this.state.editorState}/>
+                                            <ShowPreview title={this.state.title}  editorState={this.state.editorState}/>
                                         </div>
                                     </Modal.Description>
                                 </Modal.Content>
