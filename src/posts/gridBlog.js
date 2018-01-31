@@ -50,7 +50,7 @@ class GridBlog extends React.Component {
             <p>{o.about}</p>
             <p>
               <span className='colorGreen'>
-              {Math.round((o.wordCount/200))} Minutes read
+              {Math.round((o.wordCount/130))} Minutes read
               </span>,
                   <br />
               Related to
