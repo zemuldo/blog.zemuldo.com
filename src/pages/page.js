@@ -216,6 +216,7 @@ class PagesComponent extends React.Component {
                                       <p>Loading Blog...</p>
                                     </div>
                                     : <WelcomePage
+                                    history={this.props.history}
                                       x={x}
                                       next={this.state.next}
                                       setPreviousBlogs={this.setPreviousBlogs}

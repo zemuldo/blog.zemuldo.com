@@ -23,7 +23,9 @@ class GridBlog extends React.Component {
   render () {
     let o = this.props.blog
     return (
-      <Card className='blogCard' style={{
+      <Card 
+      onClick={()=>this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString())}
+      className='blogCard' style={{
         width: 'auto',
         maxWidth: '250px',
         minWidth: '100px'
