@@ -240,10 +240,8 @@ class App extends React.Component {
                 this.props.blogActions.resetBlog({ id: null })
             }
             if(this.state.location!==window.location.pathname){
-                console.log('updating blog....')
                 if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded===true) {
                     this.props.varsActions.updateVars({ blogLoaded: false })
-                    console.log('updating blog')
                     this.setBlogHere(id, page)
                 }
             }
