@@ -1,7 +1,7 @@
 module.exports = {
     apps : [
         {
-          name: "Server 0",
+          name: "Server 0 8070",
           script: "./app.js",
           watch: true,
           env: {
@@ -14,7 +14,7 @@ module.exports = {
           }
         },
         {
-            name: "Server 1",
+            name: "Server 1 8071",
             script: "./app.js",
             watch: true,
             env: {
@@ -27,7 +27,7 @@ module.exports = {
             }
         },
         {
-            name: "Server 2",
+            name: "Server 2 8072",
             script: "./app.js",
             watch: true,
             env: {
@@ -40,7 +40,7 @@ module.exports = {
             }
         },
         {
-            name: "Server 3",
+            name: "Server 3 8073",
             script: "./app.js",
             watch: true,
             env: {
@@ -53,11 +53,11 @@ module.exports = {
             }
         },
         {
-            name: "Server 4",
+            name: "Server 4 8074",
             script: "./app.js",
             watch: true,
             env: {
-                "PORT": 8073,
+                "PORT": 8074,
                 "NODE_ENV": "development"
             },
             env_production: {
