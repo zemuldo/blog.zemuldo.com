@@ -122,29 +122,35 @@ class App extends React.Component {
    }
 
    handleFilterChange(e) {
-      let query = {}
-      let queryMthod = 'getAllPosts'
-      if (this.props.vars.currentLocation !== 'home') {
-         query.type = this.props.vars.currentLocation
+       let query = {}
+        let queryMthod = 'getAllPosts'
+        if (this.props.vars.currentLocation !== 'home') {
+           query.type = this.props.vars.currentLocation
+        }
+        if (e.target.value !== '') {
+           query.filter = e.target.value
+           queryMthod = 'getFiltered'
+        }
+      
+      let run = ()=>{
+        
+        this.setState({blogsAreLoading: true})
+        e.preventDefault()
+        axios.post(env.httpURL, {
+           'queryMethod': queryMthod,
+           'queryData': query
+        })
+            .then(response => {
+               this.props.blogsActions.updateBlogs(response.data)
+               this.setState({blogsAreLoading: false})
+            })
+            .catch(err => {
+               this.setState({blogs: []})
+               this.setState({blogsAreLoading: false})
+            })
       }
-      if (e.target.value !== '') {
-         query.filter = e.target.value
-         queryMthod = 'getFiltered'
-      }
-      this.setState({blogsAreLoading: true})
-      e.preventDefault()
-      axios.post(env.httpURL, {
-         'queryMethod': queryMthod,
-         'queryData': query
-      })
-          .then(response => {
-             this.props.blogsActions.updateBlogs(response.data)
-             this.setState({blogsAreLoading: false})
-          })
-          .catch(err => {
-             this.setState({blogs: []})
-             this.setState({blogsAreLoading: false})
-          })
+      clearTimeout(run)
+      setTimeout(run,1500)
    }
 
    navigateBlogs(query) {
