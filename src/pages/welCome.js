@@ -18,7 +18,6 @@ class WelcomePage extends React.Component {
   }
 
   componentDidMount () {
-
   }
 
   render () {
@@ -43,6 +42,7 @@ class WelcomePage extends React.Component {
                                       {
                                         this.props.vars.blogsLoaded===true?
                                         <GridBlogs
+                                        history={this.props.history}
                                         setPreviousBlogs={this.props.setPreviousBlogs}
                                         setNextBlogs={this.props.setNextBlogs}
                                         color={this.props.vars.color}
