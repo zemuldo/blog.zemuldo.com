@@ -15,7 +15,7 @@ let env = ENV().raw.NODE_ENV
 let {
   getBlogTemplate
 } = require('./tools/tools')
-const conf = require('./src/environments/conf')
+const conf = require('./src/env/conf')
 let {
   getBlog
 } = require('./db/database')

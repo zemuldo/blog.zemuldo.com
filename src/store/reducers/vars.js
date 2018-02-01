@@ -1,5 +1,5 @@
 import {UPDATE_VARS} from '../actions/vars'
-import config from '../../environments/conf'
+import config from '../../env/conf'
 
 const env = config[process.env.NODE_ENV] || 'development'
 
