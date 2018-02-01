@@ -81,7 +81,7 @@ class WelcomePage extends React.Component {
                                                                 <Link
                                                                   onClick={() => this.props.varsActions.updateVars({blogsLoaded: false})}
                                                                   to={'/topics/' + this.props.topics[i].key}>
-                                                                  {topicsOBJ[this.props.topics[i].key].full}
+                                                                  {topicsOBJ[this.props.topics[i].key].name}
                                                                 </Link>
                                                               </Card.Header>
                                                               <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>

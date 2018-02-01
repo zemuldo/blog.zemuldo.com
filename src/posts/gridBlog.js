@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 const getTopiINfo = (topics) => {
   let info = []
   topics.forEach(function (topic) {
-    info.push(topicsOBJ[topic].full)
+    info.push(topicsOBJ[topic].name)
   })
   return info
 }
@@ -64,7 +64,7 @@ class GridBlog extends React.Component {
                   className='redMoreButton'
                   ref={o._id}
                   name='all'
-                  style={{ color: 'blue', border: 'none', bottom: '1%' }}
+                  style={{ color: 'blue', border: 'none', bottom: '1%', }}
               >
                 <span>Read More</span>
               </Button>

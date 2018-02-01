@@ -31,11 +31,11 @@ class Topics extends React.Component {
           </button>
         </Link>
         {_.times(topics.length, i =>
-          <Link key={topics[i].key} to={'/topics/'+ topics[i].name}>
+          <Link key={topics[i].key} to={'/topics/'+ topics[i].key}>
             <button
-              disabled={this.props.vars.topic === topics[i].name}
+              disabled={this.props.vars.topic === topics[i].key}
               className='topicButton'
-              onClick={() => this.props.varsActions.updateVars({topic: topics[i].text})}
+              onClick={() => this.props.varsActions.updateVars({topic: topics[i].key})}
               name={topics[i].name}
                         >
               <span>

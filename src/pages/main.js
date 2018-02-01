@@ -418,17 +418,17 @@ class App extends React.Component {
                       <Icon size='big' color='orange' name='chevron left'/>
                    </Button>
                    {_.times(o.length, i =>
-                           <Link key={o[i].key} to={'/topics/'+ o[i].name}>
+                           <Link key={o[i].key} to={'/topics/'+ o[i].key}>
                               <Button
                                   size={'small'}
                                   style={{backgroundColor: 'green'}}
-                                  disabled={this.props.vars.topic === o[i].name}
+                                  disabled={this.props.vars.topic === o[i].key}
                                   className='topicButton'
-                                  onClick={() => this.props.varsActions.updateVars({topic: o[i].text})}
-                                  name={o[i].name}
+                                  onClick={() => this.props.varsActions.updateVars({topic: o[i].key})}
+                                  name={o[i].key}
                               >
                   <span>
-                    {util.toTitleCase(o[i].name)}
+                    {util.toTitleCase(o[i].key)}
                   </span>
                               </Button>
                            </Link>
