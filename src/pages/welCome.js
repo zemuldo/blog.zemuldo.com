@@ -71,18 +71,18 @@ class WelcomePage extends React.Component {
                                         <Card.Group>
                                           {
                                                         _.times(this.props.topics.length, (i) =>
-                                                          <Card className='blogCard' style={{
+                                                          <Card
+                                                              onClick={()=>this.props.history.push('/topics/' + this.props.topics[i].key)}
+                                                              className='blogCard' style={{
                                                             width: 'auto',
                                                             maxWidth: '200px',
                                                             minWidth: '100px'
                                                           }} key={i}>
                                                             <Card.Content>
                                                               <Card.Header>
-                                                                <Link
-                                                                  onClick={() => this.props.varsActions.updateVars({blogsLoaded: false})}
-                                                                  to={'/topics/' + this.props.topics[i].key}>
-                                                                  {topicsOBJ[this.props.topics[i].key].name}
-                                                                </Link>
+                                                                  <span className={'colorBlue'}>
+                                                                    {topicsOBJ[this.props.topics[i].key].name}
+                                                                  </span>
                                                               </Card.Header>
                                                               <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>
                                                               <Card.Description>{this.props.topics[i].blogs + ' '}articles to read on this topic.</Card.Description>

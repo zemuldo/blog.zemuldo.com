@@ -1,6 +1,5 @@
 import React from 'react'
 import {Card, Button, Header} from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
 import {topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
 
@@ -64,7 +63,7 @@ class GridBlog extends React.Component {
                   className='redMoreButton'
                   ref={o._id}
                   name='all'
-                  style={{ color: 'blue', border: 'none', bottom: '1%', }}
+                  style={{ color: 'blue', border: 'none', bottom: '1%'}}
               >
                 <span>Read More</span>
               </Button>
