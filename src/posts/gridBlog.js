@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card, Button, Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import {topicsOBJ} from '../environments/conf'
+import {topicsOBJ} from '../env/conf'
 import PropTypes from 'prop-types'
 
 const getTopiINfo = (topics) => {

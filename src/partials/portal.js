@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button, Header, Segment, Portal, Form, Checkbox, TextArea} from 'semantic-ui-react'
 import axios from 'axios'
-import config from '../environments/conf'
+import config from '../env/conf'
 
 const env = config[process.env.NODE_ENV] || 'development'
 

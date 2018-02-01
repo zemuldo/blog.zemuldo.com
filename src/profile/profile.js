@@ -5,7 +5,7 @@ import {Header, Grid} from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
 import Welcome from './profile_wellcome'
 import Blogs from '../posts/blogs'
-import config from '../environments/conf'
+import config from '../env/conf'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
