@@ -9,7 +9,7 @@ import * as BlogsActions from '../store/actions/blogs'
 import * as VarsActions from '../store/actions/vars'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
-import config, {topicsOBJ} from '../env/conf'
+import config, {topicsOBJ} from '../conf/conf'
 
 const getTopiINfo = (topics) => {
   let info = []

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card, Button, Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import {topicsOBJ} from '../env/conf'
+import {topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
 
 const getTopiINfo = (topics) => {
@@ -59,18 +59,15 @@ class GridBlog extends React.Component {
               <br />
               Published on {o.date}
             </p>
-            <Link
-              to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString()}>
               <Button
-                color={'green'}
-                className='redMoreButton'
-                ref={o._id}
-                name='all'
-                style={{ color: 'blue', border: 'none', bottom: '1%' }}
+                  color={'green'}
+                  className='redMoreButton'
+                  ref={o._id}
+                  name='all'
+                  style={{ color: 'blue', border: 'none', bottom: '1%' }}
               >
                 <span>Read More</span>
               </Button>
-            </Link>
           </Card.Description>
         </Card.Content>
       </Card>
