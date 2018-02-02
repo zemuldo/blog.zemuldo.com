@@ -31,6 +31,7 @@ class GridBlogs extends React.Component {
                           {
                                     _.times(this.props.blogs.length, (i) =>
                                       <GridBlog
+                                      history={this.props.history}
                                         key={this.props.blogs[i].id}
                                         color={this.props.vars.color}
                                         blog={this.props.blogs[i]}

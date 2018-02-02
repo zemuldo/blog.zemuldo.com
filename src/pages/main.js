@@ -12,8 +12,8 @@ import * as VarsActions from '../store/actions/vars'
 import axios from 'axios'
 import util from '../util'
 import PagesComponent from './page'
-import config, {topics} from '../environments/conf'
-import {pages, topicsOBJ} from '../environments/conf'
+import config, {topics} from '../conf/conf'
+import {pages, topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -122,29 +122,35 @@ class App extends React.Component {
    }
 
    handleFilterChange(e) {
-      let query = {}
-      let queryMthod = 'getAllPosts'
-      if (this.props.vars.currentLocation !== 'home') {
-         query.type = this.props.vars.currentLocation
+       let query = {}
+        let queryMthod = 'getAllPosts'
+        if (this.props.vars.currentLocation !== 'home') {
+           query.type = this.props.vars.currentLocation
+        }
+        if (e.target.value !== '') {
+           query.filter = e.target.value
+           queryMthod = 'getFiltered'
+        }
+      
+      let run = ()=>{
+        
+        this.setState({blogsAreLoading: true})
+        e.preventDefault()
+        axios.post(env.httpURL, {
+           'queryMethod': queryMthod,
+           'queryData': query
+        })
+            .then(response => {
+               this.props.blogsActions.updateBlogs(response.data)
+               this.setState({blogsAreLoading: false})
+            })
+            .catch(err => {
+               this.setState({blogs: []})
+               this.setState({blogsAreLoading: false})
+            })
       }
-      if (e.target.value !== '') {
-         query.filter = e.target.value
-         queryMthod = 'getFiltered'
-      }
-      this.setState({blogsAreLoading: true})
-      e.preventDefault()
-      axios.post(env.httpURL, {
-         'queryMethod': queryMthod,
-         'queryData': query
-      })
-          .then(response => {
-             this.props.blogsActions.updateBlogs(response.data)
-             this.setState({blogsAreLoading: false})
-          })
-          .catch(err => {
-             this.setState({blogs: []})
-             this.setState({blogsAreLoading: false})
-          })
+      clearTimeout(run)
+      setTimeout(run,1500)
    }
 
    navigateBlogs(query) {
@@ -387,14 +393,12 @@ class App extends React.Component {
                    {
                       window.innerWidth < 1030 ?
                           <span style={window.innerWidth>600?{float: 'right', marginTop: '0px'}:{marginTop: '0px'}}>
-                          <Input
-                              style={{maxWidth: '700px'}}
-                              icon={<Icon name='search' inverted circular link />}
-                              action={{ color: 'green',  icon: 'search' }}
-                              actionPosition='left'
-                              placeholder='Everything...'
-                              onChange={this.handleFilterChange}
-                          />
+                                  <Input
+                                  style={{maxWidth: '700px',marginRight:'40px'}}
+                                      icon={<Icon color='green' name='search' inverted circular link />}
+                                      placeholder='Search...'
+                                      onChange={this.handleFilterChange}
+                                  />
                        </span> : null
                    }
                    <h1>
@@ -414,17 +418,17 @@ class App extends React.Component {
                       <Icon size='big' color='orange' name='chevron left'/>
                    </Button>
                    {_.times(o.length, i =>
-                           <Link key={o[i].key} to={'/topics/'+ o[i].name}>
+                           <Link key={o[i].key} to={'/topics/'+ o[i].key}>
                               <Button
                                   size={'small'}
                                   style={{backgroundColor: 'green'}}
-                                  disabled={this.props.vars.topic === o[i].name}
+                                  disabled={this.props.vars.topic === o[i].key}
                                   className='topicButton'
-                                  onClick={() => this.props.varsActions.updateVars({topic: o[i].text})}
-                                  name={o[i].name}
+                                  onClick={() => this.props.varsActions.updateVars({topic: o[i].key})}
+                                  name={o[i].key}
                               >
                   <span>
-                    {util.toTitleCase(o[i].name)}
+                    {util.toTitleCase(o[i].key)}
                   </span>
                               </Button>
                            </Link>

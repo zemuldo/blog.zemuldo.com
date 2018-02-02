@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {CompositeDecorator, convertFromRaw, Editor, EditorState} from 'draft-js'
-import config from '../environments/conf'
+import config from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
@@ -248,6 +248,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 RichEditorExample.propTypes = {
+  editorState:PropTypes.object.isRequired,
   title:PropTypes.string.isRequired,
 }
 

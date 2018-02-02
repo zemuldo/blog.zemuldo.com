@@ -28,7 +28,7 @@ const publicPath = paths.servedPath
 // For these, "homepage" can be set to "." to enable relative asset paths.
 const shouldUseRelativeAssetPaths = publicPath === './'
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
-// as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
+// as %PUBLIC_URL% in `index.html` and `process.conf.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
 const publicUrl = publicPath.slice(0, -1)
 // Get environment variables to inject into our app.
@@ -83,7 +83,7 @@ module.exports = {
         // if there are any conflicts. This matches Node resolution mechanism.
         // https://github.com/facebookincubator/create-react-app/issues/253
         modules: ['node_modules', paths.appNodeModules].concat(
-            // It is guaranteed to exist because we tweak it in `env.js`
+            // It is guaranteed to exist because we tweak it in `conf.js`
             process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
         ),
         // These are the reasonable defaults supported by the Node ecosystem.
@@ -252,7 +252,7 @@ module.exports = {
             }
         }),
         // Makes some environment variables available to the JS code, for example:
-        // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
+        // if (process.conf.NODE_ENV === 'production') { ... }. See `./conf.js`.
         // It is absolutely essential that NODE_ENV was set to production here.
         // Otherwise React will be compiled in the very slow development mode.
         new webpack.DefinePlugin(env.stringified),

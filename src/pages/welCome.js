@@ -5,7 +5,7 @@ import {Loader, Header, Card, Image} from 'semantic-ui-react'
 import _ from 'lodash'
 import Blog from '../posts/blog'
 import GridBlogs from '../posts/gridBlogs'
-import {pages, topicsOBJ} from '../environments/conf'
+import {pages, topicsOBJ} from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
@@ -18,7 +18,6 @@ class WelcomePage extends React.Component {
   }
 
   componentDidMount () {
-
   }
 
   render () {
@@ -43,6 +42,7 @@ class WelcomePage extends React.Component {
                                       {
                                         this.props.vars.blogsLoaded===true?
                                         <GridBlogs
+                                        history={this.props.history}
                                         setPreviousBlogs={this.props.setPreviousBlogs}
                                         setNextBlogs={this.props.setNextBlogs}
                                         color={this.props.vars.color}
@@ -71,18 +71,18 @@ class WelcomePage extends React.Component {
                                         <Card.Group>
                                           {
                                                         _.times(this.props.topics.length, (i) =>
-                                                          <Card className='blogCard' style={{
+                                                          <Card
+                                                              onClick={()=>this.props.history.push('/topics/' + this.props.topics[i].key)}
+                                                              className='blogCard' style={{
                                                             width: 'auto',
                                                             maxWidth: '200px',
                                                             minWidth: '100px'
                                                           }} key={i}>
                                                             <Card.Content>
                                                               <Card.Header>
-                                                                <Link
-                                                                  onClick={() => this.props.varsActions.updateVars({blogsLoaded: false})}
-                                                                  to={'/topics/' + this.props.topics[i].key}>
-                                                                  {topicsOBJ[this.props.topics[i].key].full}
-                                                                </Link>
+                                                                  <span className={'colorBlue'}>
+                                                                    {topicsOBJ[this.props.topics[i].key].name}
+                                                                  </span>
                                                               </Card.Header>
                                                               <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>
                                                               <Card.Description>{this.props.topics[i].blogs + ' '}articles to read on this topic.</Card.Description>

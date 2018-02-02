@@ -351,6 +351,9 @@ a:hover {
     background-color: transparent;
     border: none;
 }
+.colorGreen{
+    color: green
+}
 /*
     Chat
 */

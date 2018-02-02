@@ -19,7 +19,7 @@ import {
     RichUtils
 } from 'draft-js'
 import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
-import config from '../environments/conf'
+import config from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import * as BlogActions from '../store/actions/blog'
@@ -599,7 +599,7 @@ class RenderBlog extends React.Component {
                                     <hr/>
                                     <Modal.Description>
                                         <div>
-                                            <ShowPreview  editorState={this.state.editorState}/>
+                                            <ShowPreview title={this.state.title}  editorState={this.state.editorState}/>
                                         </div>
                                     </Modal.Description>
                                 </Modal.Content>

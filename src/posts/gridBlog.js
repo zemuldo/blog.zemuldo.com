@@ -1,13 +1,12 @@
 import React from 'react'
 import {Card, Button, Header} from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
-import {topicsOBJ} from '../environments/conf'
+import {topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
 
 const getTopiINfo = (topics) => {
   let info = []
   topics.forEach(function (topic) {
-    info.push(topicsOBJ[topic].full)
+    info.push(topicsOBJ[topic].name)
   })
   return info
 }
@@ -23,10 +22,12 @@ class GridBlog extends React.Component {
   render () {
     let o = this.props.blog
     return (
-      <Card className='blogCard' style={{
+      <Card 
+      onClick={()=>this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString())}
+      className='blogCard' style={{
         width: 'auto',
         maxWidth: '250px',
-        minWidth: '100px'
+        minWidth: '100px',
       }}
             >
         <Card.Content>
@@ -47,26 +48,25 @@ class GridBlog extends React.Component {
           <Card.Description>
             <p>{o.about}</p>
             <p>
-                            15 Minutes read,
+              <span className='colorGreen'>
+              {Math.round((o.wordCount/130))} Minutes read
+              </span>,
                   <br />
-                            Related to
+              Related to
                   <br />
               {getTopiINfo(o.topics).join(', ')}
               <br />
-                            Published on {o.date}
+              Published on {o.date}
             </p>
-            <Link
-              to={'/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString()}>
               <Button
-                color={'green'}
-                className='redMoreButton'
-                ref={o._id}
-                name='all'
-                style={{color: 'blue', border: 'none', bottom: '1%'}}
-                            >
+                  color={'green'}
+                  className='redMoreButton'
+                  ref={o._id}
+                  name='all'
+                  style={{ color: 'blue', border: 'none', bottom: '1%'}}
+              >
                 <span>Read More</span>
               </Button>
-            </Link>
           </Card.Description>
         </Card.Content>
       </Card>

@@ -8,7 +8,7 @@ import * as UserActions from '../store/actions/user'
 import * as BlogsActions from '../store/actions/blogs'
 import {bindActionCreators} from 'redux'
 import axios from 'axios/index'
-import config from '../environments/conf'
+import config from '../conf/conf'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 
@@ -151,13 +151,11 @@ class ComMenu extends React.Component {
                               style={{fontSize: '12px'}}
                               name='search'
                           >
-                             <Input
-                                 icon={<Icon name='search' inverted circular link />}
-                                 action={{ color: 'green', labelPosition: 'left', icon: 'search', content: 'Search' }}
-                                 actionPosition='left'
-                                 placeholder='Everything...'
-                                 onChange={this.handleFilterChange}
-                             />
+                                  <Input
+                                      icon={<Icon color='green' name='search' inverted circular link />}
+                                      placeholder='Search...'
+                                      onChange={this.handleFilterChange}
+                                  />
                           </Menu.Item>:null
                    }
                    {

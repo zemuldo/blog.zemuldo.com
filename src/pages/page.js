@@ -5,9 +5,9 @@ import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
 import axios from 'axios'
 import TwitterProf from '../partials/twitterProf'
-import config from '../environments/conf'
-import {pages} from '../environments/conf'
-import {topicsOBJ} from '../environments/conf'
+import config from '../conf/conf'
+import {pages} from '../conf/conf'
+import {topicsOBJ} from '../conf/conf'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -216,6 +216,7 @@ class PagesComponent extends React.Component {
                                       <p>Loading Blog...</p>
                                     </div>
                                     : <WelcomePage
+                                    history={this.props.history}
                                       x={x}
                                       next={this.state.next}
                                       setPreviousBlogs={this.setPreviousBlogs}

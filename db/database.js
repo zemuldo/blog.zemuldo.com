@@ -19,7 +19,7 @@ db.open((e, d) => {
     console.log(e)
   } else {
     console.log('DB Connected: connected to: "' + dbName + '"')
-        // if (process.env.NODE_ENV == 'live') {
+        // if (process.conf.NODE_ENV == 'live') {
         //     db.authenticate('dil', 'omera', (e, res)=> {
         //         if (e) {
         //            throw new Error('mongo :: error: not authenticated-User Details Error', e)
