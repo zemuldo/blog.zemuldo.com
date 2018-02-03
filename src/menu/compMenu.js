@@ -179,16 +179,16 @@ class ComMenu extends React.Component {
 
                                      id='photo'
                                      size='mini'
-                                     src={this.props.vars.profilePic}
+                                     src={env.httpURL+this.props.user.avatarURL}
                                      style={{
                                         borderStyle: 'solid',
                                         borderWidth: '2px',
                                         borderRadius: `${(Math.min(
-                                            JSON.parse(this.props.user.avatar).height,
-                                            JSON.parse(this.props.user.avatar).width
+                                            this.props.user.avatar.height,
+                                            this.props.user.avatar.width
                                             ) +
                                             10) *
-                                        (JSON.parse(this.props.user.avatar).borderRadius / 2 / 100)}px`
+                                        (this.props.user.avatar.borderRadius / 2 / 100)}px`
                                      }}
                                  />}
                                  style={{color: this.props.vars.colors[0]}}
