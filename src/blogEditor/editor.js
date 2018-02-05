@@ -318,14 +318,17 @@ class RenderBlog extends React.Component {
                 'queryData': {
                     type: blogData.type,
                     title: title,
-                    query: 'publish',
                     topics: blogData.topics,
                     about: blogData.about,
                     wordCount:this.state.wordCount,
                     images: ['blogs_pic.jpg'],
-                    authorID: this.props.user.id,
-                    author: this.props.user.firstName + ' ' + this.props.user.lastName,
-                    userName: this.props.user.userName,
+                    author:{
+                        id:this.props.user.id,
+                        name: this.props.user.firstName + ' ' + this.props.user.lastName,
+                        userName: this.props.user.userName,
+                        url:this.props.user.avatarURL,
+                        style:this.props.user.avatar
+                    },
                     body: JSON.stringify(obj)
                 }
 

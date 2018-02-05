@@ -23,7 +23,7 @@ class GridBlog extends React.Component {
     let o = this.props.blog
     return (
       <Card 
-      onClick={()=>this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString())}
+      onClick={()=>this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.author.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString())}
       className='blogCard' style={{
         width: 'auto',
         maxWidth: '250px',
@@ -36,7 +36,7 @@ class GridBlog extends React.Component {
               {o.title.split(' ').join(' ')}
             </Header>
           </Card.Header>
-          <Card.Meta><p>Author: {o.author}</p>
+          <Card.Meta><p>Author: {o.author.name}</p>
                         Likes:
                 <span>
                   <i style={{color: 'orange'}}>

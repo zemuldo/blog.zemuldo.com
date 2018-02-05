@@ -457,7 +457,7 @@ class Blog extends React.Component {
                                           avatar
                                           id='photo'
                                           size='tiny'
-                                          src={this.state.authorAvatar.img}
+                                          src={env.httpURL+this.props.blog.author.avatarURL}
                                           style={{
                                               borderRadius: `${(Math.min(
                                                   this.state.authorAvatar.height,
