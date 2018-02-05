@@ -69,7 +69,7 @@ class Blog extends React.Component {
 
     setBlogCounts() {
         let thisBlog = this.props.blog
-        let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+        let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         let gplusPost = {
             'method': 'pos.plusones.get',
             'id': 'p',
@@ -213,7 +213,7 @@ class Blog extends React.Component {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.zemuldo.com%2F'
         if (this.props.blog) {
             let thisBlog = this.props.blog
-            let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+            let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
             let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
@@ -225,7 +225,7 @@ class Blog extends React.Component {
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
             let thisBlog = this.props.blog
-            let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+            let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
             let fullURL = url + related + hashTgs + via
             let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
@@ -234,7 +234,7 @@ class Blog extends React.Component {
 
     gplusShare() {
         let thisBlog = this.props.blog
-        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         if (this.props.blog) {
             url = 'https://plus.google.com/share?url=https://blog.zemuldo.com/' + url
             window.open(url)
@@ -243,7 +243,7 @@ class Blog extends React.Component {
 
     linkdnShare() {
         let thisBlog = this.props.blog
-        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.zemuldo.com  /' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
     }
 
@@ -449,26 +449,21 @@ class Blog extends React.Component {
                                 <br/>
                                 <br/>
                                 <span>
-                              {
-                                  this.state.authorAvatar
-
-                                      ? <Image
-                                          floated='left'
-                                          avatar
-                                          id='photo'
-                                          size='tiny'
-                                          src={env.httpURL+this.props.blog.author.avatarURL}
-                                          style={{
-                                              borderRadius: `${(Math.min(
-                                                  this.state.authorAvatar.height,
-                                                  this.state.authorAvatar.width
-                                                  ) +
-                                                  10) *
-                                              this.state.authorAvatar.borderRadius / 2 / 100}px`
-                                          }}
-                                      />
-                                      : <span/>
-                              }
+                                    <Image
+                                        floated='left'
+                                        avatar
+                                        id='photo'
+                                        size='tiny'
+                                        src={env.httpURL+this.props.blog.author.url}
+                                        style={{
+                                            borderRadius: `${(Math.min(
+                                                this.props.blog.author.style.height,
+                                                this.props.blog.author.style.width
+                                            ) +
+                                                10) *
+                                                this.props.blog.author.style.borderRadius / 2 / 100}px`
+                                        }}
+                                    />
                             </span>
                                 <span className='info'>
                                    Published on:
@@ -477,12 +472,12 @@ class Blog extends React.Component {
                                 <br/>
                                 <br/>
                                 <span className='info'>
-                              {this.props.blog.author} {' '}
+                              {this.props.blog.author.name} {' '}
                             </span>
                                 <br/>
                                 <br/>
                                 {
-                                    this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.userName
+                                    this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
