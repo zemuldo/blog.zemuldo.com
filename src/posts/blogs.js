@@ -40,7 +40,7 @@ class Blogs extends React.Component {
                               </Header>
                             </List.Content>
                             <List.Content>
-                                        Author: {this.props.blogs[i].author}
+                                        Author: {this.props.blogs[i].author.name}
                             </List.Content>
                             <span>
                                             Likes:
@@ -51,7 +51,7 @@ class Blogs extends React.Component {
                               </span>
                             </span>
                             <Link
-                              to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '-' + o[i].title.split(' ').join('-') + '-' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
+                              to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].author.userName + '-' + o[i].title.split(' ').join('-') + '-' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
                               <Button
                                 className='redMoreButton'
                                 ref={this.props.blogs[i]._id}
@@ -77,7 +77,7 @@ class Blogs extends React.Component {
                                       </Header>
                                     </List.Content>
                                     <List.Content>
-                                            Author: {this.props.blogs[i].author}
+                                            Author: {this.props.blogs[i].author.name}
                                     </List.Content>
                                     <span>
                                             Likes:
@@ -88,7 +88,7 @@ class Blogs extends React.Component {
                                       </i>
                                     </span>
                                     <Link
-                                      to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '_' + o[i].title.split(' ').join('-') + '-' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
+                                      to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].author.userName + '_' + o[i].title.split(' ').join('-') + '-' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
                                       <Button
                                         circular
                                         size='mini'
