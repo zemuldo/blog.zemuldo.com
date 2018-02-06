@@ -79,9 +79,6 @@ class Login extends React.Component {
                     if (success.data.state === true) {
                       this.props.varsActions.updateVars({currentLocation: 'profile'})
                       this.setBlogs(user.userName)
-                      let urlCreator = window.URL || window.webkitURL
-                      let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img))
-                      this.props.varsActions.updateVars({profilePic: imageUrl})
                       this.props.userActions.updateUser(user)
                       this.props.history.push('/user/' + user.userName)
                       this.setState({validatingKnounUser: false})
@@ -153,9 +150,6 @@ class Login extends React.Component {
                 this.setBlogs(user.userName)
                 success.data.name = success.data.userName
                 this.setState({logingin: false})
-                let urlCreator = window.URL || window.webkitURL
-                let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img))
-                this.props.varsActions.updateVars({profilePic: imageUrl})
                 this.props.userActions.updateUser(user)
                 localStorage.setItem('user', JSON.stringify(success.data))
                 this.props.history.push('/user/' + success.data.userName)
@@ -304,8 +298,8 @@ class Login extends React.Component {
                 })
                 setTimeout(function () {
                   this.setState({success: false, hideMessage: true, imagePreviewUrl: ''})
-                  this.props.history.push('/login')
-                  this.props.varsActions.updateVars({signUp: false})
+                  // this.props.history.push('/login')
+                  // this.props.varsActions.updateVars({signUp: false})
                 }.bind(this), 2000)
               } else {
                 this.setState({

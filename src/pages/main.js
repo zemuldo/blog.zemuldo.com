@@ -15,6 +15,7 @@ import PagesComponent from './page'
 import config, {topics} from '../conf/conf'
 import {pages, topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
+import {Image} from "../blogEditor/editorToolkit";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -296,7 +297,7 @@ class App extends React.Component {
       let known = localStorage.getItem('user')
       if (known) {
          let user = JSON.parse(known)
-         if (typeof user.avatar !== 'string') {
+         if (typeof user.avatar === 'string') {
             localStorage.removeItem('user')
             return false
          }
@@ -305,9 +306,6 @@ class App extends React.Component {
                this.props.history.push('/')
             }
             this.props.userActions.updateUser(user)
-            let urlCreator = window.URL || window.webkitURL
-            let imageUrl = urlCreator.createObjectURL(util.dataURItoBlob(JSON.parse(user.avatar).img))
-            this.props.varsActions.updateVars({profilePic: imageUrl})
             this.setBlogs(user.userName)
          } else {
             localStorage.removeItem('user')
@@ -386,6 +384,8 @@ class App extends React.Component {
                 <title>{'ZemuldO-' + util.toTitleCase(this.props.vars.currentLocation)}</title>
                 <meta name='Danstan Otieno Onyango' content='ZemuldO-Home'/>
              </Helmet>
+
+
 
              <div style={{marginTop: '6em'}}>
                 {window.innerWidth<600?<br/>:null}
