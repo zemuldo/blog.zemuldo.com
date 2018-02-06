@@ -327,13 +327,13 @@ class App extends React.Component {
       })
           .then(function (response) {
              if (response.data[0]) {
-                this.props.blogsActions.updateBlogs(response.data)
+                this.props.userActions.updateUser({blogs:response.data})
              } else {
-                this.props.blogsActions.updateBlogs([])
+                this.props.userActions.updateUser({blogs:[]})
              }
           }.bind(this))
           .catch(function (err) {
-             this.props.blogsActions.updateBlogs([])
+            this.props.userActions.updateUser({blogs:[]})
           }.bind(this))
    }
 
