@@ -347,7 +347,7 @@ class Blog extends React.Component {
                                 }
                             </Header>
                             <span className='info'>
-                                   Published on:
+                                   Published: {moment().to(this.props.blog.date)}
                                    <br/>
                                 {this.props.blog.date}
                             </span>
@@ -470,8 +470,8 @@ class Blog extends React.Component {
                                     />
                             </span>
                                 <span className='info'>
-                                   Published on:
-                                    {' '}{moment().to(([2017, 11, 12]))}
+                                   Published
+                                    {' '}{moment().to(this.props.blog.date)}
                             </span>
                                 <br/>
                                 <br/>
