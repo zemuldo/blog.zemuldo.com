@@ -206,7 +206,7 @@ class RichEditorExample extends React.Component {
   }
 
   render () {
-    const {editorState} = this.state
+    const {editorState} = this.props
     let className = 'RichEditor-editor'
     let contentState = editorState.getCurrentContent()
     if (!contentState.hasText()) {
@@ -216,7 +216,6 @@ class RichEditorExample extends React.Component {
     }
     return (
       <div className={className} onClick={this.focus}>
-         <h1 className='alignCenter'>{this.props.title}</h1>
         <Editor
           readOnly
           blockRendererFn={mediaBlockRenderer}

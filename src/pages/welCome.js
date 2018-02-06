@@ -105,6 +105,7 @@ class WelcomePage extends React.Component {
                           {
                                 this.props.vars.blogsLoaded
                                   ? <Blog
+                                  navigateBlogs ={this.props.navigateBlogs}
                                     color={this.props.vars.color}
                                     />
                                   : <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
