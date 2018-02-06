@@ -2,6 +2,7 @@ import React from 'react'
 import {Card, Button, Header} from 'semantic-ui-react'
 import {topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 const getTopiINfo = (topics) => {
   let info = []
@@ -56,7 +57,15 @@ class GridBlog extends React.Component {
                   <br />
               {getTopiINfo(o.topics).join(', ')}
               <br />
-              Published on {o.date}
+              {
+                o.updated ?
+                  <span>
+                    Last updated  {moment().to(o.updated)}
+                  </span> : <span>
+                    Published  {moment().to(o.date)}
+                  </span>
+              }
+              
             </p>
               <Button
                   color={'green'}
