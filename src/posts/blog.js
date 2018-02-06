@@ -281,10 +281,9 @@ class Blog extends React.Component {
             })
                 .then(function (response) {
                     this.props.blogActions.resetBlog({id: null})
-                    this.closeDelete();
+                    this.props.navigateBlogs({})
                 }.bind(this))
                 .catch(function (err) {
-                    this.closeDelete()
                 }.bind(this))
         }
     };
@@ -350,13 +349,13 @@ class Blog extends React.Component {
                             <br/>
                             <br/>
                             <span className='info'>
-                                {this.props.blog.author} {' '}
+                                {this.props.blog.author.name} {' '}
                             </span>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
                                 <div>{
                                     this.state.editorState?
-                                    <PreviewEditor editorState={this.state.editorState}/>:
+                                    <PreviewEditor title={this.props.blog.title} editorState={this.state.editorState}/>:
                                     <div>Loading editor state</div>
                                 }</div>
                             </div>
@@ -551,6 +550,7 @@ Blog.propTypes = {
     ]),
     vars: PropTypes.object.isRequired,
     blogActions: PropTypes.object.isRequired,
+    navigateBlogs:PropTypes.func.isRequired
 
 }
 

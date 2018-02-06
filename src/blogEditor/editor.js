@@ -586,34 +586,6 @@ class RenderBlog extends React.Component {
                                     {mediaInput}
                                 </div>
                             </div>
-                            <Modal open={this.state.previewOpen}>
-                                <Modal.Header><Header
-                                    style={{margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center'}}
-                                    color='green' as='h1'>
-                                    You are about to publish this article.
-                                </Header></Modal.Header>
-                                <Modal.Content>
-                                    <div>
-                                        <p>
-                                            This is how will appear. Review and publish. Click back if you need to make
-                                            changes
-                                        </p>
-                                    </div>
-                                    <hr/>
-                                    <Modal.Description>
-                                        <div>
-                                            <ShowPreview title={this.state.title}  editorState={this.state.editorState}/>
-                                        </div>
-                                    </Modal.Description>
-                                </Modal.Content>
-                                <Modal.Actions>
-                                    <Button.Group>
-                                        <Button color='blue' onClick={this.closePreview}>Back</Button>
-                                        <Button.Or/>
-                                        <Button color='green' onClick={this.handleConfirm}>Publish</Button>
-                                    </Button.Group>
-                                </Modal.Actions>
-                            </Modal>
                         </div> : null
                 }
                 <div style={this.props.blog.editMode || this.props.mode==='create'? {
@@ -633,6 +605,7 @@ class RenderBlog extends React.Component {
                             You are about to publish this article.
                         </Header></Modal.Header>
                         <Modal.Content>
+                        
                             <div>
                                 <p>
                                     This is how will appear. Review and publish. Click back if you need to make changes
@@ -640,6 +613,11 @@ class RenderBlog extends React.Component {
                             </div>
                             <hr/>
                             <Modal.Description>
+                            <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color} as='h1'>
+                                        {
+                                            this.state.title
+                                        }
+                                    </Header>
                                 <div>
                                     <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState} editorState={this.state.editorState}/>
                                 </div>
@@ -685,6 +663,7 @@ const mapStateToProps = (state) => {
     return {
         blog: state.blog,
         user: state.user,
+        vars:state.vars
     }
 };
 
@@ -702,6 +681,7 @@ RenderBlog.propTypes = {
         PropTypes.oneOf([null])
     ]),
     blog: PropTypes.object.isRequired,
+    vars: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired,
     varsActions: PropTypes.object.isRequired
 };

@@ -441,6 +441,7 @@ class App extends React.Component {
                 </div>
                 <PagesComponent
                     history={this.props.history}
+                    navigateBlogs ={this.navigateBlogs}
                     handleFilterChange={this.handleFilterChange}
                     blogsAreLoading={this.blogsAreLoading}
                     setTopicNextPosts={this.setTopicNextPosts}
