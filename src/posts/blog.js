@@ -8,6 +8,7 @@ import config from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import {
     AtomicBlockUtils,
     convertFromRaw,
@@ -314,7 +315,7 @@ class Blog extends React.Component {
         axios.post(env.httpURL, {
             queryMethod: 'updateBlog',
             'queryData': {
-                _id: this.props.blog.post_ID,
+                _id: this.props.blog.postID,
                 update: update
             }
 
@@ -329,6 +330,10 @@ class Blog extends React.Component {
     }
 
     render() {
+
+        let start = moment([2017, 11, 12]);
+        let end   = moment();
+
         return (
             <div>
                 <Modal dimmer open={this.state.showDelete}>
@@ -466,7 +471,7 @@ class Blog extends React.Component {
                             </span>
                                 <span className='info'>
                                    Published on:
-                                    {' '}{this.props.blog.date}
+                                    {' '}{moment().to(([2017, 11, 12]))}
                             </span>
                                 <br/>
                                 <br/>
