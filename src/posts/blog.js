@@ -460,6 +460,9 @@ class Blog extends React.Component {
                                         size='tiny'
                                         src={env.httpURL+this.props.blog.author.url}
                                         style={{
+                                            borderStyle: 'solid',
+                                            borderWidth: '3px',
+                                            borderColor:'green',
                                             borderRadius: `${(Math.min(
                                                 this.props.blog.author.style.height,
                                                 this.props.blog.author.style.width
