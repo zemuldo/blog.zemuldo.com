@@ -1,9 +1,9 @@
 import React from 'react'
-import {Card, Button, Header} from 'semantic-ui-react'
+import {Card, Button, Header,Image, Icon} from 'semantic-ui-react'
 import {topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-
+import {connect} from 'react-redux'
 const getTopiINfo = (topics) => {
   let info = []
   topics.forEach(function (topic) {
@@ -22,13 +22,15 @@ class GridBlog extends React.Component {
 
   render () {
     let o = this.props.blog
+    let w = Math.round((o.wordCount/130))
     return (
       <Card 
       onClick={()=>this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.author.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString())}
       className='blogCard' style={{
         width: 'auto',
-        maxWidth: '250px',
+        maxWidth: '300px',
         minWidth: '100px',
+        position:"relative"
       }}
             >
         <Card.Content>
@@ -37,23 +39,18 @@ class GridBlog extends React.Component {
               {o.title.split(' ').join(' ')}
             </Header>
           </Card.Header>
-          <Card.Meta><p>Author: {o.author.name}</p>
-                        Likes:
+          <Card.Meta>
+                        <Icon size='small' inverted circular color='blue' name = 'like outline'/>
+                        <Icon size='small' inverted circular color='red' name = 'like'/>
                 <span>
-                  <i style={{color: 'orange'}}>
-                                                                ~{o.likes}
-                  </i>
+                {o.likes}
                 </span>
-            <hr color={this.props.color} />
           </Card.Meta>
           <Card.Description>
             <p>{o.about}</p>
             <p>
-              <span className='colorGreen'>
-              {Math.round((o.wordCount/130))} Minutes read
-              </span>,
                   <br />
-              Related to
+              Related Topics
                   <br />
               {getTopiINfo(o.topics).join(', ')}
               <br />
@@ -67,25 +64,45 @@ class GridBlog extends React.Component {
               }
               
             </p>
-              <Button
-                  color={'green'}
-                  className='redMoreButton'
-                  ref={o._id}
-                  name='all'
-                  style={{ color: 'blue', border: 'none', bottom: '1%'}}
-              >
-                <span>Read More</span>
-              </Button>
           </Card.Description>
+          <div>
+            <br/>
+            <Image
+            size='big'
+              avatar
+              rounded
+              style={{ maxHeight: '130px' }}
+              alt={'blogs image'}
+              src={this.props.vars.env.httpURL + o.author.url}
+            />
+
+            <span className='info'>
+              {o.author.name} {' '}
+            </span>
+            <br/>
+            <span>
+              {moment(o.date).format('ll')}
+            </span>{', '}
+            <span className='colorGreen'>
+              {w>60?Math.round((w/60))+'Hours,'+w%60+' ':w+' '} Minutes read
+              </span>
+          </div>
         </Card.Content>
       </Card>
     )
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    vars: state.vars,
+  }
+}
+
 GridBlog.propTypes = {
   blog: PropTypes.object.isRequired,
   color: PropTypes.string.isRequired,
+  vars:PropTypes.object.isRequired
 }
 
-export default GridBlog
+export default connect(mapStateToProps)(GridBlog)

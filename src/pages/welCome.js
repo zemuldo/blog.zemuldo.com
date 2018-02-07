@@ -76,7 +76,7 @@ class WelcomePage extends React.Component {
                                                     onClick={() => this.props.history.push('/topics/' + this.props.topics[i].key)}
                                                     className='blogCard' style={{
                                                       width: 'auto',
-                                                      maxWidth: '200px',
+                                                      maxWidth: '250px',
                                                       minWidth: '100px'
                                                     }} key={i}>
                                                     <Card.Content>
