@@ -327,7 +327,8 @@ class RenderBlog extends React.Component {
                         name: this.props.user.firstName + ' ' + this.props.user.lastName,
                         userName: this.props.user.userName,
                         url:this.props.user.avatarURL,
-                        style:this.props.user.avatar
+                        style:this.props.user.avatar,
+                        created:this.props.user.created
                     },
                     body: JSON.stringify(obj)
                 }
