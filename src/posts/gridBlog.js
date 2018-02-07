@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Button, Header,Image, Icon} from 'semantic-ui-react'
+import {Card, Button, Header,Image, Icon,Segment, Divider, Popup} from 'semantic-ui-react'
 import {topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -46,6 +46,7 @@ class GridBlog extends React.Component {
                 {o.likes}
                 </span>
           </Card.Meta>
+          <Divider horizontal>{o.type}</Divider>
           <Card.Description>
             <p>{o.about}</p>
             <p>
@@ -65,28 +66,39 @@ class GridBlog extends React.Component {
               
             </p>
           </Card.Description>
-          <div>
-            <br/>
-            <Image
-            size='big'
-              avatar
-              rounded
-              style={{ maxHeight: '130px' }}
-              alt={'blogs image'}
-              src={this.props.vars.env.httpURL + o.author.url}
-            />
-
-            <span className='info'>
-              {o.author.name} {' '}
+          <br/>
+          <Popup
+            trigger={<Image
+              size='big'
+                avatar
+                rounded
+                style={{ maxHeight: '130px' }}
+                alt={'blogs image'}
+                src={this.props.vars.env.httpURL + o.author.url}
+              />}
+            content={o.author.name +', Joined '+moment().to(o.author.created)}
+          />
+          <span className='info'>
+            {o.author.name} {' '}
+          </span>
+          <br/>
+          <span>
+            {moment(o.date).format('ll')}
+          </span>{', '}
+          <span className='colorGreen'>
+            {w>60?Math.round((w/60))+'Hours,'+w%60+' ':w+' '} Minutes read
             </span>
             <br/>
-            <span>
-              {moment(o.date).format('ll')}
-            </span>{', '}
-            <span className='colorGreen'>
-              {w>60?Math.round((w/60))+'Hours,'+w%60+' ':w+' '} Minutes read
-              </span>
-          </div>
+          <Popup
+            trigger={<Image
+              floated='right'
+              avatar
+              alt={'blogs image'}
+              src={this.props.vars.env.static+'img/blogs/bookmark.png'}
+            />}
+            content='Bookmark, Read later'
+          />
+          
         </Card.Content>
       </Card>
     )
