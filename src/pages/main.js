@@ -306,7 +306,6 @@ class App extends React.Component {
                this.props.history.push('/')
             }
             this.props.userActions.updateUser(user)
-            this.setUserBlogs(user.userName)
          } else {
             localStorage.removeItem('user')
          }
@@ -316,25 +315,6 @@ class App extends React.Component {
       }
       this.forceUpdate()
       window.addEventListener('resize', this.resize)
-   }
-
-   setUserBlogs(userName) {
-      axios.post(env.httpURL, {
-         'queryMethod': 'getPosts',
-         'queryData': {
-            'author.userName':userName
-         }
-      })
-          .then(function (response) {
-             if (response.data[0]) {
-                this.props.userActions.updateUser({blogs:response.data})
-             } else {
-                this.props.userActions.updateUser({blogs:[]})
-             }
-          }.bind(this))
-          .catch(function (err) {
-            this.props.userActions.updateUser({blogs:[]})
-          }.bind(this))
    }
 
    componentWillUnmount() {
