@@ -491,7 +491,8 @@ module.exports = {
         wsURL: 'wss://api.zemuldo.com',
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
-        serverURL: 'https://blogs.zemuldo.com'
+        serverURL: 'https://blogs.zemuldo.com',
+        static:'/static/'
     },
     production: {
         httpPort: 8080,
@@ -505,13 +506,15 @@ module.exports = {
         wsURL: 'ws://localhost:8090',
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
-        serverURL: 'https://localhost:8080'
+        serverURL: 'https://localhost:8080',
+        static:'/'
     },
     development: {
         httpPort: 8080,
         wsURL: 'ws://localhost:8090',
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
-        serverURL: 'https://localhost:8080'
+        serverURL: 'https://localhost:8080',
+        static:'/'
     }
 }
