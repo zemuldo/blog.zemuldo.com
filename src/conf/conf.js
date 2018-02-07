@@ -499,7 +499,8 @@ module.exports = {
         wsURL: 'wss://api.zemuldo.com',
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
-        serverURL: 'https://blogs.zemuldo.com'
+        serverURL: 'https://blogs.zemuldo.com',
+        static:'/static/'
     },
     dev: {
         httpPort: 8080,
