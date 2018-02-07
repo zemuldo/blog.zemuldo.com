@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {Loader, Header, Card, Image} from 'semantic-ui-react'
 import _ from 'lodash'
+import util from '../util'
 import Blog from '../posts/blog'
 import GridBlogs from '../posts/gridBlogs'
 import {pages, topicsOBJ} from '../conf/conf'
@@ -69,27 +70,41 @@ class WelcomePage extends React.Component {
                                       <br />
                                       <div className='blogs'>
                                         <Card.Group>
-                                          {
-                                                        _.times(this.props.topics.length, (i) =>
-                                                          <Card
-                                                              onClick={()=>this.props.history.push('/topics/' + this.props.topics[i].key)}
-                                                              className='blogCard' style={{
-                                                            width: 'auto',
-                                                            maxWidth: '200px',
-                                                            minWidth: '100px'
-                                                          }} key={i}>
-                                                            <Card.Content>
-                                                              <Card.Header>
-                                                                  <span className={'colorBlue'}>
-                                                                    {topicsOBJ[this.props.topics[i].key].name}
-                                                                  </span>
-                                                              </Card.Header>
-                                                              <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>
-                                                              <Card.Description>{this.props.topics[i].blogs + ' '}articles to read on this topic.</Card.Description>
-                                                            </Card.Content>
-                                                          </Card>
-                                                        )
-                                                    }
+                                              {
+                                                _.times(this.props.topics.length, (i) =>
+                                                  <Card
+                                                    onClick={() => this.props.history.push('/topics/' + this.props.topics[i].key)}
+                                                    className='blogCard' style={{
+                                                      width: 'auto',
+                                                      maxWidth: '250px',
+                                                      minWidth: '100px'
+                                                    }} key={i}>
+                                                    <Card.Content>
+                                                      <Card.Header>
+                                                      <span className={'colorBlue'}>
+                                                          {topicsOBJ[this.props.topics[i].key].name}
+                                                        </span>
+                                                      </Card.Header>
+                                                    </Card.Content>
+                                                    <Card.Content>
+                                                      <Card.Header>
+                                                        
+                                                        <p>
+                                                          <Image
+                                                          style={{maxHeight:'130px'}}
+                                                            alt={topicsOBJ[this.props.topics[i].key].name + 'blogs image'}
+                                                            src={this.props.vars.env.static+'img/blogs/topics/' + this.props.topics[i].key + '.png'}
+                                                          />
+                                                        </p>
+                                                      </Card.Header>
+                                                      <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>
+                                                      <Card.Description>
+                                                        {util.toTitleCase(util.inWords(Number(this.props.topics[i].blogs))) + ' '}articles to read on this topic.
+                                                      </Card.Description>
+                                                    </Card.Content>
+                                                  </Card>
+                                                )
+                                              }
                                         </Card.Group>
 
                                       </div>
@@ -105,6 +120,7 @@ class WelcomePage extends React.Component {
                           {
                                 this.props.vars.blogsLoaded
                                   ? <Blog
+                                  navigateBlogs ={this.props.navigateBlogs}
                                     color={this.props.vars.color}
                                     />
                                   : <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>

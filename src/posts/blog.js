@@ -8,6 +8,7 @@ import config from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import {
     AtomicBlockUtils,
     convertFromRaw,
@@ -281,10 +282,9 @@ class Blog extends React.Component {
             })
                 .then(function (response) {
                     this.props.blogActions.resetBlog({id: null})
-                    this.closeDelete();
+                    this.props.navigateBlogs({})
                 }.bind(this))
                 .catch(function (err) {
-                    this.closeDelete()
                 }.bind(this))
         }
     };
@@ -315,7 +315,7 @@ class Blog extends React.Component {
         axios.post(env.httpURL, {
             queryMethod: 'updateBlog',
             'queryData': {
-                _id: this.props.blog.post_ID,
+                _id: this.props.blog.postID,
                 update: update
             }
 
@@ -330,6 +330,10 @@ class Blog extends React.Component {
     }
 
     render() {
+
+        let start = moment([2017, 11, 12]);
+        let end   = moment();
+
         return (
             <div>
                 <Modal dimmer open={this.state.showDelete}>
@@ -343,20 +347,20 @@ class Blog extends React.Component {
                                 }
                             </Header>
                             <span className='info'>
-                                   Published on:
+                                   Published: {moment().to(this.props.blog.date)}
                                    <br/>
                                 {this.props.blog.date}
                             </span>
                             <br/>
                             <br/>
                             <span className='info'>
-                                {this.props.blog.author} {' '}
+                                {this.props.blog.author.name} {' '}
                             </span>
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
                                 <div>{
                                     this.state.editorState?
-                                    <PreviewEditor editorState={this.state.editorState}/>:
+                                    <PreviewEditor title={this.props.blog.title} editorState={this.state.editorState}/>:
                                     <div>Loading editor state</div>
                                 }</div>
                             </div>
@@ -456,6 +460,9 @@ class Blog extends React.Component {
                                         size='tiny'
                                         src={env.httpURL+this.props.blog.author.url}
                                         style={{
+                                            borderStyle: 'solid',
+                                            borderWidth: '3px',
+                                            borderColor:'green',
                                             borderRadius: `${(Math.min(
                                                 this.props.blog.author.style.height,
                                                 this.props.blog.author.style.width
@@ -466,8 +473,8 @@ class Blog extends React.Component {
                                     />
                             </span>
                                 <span className='info'>
-                                   Published on:
-                                    {' '}{this.props.blog.date}
+                                   Published
+                                    {' '}{moment().to(this.props.blog.date)}
                             </span>
                                 <br/>
                                 <br/>
@@ -551,6 +558,7 @@ Blog.propTypes = {
     ]),
     vars: PropTypes.object.isRequired,
     blogActions: PropTypes.object.isRequired,
+    navigateBlogs:PropTypes.func.isRequired
 
 }
 

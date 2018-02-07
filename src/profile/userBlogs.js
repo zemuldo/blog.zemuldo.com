@@ -47,7 +47,7 @@ class GridBlogs extends React.Component {
                                     {o[i].title.split(' ').join(' ')}
                                   </Header>
                                 </Card.Header>
-                                <Card.Meta><p>Author: {o[i].author}</p>
+                                <Card.Meta><p>Author: {o[i].author.name}</p>
                                        Likes:
                                        <span><i style={{color: 'orange'}}>
                                                                 ~{o[i].likes}</i></span>
@@ -65,7 +65,7 @@ class GridBlogs extends React.Component {
                                           Published on {o[i].date}
                                   </p>
                                   <Link
-                                    to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].userName + '-' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
+                                    to={'/' + o[i].type + '/' + o[i].topics[0] + '/' + o[i].author + '-' + o[i].title.split(' ').join('-') + '_' + o[i].date.split(' ').join('-') + '-' + o[i].id.toString()}>
                                     <Button
                                       color={'green'}
                                       className='redMoreButton'
