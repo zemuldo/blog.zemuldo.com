@@ -306,7 +306,7 @@ class App extends React.Component {
                this.props.history.push('/')
             }
             this.props.userActions.updateUser(user)
-            this.setBlogs(user.userName)
+            this.setUserBlogs(user.userName)
          } else {
             localStorage.removeItem('user')
          }
@@ -318,11 +318,11 @@ class App extends React.Component {
       window.addEventListener('resize', this.resize)
    }
 
-   setBlogs(userName) {
+   setUserBlogs(userName) {
       axios.post(env.httpURL, {
          'queryMethod': 'getPosts',
          'queryData': {
-            userName: userName
+            'author.userName':userName
          }
       })
           .then(function (response) {

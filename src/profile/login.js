@@ -97,6 +97,7 @@ class Login extends React.Component {
                   }
                 })
                 .catch((err) => {
+                  console.log(err)
                   localStorage.removeItem('user')
                   this.setState({validatingKnounUser: false})
                   return err
@@ -388,7 +389,7 @@ class Login extends React.Component {
     axios.post(env.httpURL, {
       'queryMethod': 'getPosts',
       'queryData': {
-        userName: userName
+        'author.userName':userName
       }
     })
             .then(function (response) {
