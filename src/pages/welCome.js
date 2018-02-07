@@ -91,7 +91,7 @@ class WelcomePage extends React.Component {
                                                         
                                                         <p>
                                                           <Image
-                                                          style={{maxHeight:''}}
+                                                          style={{maxHeight:'130px'}}
                                                             alt={topicsOBJ[this.props.topics[i].key].name + 'blogs image'}
                                                             src={this.props.vars.env.static+'img/blogs/topics/' + this.props.topics[i].key + '.png'}
                                                           />
