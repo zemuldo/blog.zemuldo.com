@@ -34,7 +34,7 @@ class WelcomePage extends React.Component {
                                     <Header color={this.props.vars.color} as='h2'>
                                       {
                                                 this.props.vars.topic !== 'all' && topicsOBJ[this.props.vars.topic]
-                                                ? t + topicsOBJ[this.props.vars.topic].full
+                                                ? t + topicsOBJ[this.props.vars.topic].name
                                                     : pages[this.props.vars.currentLocation].topTitle
                                             }
                                     </Header>

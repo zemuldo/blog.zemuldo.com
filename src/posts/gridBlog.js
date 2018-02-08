@@ -23,9 +23,10 @@ class GridBlog extends React.Component {
   render () {
     let o = this.props.blog
     let w = Math.round((o.wordCount/130))
+    let p = '/' + o.type + '/' + o.topics[0] + '/' + o.author.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString()
     return (
       <Card 
-      onClick={()=>this.props.history.push('/' + o.type + '/' + o.topics[0] + '/' + o.author.userName + '-' + o.title.split(' ').join('-') + '-' + o.date.split(' ').join('-') + '-' + o.id.toString())}
+      
       className='blogCard' style={{
         width: 'auto',
         maxWidth: '300px',
@@ -34,10 +35,12 @@ class GridBlog extends React.Component {
       }}
             >
         <Card.Content>
-          <Card.Header>
-            <Header color='green' as='h3'>
+          <Card.Header onClick={()=>this.props.history.push(p)}>
+          <a onClick={()=>this.props.history.push(p)}>
+          <Header color='green' as='h3'>
               {o.title.split(' ').join(' ')}
             </Header>
+          </a>
           </Card.Header>
           <Card.Meta>
                         <Icon size='small' inverted circular color='blue' name = 'like outline'/>
@@ -47,8 +50,9 @@ class GridBlog extends React.Component {
                 </span>
           </Card.Meta>
           <Divider horizontal>{o.type}</Divider>
-          <Card.Description>
-            <p>{o.about}</p>
+          <Card.Description >
+           <a  style={{ color: 'black' }}>
+           <p>{o.about}</p>
             <p>
                   <br />
               Related Topics
@@ -65,8 +69,10 @@ class GridBlog extends React.Component {
               }
               
             </p>
+           </a>
           </Card.Description>
           <br/>
+          <a onClick={()=>this.props.history.push(p)}>
           <Popup
             trigger={<Image
               size='big'
@@ -78,6 +84,8 @@ class GridBlog extends React.Component {
               />}
             content={o.author.name +', Joined '+moment().to(o.author.created)}
           />
+          </a>
+         
           <span className='info'>
             {o.author.name} {' '}
           </span>
@@ -89,7 +97,8 @@ class GridBlog extends React.Component {
             {w>60?Math.round((w/60))+'Hours,'+w%60+' ':w+' '} Minutes read
             </span>
             <br/>
-          <Popup
+            <a onClick={()=>this.props.history.push(p)}>
+            <Popup
             trigger={<Image
               floated='right'
               avatar
@@ -98,6 +107,8 @@ class GridBlog extends React.Component {
             />}
             content='Bookmark, Read later'
           />
+          </a>
+          
           
         </Card.Content>
       </Card>
