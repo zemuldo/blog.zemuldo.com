@@ -387,7 +387,7 @@ class App extends React.Component {
                    <h1>
                       <Link to='/'>
                          <Header color={this.props.vars.color} as={'h1'}>
-                            Zemuldo Blogs-{pages[this.props.vars.currentLocation].name}
+                            Zemuldo Blogs
                          </Header>
                       </Link>
 
