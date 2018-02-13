@@ -398,71 +398,76 @@ class Blog extends React.Component {
 
                             }
                             <div className='shareIcon clearElem'
-                                 style={{display: 'block', fontSize: '16px', fontFamily: 'georgia'}}>
+                                style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
                                     this.state.userLoggedIn
                                         ? <span>
-                                          {
-                                              this.state.youLike
-                                                  ? <Icon color={this.props.vars.color} name='like'/>
-                                                  : <button onClick={() => this.updateLikes(this.props.blog.id)}>
-                                                      <Icon color='green' name='thumbs up'/>
-                                                  </button>
-                                          }
+                                            {
+                                                this.state.youLike
+                                                    ? <span>
+                                                        <Icon size='small' inverted circular color='blue' name = 'like outline'/>
+                                                        <Icon size='small' inverted circular color='red' name = 'like'/>                
+                                                    </span>
+                                                    : 
+                                                    <span>
+                                                        <Button size='mini' circular color='blue' icon='thumbs up' />
+                                                        <Button size='mini' circular color='orange' icon='like' />
+                                                    </span>
+                                            }
                                         </span>
                                         : <span>
                                             Likes:
                                         </span>
                                 }
                                 <span>
-                              <span style={{color: this.props.vars.color}}>
-                                {' '}{this.state.likes}
-                              </span>
-                            </span>
-                                <br/>
-                                <Icon size='large' color='green' name='external share'/>
+                                    <span style={{ color: this.props.vars.color }}>
+                                        {' '}{this.state.likes}
+                                    </span>
+                                </span>
+                                <br />
+                                <Icon size='large' color='green' name='external share' />
                                 Share this on: {}
                                 {'  '}
                                 <Button
                                     onClick={() => {
                                         this.tweetShare()
                                     }}
-                                    circular color='twitter' icon='twitter'/>
+                                    circular color='twitter' icon='twitter' />
                                 <sup>{this.props.blog.twtC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {
                                         this.fbShare()
                                     }}
-                                    circular color='facebook' icon='facebook'/>
+                                    circular color='facebook' icon='facebook' />
                                 <sup>{this.props.blog.fbC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {
                                         this.linkdnShare()
                                     }}
-                                    circular color='linkedin' icon='linkedin'/>
+                                    circular color='linkedin' icon='linkedin' />
                                 <sup>{this.props.blog.gplsC}</sup>
                                 {'   '}
                                 <Button
                                     onClick={() => {
                                         this.gplusShare()
                                     }}
-                                    circular color='google plus' icon='google plus'/>
+                                    circular color='google plus' icon='google plus' />
                                 <sup>{this.props.blog.gplsC}</sup>
-                                <br/>
-                                <br/>
+                                <br />
+                                <br />
                                 <span>
                                     <Image
                                         floated='left'
                                         avatar
                                         id='photo'
                                         size='tiny'
-                                        src={env.httpURL+this.props.blog.author.url}
+                                        src={env.httpURL + this.props.blog.author.url}
                                         style={{
                                             borderStyle: 'solid',
                                             borderWidth: '3px',
-                                            borderColor:'green',
+                                            borderColor: 'green',
                                             borderRadius: `${(Math.min(
                                                 this.props.blog.author.style.height,
                                                 this.props.blog.author.style.width
@@ -471,25 +476,25 @@ class Blog extends React.Component {
                                                 this.props.blog.author.style.borderRadius / 2 / 100}px`
                                         }}
                                     />
-                            </span>
+                                </span>
                                 <span className='info'>
-                                   Published
+                                    Published
                                     {' '}{moment().to(this.props.blog.date)}
-                            </span>
-                                <br/>
-                                <br/>
+                                </span>
+                                <br />
+                                <br />
                                 <span className='info'>
-                              {this.props.blog.author.name} {' '}
-                            </span>
-                                <br/>
-                                <br/>
+                                    {this.props.blog.author.name} {' '}
+                                </span>
+                                <br />
+                                <br />
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item color='red'
-                                                                   onClick={() => this.openDelete()}>Delete</Dropdown.Item>
+                                                        onClick={() => this.openDelete()}>Delete</Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >
