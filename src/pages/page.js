@@ -1,5 +1,5 @@
 import React from 'react'
-import {Header, Icon, Button, Grid, Loader, Input} from 'semantic-ui-react'
+import {Header, Icon, Button, Grid, Loader, Input, Sticky} from 'semantic-ui-react'
 import WelcomePage from './welCome'
 import Blogs from '../posts/blogs'
 import Topics from '../partials/topics'
@@ -125,18 +125,19 @@ class PagesComponent extends React.Component {
             {
                             (window.innerWidth > 1030)
                                 ? <Grid.Column computer={3}>
-                                  <Topics
-                                    currentLocation={this.props.vars.currentLocation}
-                                    topic={this.state.topic}
-                                    onTopicClick={this.onTopicClick}
-                                    onAllcClick={this.onAllcClick}
-                                    setTopicNextPosts={this.props.setTopicNextPosts}
-                                    blog={this.props.blog}
-                                    color={this.props.vars.color}
-                                    blogs={this.props.blogs}
-                                    resetNav={this.resetNav}
-                                    />
-                                  <div style={{float: 'left', margin: '2em 3em 3em 2em'}}>
+                                <Sticky context={this.props.tag_contextRef}>
+                                <Topics
+                                currentLocation={this.props.vars.currentLocation}
+                                topic={this.state.topic}
+                                onTopicClick={this.onTopicClick}
+                                onAllcClick={this.onAllcClick}
+                                setTopicNextPosts={this.props.setTopicNextPosts}
+                                blog={this.props.blog}
+                                color={this.props.vars.color}
+                                blogs={this.props.blogs}
+                                resetNav={this.resetNav}
+                                />
+                                <div style={{float: 'left', margin: '2em 3em 3em 2em'}}>
                                     <Header
                                       style={{marginLeft: '10px'}}
                                       color='blue' as='h3'>Search for it
@@ -188,6 +189,9 @@ class PagesComponent extends React.Component {
                                             }
                                     </div>
                                   </div>
+                </Sticky>
+                                 
+                                  
                                 </Grid.Column>
                                 : <div />
 
@@ -229,7 +233,9 @@ class PagesComponent extends React.Component {
             {
                             (window.innerWidth > 1030)
                                 ? <Grid.Column width={3}>
-                                  {<TwitterProf />}
+                                <Sticky context={this.props.tag_contextRef}>
+                                {<TwitterProf />}
+                                </Sticky>
                                 </Grid.Column> : null
                         }
           </Grid.Row>

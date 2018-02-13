@@ -352,11 +352,14 @@ class App extends React.Component {
       })
    };
 
+   handleContextRef = tag_contextRef => this.setState({ tag_contextRef })
+
    render() {
       let o = topics.slice(this.state.x, this.state.y)
-
+      const { tag_contextRef } = this.state
+    
       return (
-          <div className='main_body'>
+          <div className='main_body' ref={this.handleContextRef}>
              <Helmet>
                 <meta name='theme-color' content='#4285f4'/>
                 <meta name='msapplication-navbutton-color' content='#4285f4'/>
@@ -420,6 +423,7 @@ class App extends React.Component {
                    </Button>
                 </div>
                 <PagesComponent
+                tag_contextRef={tag_contextRef}
                     history={this.props.history}
                     navigateBlogs ={this.navigateBlogs}
                     handleFilterChange={this.handleFilterChange}
