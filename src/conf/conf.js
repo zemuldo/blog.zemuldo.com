@@ -488,7 +488,7 @@ module.exports = {
     },
     live: {
         httpPort: 8080,
-        wsURL: 'wss://api.zemuldo.com',
+        wsURL: 'wss://chat.zemuldo.com',
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
         serverURL: 'https://blogs.zemuldo.com',
@@ -496,7 +496,7 @@ module.exports = {
     },
     production: {
         httpPort: 8080,
-        wsURL: 'wss://api.zemuldo.com',
+        wsURL: 'wss://chat.zemuldo.com',
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
         serverURL: 'https://blogs.zemuldo.com',
