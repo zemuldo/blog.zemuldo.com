@@ -33,6 +33,9 @@ export function inWords(num) {
   str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
   return str;
 }
-export function people(no) {
-  return no > 1 ? 'People' : 'Person'
+export function peopleL(no) {
+  return no >1 ? `${toTitleCase(inWords(no))}others` : `One other person`
+}
+export function peopleU(no) {
+  return no>1 ? `People like this` : `Person likes this`
 }

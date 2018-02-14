@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -9,6 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import {peopleL,peopleU,inWords, toTitleCase} from '../util'
 import {
     AtomicBlockUtils,
     convertFromRaw,
@@ -264,7 +265,8 @@ class Blog extends React.Component {
                     }
                     if (response.data.n) {
                         if (response.data.n) {
-                            this.setState({likes: this.state.likes + 1, youLike: true})
+                            this.props.blogActions.updateBlog({likes:1+this.props.blog.likes})
+                            this.setState({youLike: true})
                         }
                     }
                 }.bind(this))
@@ -333,7 +335,8 @@ class Blog extends React.Component {
 
         let start = moment([2017, 11, 12]);
         let end   = moment();
-
+        let likes = inWords(this.props.blog.likes)
+        let likeMesage = this.state.youLike? 'You already liked this post':'Like this post'
         return (
             <div>
                 <Modal dimmer open={this.state.showDelete}>
@@ -404,26 +407,47 @@ class Blog extends React.Component {
                                         ? <span>
                                             {
                                                 this.state.youLike
-                                                    ? <span>
-                                                        <Icon size='small' inverted circular color='blue' name = 'like outline'/>
-                                                        <Icon size='small' inverted circular color='red' name = 'like'/>                
-                                                    </span>
-                                                    : 
-                                                    <span>
-                                                        <Button size='mini' circular color='blue' icon='thumbs up' />
-                                                        <Button size='mini' circular color='orange' icon='like' />
-                                                    </span>
+                                                    ?
+                                                    <Popup
+                                                        trigger=
+                                                        {<a>
+                                                            <Icon size='small' inverted circular color='blue' name='like outline' />
+                                                            <Icon size='small' inverted circular color='red' name='like' />
+                                                            <br />
+                                                            {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
+                                                        </a>}
+                                                        content={likeMesage}
+                                                    />
+
+                                                    :
+                                                    <Popup
+                                                        trigger=
+                                                        {<span>
+                                                            <Button size='mini' onClick={() => this.updateLikes(this.props.blog.id)} circular color='blue' icon='thumbs up' />
+                                                            <Button size='mini' onClick={() => this.updateLikes(this.props.blog.id)} circular color='orange' icon='like' />
+                                                            <a>
+                                                                <br />
+                                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                                            </a>
+                                                        </span>}
+                                                        content={likeMesage}
+                                                    />
+
                                             }
                                         </span>
-                                        : <span>
-                                            Likes:
-                                        </span>
+                                        :
+                                        <Popup
+                                            trigger=
+                                            {<a>
+                                                <Icon size='small' inverted circular color='blue' name='like outline' />
+                                                <Icon size='small' inverted circular color='red' name='like' />
+                                                <br />
+                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                            </a>}
+                                            content={likeMesage}
+                                        />
+
                                 }
-                                <span>
-                                    <span style={{ color: this.props.vars.color }}>
-                                        {' '}{this.state.likes}
-                                    </span>
-                                </span>
                                 <br />
                                 <Icon size='large' color='green' name='external share' />
                                 Share this on: {}
