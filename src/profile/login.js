@@ -266,7 +266,7 @@ class Login extends React.Component {
       return
     }
     let userData = {
-      firstName: oTitleCase(this.state.firstName.toLowerCase()),
+      firstName: toTitleCase(this.state.firstName.toLowerCase()),
       lastName: toTitleCase(this.state.lastName.toLowerCase()),
       userName: this.state.userName.toLowerCase(),
       email: this.state.email.toLowerCase(),
