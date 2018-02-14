@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as UserActions from '../store/actions/user'
 import * as VarsActions from '../store/actions/vars'
 import SignUpForm from './signUpForm'
-import util from '../util'
+import {toTitleCase} from '../util'
 import LoginForm from './lognForm'
 import * as BlogsActions from '../store/actions/blogs'
 import * as BlogActions from '../store/actions/blog'
@@ -266,8 +266,8 @@ class Login extends React.Component {
       return
     }
     let userData = {
-      firstName: util.toTitleCase(this.state.firstName.toLowerCase()),
-      lastName: util.toTitleCase(this.state.lastName.toLowerCase()),
+      firstName: oTitleCase(this.state.firstName.toLowerCase()),
+      lastName: toTitleCase(this.state.lastName.toLowerCase()),
       userName: this.state.userName.toLowerCase(),
       email: this.state.email.toLowerCase(),
       password: this.state.password,
@@ -299,8 +299,8 @@ class Login extends React.Component {
                 })
                 setTimeout(function () {
                   this.setState({success: false, hideMessage: true, imagePreviewUrl: ''})
-                  // this.props.history.push('/login')
-                  // this.props.varsActions.updateVars({signUp: false})
+                  this.props.history.push('/login')
+                  this.props.varsActions.updateVars({signUp: false})
                 }.bind(this), 2000)
               } else {
                 this.setState({

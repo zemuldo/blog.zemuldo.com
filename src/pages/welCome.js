@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {Loader, Header, Card, Image} from 'semantic-ui-react'
 import _ from 'lodash'
-import util from '../util'
+import {toTitleCase} from '../util'
 import Blog from '../posts/blog'
 import GridBlogs from '../posts/gridBlogs'
 import {pages, topicsOBJ} from '../conf/conf'
@@ -99,7 +99,7 @@ class WelcomePage extends React.Component {
                                                       </Card.Header>
                                                       <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>
                                                       <Card.Description>
-                                                        {util.toTitleCase(util.inWords(Number(this.props.topics[i].blogs))) + ' '}articles to read on this topic.
+                                                        {toTitleCase(inWords(Number(this.props.topics[i].blogs))) + ' '}articles to read on this topic.
                                                       </Card.Description>
                                                     </Card.Content>
                                                   </Card>

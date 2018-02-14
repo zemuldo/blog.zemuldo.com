@@ -10,7 +10,7 @@ import * as BlogActions from '../store/actions/blog'
 import * as UserActions from '../store/actions/user'
 import * as VarsActions from '../store/actions/vars'
 import axios from 'axios'
-import util from '../util'
+import {toTitleCase} from '../util'
 import PagesComponent from './page'
 import config, {topics} from '../conf/conf'
 import {pages, topicsOBJ} from '../conf/conf'
@@ -364,7 +364,7 @@ class App extends React.Component {
                 <meta name='theme-color' content='#4285f4'/>
                 <meta name='msapplication-navbutton-color' content='#4285f4'/>
                 <meta name='apple-mobile-web-app-status-bar-style' content='#4285f4'/>
-                <title>{'ZemuldO-' + util.toTitleCase(this.props.vars.currentLocation)}</title>
+                <title>{'ZemuldO-' + toTitleCase(this.props.vars.currentLocation)}</title>
                 <meta name='Danstan Otieno Onyango' content='ZemuldO-Home'/>
              </Helmet>
 
@@ -411,7 +411,7 @@ class App extends React.Component {
                                   name={o[i].key}
                               >
                   <span>
-                    {util.toTitleCase(o[i].key)}
+                    {toTitleCase(o[i].key)}
                   </span>
                               </Button>
                            </Link>

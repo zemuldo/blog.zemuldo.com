@@ -2,7 +2,7 @@ import React from 'react'
 import {Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import _ from 'lodash'
-import util from '../util'
+import {toTitleCase} from '../util'
 import {topics} from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
@@ -39,7 +39,7 @@ class Topics extends React.Component {
               name={topics[i].name}
                         >
               <span>
-                {util.toTitleCase(topics[i].name)}
+                {toTitleCase(topics[i].name)}
                 {' |'}
               </span>
             </button>
