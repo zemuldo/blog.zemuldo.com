@@ -19,7 +19,8 @@ import {
   } from 'draft-js'
   import {
     decorator
-  } from '../blogEditor/editorToolkit'
+  } from '../blogEditor/editorToolkit';
+  import {socialShares} from '../conf/conf'
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -337,6 +338,21 @@ class Blog extends React.Component {
         let end   = moment();
         let likes = inWords(this.props.blog.likes)
         let likeMesage = this.state.youLike? 'You already liked this post':'Like this post'
+        let shares = socialShares.map(s=>{
+            return <Popup
+                key = {s.name}
+                trigger=
+                {<a><Button
+                    onClick={() => {
+                        this[s.shareCounter]()
+                    }}
+                    circular color={s.color} icon={s.icon} />
+                    <sup>{this.props.blog[s.count]}</sup>
+                    {'   '}
+                </a>}
+                content={`Share this on ${s.name} `}
+            />
+        })
         return (
             <div>
                 <Modal dimmer open={this.state.showDelete}>
@@ -452,33 +468,7 @@ class Blog extends React.Component {
                                 <Icon size='large' color='green' name='external share' />
                                 Share this on: {}
                                 {'  '}
-                                <Button
-                                    onClick={() => {
-                                        this.tweetShare()
-                                    }}
-                                    circular color='twitter' icon='twitter' />
-                                <sup>{this.props.blog.twtC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {
-                                        this.fbShare()
-                                    }}
-                                    circular color='facebook' icon='facebook' />
-                                <sup>{this.props.blog.fbC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {
-                                        this.linkdnShare()
-                                    }}
-                                    circular color='linkedin' icon='linkedin' />
-                                <sup>{this.props.blog.gplsC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {
-                                        this.gplusShare()
-                                    }}
-                                    circular color='google plus' icon='google plus' />
-                                <sup>{this.props.blog.gplsC}</sup>
+                                {shares}
                                 <br />
                                 <br />
                                 <span>

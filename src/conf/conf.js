@@ -1,4 +1,34 @@
 module.exports = {
+    socialShares:[
+        {
+            shareCounter:'tweetShare',
+            count:'twtC',
+            icon:'twitter',
+            color:'twitter',
+            name:'Twitter'
+        },
+        {
+            shareCounter:'fbShare',
+            count:'fbC',
+            icon:'facebook',
+            color:'facebook',
+            name:'Facebook'
+        },
+        {
+            shareCounter:'linkdnShare',
+            count:'gplsC',
+            icon:'linkedin',
+            color:'linkedin',
+            name:'LinkedIn'
+        },
+        {
+            shareCounter:'gplusShare',
+            count:'gplsC',
+            icon:'google plus',
+            color:'google plus',
+            name:'Google Plus'
+        }
+    ],
     topicsOBJ: {
         bigdata:
             {
