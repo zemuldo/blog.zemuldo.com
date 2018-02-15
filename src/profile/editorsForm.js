@@ -7,11 +7,8 @@ import {bindActionCreators} from 'redux'
 import {topics} from '../env'
 import PropTypes from 'prop-types'
 import {
-  AtomicBlockUtils,
   convertFromRaw,
-  convertToRaw,
   EditorState,
-  RichUtils
 } from 'draft-js'
 import {
   decorator

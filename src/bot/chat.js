@@ -7,11 +7,6 @@ import * as VarsActions from '../store/actions/vars'
 import * as TopicsActions from '../store/actions/topics'
 import PropTypes, { func } from 'prop-types'
 
-let imets = []
-for (let i = 0; i < 100; i++) {
-  imets.push(i)
-}
-
 class LiveChat extends React.Component {
   constructor (props) {
     super(props)

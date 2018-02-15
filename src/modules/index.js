@@ -1,1 +1,0 @@
-export { default as Grid } from 'semantic-ui-react'

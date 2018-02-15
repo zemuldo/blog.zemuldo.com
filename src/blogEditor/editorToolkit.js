@@ -3,8 +3,6 @@ import {CompositeDecorator} from "draft-js";
 import PropTypes from "prop-types";
 import {Icon} from 'semantic-ui-react'
 import PrismDecorator from 'draft-js-prism'
-import Prism from 'prismjs'
-
 
 export function findLinkEntities(contentBlock, callback, contentState) {
     contentBlock.findEntityRanges(
