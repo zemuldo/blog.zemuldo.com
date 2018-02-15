@@ -1,14 +1,15 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
-import config from '../conf/conf'
+import config from '../env'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import {peopleL,peopleU,inWords, toTitleCase} from '../util'
 import {
     AtomicBlockUtils,
     convertFromRaw,
@@ -18,7 +19,8 @@ import {
   } from 'draft-js'
   import {
     decorator
-  } from '../blogEditor/editorToolkit'
+  } from '../blogEditor/editorToolkit';
+  import {socialShares} from '../env'
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -264,7 +266,8 @@ class Blog extends React.Component {
                     }
                     if (response.data.n) {
                         if (response.data.n) {
-                            this.setState({likes: this.state.likes + 1, youLike: true})
+                            this.props.blogActions.updateBlog({likes:1+this.props.blog.likes})
+                            this.setState({youLike: true})
                         }
                     }
                 }.bind(this))
@@ -333,7 +336,23 @@ class Blog extends React.Component {
 
         let start = moment([2017, 11, 12]);
         let end   = moment();
-
+        let likes = inWords(this.props.blog.likes)
+        let likeMesage = this.state.youLike? 'You already liked this post':'Like this post'
+        let shares = socialShares.map(s=>{
+            return <Popup
+                key = {s.name}
+                trigger=
+                {<a><Button
+                    onClick={() => {
+                        this[s.shareCounter]()
+                    }}
+                    circular color={s.color} icon={s.icon} />
+                    <sup>{this.props.blog[s.count]}</sup>
+                    {'   '}
+                </a>}
+                content={`Share this on ${s.name} `}
+            />
+        })
         return (
             <div>
                 <Modal dimmer open={this.state.showDelete}>
@@ -398,98 +417,108 @@ class Blog extends React.Component {
 
                             }
                             <div className='shareIcon clearElem'
-                                 style={{display: 'block', fontSize: '16px', fontFamily: 'georgia'}}>
+                                style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
                                     this.state.userLoggedIn
                                         ? <span>
-                                          {
-                                              this.state.youLike
-                                                  ? <Icon color={this.props.vars.color} name='like'/>
-                                                  : <button onClick={() => this.updateLikes(this.props.blog.id)}>
-                                                      <Icon color='green' name='thumbs up'/>
-                                                  </button>
-                                          }
+                                            {
+                                                this.state.youLike
+                                                    ?
+                                                    <Popup
+                                                        trigger=
+                                                        {<a>
+                                                            <Icon size='small' inverted circular color='blue' name='like outline' />
+                                                            <Icon size='small' inverted circular color='red' name='like' />
+                                                            <br />
+                                                            {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
+                                                        </a>}
+                                                        content={likeMesage}
+                                                    />
+
+                                                    :
+                                                    <Popup
+                                                        trigger=
+                                                        {<span>
+                                                            <Button size='mini' onClick={() => this.updateLikes(this.props.blog.id)} circular color='blue' icon='thumbs up' />
+                                                            <Button size='mini' onClick={() => this.updateLikes(this.props.blog.id)} circular color='orange' icon='like' />
+                                                            <a>
+                                                                <br />
+                                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                                            </a>
+                                                        </span>}
+                                                        content={likeMesage}
+                                                    />
+
+                                            }
                                         </span>
-                                        : <span>
-                                            Likes:
-                                        </span>
+                                        :
+                                        <Popup
+                                            trigger=
+                                            {<a>
+                                                <Icon size='small' inverted circular color='blue' name='like outline' />
+                                                <Icon size='small' inverted circular color='red' name='like' />
+                                                <br />
+                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                            </a>}
+                                            content={likeMesage}
+                                        />
+
                                 }
-                                <span>
-                              <span style={{color: this.props.vars.color}}>
-                                {' '}{this.state.likes}
-                              </span>
-                            </span>
-                                <br/>
-                                <Icon size='large' color='green' name='external share'/>
+                                <br />
+                                <Icon size='large' color='green' name='external share' />
                                 Share this on: {}
                                 {'  '}
-                                <Button
-                                    onClick={() => {
-                                        this.tweetShare()
-                                    }}
-                                    circular color='twitter' icon='twitter'/>
-                                <sup>{this.props.blog.twtC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {
-                                        this.fbShare()
-                                    }}
-                                    circular color='facebook' icon='facebook'/>
-                                <sup>{this.props.blog.fbC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {
-                                        this.linkdnShare()
-                                    }}
-                                    circular color='linkedin' icon='linkedin'/>
-                                <sup>{this.props.blog.gplsC}</sup>
-                                {'   '}
-                                <Button
-                                    onClick={() => {
-                                        this.gplusShare()
-                                    }}
-                                    circular color='google plus' icon='google plus'/>
-                                <sup>{this.props.blog.gplsC}</sup>
-                                <br/>
-                                <br/>
+                                {shares}
+                                <br />
+                                <br />
                                 <span>
-                                    <Image
-                                        floated='left'
-                                        avatar
-                                        id='photo'
-                                        size='tiny'
-                                        src={env.httpURL+this.props.blog.author.url}
-                                        style={{
-                                            borderStyle: 'solid',
-                                            borderWidth: '3px',
-                                            borderColor:'green',
-                                            borderRadius: `${(Math.min(
-                                                this.props.blog.author.style.height,
-                                                this.props.blog.author.style.width
-                                            ) +
-                                                10) *
-                                                this.props.blog.author.style.borderRadius / 2 / 100}px`
-                                        }}
-                                    />
-                            </span>
+                                    <Popup
+                                        trigger={<Image
+                                            floated='left'
+                                            avatar
+                                            id='photo'
+                                            size='tiny'
+                                            src={env.httpURL + this.props.blog.author.url}
+                                            style={{
+                                                borderStyle: 'solid',
+                                                borderWidth: '3px',
+                                                borderColor: 'green',
+                                                borderRadius: `${(Math.min(
+                                                    this.props.blog.author.style.height,
+                                                    this.props.blog.author.style.width
+                                                ) +
+                                                    10) *
+                                                    this.props.blog.author.style.borderRadius / 2 / 100}px`
+                                            }}
+                                        />}
+                                    >
+                                    <h3>
+                                    {this.props.blog.author.name}
+                                    </h3>
+                                    <p>
+                                    {`Joined ${moment().to(this.props.blog.author.created)}`}
+                                    </p>
+                                    </Popup>
+                                    
+                                </span>
                                 <span className='info'>
-                                   Published
+                                    Published
                                     {' '}{moment().to(this.props.blog.date)}
-                            </span>
-                                <br/>
-                                <br/>
+                                </span>
+                                <br />
+                                <br />
                                 <span className='info'>
-                              {this.props.blog.author.name} {' '}
-                            </span>
-                                <br/>
-                                <br/>
+                                    {this.props.blog.author.name} {' '}
+                                </span>
+                                <br />
+                                <br />
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item color='red'
-                                                                   onClick={() => this.openDelete()}>Delete</Dropdown.Item>
+                                                        onClick={() => this.openDelete()}>Delete</Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >

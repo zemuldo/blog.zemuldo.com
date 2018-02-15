@@ -2,11 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {Loader, Header, Card, Image} from 'semantic-ui-react'
-import _ from 'lodash'
-import util from '../util'
+import times from 'lodash/times'
+import {toTitleCase,inWords} from '../util'
 import Blog from '../posts/blog'
 import GridBlogs from '../posts/gridBlogs'
-import {pages, topicsOBJ} from '../conf/conf'
+import {pages, topicsOBJ} from '../env'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
@@ -71,7 +71,7 @@ class WelcomePage extends React.Component {
                                       <div className='blogs'>
                                         <Card.Group>
                                               {
-                                                _.times(this.props.topics.length, (i) =>
+                                                times(this.props.topics.length, (i) =>
                                                   <Card
                                                     onClick={() => this.props.history.push('/topics/' + this.props.topics[i].key)}
                                                     className='blogCard' style={{
@@ -99,7 +99,7 @@ class WelcomePage extends React.Component {
                                                       </Card.Header>
                                                       <Card.Meta><span className='colorBlue'>{'Articles: ' + this.props.topics[i].blogs}</span></Card.Meta>
                                                       <Card.Description>
-                                                        {util.toTitleCase(util.inWords(Number(this.props.topics[i].blogs))) + ' '}articles to read on this topic.
+                                                        {toTitleCase(inWords(Number(this.props.topics[i].blogs))) + ' '}articles to read on this topic.
                                                       </Card.Description>
                                                     </Card.Content>
                                                   </Card>

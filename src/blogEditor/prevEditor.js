@@ -1,18 +1,10 @@
 import React from 'react'
-import axios from 'axios'
 import {connect} from 'react-redux'
 import {CompositeDecorator, convertFromRaw, Editor, EditorState} from 'draft-js'
-import config from '../conf/conf'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
 
-const env = config[process.env.NODE_ENV] || 'development'
-const cats = {
-  Development: 'dev',
-  Business: 'business',
-  Technology: 'tech'
-}
 // Custom overrides for "code" style.
 const styleMap = {
   CODE: {

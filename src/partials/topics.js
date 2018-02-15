@@ -1,9 +1,9 @@
 import React from 'react'
 import {Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import _ from 'lodash'
-import util from '../util'
-import {topics} from '../conf/conf'
+import times from 'lodash/times'
+import {toTitleCase,inWords} from '../util'
+import {topics} from '../env'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import {connect} from 'react-redux'
@@ -30,7 +30,7 @@ class Topics extends React.Component {
             </span>
           </button>
         </Link>
-        {_.times(topics.length, i =>
+        {times(topics.length, i =>
           <Link key={topics[i].key} to={'/topics/'+ topics[i].key}>
             <button
               disabled={this.props.vars.topic === topics[i].key}
@@ -39,7 +39,7 @@ class Topics extends React.Component {
               name={topics[i].name}
                         >
               <span>
-                {util.toTitleCase(topics[i].name)}
+                {toTitleCase(topics[i].name)}
                 {' |'}
               </span>
             </button>

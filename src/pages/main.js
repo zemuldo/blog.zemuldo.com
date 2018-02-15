@@ -1,7 +1,7 @@
 import React from 'react'
 import {Helmet} from 'react-helmet'
 import {Header, Button, Icon, Input} from 'semantic-ui-react'
-import _ from 'lodash'
+import times from 'lodash/times'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -10,12 +10,11 @@ import * as BlogActions from '../store/actions/blog'
 import * as UserActions from '../store/actions/user'
 import * as VarsActions from '../store/actions/vars'
 import axios from 'axios'
-import util from '../util'
+import {toTitleCase} from '../util'
 import PagesComponent from './page'
-import config, {topics} from '../conf/conf'
-import {pages, topicsOBJ} from '../conf/conf'
+import config, {topics} from '../env'
+import {pages, topicsOBJ} from '../env'
 import PropTypes from 'prop-types'
-import {Image} from "../blogEditor/editorToolkit";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -352,16 +351,19 @@ class App extends React.Component {
       })
    };
 
+   handleContextRef = tag_contextRef => this.setState({ tag_contextRef })
+
    render() {
       let o = topics.slice(this.state.x, this.state.y)
-
+      const { tag_contextRef } = this.state
+    
       return (
-          <div className='main_body'>
+          <div className='main_body' ref={this.handleContextRef}>
              <Helmet>
                 <meta name='theme-color' content='#4285f4'/>
                 <meta name='msapplication-navbutton-color' content='#4285f4'/>
                 <meta name='apple-mobile-web-app-status-bar-style' content='#4285f4'/>
-                <title>{'ZemuldO-' + util.toTitleCase(this.props.vars.currentLocation)}</title>
+                <title>{'ZemuldO-' + toTitleCase(this.props.vars.currentLocation)}</title>
                 <meta name='Danstan Otieno Onyango' content='ZemuldO-Home'/>
              </Helmet>
 
@@ -384,7 +386,7 @@ class App extends React.Component {
                    <h1>
                       <Link to='/'>
                          <Header color={this.props.vars.color} as={'h1'}>
-                            Zemuldo Blogs-{pages[this.props.vars.currentLocation].name}
+                            Zemuldo Blogs
                          </Header>
                       </Link>
 
@@ -397,7 +399,7 @@ class App extends React.Component {
                            onClick={this.show_left}>
                       <Icon size='big' color='orange' name='chevron left'/>
                    </Button>
-                   {_.times(o.length, i =>
+                   {times(o.length, i =>
                            <Link key={o[i].key} to={'/topics/'+ o[i].key}>
                               <Button
                                   size={'small'}
@@ -408,7 +410,7 @@ class App extends React.Component {
                                   name={o[i].key}
                               >
                   <span>
-                    {util.toTitleCase(o[i].key)}
+                    {toTitleCase(o[i].key)}
                   </span>
                               </Button>
                            </Link>
@@ -420,6 +422,7 @@ class App extends React.Component {
                    </Button>
                 </div>
                 <PagesComponent
+                tag_contextRef={tag_contextRef}
                     history={this.props.history}
                     navigateBlogs ={this.navigateBlogs}
                     handleFilterChange={this.handleFilterChange}

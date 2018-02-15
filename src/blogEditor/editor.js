@@ -19,7 +19,7 @@ import {
     RichUtils
 } from 'draft-js'
 import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
-import config from '../conf/conf'
+import config from '../env'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import * as BlogActions from '../store/actions/blog'

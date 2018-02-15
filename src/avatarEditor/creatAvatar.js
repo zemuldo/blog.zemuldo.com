@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactAvatarEditor from './avatarEditor'
 import {Button, Grid} from 'semantic-ui-react'
-import util from '../util'
+import {dataURItoBlob} from '../util'
 import PropTypes from 'prop-types'
 
 class AvaratEditor extends React.Component {
@@ -23,7 +23,7 @@ class AvaratEditor extends React.Component {
     this.setState({image: e.target.files[0]})
     const img = this.editor.getImageScaledToCanvas().toDataURL()
     const rect = this.editor.getCroppingRect()
-    util.dataURItoBlob(img)
+    dataURItoBlob(img)
     this.props.setAvatar({
       img,
       rect,
@@ -37,7 +37,7 @@ class AvaratEditor extends React.Component {
   handleSave = () => {
     const img = this.editor.getImageScaledToCanvas().toDataURL()
     const rect = this.editor.getCroppingRect()
-    util.dataURItoBlob(img)
+    dataURItoBlob(img)
 
     this.setState({
       preview: {

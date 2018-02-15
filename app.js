@@ -15,7 +15,7 @@ let env = ENV().raw.NODE_ENV
 let {
   getBlogTemplate
 } = require('./tools/tools')
-const conf = require('./src/conf/conf')
+const conf = require('./src/env')
 let {
   getBlog
 } = require('./db/database')
@@ -172,7 +172,7 @@ app.get('/*', async function (req, res) {
 // });
 spdy
     .createServer(options, app)
-    .listen(process.env.PORT, (error) => {
+    .listen(9000, (error) => {
       if (error) {
         console.error(error)
         return process.exit(1)
