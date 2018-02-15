@@ -11,6 +11,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const eslintFormatter = require('react-dev-utils/eslintFormatter')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const paths = require('./paths')
 const getClientEnvironment = require('./env')
 const urls =
@@ -330,6 +331,9 @@ module.exports = {
             test: /\.js$|\.css$|\.html$/,
             threshold: 10240,
             minRatio: 0.8
+        }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static'
         })
     ],
     // Some libraries import Node modules but don't use them in the browser.
