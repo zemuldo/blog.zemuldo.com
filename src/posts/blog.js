@@ -472,24 +472,34 @@ class Blog extends React.Component {
                                 <br />
                                 <br />
                                 <span>
-                                    <Image
-                                        floated='left'
-                                        avatar
-                                        id='photo'
-                                        size='tiny'
-                                        src={env.httpURL + this.props.blog.author.url}
-                                        style={{
-                                            borderStyle: 'solid',
-                                            borderWidth: '3px',
-                                            borderColor: 'green',
-                                            borderRadius: `${(Math.min(
-                                                this.props.blog.author.style.height,
-                                                this.props.blog.author.style.width
-                                            ) +
-                                                10) *
-                                                this.props.blog.author.style.borderRadius / 2 / 100}px`
-                                        }}
-                                    />
+                                    <Popup
+                                        trigger={<Image
+                                            floated='left'
+                                            avatar
+                                            id='photo'
+                                            size='tiny'
+                                            src={env.httpURL + this.props.blog.author.url}
+                                            style={{
+                                                borderStyle: 'solid',
+                                                borderWidth: '3px',
+                                                borderColor: 'green',
+                                                borderRadius: `${(Math.min(
+                                                    this.props.blog.author.style.height,
+                                                    this.props.blog.author.style.width
+                                                ) +
+                                                    10) *
+                                                    this.props.blog.author.style.borderRadius / 2 / 100}px`
+                                            }}
+                                        />}
+                                    >
+                                    <h3>
+                                    {this.props.blog.author.name}
+                                    </h3>
+                                    <p>
+                                    {`Joined ${moment().to(this.props.blog.author.created)}`}
+                                    </p>
+                                    </Popup>
+                                    
                                 </span>
                                 <span className='info'>
                                     Published
