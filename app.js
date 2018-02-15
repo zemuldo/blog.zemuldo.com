@@ -10,12 +10,10 @@ const options = {
   key: fs.readFileSync(__dirname + '/keys/server.key'),
   cert: fs.readFileSync(__dirname + '/keys/server.crt')
 }
-let ENV = require('./config/env')
-let env = ENV().raw.NODE_ENV
 let {
   getBlogTemplate
 } = require('./tools/tools')
-const conf = require('./src/env')
+const env = require('./src/env')[process.env.NODE_ENV]
 let {
   getBlog
 } = require('./db/database')
@@ -167,16 +165,20 @@ app.get('/*', async function (req, res) {
   }
 })
 
-// app.listen(conf[conf].httpPort, () => {
-//   console.log("**Server started at http://localhost:" + conf[conf].httpPort)
-// });
-spdy
-    .createServer(options, app)
-    .listen(process.env.PORT, (error) => {
-      if (error) {
-        console.error(error)
-        return process.exit(1)
-      } else {
-        console.log('Listening on port: ' + process.env.PORT + '.')
-      }
-    })
+if(process.env.NODE_ENV==='dev'){
+    app.listen(env.httpPort, () => {
+  console.log("**Server started at http://localhost:" + env.httpPort)
+});
+
+}else {
+    spdy
+        .createServer(options, app)
+        .listen(process.env.PORT, (error) => {
+            if (error) {
+                console.error(error)
+                return process.exit(1)
+            } else {
+                console.log('Listening on port: ' + process.env.PORT + '.')
+            }
+        })
+}
