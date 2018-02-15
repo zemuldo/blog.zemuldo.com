@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {Loader, Header, Card, Image} from 'semantic-ui-react'
-import _ from 'lodash'
+import times from 'lodash/times'
 import {toTitleCase,inWords} from '../util'
 import Blog from '../posts/blog'
 import GridBlogs from '../posts/gridBlogs'
@@ -71,7 +71,7 @@ class WelcomePage extends React.Component {
                                       <div className='blogs'>
                                         <Card.Group>
                                               {
-                                                _.times(this.props.topics.length, (i) =>
+                                                times(this.props.topics.length, (i) =>
                                                   <Card
                                                     onClick={() => this.props.history.push('/topics/' + this.props.topics[i].key)}
                                                     className='blogCard' style={{

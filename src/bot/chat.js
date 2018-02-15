@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Header, Segment, Portal, Form, TextArea, Comment, Image} from 'semantic-ui-react'
-import _ from 'lodash'
+import times from 'lodash/times'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
@@ -199,7 +199,7 @@ class LiveChat extends React.Component {
                                 </div>
                                 <div className='chatContainer' style={{overflowX: 'hidden',overflowY: 'scroll', height: '300px'}}>
                                   {
-                                                _.times(this.state.chat.length, (i) =>
+                                                times(this.state.chat.length, (i) =>
                                                   <div ref={i} key={i}>
                                                     <Comment
                                                       className={this.state.chat[i].by === 'bot' ? 'botMessContainer' : 'userMessContainer'}>

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Loader, Card, Header, Button} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import _ from 'lodash'
+import times from 'lodash/times'
 import {connect} from 'react-redux'
 import axios from 'axios/index'
 import * as BlogsActions from '../store/actions/blogs'
@@ -34,7 +34,7 @@ class GridBlogs extends React.Component {
                 !this.props.blog.id
                     ? <Card.Group>
                       {
-                          _.times(this.props.blogs.length, (i) =>
+                          times(this.props.blogs.length, (i) =>
                             <Card key={i} className='blogCard' style={{
                               width: 'auto',
                               maxWidth: '250px',

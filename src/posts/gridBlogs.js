@@ -1,6 +1,6 @@
 import React from 'react'
 import {Loader, Card, Button } from 'semantic-ui-react'
-import _ from 'lodash'
+import times from 'lodash/times'
 import GridBlog from './gridBlog'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
@@ -29,7 +29,7 @@ class GridBlogs extends React.Component {
                       ? <div>
                         <Card.Group>
                           {
-                                    _.times(this.props.blogs.length, (i) =>
+                                    times(this.props.blogs.length, (i) =>
                                       <GridBlog
                                       history={this.props.history}
                                         key={this.props.blogs[i].id}

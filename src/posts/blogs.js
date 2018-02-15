@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, List, Header} from 'semantic-ui-react'
-import _ from 'lodash'
+import times from 'lodash/times'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import axios from 'axios/index'
@@ -31,7 +31,7 @@ class Blogs extends React.Component {
         {
                     (this.props.blogs.length > 10)
                       ? <div>
-                        {_.times(this.props.blogs.length, i =>
+                        {times(this.props.blogs.length, i =>
                           <List.Item key={this.props.blogs[i]._id}>
                             <List.Icon name='leaf' />
                             <List.Content>

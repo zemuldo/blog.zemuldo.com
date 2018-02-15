@@ -1,7 +1,7 @@
 import React from 'react'
 import {Helmet} from 'react-helmet'
 import {Header, Button, Icon, Input} from 'semantic-ui-react'
-import _ from 'lodash'
+import times from 'lodash/times'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -15,7 +15,6 @@ import PagesComponent from './page'
 import config, {topics} from '../conf/conf'
 import {pages, topicsOBJ} from '../conf/conf'
 import PropTypes from 'prop-types'
-import {Image} from "../blogEditor/editorToolkit";
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -400,7 +399,7 @@ class App extends React.Component {
                            onClick={this.show_left}>
                       <Icon size='big' color='orange' name='chevron left'/>
                    </Button>
-                   {_.times(o.length, i =>
+                   {times(o.length, i =>
                            <Link key={o[i].key} to={'/topics/'+ o[i].key}>
                               <Button
                                   size={'small'}
