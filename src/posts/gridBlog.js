@@ -1,6 +1,6 @@
 import React from 'react'
 import {Card, Button, Header,Image, Icon,Segment, Divider, Popup} from 'semantic-ui-react'
-import {topicsOBJ} from '../conf/conf'
+import {topicsOBJ} from '../env'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import {connect} from 'react-redux'

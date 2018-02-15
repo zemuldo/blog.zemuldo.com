@@ -4,7 +4,7 @@ import {Label, Header, Form, Select, Dropdown} from 'semantic-ui-react'
 import Creator from '../blogEditor/editor'
 import * as VarsActions from '../store/actions/vars'
 import {bindActionCreators} from 'redux'
-import {topics} from '../conf/conf'
+import {topics} from '../env'
 import PropTypes from 'prop-types'
 import {
   AtomicBlockUtils,

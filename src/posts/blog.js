@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
-import config from '../conf/conf'
+import config from '../env'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
@@ -20,7 +20,7 @@ import {
   import {
     decorator
   } from '../blogEditor/editorToolkit';
-  import {socialShares} from '../conf/conf'
+  import {socialShares} from '../env'
 
 const env = config[process.env.NODE_ENV] || 'development'
 

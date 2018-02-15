@@ -224,7 +224,7 @@ module.exports = {
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),
     // Makes some environment variables available to the JS code, for example:
-    // if (process.conf.NODE_ENV === 'development') { ... }. See `./conf.js`.
+    // if (process.conf.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env.stringified),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
