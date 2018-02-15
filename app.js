@@ -172,7 +172,7 @@ app.get('/*', async function (req, res) {
 // });
 spdy
     .createServer(options, app)
-    .listen(9000, (error) => {
+    .listen(process.env.PORT, (error) => {
       if (error) {
         console.error(error)
         return process.exit(1)
