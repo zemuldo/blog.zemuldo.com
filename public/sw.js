@@ -19,43 +19,47 @@ const RUNTIME = 'sw-' + buildID + '-runtime'
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-  '/index.html',
-  '/static/manifest.json',
-  '/static/img/icons/icon-192x192.png',
-  '/static/img/icons/icon-256x256.png',
-  '/static/img/icons/icon-384x384.png',
-  '/static/img/icons/icon-512x512.png',
-  '/static/img/bot/bot.gif',
-  '/static/css/' + buildID + 'main.zemuldo.css',
-  '/static/js/' + buildID + 'main.zemuldo.js',
-  '/static/media/' + buildID + 'flags.zemuldo.png',
-  '/static/media/' + buildID + '.icons.zemuldo.eot',
-  '/static/media/' + buildID + '.icons.zemuldo.svg',
-  '/static/media/' + buildID + '.icons.zemuldo.ttf',
-  '/static/media/' + buildID + '.icons.zemuldo.woff',
-  '/static/media/' + buildID + '.icons.zemuldo.woff2'
+    '/index.html',
+    '/static/manifest.json',
+    '/static/img/icons/icon-192x192.png',
+    '/static/img/icons/icon-256x256.png',
+    '/static/img/icons/icon-384x384.png',
+    '/static/img/icons/icon-512x512.png',
+    '/static/img/bot/bot.gif',
+    '/static/css/' + buildID + 'app.zemuldo.css',
+    '/static/js/' + buildID + 'app.zemuldo.js',
+    '/static/js/' + buildID + 'react.zemuldo.js',
+    '/static/js/' + buildID + 'editor.zemuldo.js',
+    '/static/js/' + buildID + 'utils.zemuldo.js',
+    '/static/media/' + buildID + 'flags.zemuldo.png',
+    '/static/media/' + buildID + '.icons.zemuldo.eot',
+    '/static/media/' + buildID + '.icons.zemuldo.svg',
+    '/static/media/' + buildID + '.icons.zemuldo.ttf',
+    '/static/media/' + buildID + '.icons.zemuldo.woff',
+    '/static/media/' + buildID + '.icons.zemuldo.woff2'
 ]
 
 // The install handler takes care of precaching the resources we always need.
 self.addEventListener('install', event => {
-  event.waitUntil(
+    event.waitUntil(
         caches.open(PRECACHE)
             .then(cache => cache.addAll(PRECACHE_URLS))
             .then(self.skipWaiting())
-            .catch(function () {})
+            .catch(function () {
+            })
     )
 })
 
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
-  const currentCaches = [PRECACHE, RUNTIME]
-  event.waitUntil(
+    const currentCaches = [PRECACHE, RUNTIME]
+    event.waitUntil(
         caches.keys().then(cacheNames => {
-          return cacheNames.filter(cacheName => !currentCaches.includes(cacheName))
+            return cacheNames.filter(cacheName => !currentCaches.includes(cacheName))
         }).then(cachesToDelete => {
-          return Promise.all(cachesToDelete.map(cacheToDelete => {
-            return caches.delete(cacheToDelete)
-          }))
+            return Promise.all(cachesToDelete.map(cacheToDelete => {
+                return caches.delete(cacheToDelete)
+            }))
         }).then(() => self.clients.claim())
     )
 })
@@ -65,22 +69,22 @@ self.addEventListener('activate', event => {
 // from the network before returning it to the page.
 self.addEventListener('fetch', event => {
     // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
-    event.respondWith(
+    if (event.request.url.startsWith(self.location.origin)) {
+        event.respondWith(
             caches.match(event.request).then(cachedResponse => {
-              if (cachedResponse) {
-                return cachedResponse
-              }
+                if (cachedResponse) {
+                    return cachedResponse
+                }
 
-              return caches.open(RUNTIME).then(cache => {
-                return fetch(event.request).then(response => {
+                return caches.open(RUNTIME).then(cache => {
+                    return fetch(event.request).then(response => {
                         // Put a copy of the response in the runtime cache.
-                  return cache.put(event.request, response.clone()).then(() => {
-                    return response
-                  })
+                        return cache.put(event.request, response.clone()).then(() => {
+                            return response
+                        })
+                    })
                 })
-              })
             })
         )
-  }
+    }
 })

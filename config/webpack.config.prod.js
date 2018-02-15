@@ -1,4 +1,3 @@
-
 const buildID = '2018-02-06'
 const autoprefixer = require('autoprefixer')
 const path = require('path')
@@ -63,7 +62,12 @@ module.exports = {
     // You can exclude the *.map files from the build during deployment.
     devtool: 'source-map',
     // In production, we only want to load the polyfills and the app code.
-    entry: [require.resolve('./polyfills'), paths.appIndexJs],
+    entry: {
+        app: './src/index.js',
+        react: ['react', 'react-router', 'react-dom', 'react-router-dom', 'react-redux', 'redux'],
+        editor: ['draft-js','draft-js-hashtag-plugin','draft-js-linkify-plugin','draft-js-counter-plugin','draft-js-prism-plugin'],
+        utils: ['moment', 'immutable', 'lodash/times', 'prismjs']
+    },
     output: {
         // The build folder.
         path: paths.appBuild,
@@ -291,7 +295,7 @@ module.exports = {
             // about it being stale, and the cache-busting can be skipped.
             dontCacheBustUrlsMatching: /\.\w{8}\./,
             filename: 'service-worker.js',
-            logger (message) {
+            logger(message) {
                 if (message.indexOf('Total precache size is') === 0) {
                     // This message occurs for every build and is a bit too noisy.
                     return
@@ -334,6 +338,9 @@ module.exports = {
         }),
         new BundleAnalyzerPlugin({
             analyzerMode: 'static'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: ['react','editor','utils']
         })
     ],
     // Some libraries import Node modules but don't use them in the browser.
