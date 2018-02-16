@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -21,6 +21,7 @@ import {
     decorator
   } from '../blogEditor/editorToolkit';
   import {socialShares} from '../env'
+import FacebookProvider, { Comments } from 'react-facebook'
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -166,6 +167,7 @@ class Blog extends React.Component {
     }
 
     componentDidMount() {
+        console.log()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
@@ -333,7 +335,9 @@ class Blog extends React.Component {
     }
 
     render() {
-
+        let comments = [
+            { menuItem: 'FaceBook', render: () => <FacebookProvider appId="1303236236454786"><Comments href={window.location.href }  /></FacebookProvider> }
+            ]
         let start = moment([2017, 11, 12]);
         let end   = moment();
         let likes = inWords(this.props.blog.likes)
@@ -555,6 +559,15 @@ class Blog extends React.Component {
                                         : null
                                 }
                             </div>
+                            <Header textAlign={'center'} as='h2' icon>
+                                <Icon name='comments' color={'green'} />
+                                Have a comment?
+                                <Header.Subheader>
+                                    Use facebook, Google + or Disqus to comment on this blog.
+                                </Header.Subheader>
+                            </Header>
+                            <Tab menu={{ attached: true}} panes={comments} />
+
                         </div>
                         : <div>
                             Content not found!
