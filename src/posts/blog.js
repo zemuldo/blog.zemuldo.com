@@ -1,8 +1,9 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
+import times from 'lodash/times'
 import axios from 'axios'
 import config from '../env'
 import {bindActionCreators} from 'redux'
@@ -20,7 +21,6 @@ import {
 import {socialShares} from '../env'
 import FacebookProvider, {Comments} from 'react-facebook'
 import DisqusThread from '../chat/disqus';
-
 const env = config[process.env.NODE_ENV] || 'development'
 
 class Blog extends React.Component {
@@ -35,7 +35,95 @@ class Blog extends React.Component {
             title: this.props.blog.title,
             wordCount: 0,
             editorState: null,
-            blogUrl: blogUrl(this.props.blog)
+            blogUrl: blogUrl(this.props.blog),
+            replyComment:'',
+            comments: [
+                {
+                    author: {
+                        name: 'Danstan Onyango',
+                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                    },
+                    id: '565465b45g4545y454545yg4yg',
+                    mess: 'Mess 1 Hello world',
+                    date: new Date().toDateString(),
+                    chat: [
+                        {
+                            author: {
+                                name: 'Danstan Onyango',
+                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                            },
+                            id: '565465b45gggg45y454545yg4yg',
+                            mess: 'Reply 1 Hello world',
+                            date: new Date().toDateString(),
+                            chat: [
+                                {
+                                    author: {
+                                        name: 'Danstan Onyango',
+                                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                    },
+                                    id: '565465b45g4545y4433435yg4yg',
+                                    mess: 'Reply 1 Hello world',
+                                    date: new Date().toDateString()
+                                },
+                                {
+                                    author: {
+                                        name: 'Danstan Onyango',
+                                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                    },
+                                    id: '565465b48989894545y454545yg4yg',
+                                    mess: 'Reply 2 Hello world',
+                                    date: new Date().toDateString()
+                                },
+                                {
+                                    author: {
+                                        name: 'Danstan Onyango',
+                                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                    },
+                                    id: '565465b432323235y454545yg4yg',
+                                    mess: 'Reply 3 Hello world',
+                                    date: new Date().toDateString()
+                                }
+                            ]
+                        },
+                        {
+                            author: {
+                                name: 'Danstan Onyango',
+                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                            },
+                            id: '565465rererer5y454545yg4yg',
+                            mess: 'Reply 2 Hello world',
+                            date: new Date().toDateString()
+                        },
+                        {
+                            author: {
+                                name: 'Danstan Onyango',
+                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                            },
+                            id: '565465bioiooioioy454545yg4yg',
+                            mess: 'Reply 3 Hello world',
+                            date: new Date().toDateString()
+                        }
+                    ]
+                },
+                {
+                    author: {
+                        name: 'Danstan Onyango',
+                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                    },
+                    id: '565465b43434343434y454545yg4yg',
+                    mess: 'Mess 2 Hello world',
+                    date: new Date().toDateString()
+                },
+                {
+                    author: {
+                        name: 'Danstan Onyango',
+                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                    },
+                    id: '565465b45g4454545yg4yg',
+                    mess: 'Mess 3 Hello world',
+                    date: new Date().toDateString()
+                }
+            ]
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -50,6 +138,7 @@ class Blog extends React.Component {
         this.handleSave = this.handleSave.bind(this)
         this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
         this.handleAboutChange = this.handleAboutChange.bind(this)
+        this.setReplyComment = this.setReplyComment.bind(this)
     }
 
     handleAboutChange(e, data) {
@@ -325,12 +414,52 @@ class Blog extends React.Component {
             }.bind(this))
     }
 
+    setReplyComment (id){
+        this.setState({replyComment:id})
+    }
+
     render() {
+        const BlogComments = (arr) => {
+            return (<Comment.Group threaded>
+                {arr.map(function (c, i) {
+                    if (c.constructor === Array) {
+                        return BlogComments(c)
+                    }
+                    return (
+                        <Comment key={c.id}>
+                            <Comment.Avatar as='a' src={env.httpURL + c.author.avatar}/>
+                            <Comment.Content>
+                                <Comment.Author as='a'>{c.author.name}</Comment.Author>
+                                <Comment.Metadata>
+                                    <span>{c.date}</span>
+                                </Comment.Metadata>
+                                <Comment.Text>{c.mess}</Comment.Text>
+                                <Comment.Actions>
+                                    <a onClick={()=>this.setReplyComment(c.id)}>Reply</a>
+                                    {
+                                        this.state.replyComment ===c.id?
+                                            <Form reply>
+                                                <Form.TextArea />
+                                                <Button content='Add Reply' labelPosition='left' icon='edit' primary />
+                                                <Button onClick={()=>this.setReplyComment('')} content='Cancel' labelPosition='left' icon='close' primary />
+                                            </Form>:null
+                                    }
+                                </Comment.Actions>
+                            </Comment.Content>
+                            {
+                                c.chat ?
+                                    BlogComments(c.chat) : null
+                            }
+                        </Comment>)
+                }.bind(this))}
+            </Comment.Group>)
+
+        };
         let comments = [
             {
-                menuItem:  'Facebook',
+                menuItem: 'Facebook',
                 render: () =>
-                    <FacebookProvider key ={'1303236236454786'} appId="1303236236454786"><Comments
+                    <FacebookProvider key={'1303236236454786'} appId="1303236236454786"><Comments
                         href={`https://blogs.zemuldo.com/${this.state.blogUrl}`}/>
                     </FacebookProvider>
             },
@@ -338,7 +467,7 @@ class Blog extends React.Component {
                 menuItem: 'Disqus',
                 render: () =>
                     <DisqusThread
-                        key ={'zemuldoblog'}
+                        key={'zemuldoblog'}
                         shortname="zemuldoblog"
                         identifier={`https://blogs.zemuldo.com/${this.state.blogUrl}`}
                         title={`Zemuldo Blogs- ${this.props.blog.title}`}
@@ -583,6 +712,10 @@ class Blog extends React.Component {
                                 </Header.Subheader>
                             </Header>
                             <Tab menu={{attached: true}} panes={comments}/>
+                            <Header as='h3' dividing>Comments</Header>
+                            {
+                                BlogComments(this.state.comments)
+                            }
 
                         </div>
                         : <div>
