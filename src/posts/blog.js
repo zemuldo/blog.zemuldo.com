@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL,peopleU,inWords, toTitleCase} from '../util'
+import {peopleL,peopleU,inWords, toTitleCase,blogUrl} from '../util'
 import {
     convertFromRaw,
     EditorState,
@@ -34,7 +34,8 @@ class Blog extends React.Component {
             authorAvatar: null,
             title: this.props.blog.title,
             wordCount: 0,
-            editorState: null
+            editorState: null,
+            blogUrl:blogUrl(this.props.blog)
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -69,14 +70,12 @@ class Blog extends React.Component {
     }
 
     setBlogCounts() {
-        let thisBlog = this.props.blog
-        let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         let gplusPost = {
             'method': 'pos.plusones.get',
             'id': 'p',
             'params': {
                 'nolog': true,
-                'id': 'https://blog.zemuldo/' + shareURL,
+                'id': 'https://blog.zemuldo/' + this.state.blogUrl,
                 'source': 'widget',
                 'userId': '@viewer',
                 'groupId': '@self'
@@ -86,8 +85,8 @@ class Blog extends React.Component {
             'apiVersion': 'v1'
         }
         window.scrollTo(0, 0)
-        this.getFBCount(shareURL)
-        this.getTWTCount(shareURL)
+        this.getFBCount(this.state.blogUrl)
+        this.getTWTCount(this.state.blogUrl)
         this.getGCCount(gplusPost)
     }
 
@@ -164,7 +163,6 @@ class Blog extends React.Component {
     }
 
     componentDidMount() {
-        console.log()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
@@ -214,8 +212,7 @@ class Blog extends React.Component {
     fbShare() {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.zemuldo.com%2F'
         if (this.props.blog) {
-            let thisBlog = this.props.blog
-            let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+            let postURL = blogUrl(this.props.blog)
             let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
@@ -226,26 +223,21 @@ class Blog extends React.Component {
             let hashTgs = '%2F&hashtags=' + this.props.blog.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let thisBlog = this.props.blog
-            let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
-            let fullURL = url + related + hashTgs + via
+            let url = `&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`
+            let fullURL = `${url}${related}${via}`
             let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
     }
 
     gplusShare() {
-        let thisBlog = this.props.blog
-        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         if (this.props.blog) {
-            url = 'https://plus.google.com/share?url=https://blog.zemuldo.com/' + url
-            window.open(url)
+            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`)
         }
     }
 
     linkdnShare() {
-        let thisBlog = this.props.blog
-        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+        let url = `https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`
         window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.zemuldo.com  /' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
     }
 
@@ -331,23 +323,12 @@ class Blog extends React.Component {
 
             }.bind(this))
     }
-    handleNewComment(comment) {
-        /* eslint no-console:0 */
-        console.log(comment);
-    }
 
     render() {
         let comments = [
-            { menuItem: 'FaceBook', render: () => <FacebookProvider appId="1303236236454786"><Comments href={window.location.href }  /></FacebookProvider> },
-            { menuItem: 'Disqus', render: () =>  <DisqusThread
-                    shortname="zemuldoblog"
-                    identifier={window.location.href}
-                    title="React Disqus thread component"
-                    onNewComment={this.handleNewComment}
-                /> }
+            { menuItem: 'FaceBook', render: () => <FacebookProvider appId="1303236236454786"><Comments href={`https://blogs.zemuldo.com/${this.state.blogUrl}`}  /></FacebookProvider> },
+            { menuItem: 'Disqus', render: () =>  <DisqusThread shortname="zemuldoblog" identifier={`https://blogs.zemuldo.com/${this.state.blogUrl}`} title={`Zemuldo Blogs- ${this.props.blog.title}`}/> }
             ]
-        let start = moment([2017, 11, 12]);
-        let end   = moment();
         let likes = inWords(this.props.blog.likes)
         let likeMesage = this.state.youLike? 'You already liked this post':'Like this post'
         let shares = socialShares.map(s=>{

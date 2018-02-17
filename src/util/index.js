@@ -39,3 +39,7 @@ export function peopleL(no) {
 export function peopleU(no) {
   return no>1 ? `People like this` : `Person likes this`
 }
+
+export  function  blogUrl (b) {
+    return `${b.type}/${b.topics[0]}/${b.author.userName }-${b.title.split(' ').join('-')}-${b.date.split(' ').join('-')}-${b.id.toString()}`
+}
