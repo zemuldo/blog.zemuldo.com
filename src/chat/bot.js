@@ -189,7 +189,7 @@ class LiveChat extends React.Component {
                               <div>
                                 <div className='alignCenter'>
                                   <Header>Zemuldo Profile Bot</Header>
-                                  <Image avatar size={'small'} src={this.props.vars.env.static+'img/chat/chat.gif'} />
+                                  <Image avatar size={'small'} src={this.props.vars.env.static+'img/chat/bot.gif'} />
                                   <hr color='blue' />
                                 </div>
                                 <div className='chatContainer' style={{overflowX: 'hidden',overflowY: 'scroll', height: '300px'}}>
