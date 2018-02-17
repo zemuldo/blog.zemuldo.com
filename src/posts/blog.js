@@ -3,7 +3,6 @@ import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, C
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
-import times from 'lodash/times'
 import axios from 'axios'
 import config from '../env'
 import {bindActionCreators} from 'redux'
@@ -21,6 +20,7 @@ import {
 import {socialShares} from '../env'
 import FacebookProvider, {Comments} from 'react-facebook'
 import DisqusThread from '../chat/disqus';
+
 const env = config[process.env.NODE_ENV] || 'development'
 
 class Blog extends React.Component {
@@ -36,7 +36,7 @@ class Blog extends React.Component {
             wordCount: 0,
             editorState: null,
             blogUrl: blogUrl(this.props.blog),
-            replyComment:'',
+            replyComment: '',
             comments: [
                 {
                     author: {
@@ -45,7 +45,7 @@ class Blog extends React.Component {
                     },
                     id: '565465b45g4545y454545yg4yg',
                     mess: 'Mess 1 Hello world',
-                    date: new Date().toDateString(),
+                    date: new Date().toISOString(),
                     chat: [
                         {
                             author: {
@@ -54,7 +54,7 @@ class Blog extends React.Component {
                             },
                             id: '565465b45gggg45y454545yg4yg',
                             mess: 'Reply 1 Hello world',
-                            date: new Date().toDateString(),
+                            date: new Date().toISOString(),
                             chat: [
                                 {
                                     author: {
@@ -63,7 +63,7 @@ class Blog extends React.Component {
                                     },
                                     id: '565465b45g4545y4433435yg4yg',
                                     mess: 'Reply 1 Hello world',
-                                    date: new Date().toDateString()
+                                    date: new Date().toISOString()
                                 },
                                 {
                                     author: {
@@ -72,7 +72,7 @@ class Blog extends React.Component {
                                     },
                                     id: '565465b48989894545y454545yg4yg',
                                     mess: 'Reply 2 Hello world',
-                                    date: new Date().toDateString()
+                                    date: new Date().toISOString()
                                 },
                                 {
                                     author: {
@@ -81,7 +81,7 @@ class Blog extends React.Component {
                                     },
                                     id: '565465b432323235y454545yg4yg',
                                     mess: 'Reply 3 Hello world',
-                                    date: new Date().toDateString()
+                                    date: new Date().toISOString()
                                 }
                             ]
                         },
@@ -92,7 +92,7 @@ class Blog extends React.Component {
                             },
                             id: '565465rererer5y454545yg4yg',
                             mess: 'Reply 2 Hello world',
-                            date: new Date().toDateString()
+                            date: new Date().toISOString()
                         },
                         {
                             author: {
@@ -101,7 +101,7 @@ class Blog extends React.Component {
                             },
                             id: '565465bioiooioioy454545yg4yg',
                             mess: 'Reply 3 Hello world',
-                            date: new Date().toDateString()
+                            date: new Date().toISOString()
                         }
                     ]
                 },
@@ -112,7 +112,7 @@ class Blog extends React.Component {
                     },
                     id: '565465b43434343434y454545yg4yg',
                     mess: 'Mess 2 Hello world',
-                    date: new Date().toDateString()
+                    date: new Date().toISOString()
                 },
                 {
                     author: {
@@ -121,7 +121,7 @@ class Blog extends React.Component {
                     },
                     id: '565465b45g4454545yg4yg',
                     mess: 'Mess 3 Hello world',
-                    date: new Date().toDateString()
+                    date: new Date().toISOString()
                 }
             ]
         }
@@ -139,6 +139,8 @@ class Blog extends React.Component {
         this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
         this.handleAboutChange = this.handleAboutChange.bind(this)
         this.setReplyComment = this.setReplyComment.bind(this)
+        this.submitComment = this.submitComment.bind(this)
+        this.onCommentChange = this.onCommentChange.bind(this)
     }
 
     handleAboutChange(e, data) {
@@ -414,8 +416,29 @@ class Blog extends React.Component {
             }.bind(this))
     }
 
-    setReplyComment (id){
-        this.setState({replyComment:id})
+    setReplyComment(id) {
+        this.setState({replyComment: id})
+    }
+
+    onCommentChange(e) {
+        this.setState({mess: e.target.value})
+    }
+
+    submitComment() {
+        if (this.state.mess.length > 1) {
+            this.setState({
+                comments: [...this.state.comments, {
+                    author: {
+                        name: this.props.user.name,
+                        avatar: this.props.user.avatarURL,
+                    },
+                    id: this.state.mess,
+                    mess: this.state.mess,
+                    date: new Date().toISOString()
+                }], mess: ''
+            })
+        }
+
     }
 
     render() {
@@ -431,18 +454,19 @@ class Blog extends React.Component {
                             <Comment.Content>
                                 <Comment.Author as='a'>{c.author.name}</Comment.Author>
                                 <Comment.Metadata>
-                                    <span>{c.date}</span>
+                                    <span>{moment().to(c.date)}</span>
                                 </Comment.Metadata>
                                 <Comment.Text>{c.mess}</Comment.Text>
                                 <Comment.Actions>
-                                    <a onClick={()=>this.setReplyComment(c.id)}>Reply</a>
+                                    <a onClick={() => this.setReplyComment(c.id)}>Reply</a>
                                     {
-                                        this.state.replyComment ===c.id?
+                                        this.state.replyComment === c.id ?
                                             <Form reply>
-                                                <Form.TextArea />
-                                                <Button content='Add Reply' labelPosition='left' icon='edit' primary />
-                                                <Button onClick={()=>this.setReplyComment('')} content='Cancel' labelPosition='left' icon='close' primary />
-                                            </Form>:null
+                                                <Form.TextArea/>
+                                                <Button content='Add Reply' labelPosition='left' icon='edit' primary/>
+                                                <Button onClick={() => this.setReplyComment('')} content='Cancel'
+                                                        labelPosition='left' icon='close' primary/>
+                                            </Form> : null
                                     }
                                 </Comment.Actions>
                             </Comment.Content>
@@ -456,6 +480,21 @@ class Blog extends React.Component {
 
         };
         let comments = [
+            {
+
+                menuItem: 'Comments',
+                render: () =>
+                    <div>
+                        {
+                            BlogComments(this.state.comments)
+                        }
+                        <Form>
+                            <Form.TextArea onChange={this.onCommentChange}/>
+                            <Button onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
+                                    icon='edit' primary/>
+                        </Form>
+                    </div>
+            },
             {
                 menuItem: 'Facebook',
                 render: () =>
@@ -712,10 +751,7 @@ class Blog extends React.Component {
                                 </Header.Subheader>
                             </Header>
                             <Tab menu={{attached: true}} panes={comments}/>
-                            <Header as='h3' dividing>Comments</Header>
-                            {
-                                BlogComments(this.state.comments)
-                            }
+
 
                         </div>
                         : <div>
