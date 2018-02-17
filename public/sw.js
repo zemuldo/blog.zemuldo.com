@@ -25,7 +25,7 @@ const PRECACHE_URLS = [
     '/static/img/icons/icon-256x256.png',
     '/static/img/icons/icon-384x384.png',
     '/static/img/icons/icon-512x512.png',
-    '/static/img/bot/bot.gif',
+    '/static/img/chat/chat.gif',
     '/static/css/' + buildID + 'app.zemuldo.css',
     '/static/js/' + buildID + 'app.zemuldo.js',
     '/static/js/' + buildID + 'react.zemuldo.js',

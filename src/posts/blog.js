@@ -11,17 +11,15 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import {peopleL,peopleU,inWords, toTitleCase} from '../util'
 import {
-    AtomicBlockUtils,
     convertFromRaw,
-    convertToRaw,
     EditorState,
-    RichUtils
   } from 'draft-js'
-  import {
+import {
     decorator
   } from '../blogEditor/editorToolkit';
-  import {socialShares} from '../env'
+import {socialShares} from '../env'
 import FacebookProvider, { Comments } from 'react-facebook'
+import DisqusThread from '../chat/disqus';
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -47,9 +45,8 @@ class Blog extends React.Component {
         this.getTWTCount = this.getTWTCount.bind(this)
         this.getGCCount = this.getGCCount.bind(this)
         this.saveEdit = this.saveEdit.bind(this)
-        this.handleTitleChange = this.handleTitleChange.bind(this)
+        this.handleInputChange = this.handleInputChange.bind(this)
         this.handleSave = this.handleSave.bind(this)
-        this.handleWordChange = this.handleWordChange.bind(this)
         this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
         this.handleAboutChange = this.handleAboutChange.bind(this)
     }
@@ -294,12 +291,13 @@ class Blog extends React.Component {
         }
     };
 
-    handleTitleChange = (e) => {
-        this.setState({title: e.target.value})
-    }
-
-    handleWordChange = (e) => {
-        this.props.blogActions.updateBlog({wordCount:e.target.value})
+    handleInputChange = (e) => {
+        let test = {
+            [e.target.name]:e.target.value
+        }
+        console.log(test)
+        this.setState({[e.target.name]: e.target.value})
+        this.props.blogActions.updateBlog({[e.target.name]:e.target.value})
     }
 
     handleSave = () => {
@@ -333,10 +331,20 @@ class Blog extends React.Component {
 
             }.bind(this))
     }
+    handleNewComment(comment) {
+        /* eslint no-console:0 */
+        console.log(comment);
+    }
 
     render() {
         let comments = [
-            { menuItem: 'FaceBook', render: () => <FacebookProvider appId="1303236236454786"><Comments href={window.location.href }  /></FacebookProvider> }
+            { menuItem: 'FaceBook', render: () => <FacebookProvider appId="1303236236454786"><Comments href={window.location.href }  /></FacebookProvider> },
+            { menuItem: 'Disqus', render: () =>  <DisqusThread
+                    shortname="zemuldoblog"
+                    identifier={window.location.href}
+                    title="React Disqus thread component"
+                    onNewComment={this.handleNewComment}
+                /> }
             ]
         let start = moment([2017, 11, 12]);
         let end   = moment();
@@ -344,6 +352,7 @@ class Blog extends React.Component {
         let likeMesage = this.state.youLike? 'You already liked this post':'Like this post'
         let shares = socialShares.map(s=>{
             return <Popup
+                inverted
                 key = {s.name}
                 trigger=
                 {<a><Button
@@ -410,10 +419,10 @@ class Blog extends React.Component {
                                     <div>
                                         <Header style={{textAlign: 'left', alignment: 'center'}}
                                                 color={this.props.vars.color} as='h3'>
-                                            <span>Title: </span> <Input onChange={this.handleTitleChange}
+                                            <span>Title: </span> <Input name ='title' onChange={this.handleInputChange}
                                                                         value={this.state.title}/>
                                             {' '}
-                                            <span>Words </span> <Input onChange={this.handleWordChange}
+                                            <span>Words </span> <Input  name ='wordCount' onChange={this.handleInputChange}
                                                                        value={this.props.blog.wordCount}/>
                                         </Header>
 
