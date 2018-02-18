@@ -58,7 +58,6 @@ export function updateReplies(c, cs) {
                         c
                     ]
                 }
-                console.log(cs)
                 resolve(cs)
                 return true
             }

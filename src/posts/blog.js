@@ -482,7 +482,6 @@ class Blog extends React.Component {
         this.setReplyComment('')
         updateReplies(c, o)
             .then(oo=>{
-                console.log(oo)
                 this.setState({comments: oo})
 
             })
