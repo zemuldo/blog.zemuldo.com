@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL, peopleU, inWords, toTitleCase, blogUrl} from '../util'
+import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies} from '../util'
 import {
     convertFromRaw,
     EditorState,
@@ -43,74 +43,109 @@ class Blog extends React.Component {
                         name: 'Danstan Onyango',
                         avatar: '/avatars/5a756836ff08f01a6637572b.png'
                     },
-                    id: '565465b45g4545y454545yg4yg',
+                    _id: '565465b45g4545y454545yg4yg',
                     mess: 'Mess 1 Hello world',
                     date: new Date().toISOString(),
-                    chat: [
-                        {
-                            author: {
-                                name: 'Danstan Onyango',
-                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                            },
-                            id: '565465b45gggg45y454545yg4yg',
-                            mess: 'Reply 1 Hello world',
-                            date: new Date().toISOString(),
-                            chat: [
-                                {
-                                    author: {
-                                        name: 'Danstan Onyango',
-                                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                    },
-                                    id: '565465b45g4545y4433435yg4yg',
-                                    mess: 'Reply 1 Hello world',
-                                    date: new Date().toISOString()
+                    chat: {
+                        comments: [
+                            {
+                                author: {
+                                    name: 'Danstan Onyango',
+                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                 },
-                                {
-                                    author: {
-                                        name: 'Danstan Onyango',
-                                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                    },
-                                    id: '565465b48989894545y454545yg4yg',
-                                    mess: 'Reply 2 Hello world',
-                                    date: new Date().toISOString()
-                                },
-                                {
-                                    author: {
-                                        name: 'Danstan Onyango',
-                                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                    },
-                                    id: '565465b432323235y454545yg4yg',
-                                    mess: 'Reply 3 Hello world',
-                                    date: new Date().toISOString()
+                                _id: '565465b45gggg45y454545yg4yg',
+                                mess: 'Reply 1 Hello world',
+                                date: new Date().toISOString(),
+                                chat: {
+                                    comments: [
+                                        {
+                                            author: {
+                                                name: 'Danstan Onyango',
+                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                            },
+                                            _id: '565465b45g4545y4433435yg4yg',
+                                            mess: 'Reply 1 Hello world',
+                                            date: new Date().toISOString(),
+                                            chat: {
+                                                comments: [
+                                                    {
+                                                        author: {
+                                                            name: 'Danstan Onyango',
+                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                                        },
+                                                        _id: '565465b45g4547775y4433435yg4yg',
+                                                        mess: 'Reply 1 Hello world',
+                                                        date: new Date().toISOString()
+                                                    },
+                                                    {
+                                                        author: {
+                                                            name: 'Danstan Onyango',
+                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                                        },
+                                                        _id: '565465b48989894777545y454545yg4yg',
+                                                        mess: 'Reply 2 Hello world',
+                                                        date: new Date().toISOString()
+                                                    },
+                                                    {
+                                                        author: {
+                                                            name: 'Danstan Onyango',
+                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                                        },
+                                                        _id: '565465b432323277735y454545yg4yg',
+                                                        mess: 'Reply 3 Hello world',
+                                                        date: new Date().toISOString()
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            author: {
+                                                name: 'Danstan Onyango',
+                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                            },
+                                            _id: '565465b48989894545y454545yg4yg',
+                                            mess: 'Reply 2 Hello world',
+                                            date: new Date().toISOString()
+                                        },
+                                        {
+                                            author: {
+                                                name: 'Danstan Onyango',
+                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                            },
+                                            _id: '565465b432323235y454545yg4yg',
+                                            mess: 'Reply 3 Hello world',
+                                            date: new Date().toISOString()
+                                        }
+                                    ]
                                 }
-                            ]
-                        },
-                        {
-                            author: {
-                                name: 'Danstan Onyango',
-                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
                             },
-                            id: '565465rererer5y454545yg4yg',
-                            mess: 'Reply 2 Hello world',
-                            date: new Date().toISOString()
-                        },
-                        {
-                            author: {
-                                name: 'Danstan Onyango',
-                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                            {
+                                author: {
+                                    name: 'Danstan Onyango',
+                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                },
+                                _id: '565465rererer5y454545yg4yg',
+                                mess: 'Reply 2 Hello world',
+                                date: new Date().toISOString()
                             },
-                            id: '565465bioiooioioy454545yg4yg',
-                            mess: 'Reply 3 Hello world',
-                            date: new Date().toISOString()
-                        }
-                    ]
+                            {
+                                author: {
+                                    name: 'Danstan Onyango',
+                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                },
+                                _id: '565465bioiooioioy454545yg4yg',
+                                mess: 'Reply 3 Hello world',
+                                date: new Date().toISOString()
+                            }
+                        ]
+                    }
                 },
                 {
                     author: {
                         name: 'Danstan Onyango',
                         avatar: '/avatars/5a756836ff08f01a6637572b.png'
                     },
-                    id: '565465b43434343434y454545yg4yg',
+                    _id: '565465b43434343434y454545yg4yg',
                     mess: 'Mess 2 Hello world',
                     date: new Date().toISOString()
                 },
@@ -119,7 +154,7 @@ class Blog extends React.Component {
                         name: 'Danstan Onyango',
                         avatar: '/avatars/5a756836ff08f01a6637572b.png'
                     },
-                    id: '565465b45g4454545yg4yg',
+                    _id: '565465b45g4454545yg4yg',
                     mess: 'Mess 3 Hello world',
                     date: new Date().toISOString()
                 }
@@ -141,6 +176,7 @@ class Blog extends React.Component {
         this.setReplyComment = this.setReplyComment.bind(this)
         this.submitComment = this.submitComment.bind(this)
         this.onCommentChange = this.onCommentChange.bind(this)
+        this.updateComments = this.updateComments.bind(this)
     }
 
     handleAboutChange(e, data) {
@@ -416,8 +452,8 @@ class Blog extends React.Component {
             }.bind(this))
     }
 
-    setReplyComment(id) {
-        this.setState({replyComment: id})
+    setReplyComment(_id) {
+        this.setState({replyComment: _id})
     }
 
     onCommentChange(e) {
@@ -441,15 +477,28 @@ class Blog extends React.Component {
 
     }
 
+    updateComments(c) {
+        let o = this.state.comments;
+        this.setReplyComment('')
+        updateReplies(c, o)
+            .then(oo=>{
+                console.log(oo)
+                this.setState({comments: oo})
+
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+
+    }
+
     render() {
         const BlogComments = (arr) => {
             return (<Comment.Group threaded>
-                {arr.map(function (c, i) {
-                    if (c.constructor === Array) {
-                        return BlogComments(c)
-                    }
+                {arr.map(function (c) {
+                    let query = c._id;
                     return (
-                        <Comment key={c.id}>
+                        <Comment key={c._id}>
                             <Comment.Avatar as='a' src={env.httpURL + c.author.avatar}/>
                             <Comment.Content>
                                 <Comment.Author as='a'>{c.author.name}</Comment.Author>
@@ -458,12 +507,23 @@ class Blog extends React.Component {
                                 </Comment.Metadata>
                                 <Comment.Text>{c.mess}</Comment.Text>
                                 <Comment.Actions>
-                                    <a onClick={() => this.setReplyComment(c.id)}>Reply</a>
+                                    <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
                                     {
-                                        this.state.replyComment === c.id ?
+                                        this.state.replyComment === c._id ?
                                             <Form reply>
-                                                <Form.TextArea/>
-                                                <Button content='Add Reply' labelPosition='left' icon='edit' primary/>
+                                                <Form.TextArea onChange={this.onCommentChange}/>
+                                                <Button
+                                                    onClick={() => this.updateComments({
+                                                        parrent_id:c._id,
+                                                        mess: this.state.mess,
+                                                        _id: 'iwuewiuiwuwuieuwie',
+                                                        author: {name:'Omera Zemuldo', avatar: '/avatars/5a756836ff08f01a6637572b.png'}
+                                                    })}
+                                                    content='Add Reply'
+                                                    labelPosition='left'
+                                                    icon='edit'
+                                                    primary
+                                                />
                                                 <Button onClick={() => this.setReplyComment('')} content='Cancel'
                                                         labelPosition='left' icon='close' primary/>
                                             </Form> : null
@@ -472,7 +532,7 @@ class Blog extends React.Component {
                             </Comment.Content>
                             {
                                 c.chat ?
-                                    BlogComments(c.chat) : null
+                                    BlogComments(c.chat.comments) : null
                             }
                         </Comment>)
                 }.bind(this))}
@@ -508,7 +568,7 @@ class Blog extends React.Component {
                     <DisqusThread
                         key={'zemuldoblog'}
                         shortname="zemuldoblog"
-                        identifier={`https://blogs.zemuldo.com/${this.state.blogUrl}`}
+                        identifier={this.props.blog._id}
                         title={`Zemuldo Blogs- ${this.props.blog.title}`}
                     />
             }
