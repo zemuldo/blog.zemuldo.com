@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -9,18 +9,17 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL,peopleU,inWords, toTitleCase} from '../util'
+import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies} from '../util'
 import {
-    AtomicBlockUtils,
     convertFromRaw,
-    convertToRaw,
     EditorState,
-    RichUtils
-  } from 'draft-js'
-  import {
+} from 'draft-js'
+import {
     decorator
-  } from '../blogEditor/editorToolkit';
-  import {socialShares} from '../env'
+} from '../blogEditor/editorToolkit';
+import {socialShares} from '../env'
+import FacebookProvider, {Comments} from 'react-facebook'
+import DisqusThread from '../chat/disqus';
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -35,7 +34,131 @@ class Blog extends React.Component {
             authorAvatar: null,
             title: this.props.blog.title,
             wordCount: 0,
-            editorState: null
+            editorState: null,
+            blogUrl: blogUrl(this.props.blog),
+            replyComment: '',
+            comments: [
+                {
+                    author: {
+                        name: 'Danstan Onyango',
+                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                    },
+                    _id: '565465b45g4545y454545yg4yg',
+                    mess: 'Mess 1 Hello world',
+                    date: new Date().toISOString(),
+                    chat: {
+                        comments: [
+                            {
+                                author: {
+                                    name: 'Danstan Onyango',
+                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                },
+                                _id: '565465b45gggg45y454545yg4yg',
+                                mess: 'Reply 1 Hello world',
+                                date: new Date().toISOString(),
+                                chat: {
+                                    comments: [
+                                        {
+                                            author: {
+                                                name: 'Danstan Onyango',
+                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                            },
+                                            _id: '565465b45g4545y4433435yg4yg',
+                                            mess: 'Reply 1 Hello world',
+                                            date: new Date().toISOString(),
+                                            chat: {
+                                                comments: [
+                                                    {
+                                                        author: {
+                                                            name: 'Danstan Onyango',
+                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                                        },
+                                                        _id: '565465b45g4547775y4433435yg4yg',
+                                                        mess: 'Reply 1 Hello world',
+                                                        date: new Date().toISOString()
+                                                    },
+                                                    {
+                                                        author: {
+                                                            name: 'Danstan Onyango',
+                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                                        },
+                                                        _id: '565465b48989894777545y454545yg4yg',
+                                                        mess: 'Reply 2 Hello world',
+                                                        date: new Date().toISOString()
+                                                    },
+                                                    {
+                                                        author: {
+                                                            name: 'Danstan Onyango',
+                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                                        },
+                                                        _id: '565465b432323277735y454545yg4yg',
+                                                        mess: 'Reply 3 Hello world',
+                                                        date: new Date().toISOString()
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            author: {
+                                                name: 'Danstan Onyango',
+                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                            },
+                                            _id: '565465b48989894545y454545yg4yg',
+                                            mess: 'Reply 2 Hello world',
+                                            date: new Date().toISOString()
+                                        },
+                                        {
+                                            author: {
+                                                name: 'Danstan Onyango',
+                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                            },
+                                            _id: '565465b432323235y454545yg4yg',
+                                            mess: 'Reply 3 Hello world',
+                                            date: new Date().toISOString()
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                author: {
+                                    name: 'Danstan Onyango',
+                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                },
+                                _id: '565465rererer5y454545yg4yg',
+                                mess: 'Reply 2 Hello world',
+                                date: new Date().toISOString()
+                            },
+                            {
+                                author: {
+                                    name: 'Danstan Onyango',
+                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                                },
+                                _id: '565465bioiooioioy454545yg4yg',
+                                mess: 'Reply 3 Hello world',
+                                date: new Date().toISOString()
+                            }
+                        ]
+                    }
+                },
+                {
+                    author: {
+                        name: 'Danstan Onyango',
+                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                    },
+                    _id: '565465b43434343434y454545yg4yg',
+                    mess: 'Mess 2 Hello world',
+                    date: new Date().toISOString()
+                },
+                {
+                    author: {
+                        name: 'Danstan Onyango',
+                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
+                    },
+                    _id: '565465b45g4454545yg4yg',
+                    mess: 'Mess 3 Hello world',
+                    date: new Date().toISOString()
+                }
+            ]
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -46,18 +169,22 @@ class Blog extends React.Component {
         this.getTWTCount = this.getTWTCount.bind(this)
         this.getGCCount = this.getGCCount.bind(this)
         this.saveEdit = this.saveEdit.bind(this)
-        this.handleTitleChange = this.handleTitleChange.bind(this)
+        this.handleInputChange = this.handleInputChange.bind(this)
         this.handleSave = this.handleSave.bind(this)
-        this.handleWordChange = this.handleWordChange.bind(this)
         this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
         this.handleAboutChange = this.handleAboutChange.bind(this)
+        this.setReplyComment = this.setReplyComment.bind(this)
+        this.submitComment = this.submitComment.bind(this)
+        this.onCommentChange = this.onCommentChange.bind(this)
+        this.updateComments = this.updateComments.bind(this)
     }
+
     handleAboutChange(e, data) {
-        this.props.blogActions.updateBlog({about:data.value})
-      }
+        this.props.blogActions.updateBlog({about: data.value})
+    }
 
     handleEditorStateEdit() {
-        this.setState({wordCount:this.props.blog.wordCount})
+        this.setState({wordCount: this.props.blog.wordCount})
         let editorState = JSON.parse(this.props.blog.body);
         this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
     };
@@ -71,14 +198,12 @@ class Blog extends React.Component {
     }
 
     setBlogCounts() {
-        let thisBlog = this.props.blog
-        let shareURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         let gplusPost = {
             'method': 'pos.plusones.get',
             'id': 'p',
             'params': {
                 'nolog': true,
-                'id': 'https://blog.zemuldo/' + shareURL,
+                'id': 'https://blog.zemuldo/' + this.state.blogUrl,
                 'source': 'widget',
                 'userId': '@viewer',
                 'groupId': '@self'
@@ -88,8 +213,8 @@ class Blog extends React.Component {
             'apiVersion': 'v1'
         }
         window.scrollTo(0, 0)
-        this.getFBCount(shareURL)
-        this.getTWTCount(shareURL)
+        this.getFBCount(this.state.blogUrl)
+        this.getTWTCount(this.state.blogUrl)
         this.getGCCount(gplusPost)
     }
 
@@ -215,8 +340,7 @@ class Blog extends React.Component {
     fbShare() {
         let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.zemuldo.com%2F'
         if (this.props.blog) {
-            let thisBlog = this.props.blog
-            let postURL = thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+            let postURL = blogUrl(this.props.blog)
             let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
@@ -227,26 +351,21 @@ class Blog extends React.Component {
             let hashTgs = '%2F&hashtags=' + this.props.blog.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let thisBlog = this.props.blog
-            let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
-            let fullURL = url + related + hashTgs + via
+            let url = `&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`
+            let fullURL = `${url}${related}${via}`
             let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
     }
 
     gplusShare() {
-        let thisBlog = this.props.blog
-        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
         if (this.props.blog) {
-            url = 'https://plus.google.com/share?url=https://blog.zemuldo.com/' + url
-            window.open(url)
+            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`)
         }
     }
 
     linkdnShare() {
-        let thisBlog = this.props.blog
-        let url = '&url=https%3A%2F%2Fblog.zemuldo.com/' + thisBlog.type + '/' + thisBlog.topics[0] + '/' + thisBlog.author.userName + '-' + thisBlog.title.split(' ').join('-') + '-' + thisBlog.date.split(' ').join('-') + '-' + thisBlog.id.toString()
+        let url = `https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`
         window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.zemuldo.com  /' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
     }
 
@@ -266,7 +385,7 @@ class Blog extends React.Component {
                     }
                     if (response.data.n) {
                         if (response.data.n) {
-                            this.props.blogActions.updateBlog({likes:1+this.props.blog.likes})
+                            this.props.blogActions.updateBlog({likes: 1 + this.props.blog.likes})
                             this.setState({youLike: true})
                         }
                     }
@@ -292,12 +411,13 @@ class Blog extends React.Component {
         }
     };
 
-    handleTitleChange = (e) => {
-        this.setState({title: e.target.value})
-    }
-
-    handleWordChange = (e) => {
-        this.props.blogActions.updateBlog({wordCount:e.target.value})
+    handleInputChange = (e) => {
+        let test = {
+            [e.target.name]: e.target.value
+        }
+        console.log(test)
+        this.setState({[e.target.name]: e.target.value})
+        this.props.blogActions.updateBlog({[e.target.name]: e.target.value})
     }
 
     handleSave = () => {
@@ -307,7 +427,7 @@ class Blog extends React.Component {
             wordCount: this.props.blog.wordCount,
             about: this.props.blog.about
         }
-        let o = { editMode: false, title: this.state.title }
+        let o = {editMode: false, title: this.state.title}
         update.body = this.props.blog.body
         if (body) {
             o.body = body
@@ -332,24 +452,141 @@ class Blog extends React.Component {
             }.bind(this))
     }
 
-    render() {
+    setReplyComment(_id) {
+        this.setState({replyComment: _id})
+    }
 
-        let start = moment([2017, 11, 12]);
-        let end   = moment();
+    onCommentChange(e) {
+        this.setState({mess: e.target.value})
+    }
+
+    submitComment() {
+        if (this.state.mess.length > 1) {
+            this.setState({
+                comments: [...this.state.comments, {
+                    author: {
+                        name: this.props.user.name,
+                        avatar: this.props.user.avatarURL,
+                    },
+                    id: this.state.mess,
+                    mess: this.state.mess,
+                    date: new Date().toISOString()
+                }], mess: ''
+            })
+        }
+
+    }
+
+    updateComments(c) {
+        let o = this.state.comments;
+        this.setReplyComment('')
+        updateReplies(c, o)
+            .then(oo=>{
+                this.setState({comments: oo})
+
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+
+    }
+
+    render() {
+        const BlogComments = (arr) => {
+            return (<Comment.Group threaded>
+                {arr.map(function (c) {
+                    let query = c._id;
+                    return (
+                        <Comment key={c._id}>
+                            <Comment.Avatar as='a' src={env.httpURL + c.author.avatar}/>
+                            <Comment.Content>
+                                <Comment.Author as='a'>{c.author.name}</Comment.Author>
+                                <Comment.Metadata>
+                                    <span>{moment().to(c.date)}</span>
+                                </Comment.Metadata>
+                                <Comment.Text>{c.mess}</Comment.Text>
+                                <Comment.Actions>
+                                    <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
+                                    {
+                                        this.state.replyComment === c._id ?
+                                            <Form reply>
+                                                <Form.TextArea onChange={this.onCommentChange}/>
+                                                <Button
+                                                    onClick={() => this.updateComments({
+                                                        parrent_id:c._id,
+                                                        mess: this.state.mess,
+                                                        _id: 'iwuewiuiwuwuieuwie',
+                                                        author: {name:'Omera Zemuldo', avatar: '/avatars/5a756836ff08f01a6637572b.png'}
+                                                    })}
+                                                    content='Add Reply'
+                                                    labelPosition='left'
+                                                    icon='edit'
+                                                    primary
+                                                />
+                                                <Button onClick={() => this.setReplyComment('')} content='Cancel'
+                                                        labelPosition='left' icon='close' primary/>
+                                            </Form> : null
+                                    }
+                                </Comment.Actions>
+                            </Comment.Content>
+                            {
+                                c.chat ?
+                                    BlogComments(c.chat.comments) : null
+                            }
+                        </Comment>)
+                }.bind(this))}
+            </Comment.Group>)
+
+        };
+        let comments = [
+            {
+
+                menuItem: 'Comments',
+                render: () =>
+                    <div>
+                        {
+                            BlogComments(this.state.comments)
+                        }
+                        <Form>
+                            <Form.TextArea onChange={this.onCommentChange}/>
+                            <Button onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
+                                    icon='edit' primary/>
+                        </Form>
+                    </div>
+            },
+            {
+                menuItem: 'Facebook',
+                render: () =>
+                    <FacebookProvider key={'1303236236454786'} appId="1303236236454786"><Comments
+                        href={`https://blogs.zemuldo.com/${this.state.blogUrl}`}/>
+                    </FacebookProvider>
+            },
+            {
+                menuItem: 'Disqus',
+                render: () =>
+                    <DisqusThread
+                        key={'zemuldoblog'}
+                        shortname="zemuldoblog"
+                        identifier={this.props.blog._id}
+                        title={`Zemuldo Blogs- ${this.props.blog.title}`}
+                    />
+            }
+        ]
         let likes = inWords(this.props.blog.likes)
-        let likeMesage = this.state.youLike? 'You already liked this post':'Like this post'
-        let shares = socialShares.map(s=>{
+        let likeMesage = this.state.youLike ? 'You already liked this post' : 'Like this post'
+        let shares = socialShares.map(s => {
             return <Popup
-                key = {s.name}
+                inverted
+                key={s.name}
                 trigger=
-                {<a><Button
-                    onClick={() => {
-                        this[s.shareCounter]()
-                    }}
-                    circular color={s.color} icon={s.icon} />
-                    <sup>{this.props.blog[s.count]}</sup>
-                    {'   '}
-                </a>}
+                    {<a><Button
+                        onClick={() => {
+                            this[s.shareCounter]()
+                        }}
+                        circular color={s.color} icon={s.icon}/>
+                        <sup>{this.props.blog[s.count]}</sup>
+                        {'   '}
+                    </a>}
                 content={`Share this on ${s.name} `}
             />
         })
@@ -367,7 +604,7 @@ class Blog extends React.Component {
                             </Header>
                             <span className='info'>
                                    Published: {moment().to(this.props.blog.date)}
-                                   <br/>
+                                <br/>
                                 {this.props.blog.date}
                             </span>
                             <br/>
@@ -378,9 +615,10 @@ class Blog extends React.Component {
                             <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
                                 <br/>
                                 <div>{
-                                    this.state.editorState?
-                                    <PreviewEditor title={this.props.blog.title} editorState={this.state.editorState}/>:
-                                    <div>Loading editor state</div>
+                                    this.state.editorState ?
+                                        <PreviewEditor title={this.props.blog.title}
+                                                       editorState={this.state.editorState}/> :
+                                        <div>Loading editor state</div>
                                 }</div>
                             </div>
                         </Modal.Description>
@@ -389,7 +627,8 @@ class Blog extends React.Component {
                         <Button color='green' onClick={() => this.closeDelete()}>
                             Cancel
                         </Button>
-                        <Button color='red' icon='checkmark' labelPosition='right' content='Delete' onClick={() => this.deletBlog(this.props.blog.id)}/>
+                        <Button color='red' icon='checkmark' labelPosition='right' content='Delete'
+                                onClick={() => this.deletBlog(this.props.blog.id)}/>
                     </Modal.Actions>
                 </Modal>
                 {
@@ -406,10 +645,10 @@ class Blog extends React.Component {
                                     <div>
                                         <Header style={{textAlign: 'left', alignment: 'center'}}
                                                 color={this.props.vars.color} as='h3'>
-                                            <span>Title: </span> <Input onChange={this.handleTitleChange}
+                                            <span>Title: </span> <Input name='title' onChange={this.handleInputChange}
                                                                         value={this.state.title}/>
                                             {' '}
-                                            <span>Words </span> <Input onChange={this.handleWordChange}
+                                            <span>Words </span> <Input name='wordCount' onChange={this.handleInputChange}
                                                                        value={this.props.blog.wordCount}/>
                                         </Header>
 
@@ -417,7 +656,7 @@ class Blog extends React.Component {
 
                             }
                             <div className='shareIcon clearElem'
-                                style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
+                                 style={{display: 'block', fontSize: '16px', fontFamily: 'georgia'}}>
                                 {
                                     this.state.userLoggedIn
                                         ? <span>
@@ -426,23 +665,29 @@ class Blog extends React.Component {
                                                     ?
                                                     <Popup
                                                         trigger=
-                                                        {<a>
-                                                            <Icon size='small' inverted circular color='blue' name='like outline' />
-                                                            <Icon size='small' inverted circular color='red' name='like' />
-                                                            <br />
-                                                            {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
-                                                        </a>}
+                                                            {<a>
+                                                                <Icon size='small' inverted circular color='blue'
+                                                                      name='like outline'/>
+                                                                <Icon size='small' inverted circular color='red'
+                                                                      name='like'/>
+                                                                <br/>
+                                                                {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
+                                                            </a>}
                                                         content={likeMesage}
                                                     />
 
                                                     :
                                                     <Popup
                                                         trigger=
-                                                        {<span>
-                                                            <Button size='mini' onClick={() => this.updateLikes(this.props.blog.id)} circular color='blue' icon='thumbs up' />
-                                                            <Button size='mini' onClick={() => this.updateLikes(this.props.blog.id)} circular color='orange' icon='like' />
+                                                            {<span>
+                                                            <Button size='mini'
+                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                    circular color='blue' icon='thumbs up'/>
+                                                            <Button size='mini'
+                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                    circular color='orange' icon='like'/>
                                                             <a>
-                                                                <br />
+                                                                <br/>
                                                                 {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
                                                             </a>
                                                         </span>}
@@ -454,23 +699,23 @@ class Blog extends React.Component {
                                         :
                                         <Popup
                                             trigger=
-                                            {<a>
-                                                <Icon size='small' inverted circular color='blue' name='like outline' />
-                                                <Icon size='small' inverted circular color='red' name='like' />
-                                                <br />
-                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
-                                            </a>}
+                                                {<a>
+                                                    <Icon size='small' inverted circular color='blue' name='like outline'/>
+                                                    <Icon size='small' inverted circular color='red' name='like'/>
+                                                    <br/>
+                                                    {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                                </a>}
                                             content={likeMesage}
                                         />
 
                                 }
-                                <br />
-                                <Icon size='large' color='green' name='external share' />
+                                <br/>
+                                <Icon size='large' color='green' name='external share'/>
                                 Share this on: {}
                                 {'  '}
                                 {shares}
-                                <br />
-                                <br />
+                                <br/>
+                                <br/>
                                 <span>
                                     <Popup
                                         trigger={<Image
@@ -486,9 +731,9 @@ class Blog extends React.Component {
                                                 borderRadius: `${(Math.min(
                                                     this.props.blog.author.style.height,
                                                     this.props.blog.author.style.width
-                                                ) +
+                                                    ) +
                                                     10) *
-                                                    this.props.blog.author.style.borderRadius / 2 / 100}px`
+                                                this.props.blog.author.style.borderRadius / 2 / 100}px`
                                             }}
                                         />}
                                     >
@@ -505,20 +750,20 @@ class Blog extends React.Component {
                                     Published
                                     {' '}{moment().to(this.props.blog.date)}
                                 </span>
-                                <br />
-                                <br />
+                                <br/>
+                                <br/>
                                 <span className='info'>
                                     {this.props.blog.author.name} {' '}
                                 </span>
-                                <br />
-                                <br />
+                                <br/>
+                                <br/>
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item color='red'
-                                                        onClick={() => this.openDelete()}>Delete</Dropdown.Item>
+                                                                   onClick={() => this.openDelete()}>Delete</Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >
@@ -541,20 +786,32 @@ class Blog extends React.Component {
                                 <br/>
                                 {
                                     this.state.editorState ?
-                                        <BlogEditor initEditorState={this.state.editorState} mode={'edit'} className='editor' editorState={this.props.blog.body} /> :
+                                        <BlogEditor initEditorState={this.state.editorState} mode={'edit'}
+                                                    className='editor' editorState={this.props.blog.body}/> :
                                         <div>Loading state</div>
                                 }
                             </div>
                             <div>
                                 {
                                     this.props.blog.editMode ?
-                                        <Form style={{ padding: '2em 2em 2em 2em' }}>
-                                        <Form.TextArea maxLength='140' onChange={this.handleAboutChange} label='About your blog'
-                                            value={this.props.blog.about} />
+                                        <Form style={{padding: '2em 2em 2em 2em'}}>
+                                            <Form.TextArea maxLength='140' onChange={this.handleAboutChange}
+                                                           label='About your blog'
+                                                           value={this.props.blog.about}/>
                                         </Form>
                                         : null
                                 }
                             </div>
+                            <Header as='h2' icon>
+                                <Icon name='comments' color={'green'}/>
+                                Have a comment?
+                                <Header.Subheader>
+                                    Use facebook, Google + or Disqus to comment on this blog.
+                                </Header.Subheader>
+                            </Header>
+                            <Tab menu={{attached: true}} panes={comments}/>
+
+
                         </div>
                         : <div>
                             Content not found!
@@ -587,7 +844,7 @@ Blog.propTypes = {
     ]),
     vars: PropTypes.object.isRequired,
     blogActions: PropTypes.object.isRequired,
-    navigateBlogs:PropTypes.func.isRequired
+    navigateBlogs: PropTypes.func.isRequired
 
 }
 

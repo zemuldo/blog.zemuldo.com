@@ -81,7 +81,7 @@ class LiveChat extends React.Component {
   };
   handlePortalOpen = () => {
     if (this.state.chat.length === 0) {
-      this.setState({chat: [{by: 'bot', text: 'Hi i am zemuldo profile bot, just here to help'}]})
+      this.setState({chat: [{by: 'bot', text: 'Hi i am zemuldo profile chat, just here to help'}]})
     }
     this.setState({portalOpen: true, checked: false})
   };
@@ -189,7 +189,7 @@ class LiveChat extends React.Component {
                               <div>
                                 <div className='alignCenter'>
                                   <Header>Zemuldo Profile Bot</Header>
-                                  <Image avatar size={'small'} src={this.props.vars.env.static+'img/bot/bot.gif'} />
+                                  <Image avatar size={'small'} src={this.props.vars.env.static+'img/chat/bot.gif'} />
                                   <hr color='blue' />
                                 </div>
                                 <div className='chatContainer' style={{overflowX: 'hidden',overflowY: 'scroll', height: '300px'}}>

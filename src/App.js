@@ -3,7 +3,7 @@ import Main from './routes'
 import NavBar from './menu/navBar'
 import Footer from './partials/footer'
 import ReviewPortal from './partials/portal'
-import LiveChat from './bot/chat'
+import LiveChat from './chat/bot'
 
 export default class App extends React.Component {
   constructor (props) {
