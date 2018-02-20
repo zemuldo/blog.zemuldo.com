@@ -52,19 +52,39 @@ export function updateReplies(c, cs) {
     return new Promise(function (resolve, reject) {
         cs.forEach(function (thisC) {
             if (thisC._id === c.parrent_id) {
-                console.log('+++++++++++parent found')
                 thisC.chat ? thisC.chat.comments.push(c) : thisC.chat = {
                     comments: [
                         c
                     ]
                 }
-                resolve(cs)
                 return true
             }
             if (thisC.chat) {
                 updateReplies(c, thisC.chat.comments)
             }
         })
+        resolve(cs)
+    })
+        .then(o=>{
+            return o
+        })
+        .catch(e=>{
+            console.log(e)
+        })
+}
+
+export function deleteComments(id, cs) {
+    return new Promise(function (resolve, reject) {
+        cs.map(function (thisC,index) {
+            if (thisC._id === id) {
+                cs.splice(index, 1)
+                return true
+            }
+            if (thisC.chat) {
+                deleteComments(id, thisC.chat.comments)
+            }
+        })
+        resolve(cs)
     })
         .then(o=>{
             return o

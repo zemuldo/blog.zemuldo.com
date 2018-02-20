@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies} from '../util'
+import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments} from '../util'
 import {
     convertFromRaw,
     EditorState,
@@ -53,7 +53,7 @@ class Blog extends React.Component {
                                     name: 'Danstan Onyango',
                                     avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                 },
-                                _id: '565465b45gggg45y454545yg4yg',
+                                _id: '1111111111111111111',
                                 mess: 'Reply 1 Hello world',
                                 date: new Date().toISOString(),
                                 chat: {
@@ -63,7 +63,7 @@ class Blog extends React.Component {
                                                 name: 'Danstan Onyango',
                                                 avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                             },
-                                            _id: '565465b45g4545y4433435yg4yg',
+                                            _id: '2222222222222222222222222222',
                                             mess: 'Reply 1 Hello world',
                                             date: new Date().toISOString(),
                                             chat: {
@@ -73,7 +73,7 @@ class Blog extends React.Component {
                                                             name: 'Danstan Onyango',
                                                             avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                                         },
-                                                        _id: '565465b45g4547775y4433435yg4yg',
+                                                        _id: '333333333333333333333333333333',
                                                         mess: 'Reply 1 Hello world',
                                                         date: new Date().toISOString()
                                                     },
@@ -82,7 +82,7 @@ class Blog extends React.Component {
                                                             name: 'Danstan Onyango',
                                                             avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                                         },
-                                                        _id: '565465b48989894777545y454545yg4yg',
+                                                        _id: '444444444444444444444444444444444',
                                                         mess: 'Reply 2 Hello world',
                                                         date: new Date().toISOString()
                                                     },
@@ -91,7 +91,7 @@ class Blog extends React.Component {
                                                             name: 'Danstan Onyango',
                                                             avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                                         },
-                                                        _id: '565465b432323277735y454545yg4yg',
+                                                        _id: '5555555555555555555555555555555555',
                                                         mess: 'Reply 3 Hello world',
                                                         date: new Date().toISOString()
                                                     }
@@ -103,7 +103,7 @@ class Blog extends React.Component {
                                                 name: 'Danstan Onyango',
                                                 avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                             },
-                                            _id: '565465b48989894545y454545yg4yg',
+                                            _id: '6666666666666666666666666666666',
                                             mess: 'Reply 2 Hello world',
                                             date: new Date().toISOString()
                                         },
@@ -112,7 +112,7 @@ class Blog extends React.Component {
                                                 name: 'Danstan Onyango',
                                                 avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                             },
-                                            _id: '565465b432323235y454545yg4yg',
+                                            _id: '7777777777777777777777777777',
                                             mess: 'Reply 3 Hello world',
                                             date: new Date().toISOString()
                                         }
@@ -124,7 +124,7 @@ class Blog extends React.Component {
                                     name: 'Danstan Onyango',
                                     avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                 },
-                                _id: '565465rererer5y454545yg4yg',
+                                _id: '88888888888888888888888888888888888888',
                                 mess: 'Reply 2 Hello world',
                                 date: new Date().toISOString()
                             },
@@ -133,7 +133,7 @@ class Blog extends React.Component {
                                     name: 'Danstan Onyango',
                                     avatar: '/avatars/5a756836ff08f01a6637572b.png'
                                 },
-                                _id: '565465bioiooioioy454545yg4yg',
+                                _id: '999999999999999999999999',
                                 mess: 'Reply 3 Hello world',
                                 date: new Date().toISOString()
                             }
@@ -145,7 +145,7 @@ class Blog extends React.Component {
                         name: 'Danstan Onyango',
                         avatar: '/avatars/5a756836ff08f01a6637572b.png'
                     },
-                    _id: '565465b43434343434y454545yg4yg',
+                    _id: '00000000000000000000000000000000000000',
                     mess: 'Mess 2 Hello world',
                     date: new Date().toISOString()
                 },
@@ -154,7 +154,7 @@ class Blog extends React.Component {
                         name: 'Danstan Onyango',
                         avatar: '/avatars/5a756836ff08f01a6637572b.png'
                     },
-                    _id: '565465b45g4454545yg4yg',
+                    _id: 'ffffffffffffffffffffffffffffffffffffff',
                     mess: 'Mess 3 Hello world',
                     date: new Date().toISOString()
                 }
@@ -177,6 +177,7 @@ class Blog extends React.Component {
         this.submitComment = this.submitComment.bind(this)
         this.onCommentChange = this.onCommentChange.bind(this)
         this.updateComments = this.updateComments.bind(this)
+        this.deleteComments =this.deleteComments.bind(this)
     }
 
     handleAboutChange(e, data) {
@@ -456,6 +457,17 @@ class Blog extends React.Component {
         this.setState({replyComment: _id})
     }
 
+    deleteComments(id){
+        deleteComments(id,this.state.comments)
+            .then(oo=>{
+                this.setState({comments: oo})
+
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+    }
+
     onCommentChange(e) {
         this.setState({mess: e.target.value})
     }
@@ -504,9 +516,10 @@ class Blog extends React.Component {
                                 <Comment.Metadata>
                                     <span>{moment().to(c.date)}</span>
                                 </Comment.Metadata>
-                                <Comment.Text>{c.mess}</Comment.Text>
+                                <Comment.Text>{c.mess} {' '} {c._id}</Comment.Text>
                                 <Comment.Actions>
                                     <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
+                                    <a onClick={() => this.deleteComments(c._id)}>Delete</a>
                                     {
                                         this.state.replyComment === c._id ?
                                             <Form reply>
@@ -515,8 +528,9 @@ class Blog extends React.Component {
                                                     onClick={() => this.updateComments({
                                                         parrent_id:c._id,
                                                         mess: this.state.mess,
-                                                        _id: 'iwuewiuiwuwuieuwie',
-                                                        author: {name:'Omera Zemuldo', avatar: '/avatars/5a756836ff08f01a6637572b.png'}
+                                                        _id: new Date().toTimeString(),
+                                                        owner:this.props.user._id,
+                                                        author: {name:this.props.user.name, avatar: this.props.user.avatarURL}
                                                     })}
                                                     content='Add Reply'
                                                     labelPosition='left'
