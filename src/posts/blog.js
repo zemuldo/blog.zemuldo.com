@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments} from '../util'
+import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments, notifyMe} from '../util'
 import {
     convertFromRaw,
     EditorState,
@@ -37,7 +37,9 @@ class Blog extends React.Component {
             editorState: null,
             blogUrl: blogUrl(this.props.blog),
             replyComment: '',
-            comments: []
+            comments: [],
+            cdelopen:false,
+            commentToDelete:null
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -58,7 +60,18 @@ class Blog extends React.Component {
         this.updateComments = this.updateComments.bind(this)
         this.deleteComments = this.deleteComments.bind(this)
         this.getComments = this.getComments.bind(this)
+        this.showDeleteComment=this.showDeleteComment.bind(this)
+        this.handleConfirmDeleteComment=this.handleConfirmDeleteComment.bind(this)
+        this.handleCancelDeleteComment =  this.handleCancelDeleteComment.bind(this)
     }
+    show = dimmer => () => this.setState({ dimmer, open: true })
+    close = () => this.setState({ open: false })
+    showDeleteComment = (_id) => this.setState({ cdelopen: true ,commentToDelete:_id})
+    handleConfirmDeleteComment = () => {
+        this.deleteComments(this.state.commentToDelete)
+        this.setState({ cdelopen: false })
+    }
+    handleCancelDeleteComment = () => this.setState({ cdelopen: false })
 
     handleAboutChange(e, data) {
         this.props.blogActions.updateBlog({about: data.value})
@@ -177,7 +190,6 @@ class Blog extends React.Component {
             'queryData': {postID:this.props.blog._id}}
         )
             .then(o=>{
-                console.log(o.data)
                 this.setState({comments:o.data.comments})
             })
             .catch(e=>{
@@ -349,14 +361,32 @@ class Blog extends React.Component {
     }
 
     setReplyComment(_id) {
+        if(!this.props.user || !this.props.user._id){
+            this.setState({open:true})
+            return false
+        }
         this.setState({replyComment: _id})
     }
 
-    deleteComments(id) {
-        deleteComments(id, this.state.comments)
+    deleteComments(_id) {
+        axios.post(env.httpURL,{
+            queryMethod: 'deleteComment',
+            'queryData': {
+                postID: this.props.blog._id,
+                _id: _id
+            }
+        })
             .then(oo => {
-                this.setState({comments: oo})
-
+                if(oo.data.nModified===1){
+                    return deleteComments(_id, this.state.comments)
+                }
+            })
+            .then(o=>{
+                if(o.constructor===Array){
+                    this.setState({comments: o})
+                    notifyMe('Comment was deleted')
+                }
+                this.setState({commentToDelete:null})
             })
             .catch(e => {
                 console.log(e)
@@ -368,6 +398,10 @@ class Blog extends React.Component {
     }
 
     submitComment() {
+        if(!this.props.user){
+           this.setState({open:true})
+            return false
+        }
 
         if (this.state.mess.length > 1) {
             axios.post(env.httpURL,{
@@ -427,6 +461,7 @@ class Blog extends React.Component {
     }
 
     render() {
+        const { open, dimmer } = this.state
         const BlogComments = (arr) => {
             return (<Comment.Group threaded>
                 {arr.map(function (c) {
@@ -442,7 +477,10 @@ class Blog extends React.Component {
                                 <Comment.Text>{c.mess}{' '}{c._id}</Comment.Text>
                                 <Comment.Actions>
                                     <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
-                                    <a onClick={() => this.deleteComments(c._id)}>Delete</a>
+                                    {
+                                        this.props.user && this.props.user._id && this.props.user._id===c.userID?
+                                            <a onClick={() => this.showDeleteComment(c._id)}>Delete</a>:null
+                                    }
                                     {
                                         this.state.replyComment === c._id ?
                                             <Form reply>
@@ -532,6 +570,11 @@ class Blog extends React.Component {
         })
         return (
             <div>
+                <Confirm
+                    open={this.state.cdelopen}
+                    onCancel={this.handleCancelDeleteComment}
+                    onConfirm={this.handleConfirmDeleteComment}
+                />
                 <Modal dimmer open={this.state.showDelete}>
                     <Modal.Header>This Post will be deleted</Modal.Header>
                     <Modal.Content image>
@@ -569,6 +612,21 @@ class Blog extends React.Component {
                         </Button>
                         <Button color='red' icon='checkmark' labelPosition='right' content='Delete'
                                 onClick={() => this.deletBlog(this.props.blog.id)}/>
+                    </Modal.Actions>
+                </Modal>
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Select a Photo</Modal.Header>
+                    <Modal.Content image>
+                        <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' />
+                        <Modal.Description>
+                            <Header>Login first</Header>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button color='black' onClick={this.close}>
+                            Nope
+                        </Button>
+                        <Button positive icon='checkmark' labelPosition='right' content="Take me to Login" onClick={this.close} />
                     </Modal.Actions>
                 </Modal>
                 {
