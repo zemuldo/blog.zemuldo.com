@@ -51,7 +51,8 @@ export function blogUrl(b) {
 export function updateReplies(c, cs) {
     return new Promise(function (resolve, reject) {
         cs.forEach(function (thisC) {
-            if (thisC._id === c.parrent_id) {
+            if (thisC._id === c.parent_id) {
+                console.log('+++++++++++++found')
                 thisC.chat ? thisC.chat.comments.push(c) : thisC.chat = {
                     comments: [
                         c

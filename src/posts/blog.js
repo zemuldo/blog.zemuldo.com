@@ -37,128 +37,7 @@ class Blog extends React.Component {
             editorState: null,
             blogUrl: blogUrl(this.props.blog),
             replyComment: '',
-            comments: [
-                {
-                    author: {
-                        name: 'Danstan Onyango',
-                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                    },
-                    _id: '565465b45g4545y454545yg4yg',
-                    mess: 'Mess 1 Hello world',
-                    date: new Date().toISOString(),
-                    chat: {
-                        comments: [
-                            {
-                                author: {
-                                    name: 'Danstan Onyango',
-                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                },
-                                _id: '1111111111111111111',
-                                mess: 'Reply 1 Hello world',
-                                date: new Date().toISOString(),
-                                chat: {
-                                    comments: [
-                                        {
-                                            author: {
-                                                name: 'Danstan Onyango',
-                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                            },
-                                            _id: '2222222222222222222222222222',
-                                            mess: 'Reply 1 Hello world',
-                                            date: new Date().toISOString(),
-                                            chat: {
-                                                comments: [
-                                                    {
-                                                        author: {
-                                                            name: 'Danstan Onyango',
-                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                                        },
-                                                        _id: '333333333333333333333333333333',
-                                                        mess: 'Reply 1 Hello world',
-                                                        date: new Date().toISOString()
-                                                    },
-                                                    {
-                                                        author: {
-                                                            name: 'Danstan Onyango',
-                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                                        },
-                                                        _id: '444444444444444444444444444444444',
-                                                        mess: 'Reply 2 Hello world',
-                                                        date: new Date().toISOString()
-                                                    },
-                                                    {
-                                                        author: {
-                                                            name: 'Danstan Onyango',
-                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                                        },
-                                                        _id: '5555555555555555555555555555555555',
-                                                        mess: 'Reply 3 Hello world',
-                                                        date: new Date().toISOString()
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            author: {
-                                                name: 'Danstan Onyango',
-                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                            },
-                                            _id: '6666666666666666666666666666666',
-                                            mess: 'Reply 2 Hello world',
-                                            date: new Date().toISOString()
-                                        },
-                                        {
-                                            author: {
-                                                name: 'Danstan Onyango',
-                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                            },
-                                            _id: '7777777777777777777777777777',
-                                            mess: 'Reply 3 Hello world',
-                                            date: new Date().toISOString()
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                author: {
-                                    name: 'Danstan Onyango',
-                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                },
-                                _id: '88888888888888888888888888888888888888',
-                                mess: 'Reply 2 Hello world',
-                                date: new Date().toISOString()
-                            },
-                            {
-                                author: {
-                                    name: 'Danstan Onyango',
-                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                },
-                                _id: '999999999999999999999999',
-                                mess: 'Reply 3 Hello world',
-                                date: new Date().toISOString()
-                            }
-                        ]
-                    }
-                },
-                {
-                    author: {
-                        name: 'Danstan Onyango',
-                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                    },
-                    _id: '00000000000000000000000000000000000000',
-                    mess: 'Mess 2 Hello world',
-                    date: new Date().toISOString()
-                },
-                {
-                    author: {
-                        name: 'Danstan Onyango',
-                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                    },
-                    _id: 'ffffffffffffffffffffffffffffffffffffff',
-                    mess: 'Mess 3 Hello world',
-                    date: new Date().toISOString()
-                }
-            ]
+            comments: []
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -177,7 +56,8 @@ class Blog extends React.Component {
         this.submitComment = this.submitComment.bind(this)
         this.onCommentChange = this.onCommentChange.bind(this)
         this.updateComments = this.updateComments.bind(this)
-        this.deleteComments =this.deleteComments.bind(this)
+        this.deleteComments = this.deleteComments.bind(this)
+        this.getComments = this.getComments.bind(this)
     }
 
     handleAboutChange(e, data) {
@@ -291,7 +171,22 @@ class Blog extends React.Component {
         localStorage.removeItem('editBlog')
     }
 
+    getComments(){
+        axios.post(env.httpURL,{
+            'queryMethod': 'getComments',
+            'queryData': {postID:this.props.blog._id}}
+        )
+            .then(o=>{
+                console.log(o.data)
+                this.setState({comments:o.data.comments})
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+    }
+
     componentDidMount() {
+        this.getComments()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
@@ -457,13 +352,13 @@ class Blog extends React.Component {
         this.setState({replyComment: _id})
     }
 
-    deleteComments(id){
-        deleteComments(id,this.state.comments)
-            .then(oo=>{
+    deleteComments(id) {
+        deleteComments(id, this.state.comments)
+            .then(oo => {
                 this.setState({comments: oo})
 
             })
-            .catch(e=>{
+            .catch(e => {
                 console.log(e)
             })
     }
@@ -473,18 +368,37 @@ class Blog extends React.Component {
     }
 
     submitComment() {
+
         if (this.state.mess.length > 1) {
-            this.setState({
-                comments: [...this.state.comments, {
+            axios.post(env.httpURL,{
+                queryMethod:"comment",
+                queryData:{
+                    postID:this.props.blog._id,
                     author: {
                         name: this.props.user.name,
                         avatar: this.props.user.avatarURL,
                     },
-                    id: this.state.mess,
+                    userID:this.props.user._id,
                     mess: this.state.mess,
-                    date: new Date().toISOString()
-                }], mess: ''
+                }
             })
+                .then(o=>{
+                    this.setState({
+                        comments: [...this.state.comments, {
+                            author: {
+                                name: this.props.user.name,
+                                avatar: this.props.user.avatarURL,
+                            },
+                            postID:this.props.blog._id,
+                            _id:o.data._id,
+                            mess: this.state.mess,
+                            date: new Date().toISOString()
+                        }], mess: ''
+                    })
+                })
+                .catch(e=>{
+                    console.log(e)
+                })
         }
 
     }
@@ -492,12 +406,21 @@ class Blog extends React.Component {
     updateComments(c) {
         let o = this.state.comments;
         this.setReplyComment('')
-        updateReplies(c, o)
-            .then(oo=>{
-                this.setState({comments: oo})
-
+        axios.post(env.httpURL,{
+            queryMethod:"replyComment",
+            queryData:c
+        })
+            .then(oo => {
+                console.log(oo)
+                c._id = oo.data._id
+                console.log(c)
+                return updateReplies(c, o)
             })
-            .catch(e=>{
+            .then(oo=>{
+                console.log(oo)
+                this.setState({comments: oo})
+            })
+            .catch(e => {
                 console.log(e)
             })
 
@@ -516,7 +439,7 @@ class Blog extends React.Component {
                                 <Comment.Metadata>
                                     <span>{moment().to(c.date)}</span>
                                 </Comment.Metadata>
-                                <Comment.Text>{c.mess} {' '} {c._id}</Comment.Text>
+                                <Comment.Text>{c.mess}{' '}{c._id}</Comment.Text>
                                 <Comment.Actions>
                                     <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
                                     <a onClick={() => this.deleteComments(c._id)}>Delete</a>
@@ -526,11 +449,14 @@ class Blog extends React.Component {
                                                 <Form.TextArea onChange={this.onCommentChange}/>
                                                 <Button
                                                     onClick={() => this.updateComments({
-                                                        parrent_id:c._id,
+                                                        postID: this.props.blog._id,
+                                                        parent_id: c._id,
                                                         mess: this.state.mess,
-                                                        _id: new Date().toTimeString(),
-                                                        owner:this.props.user._id,
-                                                        author: {name:this.props.user.name, avatar: this.props.user.avatarURL}
+                                                        userID: this.props.user._id,
+                                                        author: {
+                                                            name: this.props.user.name,
+                                                            avatar: this.props.user.avatarURL
+                                                        }
                                                     })}
                                                     content='Add Reply'
                                                     labelPosition='left'
