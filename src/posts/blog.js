@@ -19,6 +19,7 @@ import {
 } from '../blogEditor/editorToolkit';
 import {socialShares} from '../env'
 import FacebookProvider, {Comments} from 'react-facebook'
+import LoginForm from '../profile/lognForm'
 import DisqusThread from '../chat/disqus';
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -190,6 +191,7 @@ class Blog extends React.Component {
             'queryData': {postID:this.props.blog._id}}
         )
             .then(o=>{
+                console.log(o)
                 this.setState({comments:o.data.comments})
             })
             .catch(e=>{
@@ -465,7 +467,6 @@ class Blog extends React.Component {
         const BlogComments = (arr) => {
             return (<Comment.Group threaded>
                 {arr.map(function (c) {
-                    let query = c._id;
                     return (
                         <Comment key={c._id}>
                             <Comment.Avatar as='a' src={env.httpURL + c.author.avatar}/>
@@ -474,7 +475,7 @@ class Blog extends React.Component {
                                 <Comment.Metadata>
                                     <span>{moment().to(c.date)}</span>
                                 </Comment.Metadata>
-                                <Comment.Text>{c.mess}{' '}{c._id}</Comment.Text>
+                                <Comment.Text>{c.mess}</Comment.Text>
                                 <Comment.Actions>
                                     <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
                                     {
@@ -617,9 +618,19 @@ class Blog extends React.Component {
                 <Modal dimmer={dimmer} open={open} onClose={this.close}>
                     <Modal.Header>Select a Photo</Modal.Header>
                     <Modal.Content image>
-                        <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' />
                         <Modal.Description>
-                            <Header>Login first</Header>
+                            <LoginForm
+                                color={this.props.vars.colors[0]}
+                                logingin={this.state.logingin}
+                                handSwichReg={this.handSwichReg}
+                                handleUnameChange={this.handleUnameChange}
+                                handlePasswordChange={this.handlePasswordChange}
+                                onLoginClick={this.onLoginClick}
+                                errorDetails={this.state.errorDetails}
+                                error={this.state.error}
+                                success={this.state.success}
+                                hideMessage={this.state.hideMessage}
+                            />
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
@@ -808,8 +819,6 @@ class Blog extends React.Component {
                                 </Header.Subheader>
                             </Header>
                             <Tab menu={{attached: true}} panes={comments}/>
-
-
                         </div>
                         : <div>
                             Content not found!
