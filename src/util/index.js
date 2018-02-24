@@ -51,20 +51,19 @@ export function blogUrl(b) {
 export function updateReplies(c, cs) {
     return new Promise(function (resolve, reject) {
         cs.forEach(function (thisC) {
-            if (thisC._id === c.parrent_id) {
-                console.log('+++++++++++parent found')
+            if (thisC._id === c.parent_id) {
                 thisC.chat ? thisC.chat.comments.push(c) : thisC.chat = {
                     comments: [
                         c
                     ]
                 }
-                resolve(cs)
                 return true
             }
             if (thisC.chat) {
                 updateReplies(c, thisC.chat.comments)
             }
         })
+        resolve(cs)
     })
         .then(o=>{
             return o
@@ -72,4 +71,57 @@ export function updateReplies(c, cs) {
         .catch(e=>{
             console.log(e)
         })
+}
+
+export function deleteComments(_id, cs) {
+    return new Promise(function (resolve, reject) {
+        cs.map(function (thisC,index) {
+            if (thisC._id === _id) {
+                cs.splice(index, 1)
+                return true
+            }
+            if (thisC.chat) {
+                deleteComments(_id, thisC.chat.comments)
+            }
+        })
+        resolve(cs)
+    })
+        .then(o=>{
+            return o
+        })
+        .catch(e=>{
+            console.log(e)
+        })
+}
+
+export function notifyMe(m) {
+    // Let's check if the browser supports notifications
+    if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        let notification = new Notification(m);
+        setTimeout(function () {
+            notification.close()
+        },8000)
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+        Notification.requestPermission(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                let notification = new Notification(m);
+                setTimeout(function () {
+                    notification.close()
+                },8000)
+            }
+        });
+    }
+
+    // At last, if the user has denied notifications, and you
+    // want to be respectful there is no need to bother them any more.
 }

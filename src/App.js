@@ -14,6 +14,9 @@ export default class App extends React.Component {
   resize = () => this.forceUpdate();
 
   componentDidMount () {
+      Notification.requestPermission().then(function(result) {
+          console.log(result);
+      })
     window.addEventListener('resize', this.resize)
   };
 

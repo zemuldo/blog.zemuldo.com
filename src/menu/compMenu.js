@@ -48,7 +48,7 @@ class ComMenu extends React.Component {
    };
    handleLogoutinButton = () => {
       localStorage.removeItem('user')
-      this.props.userActions.updateUser({id: null})
+      this.props.userActions.updateUser({id: null,_id:null})
    };
    handleCreateNew = () => {
       let editorState = window.localStorage.getItem('draftContent')

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment} from 'semantic-ui-react'
+import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies} from '../util'
+import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments, notifyMe} from '../util'
 import {
     convertFromRaw,
     EditorState,
@@ -19,6 +19,7 @@ import {
 } from '../blogEditor/editorToolkit';
 import {socialShares} from '../env'
 import FacebookProvider, {Comments} from 'react-facebook'
+import LoginForm from '../profile/lognForm'
 import DisqusThread from '../chat/disqus';
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -37,128 +38,9 @@ class Blog extends React.Component {
             editorState: null,
             blogUrl: blogUrl(this.props.blog),
             replyComment: '',
-            comments: [
-                {
-                    author: {
-                        name: 'Danstan Onyango',
-                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                    },
-                    _id: '565465b45g4545y454545yg4yg',
-                    mess: 'Mess 1 Hello world',
-                    date: new Date().toISOString(),
-                    chat: {
-                        comments: [
-                            {
-                                author: {
-                                    name: 'Danstan Onyango',
-                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                },
-                                _id: '565465b45gggg45y454545yg4yg',
-                                mess: 'Reply 1 Hello world',
-                                date: new Date().toISOString(),
-                                chat: {
-                                    comments: [
-                                        {
-                                            author: {
-                                                name: 'Danstan Onyango',
-                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                            },
-                                            _id: '565465b45g4545y4433435yg4yg',
-                                            mess: 'Reply 1 Hello world',
-                                            date: new Date().toISOString(),
-                                            chat: {
-                                                comments: [
-                                                    {
-                                                        author: {
-                                                            name: 'Danstan Onyango',
-                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                                        },
-                                                        _id: '565465b45g4547775y4433435yg4yg',
-                                                        mess: 'Reply 1 Hello world',
-                                                        date: new Date().toISOString()
-                                                    },
-                                                    {
-                                                        author: {
-                                                            name: 'Danstan Onyango',
-                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                                        },
-                                                        _id: '565465b48989894777545y454545yg4yg',
-                                                        mess: 'Reply 2 Hello world',
-                                                        date: new Date().toISOString()
-                                                    },
-                                                    {
-                                                        author: {
-                                                            name: 'Danstan Onyango',
-                                                            avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                                        },
-                                                        _id: '565465b432323277735y454545yg4yg',
-                                                        mess: 'Reply 3 Hello world',
-                                                        date: new Date().toISOString()
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            author: {
-                                                name: 'Danstan Onyango',
-                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                            },
-                                            _id: '565465b48989894545y454545yg4yg',
-                                            mess: 'Reply 2 Hello world',
-                                            date: new Date().toISOString()
-                                        },
-                                        {
-                                            author: {
-                                                name: 'Danstan Onyango',
-                                                avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                            },
-                                            _id: '565465b432323235y454545yg4yg',
-                                            mess: 'Reply 3 Hello world',
-                                            date: new Date().toISOString()
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                author: {
-                                    name: 'Danstan Onyango',
-                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                },
-                                _id: '565465rererer5y454545yg4yg',
-                                mess: 'Reply 2 Hello world',
-                                date: new Date().toISOString()
-                            },
-                            {
-                                author: {
-                                    name: 'Danstan Onyango',
-                                    avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                                },
-                                _id: '565465bioiooioioy454545yg4yg',
-                                mess: 'Reply 3 Hello world',
-                                date: new Date().toISOString()
-                            }
-                        ]
-                    }
-                },
-                {
-                    author: {
-                        name: 'Danstan Onyango',
-                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                    },
-                    _id: '565465b43434343434y454545yg4yg',
-                    mess: 'Mess 2 Hello world',
-                    date: new Date().toISOString()
-                },
-                {
-                    author: {
-                        name: 'Danstan Onyango',
-                        avatar: '/avatars/5a756836ff08f01a6637572b.png'
-                    },
-                    _id: '565465b45g4454545yg4yg',
-                    mess: 'Mess 3 Hello world',
-                    date: new Date().toISOString()
-                }
-            ]
+            comments: [],
+            cdelopen:false,
+            commentToDelete:null
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.updateLikes = this.updateLikes.bind(this)
@@ -177,7 +59,20 @@ class Blog extends React.Component {
         this.submitComment = this.submitComment.bind(this)
         this.onCommentChange = this.onCommentChange.bind(this)
         this.updateComments = this.updateComments.bind(this)
+        this.deleteComments = this.deleteComments.bind(this)
+        this.getComments = this.getComments.bind(this)
+        this.showDeleteComment=this.showDeleteComment.bind(this)
+        this.handleConfirmDeleteComment=this.handleConfirmDeleteComment.bind(this)
+        this.handleCancelDeleteComment =  this.handleCancelDeleteComment.bind(this)
     }
+    show = dimmer => () => this.setState({ dimmer, open: true })
+    close = () => this.setState({ open: false })
+    showDeleteComment = (_id) => this.setState({ cdelopen: true ,commentToDelete:_id})
+    handleConfirmDeleteComment = () => {
+        this.deleteComments(this.state.commentToDelete)
+        this.setState({ cdelopen: false })
+    }
+    handleCancelDeleteComment = () => this.setState({ cdelopen: false })
 
     handleAboutChange(e, data) {
         this.props.blogActions.updateBlog({about: data.value})
@@ -290,7 +185,22 @@ class Blog extends React.Component {
         localStorage.removeItem('editBlog')
     }
 
+    getComments(){
+        axios.post(env.httpURL,{
+            'queryMethod': 'getComments',
+            'queryData': {postID:this.props.blog._id}}
+        )
+            .then(o=>{
+                console.log(o)
+                this.setState({comments:o.data.comments})
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+    }
+
     componentDidMount() {
+        this.getComments()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
@@ -453,7 +363,36 @@ class Blog extends React.Component {
     }
 
     setReplyComment(_id) {
+        if(!this.props.user || !this.props.user._id){
+            this.setState({open:true})
+            return false
+        }
         this.setState({replyComment: _id})
+    }
+
+    deleteComments(_id) {
+        axios.post(env.httpURL,{
+            queryMethod: 'deleteComment',
+            'queryData': {
+                postID: this.props.blog._id,
+                _id: _id
+            }
+        })
+            .then(oo => {
+                if(oo.data.nModified===1){
+                    return deleteComments(_id, this.state.comments)
+                }
+            })
+            .then(o=>{
+                if(o.constructor===Array){
+                    this.setState({comments: o})
+                    notifyMe('Comment was deleted')
+                }
+                this.setState({commentToDelete:null})
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     onCommentChange(e) {
@@ -461,18 +400,41 @@ class Blog extends React.Component {
     }
 
     submitComment() {
+        if(!this.props.user){
+           this.setState({open:true})
+            return false
+        }
+
         if (this.state.mess.length > 1) {
-            this.setState({
-                comments: [...this.state.comments, {
+            axios.post(env.httpURL,{
+                queryMethod:"comment",
+                queryData:{
+                    postID:this.props.blog._id,
                     author: {
                         name: this.props.user.name,
                         avatar: this.props.user.avatarURL,
                     },
-                    id: this.state.mess,
+                    userID:this.props.user._id,
                     mess: this.state.mess,
-                    date: new Date().toISOString()
-                }], mess: ''
+                }
             })
+                .then(o=>{
+                    this.setState({
+                        comments: [...this.state.comments, {
+                            author: {
+                                name: this.props.user.name,
+                                avatar: this.props.user.avatarURL,
+                            },
+                            postID:this.props.blog._id,
+                            _id:o.data._id,
+                            mess: this.state.mess,
+                            date: new Date().toISOString()
+                        }], mess: ''
+                    })
+                })
+                .catch(e=>{
+                    console.log(e)
+                })
         }
 
     }
@@ -480,22 +442,31 @@ class Blog extends React.Component {
     updateComments(c) {
         let o = this.state.comments;
         this.setReplyComment('')
-        updateReplies(c, o)
-            .then(oo=>{
-                this.setState({comments: oo})
-
+        axios.post(env.httpURL,{
+            queryMethod:"replyComment",
+            queryData:c
+        })
+            .then(oo => {
+                console.log(oo)
+                c._id = oo.data._id
+                console.log(c)
+                return updateReplies(c, o)
             })
-            .catch(e=>{
+            .then(oo=>{
+                console.log(oo)
+                this.setState({comments: oo})
+            })
+            .catch(e => {
                 console.log(e)
             })
 
     }
 
     render() {
+        const { open, dimmer } = this.state
         const BlogComments = (arr) => {
             return (<Comment.Group threaded>
                 {arr.map(function (c) {
-                    let query = c._id;
                     return (
                         <Comment key={c._id}>
                             <Comment.Avatar as='a' src={env.httpURL + c.author.avatar}/>
@@ -508,15 +479,23 @@ class Blog extends React.Component {
                                 <Comment.Actions>
                                     <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
                                     {
+                                        this.props.user && this.props.user._id && this.props.user._id===c.userID?
+                                            <a onClick={() => this.showDeleteComment(c._id)}>Delete</a>:null
+                                    }
+                                    {
                                         this.state.replyComment === c._id ?
                                             <Form reply>
                                                 <Form.TextArea onChange={this.onCommentChange}/>
                                                 <Button
                                                     onClick={() => this.updateComments({
-                                                        parrent_id:c._id,
+                                                        postID: this.props.blog._id,
+                                                        parent_id: c._id,
                                                         mess: this.state.mess,
-                                                        _id: 'iwuewiuiwuwuieuwie',
-                                                        author: {name:'Omera Zemuldo', avatar: '/avatars/5a756836ff08f01a6637572b.png'}
+                                                        userID: this.props.user._id,
+                                                        author: {
+                                                            name: this.props.user.name,
+                                                            avatar: this.props.user.avatarURL
+                                                        }
                                                     })}
                                                     content='Add Reply'
                                                     labelPosition='left'
@@ -592,6 +571,11 @@ class Blog extends React.Component {
         })
         return (
             <div>
+                <Confirm
+                    open={this.state.cdelopen}
+                    onCancel={this.handleCancelDeleteComment}
+                    onConfirm={this.handleConfirmDeleteComment}
+                />
                 <Modal dimmer open={this.state.showDelete}>
                     <Modal.Header>This Post will be deleted</Modal.Header>
                     <Modal.Content image>
@@ -629,6 +613,31 @@ class Blog extends React.Component {
                         </Button>
                         <Button color='red' icon='checkmark' labelPosition='right' content='Delete'
                                 onClick={() => this.deletBlog(this.props.blog.id)}/>
+                    </Modal.Actions>
+                </Modal>
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Select a Photo</Modal.Header>
+                    <Modal.Content image>
+                        <Modal.Description>
+                            <LoginForm
+                                color={this.props.vars.colors[0]}
+                                logingin={this.state.logingin}
+                                handSwichReg={this.handSwichReg}
+                                handleUnameChange={this.handleUnameChange}
+                                handlePasswordChange={this.handlePasswordChange}
+                                onLoginClick={this.onLoginClick}
+                                errorDetails={this.state.errorDetails}
+                                error={this.state.error}
+                                success={this.state.success}
+                                hideMessage={this.state.hideMessage}
+                            />
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button color='black' onClick={this.close}>
+                            Nope
+                        </Button>
+                        <Button positive icon='checkmark' labelPosition='right' content="Take me to Login" onClick={this.close} />
                     </Modal.Actions>
                 </Modal>
                 {
@@ -810,8 +819,6 @@ class Blog extends React.Component {
                                 </Header.Subheader>
                             </Header>
                             <Tab menu={{attached: true}} panes={comments}/>
-
-
                         </div>
                         : <div>
                             Content not found!
