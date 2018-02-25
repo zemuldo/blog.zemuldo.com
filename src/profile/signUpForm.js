@@ -42,51 +42,57 @@ class SignUpForm extends React.Component {
 
           <Form.Group widths='equal'>
             <Form.Input
+                name={'firstName'}
               size='small'
               label='First Name'
               fluid
               type='text'
               placeholder='First Name'
-              onChange={this.props.handleFNameChange}
+              onChange={this.props.handleFormField}
                    />
             <Form.Input
+                name={'lastName'}
               label='Last Name'
               fluid
               type='text'
               placeholder='Last Name'
-              onChange={this.props.handleLNameChange}
+              onChange={this.props.handleFormField}
                    />
           </Form.Group>
           <Form.Input
+              name={'email'}
             label='Email Address'
             fluid
             type='email'
             placeholder='E-mail address'
-            onChange={this.props.handleEmailChange}
+            onChange={this.props.handleFormField}
                 />
           <Form.Group widths='equal'>
             <Form.Input
+                name={'userName'}
               label='Username'
               fluid
               type='text'
               placeholder='Username'
-              onChange={this.props.handleUnameChange}
+              onChange={this.props.handleFormField}
                    />
           </Form.Group>
           <Form.Group widths='equal'>
             <Form.Input
+                name={'password'}
               label='Password'
               fluid
               type='password'
               placeholder='Password'
-              onChange={this.props.handlePasswordChange}
+              onChange={this.props.handleFormField}
                    />
             <Form.Input
+                name={'confirmPass'}
               label='Confirm Password'
               fluid
               type='password'
               placeholder='Confirm Password'
-              onChange={this.props.handleConPassChange}
+              onChange={this.props.handleFormField}
                    />
           </Form.Group>
           {

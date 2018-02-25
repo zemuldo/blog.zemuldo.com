@@ -69,8 +69,7 @@ class Blog extends React.Component {
         this.showDeleteComment=this.showDeleteComment.bind(this);
         this.handleConfirmDeleteComment=this.handleConfirmDeleteComment.bind(this);
         this.handleCancelDeleteComment =  this.handleCancelDeleteComment.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this)
-        this.handleUnameChange = this.handleUnameChange.bind(this)
+        this.handleFormField = this.handleFormField.bind(this)
     }
     show = dimmer => () => this.setState({ dimmer, open: true });
     close = () => this.setState({ open: false })
@@ -198,7 +197,6 @@ class Blog extends React.Component {
             'queryData': {postID:this.props.blog._id}}
         )
             .then(o=>{
-                console.log(o)
                 this.setState({comments:o.data.comments})
             })
             .catch(e=>{
@@ -332,7 +330,6 @@ class Blog extends React.Component {
         let test = {
             [e.target.name]: e.target.value
         }
-        console.log(test)
         this.setState({[e.target.name]: e.target.value})
         this.props.blogActions.updateBlog({[e.target.name]: e.target.value})
     }
@@ -454,13 +451,10 @@ class Blog extends React.Component {
             queryData:c
         })
             .then(oo => {
-                console.log(oo)
                 c._id = oo.data._id
-                console.log(c)
                 return updateReplies(c, o)
             })
             .then(oo=>{
-                console.log(oo)
                 this.setState({comments: oo})
             })
             .catch(e => {
@@ -469,14 +463,9 @@ class Blog extends React.Component {
 
     }
 
-    handlePasswordChange (e) {
+    handleFormField(e) {
         e.preventDefault()
-        this.setState({password: e.target.value})
-    }
-
-    handleUnameChange (e) {
-        e.preventDefault()
-        this.setState({userName: e.target.value})
+        this.setState({[e.target.name]: e.target.value})
     }
 
     onLoginClick = () => {
@@ -519,9 +508,7 @@ class Blog extends React.Component {
                     this.setState({logingin: false})
                     this.props.userActions.updateUser(user)
                     localStorage.setItem('user', JSON.stringify(success.data))
-                    setTimeout( ()=> {
-                        this.setState({open:false})
-                    },2000)
+                    this.setState({open:false})
                 } else {
                     this.setState({
                         error: true,
@@ -708,8 +695,7 @@ class Blog extends React.Component {
                             <LoginForm
                                 color={this.props.vars.colors[0]}
                                 logingin={this.state.logingin}
-                                handleUnameChange={this.handleUnameChange}
-                                handlePasswordChange={this.handlePasswordChange}
+                                handleFormField={this.handleFormField}
                                 onLoginClick={this.onLoginClick}
                                 errorDetails={this.state.errorDetails}
                                 error={this.state.error}

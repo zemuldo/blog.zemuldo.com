@@ -17,19 +17,21 @@ class LoginForm extends React.Component {
         <Form size='large'>
           <Segment stacked>
             <Form.Input
+              name={'userName'}
               fluid
               icon='user'
               iconPosition='left'
               placeholder='E-mail address'
-              onChange={this.props.handleUnameChange}
+              onChange={this.props.handleFormField}
                    />
             <Form.Input
+                name={'password'}
               fluid
               icon='lock'
               iconPosition='left'
               placeholder='Password'
               type='password'
-              onChange={this.props.handlePasswordChange}
+              onChange={this.props.handleFormField}
                    />
             {
                       !this.props.logingin
