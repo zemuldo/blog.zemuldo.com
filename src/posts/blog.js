@@ -44,8 +44,10 @@ class Blog extends React.Component {
             cdelopen:false,
             commentToDelete:null,
             warning: true,
+            error: false,
             success: false,
-            hideMessage: true
+            hideMessage: true,
+            logingin:false
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.updateLikes = this.updateLikes.bind(this);
@@ -327,9 +329,6 @@ class Blog extends React.Component {
     };
 
     handleInputChange = (e) => {
-        let test = {
-            [e.target.name]: e.target.value
-        }
         this.setState({[e.target.name]: e.target.value})
         this.props.blogActions.updateBlog({[e.target.name]: e.target.value})
     }
@@ -357,7 +356,7 @@ class Blog extends React.Component {
             }
 
         })
-            .then(function (response) {
+            .then(function (o) {
                 localStorage.removeItem('editBlog')
             }.bind(this))
 
