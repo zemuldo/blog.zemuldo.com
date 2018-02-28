@@ -7,6 +7,7 @@ import axios from 'axios'
 import config from '../env'
 import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
+import * as UserActions from "../store/actions/user"
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments, notifyMe} from '../util'
@@ -39,47 +40,54 @@ class Blog extends React.Component {
             blogUrl: blogUrl(this.props.blog),
             replyComment: '',
             comments: [],
+            errorDetails:null,
             cdelopen:false,
-            commentToDelete:null
+            commentToDelete:null,
+            warning: true,
+            error: false,
+            success: false,
+            hideMessage: true,
+            logingin:false
         }
-        this.componentDidMount = this.componentDidMount.bind(this)
-        this.updateLikes = this.updateLikes.bind(this)
-        this.getAauthorAvatar = this.getAauthorAvatar.bind(this)
-        this.closeDelete = this.closeDelete.bind(this)
-        this.openDelete = this.openDelete.bind(this)
-        this.getFBCount = this.getFBCount.bind(this)
-        this.getTWTCount = this.getTWTCount.bind(this)
-        this.getGCCount = this.getGCCount.bind(this)
-        this.saveEdit = this.saveEdit.bind(this)
-        this.handleInputChange = this.handleInputChange.bind(this)
-        this.handleSave = this.handleSave.bind(this)
-        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this)
-        this.handleAboutChange = this.handleAboutChange.bind(this)
-        this.setReplyComment = this.setReplyComment.bind(this)
-        this.submitComment = this.submitComment.bind(this)
-        this.onCommentChange = this.onCommentChange.bind(this)
-        this.updateComments = this.updateComments.bind(this)
-        this.deleteComments = this.deleteComments.bind(this)
-        this.getComments = this.getComments.bind(this)
-        this.showDeleteComment=this.showDeleteComment.bind(this)
-        this.handleConfirmDeleteComment=this.handleConfirmDeleteComment.bind(this)
-        this.handleCancelDeleteComment =  this.handleCancelDeleteComment.bind(this)
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.updateLikes = this.updateLikes.bind(this);
+        this.getAauthorAvatar = this.getAauthorAvatar.bind(this);
+        this.closeDelete = this.closeDelete.bind(this);
+        this.openDelete = this.openDelete.bind(this);
+        this.getFBCount = this.getFBCount.bind(this);
+        this.getTWTCount = this.getTWTCount.bind(this);
+        this.getGCCount = this.getGCCount.bind(this);
+        this.saveEdit = this.saveEdit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this);
+        this.handleAboutChange = this.handleAboutChange.bind(this);
+        this.setReplyComment = this.setReplyComment.bind(this);
+        this.submitComment = this.submitComment.bind(this);
+        this.onCommentChange = this.onCommentChange.bind(this);
+        this.updateComments = this.updateComments.bind(this);
+        this.deleteComments = this.deleteComments.bind(this);
+        this.getComments = this.getComments.bind(this);
+        this.showDeleteComment=this.showDeleteComment.bind(this);
+        this.handleConfirmDeleteComment=this.handleConfirmDeleteComment.bind(this);
+        this.handleCancelDeleteComment =  this.handleCancelDeleteComment.bind(this);
+        this.handleFormField = this.handleFormField.bind(this)
     }
-    show = dimmer => () => this.setState({ dimmer, open: true })
+    show = dimmer => () => this.setState({ dimmer, open: true });
     close = () => this.setState({ open: false })
-    showDeleteComment = (_id) => this.setState({ cdelopen: true ,commentToDelete:_id})
+    showDeleteComment = (_id) => this.setState({ cdelopen: true ,commentToDelete:_id});
     handleConfirmDeleteComment = () => {
-        this.deleteComments(this.state.commentToDelete)
+        this.deleteComments(this.state.commentToDelete);
         this.setState({ cdelopen: false })
-    }
-    handleCancelDeleteComment = () => this.setState({ cdelopen: false })
+    };
+    handleCancelDeleteComment = () => this.setState({ cdelopen: false });
 
     handleAboutChange(e, data) {
         this.props.blogActions.updateBlog({about: data.value})
     }
 
     handleEditorStateEdit() {
-        this.setState({wordCount: this.props.blog.wordCount})
+        this.setState({wordCount: this.props.blog.wordCount});
         let editorState = JSON.parse(this.props.blog.body);
         this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
     };
@@ -191,7 +199,6 @@ class Blog extends React.Component {
             'queryData': {postID:this.props.blog._id}}
         )
             .then(o=>{
-                console.log(o)
                 this.setState({comments:o.data.comments})
             })
             .catch(e=>{
@@ -322,10 +329,6 @@ class Blog extends React.Component {
     };
 
     handleInputChange = (e) => {
-        let test = {
-            [e.target.name]: e.target.value
-        }
-        console.log(test)
         this.setState({[e.target.name]: e.target.value})
         this.props.blogActions.updateBlog({[e.target.name]: e.target.value})
     }
@@ -353,7 +356,7 @@ class Blog extends React.Component {
             }
 
         })
-            .then(function (response) {
+            .then(function (o) {
                 localStorage.removeItem('editBlog')
             }.bind(this))
 
@@ -447,19 +450,88 @@ class Blog extends React.Component {
             queryData:c
         })
             .then(oo => {
-                console.log(oo)
                 c._id = oo.data._id
-                console.log(c)
                 return updateReplies(c, o)
             })
             .then(oo=>{
-                console.log(oo)
                 this.setState({comments: oo})
             })
             .catch(e => {
                 console.log(e)
             })
 
+    }
+
+    handleFormField(e) {
+        e.preventDefault()
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+    onLoginClick = () => {
+        this.setState({logingin: true})
+        if (!this.state.userName || !this.state.password) {
+            this.setState({
+                error: true,
+                hideMessage: false,
+                logingin: false,
+                errorDetails: {field: 'Login', message: 'Invalid login details'}
+            })
+            setTimeout(function () {
+                this.setState({error: false, hideMessage: true})
+            }.bind(this), 2000)
+            return false
+        }
+        let userData = {
+            userName: this.state.userName,
+            password: this.state.password
+        }
+        axios.post(env.httpURL, {
+            'queryMethod': 'loginUser',
+            'queryData': userData
+        })
+            .then(function (success) {
+                if (!success.data) {
+                    this.setState({
+                        error: true,
+                        hideMessage: false,
+                        errorDetails: {field: 'Login', message: 'An error occurred, Check your Internet'}
+                    })
+                    setTimeout(function () {
+                        this.setState({error: false, hideMessage: true})
+                    }.bind(this), 2000)
+                    return false
+                }
+                if (success.data.id) {
+                    let user = success.data
+                    success.data.name = success.data.userName
+                    this.setState({logingin: false})
+                    this.props.userActions.updateUser(user)
+                    localStorage.setItem('user', JSON.stringify(success.data))
+                    this.setState({open:false})
+                } else {
+                    this.setState({
+                        error: true,
+                        hideMessage: false,
+                        logingin: false,
+                        errorDetails: {field: 'Login', message: success.data.error}
+                    })
+                    setTimeout(function () {
+                        this.setState({error: false, hideMessage: true})
+                    }.bind(this), 2000)
+                }
+            }.bind(this))
+            .catch(function (e) {
+                console.log(e)
+                this.setState({
+                    error: true,
+                    hideMessage: false,
+                    logingin: false,
+                    errorDetails: {field: 'Login', message: 'An erro occured, Check your Internet'}
+                })
+                setTimeout(function () {
+                    this.setState({error: false, hideMessage: true})
+                }.bind(this), 2000)
+            }.bind(this))
     }
 
     render() {
@@ -622,9 +694,7 @@ class Blog extends React.Component {
                             <LoginForm
                                 color={this.props.vars.colors[0]}
                                 logingin={this.state.logingin}
-                                handSwichReg={this.handSwichReg}
-                                handleUnameChange={this.handleUnameChange}
-                                handlePasswordChange={this.handlePasswordChange}
+                                handleFormField={this.handleFormField}
                                 onLoginClick={this.onLoginClick}
                                 errorDetails={this.state.errorDetails}
                                 error={this.state.error}
@@ -839,7 +909,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        blogActions: bindActionCreators(BlogActions, dispatch)
+        blogActions: bindActionCreators(BlogActions, dispatch),
+        userActions: bindActionCreators(UserActions, dispatch),
     }
 }
 
