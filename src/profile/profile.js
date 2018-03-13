@@ -1,10 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import {Header, Grid} from 'semantic-ui-react'
+import {Header, Loader, Container} from 'semantic-ui-react'
 import EditorsForm from './editorsForm'
-import Welcome from './profile_wellcome'
-import Blogs from '../posts/blogs'
+import GridBlogs from '../posts/gridBlogs'
 import config from '../env'
 import PropTypes from 'prop-types'
 
@@ -96,103 +95,36 @@ class Profile extends React.Component {
 
   render () {
     return (
-      <div style={{padding: '1em'}}>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={16}>
-              <div>
-                <Header color='green' as='h1'>
-                                    Welcome to your dashboard.
-                                </Header>
-              </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
+        <Container>
             {
-                            (window.innerWidth > 600)
-                                ? <Grid.Column width={3}>
-                                  <Header color='green' as='h3'>
-                                        Your Articles
-                                    </Header>
-                                  <div>
-                                    {
-                                            this.props.blogs[0]
-                                                ? <Blogs
-                                                  color={this.props.vars.color}
-                                                  onReadMore={this.onReadMore}
-                                                />
-                                                : <div>
-                                                    You haven't published anything yet
-                                                </div>
-                                        }
-                                  </div>
-                                </Grid.Column>
-                                : null
-                        }
-            {
-                            window.innerWidth > 600
-                                ? <Grid.Column width={10}>
-                                  <Header color={this.props.vars.color} as='h1'>
-                                        Welcome to your Dashboard
-                                    </Header>
-                                  {
-                                        this.props.vars.createNew
-                                            ? <EditorsForm
-                                              currentUser={this.props.user}
-                                              onFinishClick={this.onFinishClick}
-                                              handleUTAChange={this.handleUTAChange}
-                                              handleCategoryChange={this.handleCategoryChange}
-                                              handleTopicChange={this.handleTopicChange}
-                                            />
-                                            : <div>
-                                              <Header color={this.props.vars.color} as='h1'>
-                                                    Your Articles
-                                                </Header>
-                                              <Welcome
-                                                richViewerState={this.state.richViewerState}
-                                                color={this.props.vars.colors[1]}
-                                                blogIsLoading={this.state.blogIsLoading}
-                                                blogDetails={this.state.blogDetails}
-                                                blog={this.state.blog}
-                                                blogs={this.state.blogs}
-                                                blogLoaded={this.state.blogLoaded} />
-                                            </div>
-                                    }
-                                </Grid.Column>
-                                : <Grid.Column width={16}>
-                                  <Header color={this.props.vars.color} as='h1'>
-                                        Welcome to your Dashboard.
-                                    </Header>
-                                  {
-                                        this.props.vars.createNew
-                                            ? <EditorsForm
-                                              currentUser={this.props.user}
-                                              onFinishClick={this.onFinishClick}
-                                              handleUTAChange={this.handleUTAChange}
-                                              handleCategoryChange={this.handleCategoryChange}
-                                              handleTopicChange={this.handleTopicChange}
-                                            />
-                                            : <div>
-                                              <Header color={this.props.vars.color} as='h2'>
-                                                    Your Top Articles.
-                                                </Header>
-                                            </div>
-                                    }
-                                </Grid.Column>
-                        }
-            {
-                            (window.innerWidth > 600)
-                                ? <Grid.Column width={3}>
-                                  <div>
-                                        I will give you some more stuff here
+                this.props.vars.createNew
+                    ? <EditorsForm
+                        currentUser={this.props.user}
+                        onFinishClick={this.onFinishClick}
+                        handleUTAChange={this.handleUTAChange}
+                        handleCategoryChange={this.handleCategoryChange}
+                        handleTopicChange={this.handleTopicChange}
+                    />
+                    : <div>
+                        <Header color={this.props.vars.color} as='h1'>
+                            Published by You
+                        </Header>
+                        <div className='blogs'>
+                            {
+                                this.props.vars.blogsLoaded===true?
+                                    <GridBlogs
+                                        history={this.props.history}
+                                        color={this.props.vars.color}
+                                    />:
+                                    <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
+                                        <Loader active inline='centered' />
+                                        <p>Loading Blogs...</p>
                                     </div>
-                                </Grid.Column>
-                                : null
-                        }
-
-          </Grid.Row>
-        </Grid>
-      </div>
+                            }
+                        </div>
+                    </div>
+            }
+        </Container>
     )
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import 'semantic-ui-css/semantic.min.css'
-import {Menu, Icon, Dropdown, Image, Input} from 'semantic-ui-react'
+import {Menu, Icon, Dropdown, Image, Container} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import * as VarsActions from '../store/actions/vars'
@@ -93,143 +93,145 @@ class MobileMenu extends React.Component {
       let urlDetails = 'all'
       return (
           <div>
-             <Menu
-                 style={{backgroundColor: 'black', opacity:'0.8', padding: '0px 10px 0px 10px', fontSize: '18px', maxHeight:'60px'}}
-                 fixed='top'
-                 size='tiny'
-                 secondary
-                 color={this.props.vars.colors[0]}
-                 borderless
-             >
-                <Dropdown
-                    className='dropDown'
-                    trigger={<Icon name='bars'/>}
-                    style={{color: this.props.vars.colors[0]}}
-                    pointing='top left'
-                    item
-                >
-                   <Dropdown.Menu>
-                      <Dropdown.Item
-                          as='span'
-                          className=''
-                          name='home'
-                          active={this.props.vars.currentLocation === 'home'}
-                          onClick={this.handleHomeClick}>
-                         <Icon color={this.props.vars.colors[0]} name='home'/>
-                         <span color={this.props.vars.colors[0]}><Link to='/'>Home</Link></span>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                          as='span'
-                          name='dev'
-                          active={this.props.vars.currentLocation === 'dev'}
-                          onClick={this.handleMenuItemClick}>
-                         <Icon color={this.props.vars.colors[0]} name='code'/>
-                         <span color={this.props.vars.colors[0]}><Link
-                             to={'/dev/' + urlDetails}>Dev</Link></span>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                          as='span'
-                          name='business'
-                          active={this.props.vars.currentLocation === 'business'}
-                          onClick={this.handleMenuItemClick}>
-                         <Icon color={this.props.vars.colors[0]} name='creative commons'/>
-                         <span color={this.props.vars.colors[0]}><Link
-                             to={'/business/' + urlDetails}>Business</Link></span>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                          as='span'
-                          name='tech'
-                          active={this.props.vars.currentLocation === 'tech'}
-                          onClick={this.handleMenuItemClick}>
-                         <Icon color={this.props.vars.colors[0]} name='server'/>
-                         <span color={this.props.vars.colors[0]}><Link
-                             to={'/tech/' + urlDetails}>Tech</Link></span>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                          as='span'
-                          name='reviews'
-                          active={this.props.vars.currentLocation === 'reviews'}
-                          onClick={this.handleMenuItemClick}>
-                         <Icon color={this.props.vars.colors[0]} name='circle notched'/>
-                         <span color={this.props.vars.colors[0]}><Link
-                             to={'/reviews/' + urlDetails}>Reviews</Link></span>
-                      </Dropdown.Item>
-                   </Dropdown.Menu>
-                </Dropdown>
-                <Menu.Menu position='right'>
-                   {
-                      (!this.props.user || !this.props.user.id)
-                          ? <Menu.Item
-                              as='span'
-                              position='right'
-                              name='login'
-                              color={this.props.vars.colors[0]}
-                              onClick={() => {
-                                 this.props.varsActions.updateVars({curentLocation: 'login', signUp: false})
-                              }}>
-                             <Icon color={this.props.vars.colors[0]} name='unlock'/>
-                             <span style={{color: 'black'}}><Link to='/login'>Login</Link></span>
-                          </Menu.Item>
-                          : <Menu.Item>
-                             <Dropdown
-                                 className='dropDown'
-                                 trigger={<Image
-                                     alt={'blogd.zemuldo.com_' + this.props.user.userName + '+_profile_pic'}
+             <Container>
+                 <Menu
+                     text
+                     fixed='top'
+                     size='tiny'
+                     secondary
+                     color={this.props.vars.colors[0]}
+                     borderless
+                 >
+                     <Dropdown
+                         className='dropDown'
+                         trigger={<Icon name='bars'/>}
+                         style={{color: this.props.vars.colors[0]}}
+                         pointing='top left'
+                         item
+                     >
+                         <Dropdown.Menu>
+                             <Dropdown.Item
+                                 as='span'
+                                 className=''
+                                 name='home'
+                                 active={this.props.vars.currentLocation === 'home'}
+                                 onClick={this.handleHomeClick}>
+                                 <Icon color={this.props.vars.colors[0]} name='home'/>
+                                 <span color={this.props.vars.colors[0]}><Link to='/'>Home</Link></span>
+                             </Dropdown.Item>
+                             <Dropdown.Item
+                                 as='span'
+                                 name='dev'
+                                 active={this.props.vars.currentLocation === 'dev'}
+                                 onClick={this.handleMenuItemClick}>
+                                 <Icon color={this.props.vars.colors[0]} name='code'/>
+                                 <span color={this.props.vars.colors[0]}><Link
+                                     to={'/dev/' + urlDetails}>Dev</Link></span>
+                             </Dropdown.Item>
+                             <Dropdown.Item
+                                 as='span'
+                                 name='business'
+                                 active={this.props.vars.currentLocation === 'business'}
+                                 onClick={this.handleMenuItemClick}>
+                                 <Icon color={this.props.vars.colors[0]} name='creative commons'/>
+                                 <span color={this.props.vars.colors[0]}><Link
+                                     to={'/business/' + urlDetails}>Business</Link></span>
+                             </Dropdown.Item>
+                             <Dropdown.Item
+                                 as='span'
+                                 name='tech'
+                                 active={this.props.vars.currentLocation === 'tech'}
+                                 onClick={this.handleMenuItemClick}>
+                                 <Icon color={this.props.vars.colors[0]} name='server'/>
+                                 <span color={this.props.vars.colors[0]}><Link
+                                     to={'/tech/' + urlDetails}>Tech</Link></span>
+                             </Dropdown.Item>
+                             <Dropdown.Item
+                                 as='span'
+                                 name='reviews'
+                                 active={this.props.vars.currentLocation === 'reviews'}
+                                 onClick={this.handleMenuItemClick}>
+                                 <Icon color={this.props.vars.colors[0]} name='circle notched'/>
+                                 <span color={this.props.vars.colors[0]}><Link
+                                     to={'/reviews/' + urlDetails}>Reviews</Link></span>
+                             </Dropdown.Item>
+                         </Dropdown.Menu>
+                     </Dropdown>
+                     <Menu.Menu position='right'>
+                         {
+                             (!this.props.user || !this.props.user.id)
+                                 ? <Menu.Item
+                                     as='span'
+                                     position='right'
+                                     name='login'
+                                     color={this.props.vars.colors[0]}
+                                     onClick={() => {
+                                         this.props.varsActions.updateVars({curentLocation: 'login', signUp: false})
+                                     }}>
+                                     <Icon color={this.props.vars.colors[0]} name='unlock'/>
+                                     <span style={{color: 'black'}}><Link to='/login'>Login</Link></span>
+                                 </Menu.Item>
+                                 : <Menu.Item>
+                                     <Dropdown
+                                         className='dropDown'
+                                         trigger={<Image
+                                             alt={'blogd.zemuldo.com_' + this.props.user.userName + '+_profile_pic'}
 
-                                     id='photo'
-                                     size='mini'
-                                     src={env.httpURL+this.props.user.avatarURL}
-                                     style={{
-                                         borderStyle: 'solid',
-                                         borderWidth: '2px',
-                                         borderRadius: `${(Math.min(
-                                             this.props.user.avatar.height,
-                                             this.props.user.avatar.width
-                                             ) +
-                                             10) *
-                                         (this.props.user.avatar.borderRadius / 2 / 100)}px`
-                                     }}
-                                 />}
-                                 style={{color: this.props.vars.colors[0]}}
-                                 pointing='top right'
-                                 item
-                             >
-                                <Dropdown.Menu>
-                                   <Dropdown.Item as='span' onClick={this.handleProfile}>
-                                      <Icon color={this.props.vars.colors[0]} name='user circle'/>
-                                      <Link to={'/user/' + this.props.user.userName}
-                                            color={this.props.vars.colors[1]}>Your Profile</Link>
-                                   </Dropdown.Item>
-                                   <Dropdown.Item as='span'>
-                                      <Icon color={this.props.vars.colors[0]} name='users'/>
-                                      <Link to={'/user/' + this.props.user.userName + '/followers'}
-                                            color={this.props.vars.colors[2]}>Followers</Link>
-                                   </Dropdown.Item>
-                                   <Dropdown.Item as='span'>
-                                      <Icon color={this.props.vars.colors[0]} name='help'/>
-                                      <Link to={'/user/' + this.props.user.userName + '/help'}
-                                            color={this.props.vars.colors[0]}>Help</Link>
-                                   </Dropdown.Item>
-                                   <Dropdown.Item as='span' onClick={this.handleCreateNew}>
-                                      <Icon color={this.props.vars.colors[0]} name='plus'/>
-                                      <Link to={'/user/' + this.props.user.userName + '/editor'}
-                                            color={this.props.vars.colors[0]}>New Article</Link>
-                                   </Dropdown.Item>
-                                   <Dropdown.Item as='span'>
-                                      <Icon color={this.props.vars.colors[0]} name='setting'/>
-                                      <Link to={'/user/' + this.props.user.userName + '/settings'}
-                                            color={this.props.vars.colors[1]}>Settings</Link>
-                                   </Dropdown.Item>
-                                   <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
-                                      <Icon color={this.props.vars.colors[0]} name='sign out'/>
-                                      <span className='colorRed'>Sign Out</span>
-                                   </Dropdown.Item>
-                                </Dropdown.Menu>
-                             </Dropdown>
-                          </Menu.Item>
-                   }
-                </Menu.Menu>
-             </Menu>
+                                             id='photo'
+                                             size='mini'
+                                             src={env.httpURL+this.props.user.avatarURL}
+                                             style={{
+                                                 borderStyle: 'solid',
+                                                 borderWidth: '2px',
+                                                 borderRadius: `${(Math.min(
+                                                     this.props.user.avatar.height,
+                                                     this.props.user.avatar.width
+                                                     ) +
+                                                     10) *
+                                                 (this.props.user.avatar.borderRadius / 2 / 100)}px`
+                                             }}
+                                         />}
+                                         style={{color: this.props.vars.colors[0]}}
+                                         pointing='top right'
+                                         item
+                                     >
+                                         <Dropdown.Menu>
+                                             <Dropdown.Item as='span' onClick={this.handleProfile}>
+                                                 <Icon color={this.props.vars.colors[0]} name='user circle'/>
+                                                 <Link to={'/user/' + this.props.user.userName}
+                                                       color={this.props.vars.colors[1]}>Your Profile</Link>
+                                             </Dropdown.Item>
+                                             <Dropdown.Item as='span'>
+                                                 <Icon color={this.props.vars.colors[0]} name='users'/>
+                                                 <Link to={'/user/' + this.props.user.userName + '/followers'}
+                                                       color={this.props.vars.colors[2]}>Followers</Link>
+                                             </Dropdown.Item>
+                                             <Dropdown.Item as='span'>
+                                                 <Icon color={this.props.vars.colors[0]} name='help'/>
+                                                 <Link to={'/user/' + this.props.user.userName + '/help'}
+                                                       color={this.props.vars.colors[0]}>Help</Link>
+                                             </Dropdown.Item>
+                                             <Dropdown.Item as='span' onClick={this.handleCreateNew}>
+                                                 <Icon color={this.props.vars.colors[0]} name='plus'/>
+                                                 <Link to={'/user/' + this.props.user.userName + '/editor'}
+                                                       color={this.props.vars.colors[0]}>New Article</Link>
+                                             </Dropdown.Item>
+                                             <Dropdown.Item as='span'>
+                                                 <Icon color={this.props.vars.colors[0]} name='setting'/>
+                                                 <Link to={'/user/' + this.props.user.userName + '/settings'}
+                                                       color={this.props.vars.colors[1]}>Settings</Link>
+                                             </Dropdown.Item>
+                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
+                                                 <Icon color={this.props.vars.colors[0]} name='sign out'/>
+                                                 <span className='colorRed'>Sign Out</span>
+                                             </Dropdown.Item>
+                                         </Dropdown.Menu>
+                                     </Dropdown>
+                                 </Menu.Item>
+                         }
+                     </Menu.Menu>
+                 </Menu>
+             </Container>
           </div>
       )
    }
