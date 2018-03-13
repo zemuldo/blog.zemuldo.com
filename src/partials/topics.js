@@ -18,18 +18,6 @@ class Topics extends React.Component {
     return (
       <div className='topicsWrapper'>
         <Header color='blue' as='h3'>Topics</Header>
-        <Link to={'/'}>
-          <button
-            disabled={this.props.vars.topic === 'all' || !window.location.pathname.split('/')[2]}
-            className='topicButton'
-            onClick={() => this.props.varsActions.updateVars({topic: 'all'})}
-            name='all'
-                    >
-            <span>
-              {'All |'}
-            </span>
-          </button>
-        </Link>
         {times(topics.length, i =>
           <Link key={topics[i].key} to={'/topics/'+ topics[i].key}>
             <button

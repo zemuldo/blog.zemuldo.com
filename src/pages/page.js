@@ -120,126 +120,23 @@ class PagesComponent extends React.Component {
   render () {
     return (
       <div>
-        <Grid columns={2}>
-          <Grid.Row>
-            {
-              (window.innerWidth > 1030)
-                ? <Grid.Column computer={3}>
-                  <Sticky context={this.props.tag_contextRef}>
-                    <Topics
-                      currentLocation={this.props.vars.currentLocation}
-                      topic={this.state.topic}
-                      onTopicClick={this.onTopicClick}
-                      onAllcClick={this.onAllcClick}
-                      setTopicNextPosts={this.props.setTopicNextPosts}
-                      blog={this.props.blog}
-                      color={this.props.vars.color}
-                      blogs={this.props.blogs}
-                      resetNav={this.resetNav}
-                    />
-                    <div style={{ float: 'left', margin: '2em 3em 3em 2em' }}>
-                      <Header
-                        style={{ marginLeft: '10px' }}
-                        color='blue' as='h3'>Search for it
-                                        </Header>
-                      <Input
-                        icon={<Icon name='search' inverted circular link />}
-                        placeholder='Search...'
-                        onChange={this.props.handleFilterChange}
-                      />
+          {
 
-                      <Header color={this.props.vars.colors[2]} as='h2'>Most Popular</Header>
-                      <div>
-                        <br />
-                        {
-                          this.props.blogs[0]
-                            ? <div>
-                              <Blogs
-                                color={this.props.vars.color}
-                              />
-                              <div>
-                                <br />
-                                <Button
-                                  color={this.props.vars.color}
-                                  circular
-                                  size='mini'
-                                  floated='left'
-                                  disabled={!this.state.next}
-                                  onClick={() => this.setNextBlogs('next')}
-                                  name='next'
-                                >
-                                  Next
-                                                                              </Button>
-                                <Button
-                                  color={this.props.vars.color}
-                                  circular
-                                  size='mini'
-                                  floated='right'
-                                  disabled={x === 0}
-                                  onClick={() => this.setPreviousBlogs('previous')}
-                                  name='previous'
-                                >
-                                  Prev
-                                                                              </Button>
-                              </div>
-                            </div>
-                            : <div>
-                              No matching content on this Topic
-                                                                      </div>
-                        }
-                      </div>
-                    </div>
-                  </Sticky>
-
-
-                </Grid.Column>
-                : <div />
-
-            }
-            <Grid.Column mobile={window.innerWidth < 1030 ? 16 : 10}
-              computer={window.innerWidth < 1030 ? 16 : 10} width={10}>
-              {
-                window.innerWidth < 600
-                  ? <Topics
-                    currentLocation={this.props.vars.currentLocation}
-                    topic={this.state.topic}
-                    onTopicClick={this.onTopicClick}
-                    onAllcClick={this.onAllcClick}
-                    setTopicNextPosts={this.props.setTopicNextPosts}
-                    blog={this.props.blog}
-                    color={this.props.vars.color}
-                    blogs={this.props.blogs}
-                    resetNav={this.resetNav} />
-                  : null
-              }
-              {
-
-                !this.props.vars.blogLoaded
+              !this.props.vars.blogLoaded
                   ? <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                    <Loader active inline='centered' />
-                    <p>Loading Blog...</p>
+                      <Loader active inline='centered' />
+                      <p>Loading Blog...</p>
                   </div>
                   : <WelcomePage
-                    navigateBlogs={this.props.navigateBlogs}
-                    history={this.props.history}
-                    x={x}
-                    next={this.state.next}
-                    setPreviousBlogs={this.setPreviousBlogs}
-                    setNextBlogs={this.setNextBlogs}
-                    color={this.props.vars.colors[1]}
+                      navigateBlogs={this.props.navigateBlogs}
+                      history={this.props.history}
+                      x={x}
+                      next={this.state.next}
+                      setPreviousBlogs={this.setPreviousBlogs}
+                      setNextBlogs={this.setNextBlogs}
+                      color={this.props.vars.colors[1]}
                   />
-              }
-            </Grid.Column>
-            {
-              (window.innerWidth > 1030)
-                ? <Grid.Column width={3}>
-                  <Sticky context={this.props.tag_contextRef}>
-                    {<TwitterProf />}
-                  </Sticky>
-                </Grid.Column> : null
-            }
-          </Grid.Row>
-        </Grid>
+          }
       </div>)
   }
 }

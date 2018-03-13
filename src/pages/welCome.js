@@ -44,8 +44,6 @@ class WelcomePage extends React.Component {
                                         this.props.vars.blogsLoaded===true?
                                         <GridBlogs
                                         history={this.props.history}
-                                        setPreviousBlogs={this.props.setPreviousBlogs}
-                                        setNextBlogs={this.props.setNextBlogs}
                                         color={this.props.vars.color}
                                             />:
                                             <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>

@@ -39,30 +39,6 @@ class GridBlogs extends React.Component {
                                     )
                                 }
                         </Card.Group>
-                        <div>
-                          <br />
-                          <br />
-                          <Button
-                            color={this.props.vars.color}
-                            circular
-                            size='mini'
-                            floated='left'
-                            onClick={() => this.props.setNextBlogs('next')}
-                            name='next'
-                                >
-                                    See More
-                          </Button>
-                          <Button
-                            color={this.props.vars.color}
-                            circular
-                            size='mini'
-                            floated='right'
-                            onClick={() => this.props.setPreviousBlogs('previous')}
-                            name='previous'
-                                >
-                                    Previous
-                          </Button>
-                        </div>
                       </div>
                       : <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
                         <Loader active inline='centered' />
@@ -86,8 +62,6 @@ GridBlogs.propTypes = {
   blog: PropTypes.object.isRequired,
   blogs: PropTypes.array.isRequired,
   vars: PropTypes.object.isRequired,
-  setNextBlogs: PropTypes.func.isRequired,
-  setPreviousBlogs: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps)(GridBlogs)

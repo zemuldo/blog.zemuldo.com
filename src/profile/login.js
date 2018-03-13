@@ -413,6 +413,7 @@ class Login extends React.Component {
                                 this.props.user && this.props.user.id
                                     ? <div>
                                         <Pofile
+                                            history={this.props.history}
                                             userBlogs={this.state.userBlogs}
                                             createNew={this.props.vars.createNew}
                                             colors={this.props.vars.colors}
