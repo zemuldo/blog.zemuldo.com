@@ -66,6 +66,7 @@ module.exports = {
         app: './src/index.js',
         react: ['react', 'react-router', 'react-dom', 'react-router-dom', 'react-redux', 'redux'],
         editor: ['draft-js','draft-js-hashtag-plugin','draft-js-linkify-plugin','draft-js-counter-plugin','draft-js-prism-plugin'],
+        uitheme:['semantic-ui-react'],
         utils: ['moment', 'immutable', 'lodash/times', 'prismjs']
     },
     output: {
@@ -100,7 +101,8 @@ module.exports = {
 
             // Support React Native Web
             // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-            'react-native': 'react-native-web'
+            'react-native': 'react-native-web',
+            immutable: path.join(__dirname, '../node_modules/immutable')
         },
         plugins: [
             // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -339,8 +341,9 @@ module.exports = {
         new BundleAnalyzerPlugin({
             analyzerMode: 'static'
         }),
+        new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.optimize.CommonsChunkPlugin({
-            name: ['react','editor','utils']
+            name: ['react','editor','utils','uitheme']
         })
     ],
 
