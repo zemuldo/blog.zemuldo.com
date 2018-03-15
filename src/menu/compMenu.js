@@ -110,12 +110,11 @@ class ComMenu extends React.Component {
                                 color={this.props.vars.colors[0]}
                             >
                                 <Container>
-                                    <Menu.Item as='span' active>
-                                        <Link to='/'>
-                                            <Image avatar src={'/img/creator/dan.jpg'}/>
-                                        </Link>
-                                    </Menu.Item>
+                                    <Link to='/'>
+                                        <Image circular size={'tiny'} src={`${env.static}img/creator/dan.jpg`}/>
+                                    </Link>
                                     <Menu.Item
+                                        style={{fontSize:'24px'}}
                                         as='span'
                                         className=''
                                         name='home'
