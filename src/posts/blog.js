@@ -183,7 +183,6 @@ class Blog extends React.Component {
     getShortURL(){
         axios.post(env.fupisha,{url:`https://blog.zemuldo.com/${this.props.blog._id}`,custom_longUrl:`${window.location.href}`})
             .then(o=>{
-                console.log(o.data)
                 this.setState({blogUrl:o.data})
                 this.setBlogCounts()
             })
