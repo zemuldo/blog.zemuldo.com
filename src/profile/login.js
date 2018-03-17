@@ -311,7 +311,7 @@ class Login extends React.Component {
             }.bind(this))
     }
 
-    handleFormField(e) {
+    handleFormField = (e)=> {
         e.preventDefault()
         this.setState({[e.target.name]: e.target.value})
     }
