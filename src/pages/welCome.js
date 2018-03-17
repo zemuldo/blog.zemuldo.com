@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {Loader, Header, Card, Image} from 'semantic-ui-react'
 import times from 'lodash/times'
 import {toTitleCase,inWords} from '../util'
@@ -15,9 +14,6 @@ class WelcomePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {}
-  }
-
-  componentDidMount () {
   }
 
   render () {
