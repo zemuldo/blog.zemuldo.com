@@ -241,7 +241,7 @@ class Blog extends React.Component {
     }
 
     fbShare() {
-        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F'+this.state.blogUrl.origin+'%2F'
+        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F'+this.state.blogUrl.bareUrl+'%2F'
         if (this.props.blog) {
             let postURL = this.state.blogUrl.pathname
             let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
@@ -254,7 +254,7 @@ class Blog extends React.Component {
             let hashTgs = '%2F&hashtags=' + this.props.blog.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let url = `&url=https%3A%2F%2F${this.state.blogUrl.shortUrl}`
+            let url = `&url=https%3A%2F%2F${this.state.blogUrl.bareUrl}`
             let fullURL = `${url}${related}${via}`
             let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
@@ -263,7 +263,7 @@ class Blog extends React.Component {
 
     gplusShare() {
         if (this.props.blog) {
-            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2F${this.state.blogUrl.shortUrl}`)
+            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2F${this.state.blogUrl.bareUrl}`)
         }
     }
 

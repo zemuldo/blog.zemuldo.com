@@ -95,7 +95,8 @@
     "build": "node scripts/build.js",
     "test": "mocha",
     "lint": "eslint .",
-    "standard": "standard --fix"
+    "standard": "standard --fix",
+    "watch":"PORT=8072 node app.js"
   },
   "jest": {
     "collectCoverageFrom": [
