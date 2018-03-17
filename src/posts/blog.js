@@ -33,16 +33,13 @@ class Blog extends React.Component {
             showDelete: false,
             userLoggedIn: false,
             likes: this.props.blog ? this.props.blog.likes : 0,
-            authorAvatar: null,
             title: this.props.blog.title,
             wordCount: 0,
-            editorState: null,
             blogUrl: blogUrl(this.props.blog),
+            shortUrl: blogUrl(this.props.blog),
             replyComment: '',
             comments: [],
-            errorDetails:null,
             cdelopen:false,
-            commentToDelete:null,
             warning: true,
             error: false,
             success: false,
@@ -83,7 +80,7 @@ class Blog extends React.Component {
             'id': 'p',
             'params': {
                 'nolog': true,
-                'id': 'https://blog.zemuldo/' + this.state.blogUrl,
+                'id': this.state.blogUrl.shortUrl,
                 'source': 'widget',
                 'userId': '@viewer',
                 'groupId': '@self'
@@ -93,13 +90,13 @@ class Blog extends React.Component {
             'apiVersion': 'v1'
         }
         window.scrollTo(0, 0)
-        this.getFBCount(this.state.blogUrl)
-        this.getTWTCount(this.state.blogUrl)
+        this.getFBCount()
+        this.getTWTCount()
         this.getGCCount(gplusPost)
     }
 
-    getFBCount =(shareURL)=> {
-        return axios.get('https://graph.facebook.com/?id=https://blog.zemuldo.com/' + shareURL, {})
+    getFBCount =()=> {
+        return axios.get('https://graph.facebook.com/?id=' +this.state.blogUrl.shortUrl, {})
             .then((res) => {
                 this.props.blogActions.updateBlog({
                     fbC: (res.data.share.share_count) ? res.data.share.share_count : 0
@@ -113,8 +110,8 @@ class Blog extends React.Component {
             })
     };
 
-    getTWTCount(shareURL) {
-        return axios.get('https://public.newsharecounts.com/count.json?url=https://blog.zemuldo.com/' + shareURL, {})
+    getTWTCount() {
+        return axios.get('https://public.newsharecounts.com/count.json?url=' + this.state.blogUrl.shortUrl, {})
             .then((res) => {
                 this.props.blogActions.updateBlog({
                     twtC: (res.data.count) ? res.data.count : 0
@@ -183,13 +180,25 @@ class Blog extends React.Component {
             })
     }
 
+    getShortURL(){
+        axios.post(env.fupisha,{url:`https://blog.zemuldo.com/${this.props.blog._id}`})
+            .then(o=>{
+                console.log(o.data)
+                this.setState({blogUrl:o.data})
+                this.setBlogCounts()
+            })
+            .catch(e=>{
+
+            })
+    }
+
     componentDidMount() {
         this.getComments()
+        this.getShortURL()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({editMode: false})
         if (this.props.blog) {
             this.getAauthorAvatar()
-            this.setBlogCounts()
         }
         this.setState({youLike: true})
         if (localStorage.getItem('user')) {
@@ -232,9 +241,9 @@ class Blog extends React.Component {
     }
 
     fbShare() {
-        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.zemuldo.com%2F'
+        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F'+this.state.blogUrl.origin+'%2F'
         if (this.props.blog) {
-            let postURL = blogUrl(this.props.blog)
+            let postURL = this.state.blogUrl.pathname
             let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
@@ -245,7 +254,7 @@ class Blog extends React.Component {
             let hashTgs = '%2F&hashtags=' + this.props.blog.topics.join(',')
             let via = '&via=zemuldo'
             let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let url = `&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`
+            let url = `&url=https%3A%2F%2F${this.state.blogUrl.shortUrl}`
             let fullURL = `${url}${related}${via}`
             let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
@@ -254,7 +263,7 @@ class Blog extends React.Component {
 
     gplusShare() {
         if (this.props.blog) {
-            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`)
+            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2F${this.state.blogUrl.shortUrl}`)
         }
     }
 

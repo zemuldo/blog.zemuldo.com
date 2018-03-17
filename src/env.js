@@ -540,7 +540,7 @@ module.exports = {
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
         serverURL: 'https://localhost:8080',
-        fupisha:'http://localhost:8060/api/shorten',
+        fupisha:'http://localhost:8099/api/shorten',
         static:'/'
     },
     development: {
@@ -549,7 +549,7 @@ module.exports = {
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
         serverURL: 'https://localhost:8080',
-        fupisha:'http://localhost:8060/api/shorten',
+        fupisha:'http://localhost:8099/api/shorten',
         static:'/'
     }
 }
