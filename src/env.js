@@ -522,6 +522,7 @@ module.exports = {
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
         serverURL: 'https://blogs.zemuldo.com',
+        fupisha:'https://fupisha.io/api/shorten',
         static:'/static/'
     },
     production: {
@@ -530,6 +531,7 @@ module.exports = {
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
         serverURL: 'https://blogs.zemuldo.com',
+        fupisha:'https://fupisha.io/api/shorten',
         static:'/static/'
     },
     dev: {
@@ -538,6 +540,7 @@ module.exports = {
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
         serverURL: 'https://localhost:8080',
+        fupisha:'http://localhost:8099/api/shorten',
         static:'/'
     },
     development: {
@@ -546,6 +549,7 @@ module.exports = {
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
         serverURL: 'https://localhost:8080',
+        fupisha:'http://localhost:8099/api/shorten',
         static:'/'
     }
 }

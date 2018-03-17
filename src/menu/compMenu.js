@@ -1,6 +1,6 @@
 import React from 'react'
 import 'semantic-ui-css/semantic.min.css'
-import {Menu, Icon, Dropdown, Image, Input, Visibility, Segment, Responsive, Container, Header} from 'semantic-ui-react'
+import {Menu, Icon, Dropdown, Image, Input, Visibility, Segment, Responsive, Container} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import * as VarsActions from '../store/actions/vars'
@@ -18,7 +18,6 @@ class ComMenu extends React.Component {
     constructor(props) {
         super(props)
         this.state = {}
-        this.handleFilterChange = this.handleFilterChange.bind(this)
     };
 
     componentDidMount() {

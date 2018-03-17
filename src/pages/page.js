@@ -1,10 +1,7 @@
 import React from 'react'
-import { Header, Icon, Button, Grid, Loader, Input, Sticky } from 'semantic-ui-react'
+import { Loader } from 'semantic-ui-react'
 import WelcomePage from './welCome'
-import Blogs from '../posts/blogs'
-import Topics from '../partials/topics'
 import axios from 'axios'
-import TwitterProf from '../partials/twitterProf'
 import config from '../env'
 import { pages } from '../env'
 import { topicsOBJ } from '../env'
@@ -21,12 +18,6 @@ class PagesComponent extends React.Component {
       next: true,
       topic: 'all'
     }
-    this.componentDidMount = this.componentDidMount.bind(this)
-    this.componentWillUnmount = this.componentWillUnmount.bind(this)
-    this._handleChangeBodySize = this._handleChangeBodySize.bind(this)
-    this.setNextBlogs = this.setNextBlogs.bind(this)
-    this.setPreviousBlogs = this.setPreviousBlogs.bind(this)
-    this.resetNav = this.resetNav.bind(this)
   };
 
   _handleChangeBodySize (size) {

@@ -12,13 +12,12 @@ import {bindActionCreators} from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
 
-const env = config[process.env.NODE_ENV] || 'development'
+const env = config[process.env.NODE_ENV] || 'development';
 
 class Blogs extends React.Component {
   constructor (props) {
     super(props)
     this.state = {}
-    this.componentDidMount = this.componentDidMount.bind(this)
   };
 
   componentDidMount () {

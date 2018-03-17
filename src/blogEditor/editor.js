@@ -85,32 +85,6 @@ class RenderBlog extends React.Component {
             firstBlock:{}
 
         };
-        this.handleKeyCommand = this._handleKeyCommand.bind(this);
-        this.onTab = this._onTab.bind(this);
-        this.toggleBlockType = this._toggleBlockType.bind(this);
-        this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
-        this.saveContent = this.saveContent.bind(this);
-        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this);
-        this.handleEditorStateCreate = this.handleEditorStateCreate.bind(this);
-        this.publish = this.publish.bind(this);
-        this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this.handleTopicChange = this.handleTopicChange.bind(this);
-        this.handleUTAChange = this.handleUTAChange.bind(this);
-        this.onFinishClick = this.onFinishClick.bind(this);
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.reinInitEditorState = this.reinInitEditorState.bind(this);
-        this.promptForLink = this._promptForLink.bind(this);
-        this.onURLChange = (e) => this.setState({urlValue: e.target.value});
-        this.confirmLink = this._confirmLink.bind(this);
-        this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
-        this.removeLink = this._removeLink.bind(this);
-        this._addAudio = this._addAudio.bind(this);
-        this._addImage = this._addImage.bind(this);
-        this._addVideo = this._addVideo.bind(this);
-        this.__promptForMedia = this.__promptForMedia.bind(this);
-        this._confirmMedia = this._confirmMedia.bind(this)
-        this.handleTitleChange = this.handleTitleChange.bind(this)
-        this.handleWordChange = this.handleWordChange.bind(this)
     }
 
     handleTitleChange = (e) => {

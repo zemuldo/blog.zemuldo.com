@@ -33,11 +33,6 @@ class EditorsForm extends React.Component {
       dialogInComplete: true,
       editorState: null
     }
-    this.handleTopicChange = this.handleTopicChange.bind(this)
-    this.handleUTAChange = this.handleUTAChange.bind(this)
-    this.handleAboutChange = this.handleAboutChange.bind(this)
-    this.onFinishClick = this.onFinishClick.bind(this)
-    this.handleCategoryChange = this.handleCategoryChange.bind(this)
   };
 
   componentDidMount() {
