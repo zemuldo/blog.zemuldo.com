@@ -21,12 +21,6 @@ class PagesComponent extends React.Component {
       next: true,
       topic: 'all'
     }
-    this.componentDidMount = this.componentDidMount.bind(this)
-    this.componentWillUnmount = this.componentWillUnmount.bind(this)
-    this._handleChangeBodySize = this._handleChangeBodySize.bind(this)
-    this.setNextBlogs = this.setNextBlogs.bind(this)
-    this.setPreviousBlogs = this.setPreviousBlogs.bind(this)
-    this.resetNav = this.resetNav.bind(this)
   };
 
   _handleChangeBodySize (size) {

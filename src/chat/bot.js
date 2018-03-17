@@ -20,14 +20,6 @@ class LiveChat extends React.Component {
             chat: [],
             unsent: []
         }
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleTextChange = this.handleTextChange.bind(this)
-        this.toggle = this.toggle.bind(this)
-        this.handlePortalClose = this.handlePortalClose.bind(this)
-        this.handlePortalOpen = this.handlePortalOpen.bind(this)
-        this.chat = this.chat.bind(this)
-        this.scrollChat = this.scrollChat.bind(this)
-        this.resendUnsent = this.resendUnsent.bind(this)
     }
 
     scrollChat = function (i) {

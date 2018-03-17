@@ -49,29 +49,6 @@ class Blog extends React.Component {
             hideMessage: true,
             logingin:false
         }
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.updateLikes = this.updateLikes.bind(this);
-        this.getAauthorAvatar = this.getAauthorAvatar.bind(this);
-        this.closeDelete = this.closeDelete.bind(this);
-        this.openDelete = this.openDelete.bind(this);
-        this.getFBCount = this.getFBCount.bind(this);
-        this.getTWTCount = this.getTWTCount.bind(this);
-        this.getGCCount = this.getGCCount.bind(this);
-        this.saveEdit = this.saveEdit.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSave = this.handleSave.bind(this);
-        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this);
-        this.handleAboutChange = this.handleAboutChange.bind(this);
-        this.setReplyComment = this.setReplyComment.bind(this);
-        this.submitComment = this.submitComment.bind(this);
-        this.onCommentChange = this.onCommentChange.bind(this);
-        this.updateComments = this.updateComments.bind(this);
-        this.deleteComments = this.deleteComments.bind(this);
-        this.getComments = this.getComments.bind(this);
-        this.showDeleteComment=this.showDeleteComment.bind(this);
-        this.handleConfirmDeleteComment=this.handleConfirmDeleteComment.bind(this);
-        this.handleCancelDeleteComment =  this.handleCancelDeleteComment.bind(this);
-        this.handleFormField = this.handleFormField.bind(this)
     }
     show = dimmer => () => this.setState({ dimmer, open: true });
     close = () => this.setState({ open: false })
@@ -86,13 +63,13 @@ class Blog extends React.Component {
         this.props.blogActions.updateBlog({about: data.value})
     }
 
-    handleEditorStateEdit() {
+    handleEditorStateEdit = ()=> {
         this.setState({wordCount: this.props.blog.wordCount});
         let editorState = JSON.parse(this.props.blog.body);
         this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
     };
 
-    closeDelete() {
+    closeDelete=() =>{
         this.setState({showDelete: false})
     }
 
@@ -100,7 +77,7 @@ class Blog extends React.Component {
         this.setState({showDelete: true})
     }
 
-    setBlogCounts() {
+    setBlogCounts=() => {
         let gplusPost = {
             'method': 'pos.plusones.get',
             'id': 'p',
@@ -121,7 +98,7 @@ class Blog extends React.Component {
         this.getGCCount(gplusPost)
     }
 
-    getFBCount(shareURL) {
+    getFBCount =(shareURL)=> {
         return axios.get('https://graph.facebook.com/?id=https://blog.zemuldo.com/' + shareURL, {})
             .then((res) => {
                 this.props.blogActions.updateBlog({

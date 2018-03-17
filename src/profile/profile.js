@@ -22,11 +22,6 @@ class Profile extends React.Component {
       blogIsLoading: false,
       richViewerState: null
     }
-    this.componentDidMount = this.componentDidMount.bind(this)
-    this.componentWillUnmount = this.componentWillUnmount.bind(this)
-    this.blogsAreLoading = this.blogsAreLoading.bind(this)
-    this.blogIsLoading = this.blogIsLoading.bind(this)
-    this.onReadMore = this.onReadMore.bind(this)
   }
 
   blogsAreLoading (state) {

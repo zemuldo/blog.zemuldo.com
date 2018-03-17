@@ -18,7 +18,6 @@ class ComMenu extends React.Component {
     constructor(props) {
         super(props)
         this.state = {}
-        this.handleFilterChange = this.handleFilterChange.bind(this)
     };
 
     componentDidMount() {

@@ -42,18 +42,6 @@ class Login extends React.Component {
             signUp: false,
             userBlogs: null
         }
-        this.componentDidMount = this.componentDidMount.bind(this)
-        this.handleFormField= this.handleFormField.bind(this)
-        this.handleSignUp = this.handleSignUp.bind(this)
-        this.onLoginClick = this.onLoginClick.bind(this)
-        this.handSwichReg = this.handSwichReg.bind(this)
-        this._handleFileChange = this._handleFileChange.bind(this)
-        this.loadHandler = this.loadHandler.bind(this)
-        this.closeCreateAvatar = this.closeCreateAvatar.bind(this)
-        this.showCreateAvatar = this.showCreateAvatar.bind(this)
-        this.setAvatar = this.setAvatar.bind(this)
-        this.setBlogs = this.setBlogs.bind(this)
-        this.validateUser = this.validateUser.bind(this)
     };
 
     validateUser() {

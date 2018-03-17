@@ -15,11 +15,6 @@ class ReviewPortal extends React.Component {
       message: '',
       checked: false
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleTextChange = this.handleTextChange.bind(this)
-    this.toggle = this.toggle.bind(this)
-    this.handlePortalClose = this.handlePortalClose.bind(this)
-    this.handlePortalOpen = this.handlePortalOpen.bind(this)
   }
 
   toggle = () => {

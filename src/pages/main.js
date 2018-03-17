@@ -32,22 +32,6 @@ class App extends React.Component {
             window: window.innerWidth,
             topics: (window.innerWidth / 100) - 3
         }
-        this.componentDidMount = this.componentDidMount.bind(this)
-        this.componentWillUnmount = this.componentWillUnmount.bind(this)
-        this.componentWillUnmount = this.componentWillUnmount.bind(this)
-        this._handleCreateNew = this._handleCreateNew.bind(this)
-        this._handleSwitchToProfile = this._handleSwitchToProfile.bind(this)
-        this._goToEditor = this._goToEditor.bind(this)
-        this._exitEditMode = this._exitEditMode.bind(this)
-        this.navigateBlogs = this.navigateBlogs.bind(this)
-        this.setCurrentBlog = this.setCurrentBlog.bind(this)
-        this.blogsAreLoading = this.blogsAreLoading.bind(this)
-        this.handleFilterChange = this.handleFilterChange.bind(this)
-        this.setTopicPosts = this.setTopicPosts.bind(this)
-        this.setBlogHere = this.setBlogHere.bind(this)
-        this.setTopicNextPosts = this.setTopicNextPosts.bind(this)
-        this.show_left = this.show_left.bind(this)
-        this.show_right = this.show_right.bind(this)
     };
 
     blogsAreLoading(state) {

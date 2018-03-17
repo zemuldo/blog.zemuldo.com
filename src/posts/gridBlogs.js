@@ -9,8 +9,6 @@ class GridBlogs extends React.Component {
   constructor (props) {
     super(props)
     this.state = {showInfo: false}
-    this.handleMouseEnter = this.handleMouseEnter.bind(this)
-    this.handleMouseLeave = this.handleMouseLeave.bind(this)
   }
 
   handleMouseEnter () {
