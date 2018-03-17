@@ -9,7 +9,6 @@ import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import createCounterPlugin from 'draft-js-counter-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import Prism from 'prismjs';
-import createPrismPlugin from 'draft-js-prism-plugin';
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import {
     AtomicBlockUtils,
@@ -35,10 +34,6 @@ import {
     styleMap
 } from './editorToolkit'
 
-const prismPlugin = createPrismPlugin({
-    // Provide your own instance of PrismJS
-    prism: Prism
-});
 
 const hashtagPlugin = createHashtagPlugin();
 const linkifyPlugin = createLinkifyPlugin();
@@ -54,8 +49,7 @@ const plugins = [
     hashtagPlugin,
     linkifyPlugin,
     counterPlugin,
-    sideToolbarPlugin,
-    prismPlugin
+    sideToolbarPlugin
 ];
 
 const env = config[process.env.NODE_ENV] || 'development';
