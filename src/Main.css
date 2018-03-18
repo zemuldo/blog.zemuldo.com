@@ -145,6 +145,8 @@ a:hover {
 }
 
 .RichEditor-editor .public-DraftStyleDefault-pre {
+    position: relative;
+    max-width: 70%;
     background-color: rgb(68,68,68); /* Needed for IEs */
 
     -moz-box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
@@ -156,6 +158,7 @@ a:hover {
     zoom: 1;
     padding: 5px;
     list-style: none;
+    overflow:auto;
     color: #45D40C;
     font: 0.8em 'Andale Mono', Consolas, 'Courier New';
     line-height: 1.6em;
