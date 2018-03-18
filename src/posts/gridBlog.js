@@ -35,7 +35,7 @@ class GridBlog extends React.Component {
       }}
             >
         <Card.Content>
-          <Card.Header onClick={()=>this.props.history.push(p)}>
+          <Card.Header>
           <a onClick={()=>this.props.history.push(p)}>
           <Header color='green' as='h3'>
               {o.title.split(' ').join(' ')}
