@@ -57,6 +57,11 @@ class App extends React.Component {
 
     setBlogHere(id, page) {
         this.props.varsActions.updateVars({blogLoaded: false})
+        if(this.props.vars[`blog_${id}`]){
+            this.props.blogActions.updateBlog(this.props.vars[`blog_${id}`])
+            this.props.varsActions.updateVars({blogLoaded: true})
+            return true
+        }
         if (!pages[page]) {
             window.location = '/'
         }
@@ -83,7 +88,11 @@ class App extends React.Component {
                 Object.assign(blog, response[1].data)
                 this.props.blogActions.updateBlog(blog)
                 this.props.varsActions.updateVars({blogLoaded: true})
+                return blog
             }.bind(this))
+            .then(o=>{
+                if(o) this.props.varsActions.updateVars({[`blog_${id}`]:o})
+            })
             .catch(function (err) {
                 this.props.history.push('/')
                 this.props.blogActions.updateBlog({})
@@ -138,11 +147,17 @@ class App extends React.Component {
 
     navigateBlogs(query) {
         this.props.varsActions.updateVars({blogsLoaded: false})
-        return axios.post(env.httpURL, {
+        let q = {
             'queryMethod': 'getPosts',
             'queryData': query
-        })
-            .then(function (response) {
+        }
+        if(this.props.vars[window.location.pathname]){
+            this.props.blogsActions.updateBlogs(this.props.vars[window.location.pathname])
+            this.props.varsActions.updateVars({blogsLoaded: true})
+           return true
+        }
+        return axios.post(env.httpURL, q)
+            .then( (response)=> {
                 if (!response.data) {
                     this.props.blogsActions.updateBlogs([])
                     this.props.varsActions.updateVars({blogsLoaded: true})
@@ -161,8 +176,11 @@ class App extends React.Component {
                         }))
                     }
                 }
-            }.bind(this))
-            .catch(function (err) {
+            })
+            .then(o=>{
+                this.props.varsActions.updateVars({[window.location.pathname]:this.props.blogs})
+            })
+            .catch( (err)=> {
                 this.props.blogsActions.updateBlogs([])
                 if (!this.props.vars.wsFetchBlogDeatils) {
                     this.props.varsActions.updateVars({wsFetchBlogDeatils: true})
@@ -173,7 +191,7 @@ class App extends React.Component {
                     }))
                 }
                 this.props.varsActions.updateVars({blogsLoaded: true})
-            }.bind(this))
+            })
     }
 
     resize = () => this.forceUpdate();
@@ -308,18 +326,6 @@ class App extends React.Component {
         window.removeEventListener('resize', this.resize)
     }
 
-    _handleCreateNew = () => {
-        let editorState = window.localStorage.getItem('draftContent')
-        let blogData = window.localStorage.getItem('blogData')
-        if (editorState && blogData) {
-            this.setState({editingMode: true})
-        }
-        this.setState({createNew: true, currentLocation: 'profile'})
-    }
-    _handleSwitchToProfile = () => {
-        this.setState({currentLocation: 'profile', createNew: false})
-    }
-
     _goToEditor() {
         this.setState({editingMode: true})
     }
@@ -327,17 +333,6 @@ class App extends React.Component {
     _exitEditMode() {
         this.setState({editingMode: false, createNew: false})
     }
-
-    show_left = () => {
-        this.setState({x: this.state.x === 0 ? 0 : this.state.x - 1, y: this.state.y === 6 ? 6 : this.state.y - 1})
-    };
-
-    show_right = () => {
-        this.setState({
-            x: this.state.y >= topics.length ? this.state.x : this.state.x + 1,
-            y: this.state.y === topics.length ? topics.length - 1 : this.state.y + 1
-        })
-    };
 
     handleContextRef = tag_contextRef => this.setState({tag_contextRef})
 

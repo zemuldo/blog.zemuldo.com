@@ -5,7 +5,8 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import * as TopicsActions from '../store/actions/topics'
-import PropTypes, {func} from 'prop-types'
+import * as BlogsActions from '../store/actions/blogs'
+import PropTypes from 'prop-types'
 
 class LiveChat extends React.Component {
     constructor(props) {
@@ -31,7 +32,7 @@ class LiveChat extends React.Component {
         this.chat()
     }
 
-    chat() {
+    chat =()=> {
         this.props.vars.ws.onmessage = function (message) {
             let mess = JSON.parse(message.data)
             if (mess.type === 'sessionId') {
@@ -56,6 +57,12 @@ class LiveChat extends React.Component {
             }
             if (mess.type === 'topicDetails') {
                 this.props.topicsActions.updateTopics(mess.msg)
+                return true
+            }
+            if (mess.type === 'blogs') {
+                this.props.blogsActions.updateBlogs(mess.msg)
+                this.props.varsActions.updateVars({['/home/all']:mess.msg})
+                this.props.varsActions.updateVars({['/']:mess.msg})
                 return true
             }
         }.bind(this)
@@ -251,7 +258,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         varsActions: bindActionCreators(VarsActions, dispatch),
-        topicsActions: bindActionCreators(TopicsActions, dispatch)
+        topicsActions: bindActionCreators(TopicsActions, dispatch),
+        blogsActions: bindActionCreators(BlogsActions, dispatch),
     }
 }
 
