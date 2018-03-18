@@ -74,13 +74,49 @@ class Blog extends React.Component {
         this.setState({showDelete: true})
     }
 
-    setBlogCounts=() => {
+    setBlogCounts=(shareUrl) => {
+        window.scrollTo(0, 0)
+        this.getFBCount(shareUrl)
+        this.getTWTCount(shareUrl)
+        this.getGCCount(shareUrl)
+    }
+
+    getFBCount =(shareUrl)=> {
+        return axios.get('https://graph.facebook.com/?id=' +shareUrl, {})
+            .then((res) => {
+                this.props.blogActions.updateBlog({
+                    fbC: this.props.blog.fbC+(res.data.share.share_count) ? res.data.share.share_count : 0
+                })
+                return true
+            })
+            .catch((err) => {
+                this.props.blogActions.updateBlog({
+                    fbC:  this.props.blog.fbC
+                })
+            })
+    };
+
+    getTWTCount(shareUrl) {
+        return axios.get('https://public.newsharecounts.com/count.json?url=' + shareUrl, {})
+            .then((res) => {
+                this.props.blogActions.updateBlog({
+                    twtC:  this.props.blog.twtC + (res.data.count) ? res.data.count : 0
+                })
+            })
+            .catch((err) => {
+                this.props.blogActions.updateBlog({
+                    twtC:  this.props.blog.twtC
+                })
+            })
+    };
+
+    getGCCount(shareUrl) {
         let gplusPost = {
             'method': 'pos.plusones.get',
             'id': 'p',
             'params': {
                 'nolog': true,
-                'id': this.state.blogUrl.shortUrl,
+                'id': shareUrl,
                 'source': 'widget',
                 'userId': '@viewer',
                 'groupId': '@self'
@@ -89,42 +125,6 @@ class Blog extends React.Component {
             'key': 'p',
             'apiVersion': 'v1'
         }
-        window.scrollTo(0, 0)
-        this.getFBCount()
-        this.getTWTCount()
-        this.getGCCount(gplusPost)
-    }
-
-    getFBCount =()=> {
-        return axios.get('https://graph.facebook.com/?id=' +this.state.blogUrl.shortUrl, {})
-            .then((res) => {
-                this.props.blogActions.updateBlog({
-                    fbC: (res.data.share.share_count) ? res.data.share.share_count : 0
-                })
-                return true
-            })
-            .catch((err) => {
-                this.props.blogActions.updateBlog({
-                    fbC: 0
-                })
-            })
-    };
-
-    getTWTCount() {
-        return axios.get('https://public.newsharecounts.com/count.json?url=' + this.state.blogUrl.shortUrl, {})
-            .then((res) => {
-                this.props.blogActions.updateBlog({
-                    twtC: (res.data.count) ? res.data.count : 0
-                })
-            })
-            .catch((err) => {
-                this.props.blogActions.updateBlog({
-                    twtC: 0
-                })
-            })
-    };
-
-    getGCCount(gplusPost) {
         return axios.post(' https://clients6.google.com/rpc', gplusPost)
             .then((res) => {
                 this.props.blogActions.updateBlog({
@@ -134,7 +134,7 @@ class Blog extends React.Component {
             })
             .catch((err) => {
                 this.props.blogActions.updateBlog({
-                    gplsC: 0
+                    gplsC:  this.props.blog.gplsC+ 0
                 })
             })
     };
@@ -184,7 +184,8 @@ class Blog extends React.Component {
         axios.post(env.fupisha,{url:`https://blog.zemuldo.com/${this.props.blog._id}`,custom_longUrl:`${window.location.href}`})
             .then(o=>{
                 this.setState({blogUrl:o.data})
-                this.setBlogCounts()
+                this.setBlogCounts(this.state.blogUrl.shortUrl)
+                this.setBlogCounts(`https://blog.zemuldo.com/${this.state.blogUrlT}`)
             })
             .catch(e=>{
 
@@ -240,10 +241,10 @@ class Blog extends React.Component {
     }
 
     fbShare() {
-        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F'+this.state.blogUrl.shortUrl_Bare+'%2F'
+        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u='+this.state.blogUrl.shortUrl
         if (this.props.blog) {
             let postURL = this.state.blogUrl.pathname
-            let shareURL = fbShareURL + postURL + "&amp;src=sdkpreparse'"
+            let shareURL = fbShareURL + "&amp;src=sdkpreparse'"
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
     }

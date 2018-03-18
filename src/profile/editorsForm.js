@@ -43,35 +43,36 @@ class EditorsForm extends React.Component {
     window.removeEventListener('resize', this.resize)
   }
 
-  handleCategoryChange(e, data) {
+  handleCategoryChange=(e, data)=> {
+    console.log(data.value)
     this.setState({
       category: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  handleAboutChange(e, data) {
+  handleAboutChange =(e, data)=> {
     this.setState({
       about: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  handleTopicChange(e, data) {
+  handleTopicChange =(e, data)=> {
     this.setState({
       topics: data.value,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  handleUTAChange(e, data) {
+  handleUTAChange =(e, data)=> {
     this.setState({
       termsAccept: data.checked,
       dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
     })
   }
 
-  onFinishClick() {
+  onFinishClick =()=> {
     let blogDta = {
       type: this.state.category,
       topics: this.state.topics,
@@ -82,14 +83,14 @@ class EditorsForm extends React.Component {
     this.updateVars([{ key: 'editingMode', value: true }])
   }
 
-  updateVars(vars) {
+  updateVars =(vars)=> {
     let newVars = this.props.vars
     for (let i = 0; i < vars.length; i++) {
       newVars[vars[i].key] = vars[i].value
     }
     this.props.varsActions.updateVars(newVars)
   };
-  handleEditorStateCreate() {
+  handleEditorStateCreate =()=> {
     const title = localStorage.getItem('title')
     const state = window.localStorage.getItem('draftContent')
     const blogDataState = window.localStorage.getItem('blogData')
