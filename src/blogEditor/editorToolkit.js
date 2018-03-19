@@ -8,6 +8,8 @@ import MultiDecorator from 'draft-js-multidecorators'
 import SimpleDecorator from 'draft-js-simpledecorator'
 import {Entity} from 'draft-js'
 
+console.log(Prism.languages)
+
 class PrismDraftDecorator {
     constructor(grammar) {
         this.grammar = grammar;
@@ -88,10 +90,6 @@ Link.propTypes = {
 };
 
 //export const decorator = new PrismDraftDecorator(Prism.languages.javascript);
-// export const decorator = new PrismDecorator({
-//     // Provide your own instance of PrismJS
-//     prism: Prism,
-// });
 export const decorator = new MultiDecorator([
     new PrismDecorator({
         // Provide your own instance of PrismJS
@@ -134,14 +132,6 @@ export const decorator = new MultiDecorator([
     ),
 
 ]);
-
-// export const decorator =  new CompositeDecorator([
-//     {
-//         strategy: findLinkEntities,
-//         component: Link,
-//     },
-//     new PrismDraftDecorator(Prism.languages.javascript)
-// ]);
 export const styles = {
     root: {
         fontFamily: '\'Georgia\', serif',
