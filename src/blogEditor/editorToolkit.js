@@ -1,20 +1,76 @@
 import React from 'react'
-import {CompositeDecorator} from "draft-js";
 import PropTypes from "prop-types";
 import {Icon} from 'semantic-ui-react'
+import Prism from "prismjs";
+import {List} from 'immutable'
 import PrismDecorator from 'draft-js-prism'
+import MultiDecorator from 'draft-js-multidecorators'
+import SimpleDecorator from 'draft-js-simpledecorator'
+import {Entity} from 'draft-js'
 
-export function findLinkEntities(contentBlock, callback, contentState) {
+class PrismDraftDecorator {
+    constructor(grammar) {
+        this.grammar = grammar;
+        this.highlighted = {};
+    }
+    getDecorations(block) {
+        let blockType = block.getType();
+        let blockKey = block.getKey();
+        let blockText = block.getText();
+        let decorations = Array(blockText.length).fill(null);
+        this.highlighted[blockKey] = {};
+        if (blockType !== 'code-block') {
+            return List(decorations);
+        }
+        let tokens = Prism.tokenize(blockText, this.grammar);
+        let offset = 0;
+        let that = this;
+        tokens.forEach(function(tok) {
+            if (typeof tok === 'string') {
+                offset += tok.length;
+            } else {
+                let tokId = 'tok'+offset;
+                let completeId = blockKey + '-' + tokId;
+                that.highlighted[blockKey][tokId] = tok;
+                occupySlice(decorations, offset, offset + tok.content.length, completeId);
+                offset += tok.content.length;
+            }
+        });
+        return List(decorations);
+    }
+    getComponentForKey(key) {
+        return function(props) {
+            return <span  className={'token ' + props.tokType}>{props.children}</span>;
+        }
+    }
+    getPropsForKey(key) {
+        let parts = key.split('-');
+        let blockKey = parts[0];
+        let tokId = parts[1];
+        let token = this.highlighted[blockKey][tokId];
+        return {
+            tokType: token.type
+        };
+    }
+}
+
+function occupySlice(targetArr, start, end, componentKey) {
+    for (let ii = start; ii < end; ii++) {
+        targetArr[ii] = componentKey;
+    }
+}
+
+export function findLinkEntities(contentBlock, callback) {
     contentBlock.findEntityRanges(
         (character) => {
             const entityKey = character.getEntity();
             return (
                 entityKey !== null &&
-                contentState.getEntity(entityKey).getType() === 'LINK'
-            )
+                Entity.get(entityKey).getType() === 'LINK'
+            );
         },
         callback
-    )
+    );
 }
 
 export const Link = (props) => {
@@ -30,13 +86,62 @@ Link.propTypes = {
     children: PropTypes.array.isRequired,
     entityKey: PropTypes.string.isRequired
 };
-export const decorator = new CompositeDecorator([
-    {
-        strategy: findLinkEntities,
-        component: Link,
-        prism: PrismDecorator,
-    }
+
+//export const decorator = new PrismDraftDecorator(Prism.languages.javascript);
+// export const decorator = new PrismDecorator({
+//     // Provide your own instance of PrismJS
+//     prism: Prism,
+// });
+export const decorator = new MultiDecorator([
+    new PrismDecorator({
+        // Provide your own instance of PrismJS
+        prism: Prism,
+    }),
+    new PrismDraftDecorator(Prism.languages.javascript),
+    new SimpleDecorator(
+
+        function strategy(contentBlock, callback, contentState) {
+            const text = contentBlock.getText()
+
+            // Match text like #ac00ff and #EEE
+            let HEX_COLOR = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/g
+
+            // For all Hex color matches
+            let match
+            while ((match = HEX_COLOR.exec(text)) !== null) {
+                // Decorate the color code
+                let colorText = match[0]
+                let start = match.index
+                let end = start + colorText.length
+                let props = {
+                    color: colorText
+                }
+                callback(start, end, props)
+            }
+        },
+
+        /**
+         * @prop {String} color
+         */
+        function component(props) {
+            // Colorize the text with the given color
+            return <span style={{ color: props.color }}>{ props.children }</span>
+        }
+    ),
+    new SimpleDecorator(
+        findLinkEntities,
+        Link
+    ),
+
 ]);
+
+// export const decorator =  new CompositeDecorator([
+//     {
+//         strategy: findLinkEntities,
+//         component: Link,
+//     },
+//     new PrismDraftDecorator(Prism.languages.javascript)
+// ]);
 export const styles = {
     root: {
         fontFamily: '\'Georgia\', serif',
