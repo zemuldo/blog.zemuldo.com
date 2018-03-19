@@ -16,6 +16,7 @@
     "draft-js-prism": "^1.0.5",
     "draft-js-prism-plugin": "^0.1.1",
     "draft-js-side-toolbar-plugin": "^2.0.1",
+    "draft-js-simpledecorator": "^1.0.2",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "helmet": "^3.9.0",
@@ -96,7 +97,7 @@
     "test": "mocha",
     "lint": "eslint .",
     "standard": "standard --fix",
-    "watch":"PORT=8072 node app.js"
+    "watch": "PORT=8072 node app.js"
   },
   "jest": {
     "collectCoverageFrom": [
