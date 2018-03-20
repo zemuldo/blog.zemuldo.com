@@ -8,7 +8,6 @@ import createHashtagPlugin from 'draft-js-hashtag-plugin';
 import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import createCounterPlugin from 'draft-js-counter-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
-import Prism from 'prismjs';
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import {
     AtomicBlockUtils,
@@ -79,6 +78,32 @@ class RenderBlog extends React.Component {
             firstBlock:{}
 
         };
+        this.handleKeyCommand = this._handleKeyCommand.bind(this);
+        this.onTab = this._onTab.bind(this);
+        this.toggleBlockType = this._toggleBlockType.bind(this);
+        this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+        this.saveContent = this.saveContent.bind(this);
+        this.handleEditorStateEdit = this.handleEditorStateEdit.bind(this);
+        this.handleEditorStateCreate = this.handleEditorStateCreate.bind(this);
+        this.publish = this.publish.bind(this);
+        this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleTopicChange = this.handleTopicChange.bind(this);
+        this.handleUTAChange = this.handleUTAChange.bind(this);
+        this.onFinishClick = this.onFinishClick.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.reinInitEditorState = this.reinInitEditorState.bind(this);
+        this.promptForLink = this._promptForLink.bind(this);
+        this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+        this.confirmLink = this._confirmLink.bind(this);
+        this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
+        this.removeLink = this._removeLink.bind(this);
+        this._addAudio = this._addAudio.bind(this);
+        this._addImage = this._addImage.bind(this);
+        this._addVideo = this._addVideo.bind(this);
+        this.__promptForMedia = this.__promptForMedia.bind(this);
+        this._confirmMedia = this._confirmMedia.bind(this)
+        this.handleTitleChange = this.handleTitleChange.bind(this)
+        this.handleWordChange = this.handleWordChange.bind(this)
     }
 
     handleTitleChange = (e) => {
@@ -90,7 +115,7 @@ class RenderBlog extends React.Component {
         this.setState({wordCount:Number(e.target.value)})
     }
 
-    __promptForMedia =(type)=> {
+    __promptForMedia(type) {
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -100,7 +125,7 @@ class RenderBlog extends React.Component {
         })
     }
 
-    _addAudio =()=> {
+    _addAudio() {
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -110,7 +135,7 @@ class RenderBlog extends React.Component {
         })
     }
 
-    _addImage =()=> {
+    _addImage() {
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -120,7 +145,7 @@ class RenderBlog extends React.Component {
         })
     }
 
-    _addVideo =()=> {
+    _addVideo() {
         this.setState({
             showMedURLInput: true,
             urlValue: '',
@@ -130,7 +155,7 @@ class RenderBlog extends React.Component {
         })
     }
 
-    _confirmMedia =(e)=> {
+    _confirmMedia(e) {
         e.preventDefault();
         const {editorState, urlValue, urlType} = this.state;
         const contentState = editorState.getCurrentContent();
@@ -157,13 +182,13 @@ class RenderBlog extends React.Component {
         })
     }
 
-    onURLInputKeyDown =(e)=> {
+    onURLInputKeyDown(e) {
         if (e.which === 13) {
             this._confirmMedia(e)
         }
     }
 
-    promptForLink =(e)=> {
+    _promptForLink(e) {
         e.preventDefault();
         const {editorState} = this.state;
         const selection = editorState.getSelection();
@@ -187,7 +212,7 @@ class RenderBlog extends React.Component {
         }
     }
 
-    confirmLink =(e)=> {
+    _confirmLink(e) {
         e.preventDefault();
         const {editorState, urlValue} = this.state;
         const contentState = editorState.getCurrentContent();
@@ -211,13 +236,13 @@ class RenderBlog extends React.Component {
         })
     }
 
-    onLinkInputKeyDown =(e)=> {
+    _onLinkInputKeyDown(e) {
         if (e.which === 13) {
             this._confirmLink(e)
         }
     }
 
-    removeLink =(e)=> {
+    _removeLink(e) {
         e.preventDefault();
         const {editorState} = this.state;
         const selection = editorState.getSelection();
@@ -228,7 +253,7 @@ class RenderBlog extends React.Component {
         }
     }
 
-    isLoading =(value)=> {
+    isLoading(value) {
         this.setState({isLoaded: value})
     };
 
@@ -242,7 +267,7 @@ class RenderBlog extends React.Component {
         this.refs.editor.focus();
     };
 
-    handleKeyCommand =(command, editorState)=> {
+    _handleKeyCommand(command, editorState) {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             this.onChange(newState);
@@ -251,12 +276,12 @@ class RenderBlog extends React.Component {
         return false
     }
 
-    onTab(e) {
+    _onTab(e) {
         const maxDepth = 4;
         this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth))
     }
 
-    toggleBlockType =(blockType)=> {
+    _toggleBlockType(blockType) {
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -265,7 +290,7 @@ class RenderBlog extends React.Component {
         )
     }
 
-    toggleInlineStyle(inlineStyle) {
+    _toggleInlineStyle(inlineStyle) {
         this.onChange(
             RichUtils.toggleInlineStyle(
                 this.state.editorState,
@@ -364,28 +389,28 @@ class RenderBlog extends React.Component {
         }
     };
 
-    handleCategoryChange =(e, data)=> {
+    handleCategoryChange(e, data) {
         this.setState({
             category: data.value,
             dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
         })
     }
 
-    handleTopicChange =(e, data)=> {
+    handleTopicChange(e, data) {
         this.setState({
             topics: data.value,
             dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
         })
     };
 
-    handleUTAChange =(e, data)=> {
+    handleUTAChange(e, data) {
         this.setState({
             termsAccept: data.value,
             dialogInComplete: (this.state.topics && this.state.category && this.state.termsAccept)
         })
     };
 
-    onFinishClick =()=> {
+    onFinishClick() {
         let blogDta = {
             type: this.state.category,
             topics: this.state.topics
@@ -425,11 +450,12 @@ class RenderBlog extends React.Component {
         this.setState({confirmOpen: false})
     };
 
-    reinInitEditorState =(state)=> {
+    reinInitEditorState(state) {
         this.setState({editorState: state})
     }
 
     render() {
+        let mode = this.props.blog.editMode || this.props.mode==='create'
         let mediaInput;
         if (this.state.showMedURLInput) {
             mediaInput =
@@ -539,7 +565,7 @@ class RenderBlog extends React.Component {
                                                 style={{marginRight: 10}}>
                                             Add Image
                                         </Button>
-                                        <Button color='green' size='mini' onMouseDown={this._addVideo}
+                                        <Button color='green' size='mini' onMouseDown={this.addVideo}
                                                 style={{marginRight: 10}}>
                                             Add Video
                                         </Button>
@@ -558,11 +584,6 @@ class RenderBlog extends React.Component {
                         </div> : null
                 }
                 <div style={this.props.blog.editMode || this.props.mode==='create'? {
-                    height: window.innerHeight * 0.7,
-                    minHeight: '300px',
-                    width: 'inherit',
-                    lineHeight: '3em',
-                    overflowY: 'scroll',
                     padding: '5px',
                     border: '1px solid green',
                 } : null}>
@@ -601,7 +622,7 @@ class RenderBlog extends React.Component {
                         </Modal.Actions>
                     </Modal>
 
-                    <div className={className}>
+                    <div className={className+' RichEditor-editor-wrap'}>
                         <Editor
                             onClick={this.focus}
                             readOnly={!this.props.blog.editMode && this.props.mode !== 'create'}
