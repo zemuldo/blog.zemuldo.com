@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import ShowPreview from './prevEditor'
 import debounce from 'lodash/debounce'
 import Editor from 'draft-js-plugins-editor';
@@ -8,7 +8,9 @@ import createHashtagPlugin from 'draft-js-hashtag-plugin';
 import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import createCounterPlugin from 'draft-js-counter-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
+import createEmojiPlugin from 'draft-js-emoji-plugin';
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
+import 'draft-js-emoji-plugin/lib/plugin.css';
 import {
     AtomicBlockUtils,
     convertFromRaw,
@@ -16,9 +18,9 @@ import {
     EditorState,
     RichUtils
 } from 'draft-js'
-import {Button, Header, Icon, Modal, Input} from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Input } from 'semantic-ui-react'
 import config from '../env'
-import {bindActionCreators} from 'redux'
+import { bindActionCreators } from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import * as BlogActions from '../store/actions/blog'
 import PropTypes from 'prop-types'
@@ -38,17 +40,20 @@ const hashtagPlugin = createHashtagPlugin();
 const linkifyPlugin = createLinkifyPlugin();
 const counterPlugin = createCounterPlugin();
 const sideToolbarPlugin = createSideToolbarPlugin();
+const emojiPlugin = createEmojiPlugin();
 
 
-const {CharCounter, WordCounter, LineCounter} = counterPlugin;
-const {SideToolbar} = sideToolbarPlugin;
+const { CharCounter, WordCounter, LineCounter } = counterPlugin;
+const { SideToolbar } = sideToolbarPlugin;
 
+const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 
 const plugins = [
     hashtagPlugin,
     linkifyPlugin,
     counterPlugin,
-    sideToolbarPlugin
+    sideToolbarPlugin,
+    emojiPlugin
 ];
 
 const env = config[process.env.NODE_ENV] || 'development';
@@ -75,7 +80,7 @@ class RenderBlog extends React.Component {
             urlType: '',
             title: '',
             wordCount: 0,
-            firstBlock:{}
+            firstBlock: {}
 
         };
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -93,7 +98,7 @@ class RenderBlog extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.reinInitEditorState = this.reinInitEditorState.bind(this);
         this.promptForLink = this._promptForLink.bind(this);
-        this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+        this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
         this.confirmLink = this._confirmLink.bind(this);
         this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
         this.removeLink = this._removeLink.bind(this);
@@ -107,12 +112,12 @@ class RenderBlog extends React.Component {
     }
 
     handleTitleChange = (e) => {
-        this.setState({title: e.target.value})
-        this.props.mode==='create'?localStorage.setItem('creatTitle',e.target.value):null
+        this.setState({ title: e.target.value })
+        this.props.mode === 'create' ? localStorage.setItem('creatTitle', e.target.value) : null
     }
 
     handleWordChange = (e) => {
-        this.setState({wordCount:Number(e.target.value)})
+        this.setState({ wordCount: Number(e.target.value) })
     }
 
     __promptForMedia(type) {
@@ -157,17 +162,17 @@ class RenderBlog extends React.Component {
 
     _confirmMedia(e) {
         e.preventDefault();
-        const {editorState, urlValue, urlType} = this.state;
+        const { editorState, urlValue, urlType } = this.state;
         const contentState = editorState.getCurrentContent();
         const contentStateWithEntity = contentState.createEntity(
             urlType,
             'IMMUTABLE',
-            {src: urlValue}
+            { src: urlValue }
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const newEditorState = EditorState.set(
             editorState,
-            {currentContent: contentStateWithEntity}
+            { currentContent: contentStateWithEntity }
         );
         this.setState({
             editorState: AtomicBlockUtils.insertAtomicBlock(
@@ -190,7 +195,7 @@ class RenderBlog extends React.Component {
 
     _promptForLink(e) {
         e.preventDefault();
-        const {editorState} = this.state;
+        const { editorState } = this.state;
         const selection = editorState.getSelection();
         if (!selection.isCollapsed()) {
             const contentState = editorState.getCurrentContent();
@@ -214,15 +219,15 @@ class RenderBlog extends React.Component {
 
     _confirmLink(e) {
         e.preventDefault();
-        const {editorState, urlValue} = this.state;
+        const { editorState, urlValue } = this.state;
         const contentState = editorState.getCurrentContent();
         const contentStateWithEntity = contentState.createEntity(
             'LINK',
             'MUTABLE',
-            {url: urlValue}
+            { url: urlValue }
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, {currentContent: contentStateWithEntity});
+        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
         this.setState({
             editorState: RichUtils.toggleLink(
                 newEditorState,
@@ -244,7 +249,7 @@ class RenderBlog extends React.Component {
 
     _removeLink(e) {
         e.preventDefault();
-        const {editorState} = this.state;
+        const { editorState } = this.state;
         const selection = editorState.getSelection();
         if (!selection.isCollapsed()) {
             this.setState({
@@ -254,14 +259,14 @@ class RenderBlog extends React.Component {
     }
 
     isLoading(value) {
-        this.setState({isLoaded: value})
+        this.setState({ isLoaded: value })
     };
 
     onChange = (editorState) => {
         const contentState = editorState.getCurrentContent();
-        this.setState({editorState});
+        this.setState({ editorState });
         this.saveContent(contentState);
-        this.setState({hasSavedContent: false})
+        this.setState({ hasSavedContent: false })
     };
     focus = () => {
         this.refs.editor.focus();
@@ -300,11 +305,11 @@ class RenderBlog extends React.Component {
     }
 
     publish = () => {
-        this.setState({open: true})
+        this.setState({ open: true })
         const title = localStorage.getItem('creatTitle')
         const content = localStorage.getItem('draftContent')
         const blogData = JSON.parse(localStorage.getItem('blogData'))
-        if (content && blogData && title && this.state.wordCount>2) {
+        if (content && blogData && title && this.state.wordCount > 2) {
             let obj = JSON.parse(content)
             axios.post(env.httpURL, {
                 queryMethod: 'publish',
@@ -313,15 +318,15 @@ class RenderBlog extends React.Component {
                     title: title,
                     topics: blogData.topics,
                     about: blogData.about,
-                    wordCount:this.state.wordCount,
+                    wordCount: this.state.wordCount,
                     images: ['blogs_pic.jpg'],
-                    author:{
-                        id:this.props.user.id,
+                    author: {
+                        id: this.props.user.id,
                         name: this.props.user.firstName + ' ' + this.props.user.lastName,
                         userName: this.props.user.userName,
-                        url:this.props.user.avatarURL,
-                        style:this.props.user.avatar,
-                        created:this.props.user.created
+                        url: this.props.user.avatarURL,
+                        style: this.props.user.avatar,
+                        created: this.props.user.created
                     },
                     body: JSON.stringify(obj)
                 }
@@ -332,16 +337,16 @@ class RenderBlog extends React.Component {
                         window.localStorage.removeItem('blogData')
                         window.localStorage.removeItem('draftContent')
                         localStorage.removeItem('blogTitle')
-                        this.setState({isPublished: true, filledForm: true})
-                        this.props.varsActions.updateVars({editingMode: false, createNew: false})
+                        this.setState({ isPublished: true, filledForm: true })
+                        this.props.varsActions.updateVars({ editingMode: false, createNew: false })
                     } else {
-                        this.props.varsActions.updateVars({editingMode: false, createNew: false})
+                        this.props.varsActions.updateVars({ editingMode: false, createNew: false })
                     }
                 }.bind(this))
 
                 .catch(function (err) {
-                    this.setState({filledForm: true})
-                    this.setState({isPublished: false})
+                    this.setState({ filledForm: true })
+                    this.setState({ isPublished: false })
                 }.bind(this))
         } else {
 
@@ -352,7 +357,7 @@ class RenderBlog extends React.Component {
         this.props.mode === 'edit' ?
             window.localStorage.setItem('editBlog', JSON.stringify(content)) :
             window.localStorage.setItem('draftContent', JSON.stringify(content))
-        !this.state.firstBlock.text?this.setState({firstBlock:content.blocks[0]}):null
+        !this.state.firstBlock.text ? this.setState({ firstBlock: content.blocks[0] }) : null
     }, 1000);
 
     componentDidMount() {
@@ -363,13 +368,13 @@ class RenderBlog extends React.Component {
     }
 
     handleEditorStateEdit() {
-        this.setState({wordCount:this.props.blog.wordCount})
+        this.setState({ wordCount: this.props.blog.wordCount })
         let editorState = JSON.parse(this.props.editorState);
-        this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
-        !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
+        this.setState({ editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator) })
+        !this.state.firstBlock.text ? this.setState({ firstBlock: editorState.blocks[0] }) : null
     };
 
-    handleEditorStateCreate =()=> {
+    handleEditorStateCreate = () => {
         const title = localStorage.getItem('creatTitle')
         const state = window.localStorage.getItem('draftContent')
         const blogDataState = window.localStorage.getItem('blogData')
@@ -380,12 +385,12 @@ class RenderBlog extends React.Component {
                 hasSavedContent: false,
                 filledForm: true,
                 continueEdit: true,
-                firstBlock:editorState.blocks[0],
+                firstBlock: editorState.blocks[0],
                 editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)
             })
-            !this.state.firstBlock.text?this.setState({firstBlock:editorState.blocks[0]}):null
+            !this.state.firstBlock.text ? this.setState({ firstBlock: editorState.blocks[0] }) : null
         } else {
-            this.setState({filledForm: true, editorState: EditorState.createEmpty(decorator)})
+            this.setState({ filledForm: true, editorState: EditorState.createEmpty(decorator) })
         }
     };
 
@@ -416,46 +421,46 @@ class RenderBlog extends React.Component {
             topics: this.state.topics
         };
         window.localStorage.setItem('blogData', JSON.stringify(blogDta));
-        this.setState({filledForm: false})
+        this.setState({ filledForm: false })
     };
 
     startPublish = () => {
-        if(this.state.title.length<5){
+        if (this.state.title.length < 5) {
             alert('title error')
             return false
         }
-        if(this.state.words<1){
+        if (this.state.words < 1) {
             alert('title error')
             return false
         }
         this.showPreview()
     };
     showConfirm = () => {
-        this.setState({confirmOpen: true})
+        this.setState({ confirmOpen: true })
     };
     showPreview = () => {
-        this.setState({previewOpen: true})
+        this.setState({ previewOpen: true })
     };
     closePreview = () => {
-        this.setState({previewOpen: false})
+        this.setState({ previewOpen: false })
     };
     handleConfirm = () => {
         this.closePreview();
-        this.setState({startPublish: true, confirmOpen: false});
+        this.setState({ startPublish: true, confirmOpen: false });
         this.publish()
     };
     handleCancel = () => {
         this.reinInitEditorState(this.state.editorState);
         this.closePreview();
-        this.setState({confirmOpen: false})
+        this.setState({ confirmOpen: false })
     };
 
     reinInitEditorState(state) {
-        this.setState({editorState: state})
+        this.setState({ editorState: state })
     }
 
     render() {
-        let mode = this.props.blog.editMode || this.props.mode==='create'
+        let mode = this.props.blog.editMode || this.props.mode === 'create'
         let mediaInput;
         if (this.state.showMedURLInput) {
             mediaInput =
@@ -490,7 +495,7 @@ class RenderBlog extends React.Component {
                     </button>
                 </div>
         }
-        const {editorState} = this.state;
+        const { editorState } = this.state;
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
         let className = 'RichEditor-editor ' + editorStyles.editor;
@@ -511,23 +516,23 @@ class RenderBlog extends React.Component {
                                         <div>
                                             <Button
                                                 disabled={this.state.hasSavedContent}
-                                                style={{float: 'right'}} type='button'
+                                                style={{ float: 'right' }} type='button'
                                                 onClick={this.startPublish}
                                                 color='green' size='mini'>Publish
                                             </Button>
                                             <Button
                                                 disabled={this.state.hasSavedContent}
-                                                style={{float: 'left'}} type='button'
+                                                style={{ float: 'left' }} type='button'
                                                 onClick={this.handleGoBackToProfile}
                                                 color='green' size='mini'>Exit
                                             </Button>
-                                            <br/>
-                                            <br/>
+                                            <br />
+                                            <br />
                                             <span>Title: </span>
-                                            <Input error={this.state.title.length<5} onChange={this.handleTitleChange} value={this.state.title}/>
+                                            <Input error={this.state.title.length < 5} onChange={this.handleTitleChange} value={this.state.title} />
                                             {' '}
                                             <span>Words </span>
-                                            <Input error={this.state.wordCount<200} onChange={this.handleWordChange} value={this.state.wordCount}/>
+                                            <Input error={this.state.wordCount < 200} onChange={this.handleWordChange} value={this.state.wordCount} />
                                         </div> : null
                                 }
                                 <div>
@@ -535,7 +540,7 @@ class RenderBlog extends React.Component {
                                         editorState={editorState}
                                         onToggle={this.toggleBlockType}
                                     />
-                                    <br/>
+                                    <br />
                                     <InlineStyleControls
                                         editorState={editorState}
                                         onToggle={this.toggleInlineStyle}
@@ -545,12 +550,12 @@ class RenderBlog extends React.Component {
                                     on the selected text.
                                     <div style={styles.buttons}>
                                         <Button color='green' size='mini' onMouseDown={this.promptForLink}
-                                                style={{marginRight: 10}}>
-                                            <Icon name='external share'/>
+                                            style={{ marginRight: 10 }}>
+                                            <Icon name='external share' />
                                             Add Link
                                         </Button>
                                         <Button color='red' size='mini' onMouseDown={this.removeLink}>
-                                            <Icon name='external share'/>
+                                            <Icon name='external share' />
                                             Remove Link
                                         </Button>
                                     </div>
@@ -558,24 +563,24 @@ class RenderBlog extends React.Component {
                                     Use the buttons to add audio, image, or video.
                                     <div style={styles.buttons}>
                                         <Button color='green' size='mini' onMouseDown={this._addAudio}
-                                                style={{marginRight: 10}}>
+                                            style={{ marginRight: 10 }}>
                                             Add Audio
                                         </Button>
                                         <Button color='green' size='mini' onMouseDown={this._addImage}
-                                                style={{marginRight: 10}}>
+                                            style={{ marginRight: 10 }}>
                                             Add Image
                                         </Button>
                                         <Button color='green' size='mini' onMouseDown={this.addVideo}
-                                                style={{marginRight: 10}}>
+                                            style={{ marginRight: 10 }}>
                                             Add Video
                                         </Button>
                                     </div>
                                     {
-                                        (this.props.blog.editMode || this.props.mode==='create') && this.state.firstBlock.text?
+                                        (this.props.blog.editMode || this.props.mode === 'create') && this.state.firstBlock.text ?
                                             <div>
-                                                <div><CharCounter limit={10}/> characters</div>
-                                                <div><WordCounter limit={500}/> words</div>
-                                                <div><LineCounter limit={100}/> lines</div>
+                                                <div><CharCounter limit={10} /> characters</div>
+                                                <div><WordCounter limit={500} /> words</div>
+                                                <div><LineCounter limit={100} /> lines</div>
                                             </div> : null
                                     }
                                     {mediaInput}
@@ -583,46 +588,46 @@ class RenderBlog extends React.Component {
                             </div>
                         </div> : null
                 }
-                <div style={this.props.blog.editMode || this.props.mode==='create'? {
+                <div style={this.props.blog.editMode || this.props.mode === 'create' ? {
                     padding: '5px',
                     border: '1px solid green',
                 } : null}>
 
                     <Modal open={this.state.previewOpen}>
                         <Modal.Header><Header
-                            style={{margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center'}}
+                            style={{ margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center' }}
                             color='green' as='h1'>
                             You are about to publish this article.
                         </Header></Modal.Header>
                         <Modal.Content>
-                        
+
                             <div>
                                 <p>
                                     This is how will appear. Review and publish. Click back if you need to make changes
                                 </p>
                             </div>
-                            <hr/>
+                            <hr />
                             <Modal.Description>
-                            <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color} as='h1'>
-                                        {
-                                            this.state.title
-                                        }
-                                    </Header>
+                                <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color} as='h1'>
+                                    {
+                                        this.state.title
+                                    }
+                                </Header>
                                 <div>
-                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState} editorState={this.state.editorState}/>
+                                    <ShowPreview title={this.state.title} reinInitEditorState={this.reinInitEditorState} editorState={this.state.editorState} />
                                 </div>
                             </Modal.Description>
                         </Modal.Content>
                         <Modal.Actions>
                             <Button.Group>
                                 <Button color='blue' onClick={this.closePreview}>Back</Button>
-                                <Button.Or/>
+                                <Button.Or />
                                 <Button color='green' onClick={this.handleConfirm}>Publish</Button>
                             </Button.Group>
                         </Modal.Actions>
                     </Modal>
 
-                    <div className={className+' RichEditor-editor-wrap'}>
+                    <div className={className + ' RichEditor-editor-wrap'}>
                         <Editor
                             onClick={this.focus}
                             readOnly={!this.props.blog.editMode && this.props.mode !== 'create'}
@@ -638,8 +643,15 @@ class RenderBlog extends React.Component {
                             spellCheck
                             plugins={plugins}
                         />
-                        <div className={'toobar'}>
-                            <SideToolbar/>
+                        <EmojiSuggestions />
+                        <div className={editorStyles.options}>
+                            {
+                                (this.props.blog.editMode || this.props.mode === 'create') && this.state.firstBlock.text ?
+                                    <div className={editorStyles.options}>
+                                        <SideToolbar />
+                                        <EmojiSelect />
+                                    </div> : null
+                            }
                         </div>
                     </div>
                 </div>
@@ -653,7 +665,7 @@ const mapStateToProps = (state) => {
     return {
         blog: state.blog,
         user: state.user,
-        vars:state.vars
+        vars: state.vars
     }
 };
 
