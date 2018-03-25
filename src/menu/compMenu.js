@@ -119,7 +119,7 @@ class ComMenu extends React.Component {
                                         name='home'
                                         active={this.props.vars.currentLocation === 'home'}
                                         onClick={this.handleHomeClick}>
-                                        <span color={this.props.vars.colors[0]}><Link to='/home/all'>Zemuldo Blogs</Link></span>
+                                        <span color={this.props.vars.colors[0]}><Link to='/'>Zemuldo Blogs</Link></span>
                                     </Menu.Item>
                                     <Menu.Item
                                         as='span'
