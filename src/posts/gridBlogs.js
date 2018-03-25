@@ -11,7 +11,7 @@ import axios from 'axios'
 class GridBlogs extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { showInfo: false, number: this.props.blogs.length }
+    this.state = { showInfo: false, number: this.props.blogs.length,nomoreBlogs:false }
   }
 
   handleMouseEnter() {
@@ -23,18 +23,21 @@ class GridBlogs extends React.Component {
   }
 
   handleRefreshPosts = () => {
-    axios.post(this.props.vars.env.httpURL, {
-      "queryMethod": "getPosts",
-      "queryData": {
-        "start": this.props.blogs.length
-      }
-    })
-      .then(o => {
-        this.props.blogsActions.addBlogs(o.data)
+    if(window.location.pathname==='/' && !this.state.nomoreBlogs){
+      axios.post(this.props.vars.env.httpURL, {
+        "queryMethod": "getPosts",
+        "queryData": {
+          "start": this.props.blogs.length
+        }
       })
-      .catch(e => {
-        console.log(e)
-      })
+        .then(o => {
+          this.props.blogsActions.addBlogs(o.data)
+          if(!o.data[0])this.setState({nomoreBlogs:true})
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 
   render() {

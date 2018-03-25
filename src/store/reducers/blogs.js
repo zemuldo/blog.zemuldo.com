@@ -1,4 +1,4 @@
-import { UPDATE_BLOGS, ADD_BLOGS } from '../actions/blogs'
+import { UPDATE_BLOGS, ADD_BLOGS, SORT_TYPE } from '../actions/blogs'
 
 const initialState = []
 
@@ -8,6 +8,12 @@ const blogsReducer = (state = initialState, action) => {
       return action.blogs
     case ADD_BLOGS:
       return [...state.concat(action.blogs)]
+    case ADD_BLOGS:
+      return state.map((b) => {
+        if (b.type === action.type) {
+          return b;
+        }
+      })
     default:
       return state
   }
