@@ -8,7 +8,6 @@ import createHashtagPlugin from 'draft-js-hashtag-plugin';
 import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import createCounterPlugin from 'draft-js-counter-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
-import createEmojiPlugin from 'draft-js-emoji-plugin';
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 import {
@@ -40,20 +39,17 @@ const hashtagPlugin = createHashtagPlugin();
 const linkifyPlugin = createLinkifyPlugin();
 const counterPlugin = createCounterPlugin();
 const sideToolbarPlugin = createSideToolbarPlugin();
-const emojiPlugin = createEmojiPlugin();
 
 
 const { CharCounter, WordCounter, LineCounter } = counterPlugin;
 const { SideToolbar } = sideToolbarPlugin;
 
-const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 
 const plugins = [
     hashtagPlugin,
     linkifyPlugin,
     counterPlugin,
-    sideToolbarPlugin,
-    emojiPlugin
+    sideToolbarPlugin
 ];
 
 const env = config[process.env.NODE_ENV] || 'development';
@@ -643,13 +639,11 @@ class RenderBlog extends React.Component {
                             spellCheck
                             plugins={plugins}
                         />
-                        <EmojiSuggestions />
                         <div className={editorStyles.options}>
                             {
                                 (this.props.blog.editMode || this.props.mode === 'create') && this.state.firstBlock.text ?
                                     <div className={editorStyles.options}>
                                         <SideToolbar />
-                                        <EmojiSelect />
                                     </div> : null
                             }
                         </div>
