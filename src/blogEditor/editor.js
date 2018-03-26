@@ -9,7 +9,6 @@ import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import createCounterPlugin from 'draft-js-counter-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
-import 'draft-js-emoji-plugin/lib/plugin.css';
 import {
     AtomicBlockUtils,
     convertFromRaw,
