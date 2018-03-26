@@ -75,7 +75,6 @@ class Blog extends React.Component {
     }
 
     setBlogCounts=(shareUrl) => {
-        window.scrollTo(0, 0)
         this.getFBCount(shareUrl)
         this.getTWTCount(shareUrl)
         this.getGCCount(shareUrl)

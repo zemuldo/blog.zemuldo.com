@@ -149,9 +149,6 @@ WelcomePage.propTypes = {
   blogs: PropTypes.array,
   topics: PropTypes.array,
   vars: PropTypes.object.isRequired,
-  varsActions: PropTypes.object.isRequired,
-  setPreviousBlogs: PropTypes.func.isRequired,
-  setNextBlogs: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage)
