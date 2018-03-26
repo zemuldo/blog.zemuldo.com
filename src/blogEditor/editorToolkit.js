@@ -8,8 +8,6 @@ import MultiDecorator from 'draft-js-multidecorators'
 import SimpleDecorator from 'draft-js-simpledecorator'
 import {Entity} from 'draft-js'
 
-console.log(Prism.languages)
-
 class PrismDraftDecorator {
     constructor(grammar) {
         this.grammar = grammar;

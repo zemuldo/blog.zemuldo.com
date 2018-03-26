@@ -195,6 +195,10 @@ class App extends React.Component {
     }
 
     resize = () => this.forceUpdate();
+    
+    scroll = (e)=>{
+        localStorage.setItem(`scrollTo_${window.location.pathname}`,JSON.stringify({x:window.scrollX,y:window.scrollY}))
+    }
 
     componentWillUpdate() {
         if (this.state.window !== window.innerWidth) {
@@ -258,10 +262,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        import('../profile/login').then(Component => {
-            this.Login = Component
-            this.forceUpdate()
-        })
+        window.addEventListener('resize', this.resize)
+        window.addEventListener('scroll', this.scroll)
         /*
             Take store variable from url. currrent location, topic and blog
             And update blogs
@@ -295,8 +297,6 @@ class App extends React.Component {
         }
         if (window.innerWidth > 503) {
         }
-
-        window.addEventListener('resize', this.resize)
         /*
             Attempt Auto login
         */
@@ -324,6 +324,7 @@ class App extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
+        window.removeEventListener('scroll', this.scroll)
     }
 
     _goToEditor() {

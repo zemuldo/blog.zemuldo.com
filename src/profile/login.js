@@ -44,7 +44,7 @@ class Login extends React.Component {
         }
     };
 
-    validateUser() {
+    validateUser =()=> {
         this.setState({hideMessage: true})
         let known = localStorage.getItem('user')
         if (known) {
@@ -162,7 +162,7 @@ class Login extends React.Component {
             }.bind(this))
     }
 
-    handleSignUp() {
+    handleSignUp =() =>{
         this.setState({registering: true})
         if (!this.state.userName || this.state.userName.length < 4) {
             this.setState({
@@ -316,7 +316,7 @@ class Login extends React.Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
-    setAvatar(img) {
+    setAvatar=(img)=> {
         this.setState({imagePreviewUrl: img})
     }
 
@@ -343,7 +343,7 @@ class Login extends React.Component {
         }
     }
 
-    setBlogs(userName) {
+    setBlogs =(userName)=> {
         axios.post(env.httpURL, {
             'queryMethod': 'getPosts',
             'queryData': {
@@ -362,11 +362,11 @@ class Login extends React.Component {
             }.bind(this))
     }
 
-    handSwichReg = function (state) {
+    handSwichReg = (state) => {
         this.props.varsActions.updateVars({signUp: state})
     }
 
-    _handleFileChange(e) {
+    _handleFileChange =(e)=> {
         e.preventDefault()
         if (window.FileReader) {
             let reader = new FileReader()
@@ -384,7 +384,7 @@ class Login extends React.Component {
         }
     }
 
-    loadHandler(event) {
+    loadHandler =(event)=> {
         this.setState({avatar: event.target.result})
     }
 
