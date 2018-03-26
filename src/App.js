@@ -1,6 +1,6 @@
 import React from 'react'
 import Main from './routes'
-import NavBar from './menu/navBar'
+import NavBar from './menu/compMenu'
 import Footer from './partials/footer'
 import ReviewPortal from './partials/portal'
 import LiveChat from './chat/bot'
