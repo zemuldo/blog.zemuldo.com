@@ -35,26 +35,6 @@ class App extends React.Component {
         this.setState({blogsLoaded: !state})
     }
 
-    setTopicPosts(topicBlogs, topic) {
-        if (topicBlogs[0]) {
-            this.setState({blogs: topicBlogs, topic: topic})
-            this.blogsAreLoading(false)
-        } else {
-            this.setState({blogs: [], topic: topic})
-            this.blogsAreLoading(false)
-        }
-    }
-
-    setTopicNextPosts(topicBlogs) {
-        if (topicBlogs[0]) {
-            this.setState({blogs: topicBlogs})
-            this.blogsAreLoading(false)
-        } else {
-            this.setState({blogs: []})
-            this.blogsAreLoading(false)
-        }
-    }
-
     setBlogHere(id, page) {
         this.props.varsActions.updateVars({blogLoaded: false})
         if(this.props.vars[`blog_${id}`]){
@@ -359,7 +339,6 @@ class App extends React.Component {
                        topic={this.state.topic}
                        onTopicClick={this.onTopicClick}
                        onAllcClick={this.onAllcClick}
-                       setTopicNextPosts={this.props.setTopicNextPosts}
                        blog={this.props.blog}
                        color={this.props.vars.color}
                        blogs={this.props.blogs}
@@ -370,9 +349,7 @@ class App extends React.Component {
                        tag_contextRef={tag_contextRef}
                        history={this.props.history}
                        navigateBlogs={this.navigateBlogs}
-                       handleFilterChange={this.handleFilterChange}
                        blogsAreLoading={this.blogsAreLoading}
-                       setTopicNextPosts={this.setTopicNextPosts}
                    />
                </Container>
             </div>
