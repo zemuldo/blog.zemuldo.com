@@ -846,8 +846,13 @@ class Blog extends React.Component {
                                         : null
                                 }
                             </div>
-                            <hr color='green' />
+                            <br/>
                             <div style={{ margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
+                                {
+                                    this.props.blog.headerImage ?
+
+                                        <Image fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.blog.headerImage.name}`}/> : null
+                                }
                                 <br />
                                 {
                                     this.state.editorState ?

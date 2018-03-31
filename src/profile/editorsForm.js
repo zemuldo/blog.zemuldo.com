@@ -32,7 +32,8 @@ class EditorsForm extends React.Component {
       termsAccept: false,
       about: '',
       dialogInComplete: true,
-      editorState: null
+      editorState: null,
+      headerImage:{}
     }
   };
 
@@ -77,7 +78,8 @@ class EditorsForm extends React.Component {
     let blogDta = {
       type: this.state.category,
       topics: this.state.topics,
-      about: this.state.about
+      about: this.state.about,
+      headerImage:this.state.headerImage
     }
     window.localStorage.setItem('blogData', JSON.stringify(blogDta))
     this.setState({ filledForm: false })
@@ -109,6 +111,11 @@ class EditorsForm extends React.Component {
       this.setState({ filledForm: true, editorState: EditorState.createEmpty(decorator) })
     }
   };
+
+  handleGetImage = (imageInfo)=>{
+    console.log(imageInfo)
+    this.setState({headerImage:imageInfo})
+  }
 
   render () {
     return (
@@ -143,8 +150,7 @@ class EditorsForm extends React.Component {
                          </Form.Group>
                          <Header as='h3'>Header Picture</Header>
                          <Form.Group inline>
-                           
-                           <DropZone/>
+                           <DropZone handleGetImage={this.handleGetImage}/>
                          </Form.Group>
                          <Form.TextArea maxLength='140' onChange={this.handleAboutChange} label='About your blog'
                            placeholder='Small details about your article...upto 140 Characters' />

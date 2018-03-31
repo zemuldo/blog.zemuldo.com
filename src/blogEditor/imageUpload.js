@@ -2,7 +2,7 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import { Image } from 'semantic-ui-react'
 import axios from 'axios'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 class ImageUploader extends React.Component {
     constructor() {
@@ -11,28 +11,33 @@ class ImageUploader extends React.Component {
     }
 
     onDrop = (files) => {
+        if (this.state.deletePrev) this.deletePrev(this.state.deletePrev)
         this.setState({
             files
         });
         let formData = new FormData()
-        formData.append('image',files[0])
+        formData.append('image', files[0])
         axios.post(`${this.props.vars.env.httpURL}/uploads/images/blog_header`, formData, {
-            headers:{
-                'Content-TYpe':'multipart/form-data'
+            headers: {
+                'Content-TYpe': 'multipart/form-data'
             }
         })
-        .then(o=>{
-            console.log(o.data)
-        })
-        .catch(e=>{
-            console.log(e)
-        })
+            .then(o => {
+                this.props.handleGetImage(o.data)
+                this.setState({ deletePrev: o.data })
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
-    componentWillUpdate() {
-        if (this.state.files[0]) {
-            console.log(this.state.files[0].preview.toB)
-        }
+    deletePrev = (prev) => {
+        axios.post(`${this.props.vars.env.httpURL}/uploads/images/delete`, prev)
+            .then(o => {
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     render() {
@@ -42,26 +47,18 @@ class ImageUploader extends React.Component {
                     <div>
                         {
                             this.state.files[0] ?
-                                <Image fluid style={{ maxHeight: '400px' }} src={this.state.files[0].preview} />
+                                <Image fluid style={{ maxHeight: '500px' }} src={this.state.files[0].preview} />
                                 : null
 
                         }
                     </div>
                     <div>
                         <Dropzone onDrop={this.onDrop}>
-                            <p>Try dropping some files here, or click to select files to upload.</p>
+                            <p>Click this box and drop a file an image here</p>
                         </Dropzone>
                     </div>
 
                 </div>
-                <aside>
-                    <h2>Dropped files</h2>
-                    <ul>
-                        {
-                            this.state.files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
-                        }
-                    </ul>
-                </aside>
             </section>
         );
     }
@@ -69,8 +66,8 @@ class ImageUploader extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-      vars: state.vars
+        vars: state.vars
     }
-  }
+}
 
-export default connect(mapStateToProps) (ImageUploader)
+export default connect(mapStateToProps)(ImageUploader)
