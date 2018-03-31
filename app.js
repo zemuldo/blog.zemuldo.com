@@ -144,7 +144,7 @@ app.get('/*', async function (req, res) {
       details = {
         title: blog.title,
         description: blog.about,
-        imgSRC: pages['home'].imgSRC
+        imgSRC: blog.headerImage?`http://localhost:8090${blog.headerImage.name}`:pages['home'].imgSRC
       }
     } else {
       details = {
@@ -165,7 +165,7 @@ app.get('/*', async function (req, res) {
   }
 })
 
-if(process.env.NODE_ENV==='dev'){
+if(process.env.NODE_ENV==='dev' || process.env.NODE_ENV==='development'){
     app.listen(env.httpPort, () => {
   console.log("**Server started at http://localhost:" + env.httpPort)
 });
