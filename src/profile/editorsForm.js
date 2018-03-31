@@ -13,6 +13,7 @@ import {
 import {
   decorator
 } from '../blogEditor/editorToolkit'
+import DropZone from '../blogEditor/imageUpload'
 
 const categories = [
    {key: 'dev', value: 'dev', text: 'Development', name: 'development'},
@@ -139,6 +140,11 @@ class EditorsForm extends React.Component {
                                onChange={this.handleTopicChange} multiple search selection
                                closeOnChange options={topics} placeholder='Select topics' />
                            </Form.Field>
+                         </Form.Group>
+                         <Header as='h3'>Header Picture</Header>
+                         <Form.Group inline>
+                           
+                           <DropZone/>
                          </Form.Group>
                          <Form.TextArea maxLength='140' onChange={this.handleAboutChange} label='About your blog'
                            placeholder='Small details about your article...upto 140 Characters' />

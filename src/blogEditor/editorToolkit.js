@@ -89,10 +89,6 @@ Link.propTypes = {
 
 //export const decorator = new PrismDraftDecorator(Prism.languages.javascript);
 export const decorator = new MultiDecorator([
-    new PrismDecorator({
-        // Provide your own instance of PrismJS
-        prism: Prism,
-    }),
     new PrismDraftDecorator(Prism.languages.javascript),
     new SimpleDecorator(
 
