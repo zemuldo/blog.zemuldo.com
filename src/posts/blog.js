@@ -1,16 +1,16 @@
 import React from 'react'
-import {Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm} from 'semantic-ui-react'
-import {connect} from 'react-redux'
+import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm } from 'semantic-ui-react'
+import { connect } from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
 import config from '../env'
-import {bindActionCreators} from 'redux'
+import { bindActionCreators } from 'redux'
 import * as BlogActions from '../store/actions/blog'
 import * as UserActions from "../store/actions/user"
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments, notifyMe} from '../util'
+import { peopleL, peopleU, inWords, toTitleCase, blogUrl, updateReplies, deleteComments, notifyMe } from '../util'
 import {
     convertFromRaw,
     EditorState,
@@ -18,8 +18,8 @@ import {
 import {
     decorator
 } from '../blogEditor/editorToolkit';
-import {socialShares} from '../env'
-import FacebookProvider, {Comments} from 'react-facebook'
+import { socialShares } from '../env'
+import FacebookProvider, { Comments } from 'react-facebook'
 import LoginForm from '../profile/lognForm'
 import DisqusThread from '../chat/disqus';
 
@@ -39,17 +39,17 @@ class Blog extends React.Component {
             blogUrlT: blogUrl(this.props.blog),
             replyComment: '',
             comments: [],
-            cdelopen:false,
+            cdelopen: false,
             warning: true,
             error: false,
             success: false,
             hideMessage: true,
-            logingin:false
+            logingin: false
         }
     }
     show = dimmer => () => this.setState({ dimmer, open: true });
     close = () => this.setState({ open: false })
-    showDeleteComment = (_id) => this.setState({ cdelopen: true ,commentToDelete:_id});
+    showDeleteComment = (_id) => this.setState({ cdelopen: true, commentToDelete: _id });
     handleConfirmDeleteComment = () => {
         this.deleteComments(this.state.commentToDelete);
         this.setState({ cdelopen: false })
@@ -57,40 +57,40 @@ class Blog extends React.Component {
     handleCancelDeleteComment = () => this.setState({ cdelopen: false });
 
     handleAboutChange(e, data) {
-        this.props.blogActions.updateBlog({about: data.value})
+        this.props.blogActions.updateBlog({ about: data.value })
     }
 
-    handleEditorStateEdit = ()=> {
-        this.setState({wordCount: this.props.blog.wordCount});
+    handleEditorStateEdit = () => {
+        this.setState({ wordCount: this.props.blog.wordCount });
         let editorState = JSON.parse(this.props.blog.body);
-        this.setState({editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator)})
+        this.setState({ editorState: EditorState.createWithContent(convertFromRaw(editorState), decorator) })
     };
 
-    closeDelete=() =>{
-        this.setState({showDelete: false})
+    closeDelete = () => {
+        this.setState({ showDelete: false })
     }
 
     openDelete() {
-        this.setState({showDelete: true})
+        this.setState({ showDelete: true })
     }
 
-    setBlogCounts=(shareUrl) => {
+    setBlogCounts = (shareUrl) => {
         this.getFBCount(shareUrl)
         this.getTWTCount(shareUrl)
         this.getGCCount(shareUrl)
     }
 
-    getFBCount =(shareUrl)=> {
-        return axios.get('https://graph.facebook.com/?id=' +shareUrl, {})
+    getFBCount = (shareUrl) => {
+        return axios.get('https://graph.facebook.com/?id=' + shareUrl, {})
             .then((res) => {
                 this.props.blogActions.updateBlog({
-                    fbC: this.props.blog.fbC+(res.data.share.share_count) ? res.data.share.share_count : 0
+                    fbC: this.props.blog.fbC + (res.data.share.share_count) ? res.data.share.share_count : 0
                 })
                 return true
             })
             .catch((err) => {
                 this.props.blogActions.updateBlog({
-                    fbC:  this.props.blog.fbC
+                    fbC: this.props.blog.fbC
                 })
             })
     };
@@ -99,12 +99,12 @@ class Blog extends React.Component {
         return axios.get('https://public.newsharecounts.com/count.json?url=' + shareUrl, {})
             .then((res) => {
                 this.props.blogActions.updateBlog({
-                    twtC:  this.props.blog.twtC + (res.data.count) ? res.data.count : 0
+                    twtC: this.props.blog.twtC + (res.data.count) ? res.data.count : 0
                 })
             })
             .catch((err) => {
                 this.props.blogActions.updateBlog({
-                    twtC:  this.props.blog.twtC
+                    twtC: this.props.blog.twtC
                 })
             })
     };
@@ -133,7 +133,7 @@ class Blog extends React.Component {
             })
             .catch((err) => {
                 this.props.blogActions.updateBlog({
-                    gplsC:  this.props.blog.gplsC+ 0
+                    gplsC: this.props.blog.gplsC + 0
                 })
             })
     };
@@ -153,7 +153,7 @@ class Blog extends React.Component {
                     return false
                 }
                 if (res.data.imageURL) {
-                    this.setState({authorAvatar: JSON.parse(res.data.imageURL)})
+                    this.setState({ authorAvatar: JSON.parse(res.data.imageURL) })
                 }
             }.bind(this))
             .catch(function (err) {
@@ -162,31 +162,32 @@ class Blog extends React.Component {
     }
 
     saveEdit() {
-        this.props.blogActions.updateBlog({editMode: true})
+        this.props.blogActions.updateBlog({ editMode: true })
         localStorage.removeItem('editBlog')
     }
 
-    getComments(){
-        axios.post(env.httpURL,{
+    getComments() {
+        axios.post(env.httpURL, {
             'queryMethod': 'getComments',
-            'queryData': {postID:this.props.blog._id}}
+            'queryData': { postID: this.props.blog._id }
+        }
         )
-            .then(o=>{
-                this.setState({comments:o.data.comments})
+            .then(o => {
+                this.setState({ comments: o.data.comments })
             })
-            .catch(e=>{
+            .catch(e => {
                 console.log(e)
             })
     }
 
-    getShortURL(){
-        axios.post(env.fupisha,{url:`https://blog.zemuldo.com/${this.props.blog._id}`,custom_longUrl:`${window.location.href}`})
-            .then(o=>{
-                this.setState({blogUrl:o.data})
+    getShortURL() {
+        axios.post(env.fupisha, { url: `https://blog.zemuldo.com/${this.props.blog._id}`, custom_longUrl: `${window.location.href}` })
+            .then(o => {
+                this.setState({ blogUrl: o.data })
                 this.setBlogCounts(this.state.blogUrl.shortUrl)
                 this.setBlogCounts(`https://blog.zemuldo.com/${this.state.blogUrlT}`)
             })
-            .catch(e=>{
+            .catch(e => {
 
             })
     }
@@ -195,13 +196,13 @@ class Blog extends React.Component {
         this.getComments()
         this.getShortURL()
         this.handleEditorStateEdit()
-        this.props.blogActions.updateBlog({editMode: false})
+        this.props.blogActions.updateBlog({ editMode: false })
         if (this.props.blog) {
             this.getAauthorAvatar()
         }
-        this.setState({youLike: true})
+        this.setState({ youLike: true })
         if (localStorage.getItem('user')) {
-            this.setState({userLoggedIn: true})
+            this.setState({ userLoggedIn: true })
             axios.post(env.httpURL, {
                 'queryMethod': 'getLike',
                 'queryData': {
@@ -212,20 +213,20 @@ class Blog extends React.Component {
             })
                 .then(function (response) {
                     if (!response.data) {
-                        this.setState({youLike: false})
+                        this.setState({ youLike: false })
                         return false
                     }
                     if (!response.data.state) {
-                        this.setState({youLike: false})
+                        this.setState({ youLike: false })
                         return false
                     }
                     if (response.data.state === false) {
-                        this.setState({youLike: false})
+                        this.setState({ youLike: false })
                         return false
                     }
                     if (response.data.state === true) {
                         if (response.data.n) {
-                            this.setState({youLike: true})
+                            this.setState({ youLike: true })
                             return true
                         } else {
                             return false
@@ -233,14 +234,14 @@ class Blog extends React.Component {
                     }
                 }.bind(this))
                 .catch(function (err) {
-                    this.setState({youLike: false})
+                    this.setState({ youLike: false })
                     return false
                 }.bind(this))
         }
     }
 
     fbShare() {
-        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u='+this.state.blogUrl.shortUrl
+        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=' + this.state.blogUrl.shortUrl
         if (this.props.blog) {
             let postURL = this.state.blogUrl.pathname
             let shareURL = fbShareURL + "&amp;src=sdkpreparse'"
@@ -287,8 +288,8 @@ class Blog extends React.Component {
                     }
                     if (response.data.n) {
                         if (response.data.n) {
-                            this.props.blogActions.updateBlog({likes: 1 + this.props.blog.likes})
-                            this.setState({youLike: true})
+                            this.props.blogActions.updateBlog({ likes: 1 + this.props.blog.likes })
+                            this.setState({ youLike: true })
                         }
                     }
                 }.bind(this))
@@ -305,7 +306,7 @@ class Blog extends React.Component {
                 }
             })
                 .then(function (response) {
-                    this.props.blogActions.resetBlog({id: null})
+                    this.props.blogActions.resetBlog({ id: null })
                     this.props.navigateBlogs({})
                 }.bind(this))
                 .catch(function (err) {
@@ -314,8 +315,8 @@ class Blog extends React.Component {
     };
 
     handleInputChange = (e) => {
-        this.setState({[e.target.name]: e.target.value})
-        this.props.blogActions.updateBlog({[e.target.name]: e.target.value})
+        this.setState({ [e.target.name]: e.target.value })
+        this.props.blogActions.updateBlog({ [e.target.name]: e.target.value })
     }
 
     handleSave = () => {
@@ -325,7 +326,7 @@ class Blog extends React.Component {
             wordCount: this.props.blog.wordCount,
             about: this.props.blog.about
         }
-        let o = {editMode: false, title: this.state.title}
+        let o = { editMode: false, title: this.state.title }
         update.body = this.props.blog.body
         if (body) {
             o.body = body
@@ -351,15 +352,15 @@ class Blog extends React.Component {
     }
 
     setReplyComment(_id) {
-        if(!this.props.user || !this.props.user._id){
-            this.setState({open:true})
+        if (!this.props.user || !this.props.user._id) {
+            this.setState({ open: true })
             return false
         }
-        this.setState({replyComment: _id})
+        this.setState({ replyComment: _id })
     }
 
     deleteComments(_id) {
-        axios.post(env.httpURL,{
+        axios.post(env.httpURL, {
             queryMethod: 'deleteComment',
             'queryData': {
                 postID: this.props.blog._id,
@@ -367,16 +368,16 @@ class Blog extends React.Component {
             }
         })
             .then(oo => {
-                if(oo.data.nModified===1){
+                if (oo.data.nModified === 1) {
                     return deleteComments(_id, this.state.comments)
                 }
             })
-            .then(o=>{
-                if(o.constructor===Array){
-                    this.setState({comments: o})
+            .then(o => {
+                if (o.constructor === Array) {
+                    this.setState({ comments: o })
                     notifyMe('Comment was deleted')
                 }
-                this.setState({commentToDelete:null})
+                this.setState({ commentToDelete: null })
             })
             .catch(e => {
                 console.log(e)
@@ -384,43 +385,43 @@ class Blog extends React.Component {
     }
 
     onCommentChange(e) {
-        this.setState({mess: e.target.value})
+        this.setState({ mess: e.target.value })
     }
 
     submitComment() {
-        if(!this.props.user){
-           this.setState({open:true})
+        if (!this.props.user) {
+            this.setState({ open: true })
             return false
         }
 
         if (this.state.mess.length > 1) {
-            axios.post(env.httpURL,{
-                queryMethod:"comment",
-                queryData:{
-                    postID:this.props.blog._id,
+            axios.post(env.httpURL, {
+                queryMethod: "comment",
+                queryData: {
+                    postID: this.props.blog._id,
                     author: {
                         name: this.props.user.name,
                         avatar: this.props.user.avatarURL,
                     },
-                    userID:this.props.user._id,
+                    userID: this.props.user._id,
                     mess: this.state.mess,
                 }
             })
-                .then(o=>{
+                .then(o => {
                     this.setState({
                         comments: [...this.state.comments, {
                             author: {
                                 name: this.props.user.name,
                                 avatar: this.props.user.avatarURL,
                             },
-                            postID:this.props.blog._id,
-                            _id:o.data._id,
+                            postID: this.props.blog._id,
+                            _id: o.data._id,
                             mess: this.state.mess,
                             date: new Date().toISOString()
                         }], mess: ''
                     })
                 })
-                .catch(e=>{
+                .catch(e => {
                     console.log(e)
                 })
         }
@@ -430,16 +431,16 @@ class Blog extends React.Component {
     updateComments(c) {
         let o = this.state.comments;
         this.setReplyComment('')
-        axios.post(env.httpURL,{
-            queryMethod:"replyComment",
-            queryData:c
+        axios.post(env.httpURL, {
+            queryMethod: "replyComment",
+            queryData: c
         })
             .then(oo => {
                 c._id = oo.data._id
                 return updateReplies(c, o)
             })
-            .then(oo=>{
-                this.setState({comments: oo})
+            .then(oo => {
+                this.setState({ comments: oo })
             })
             .catch(e => {
                 console.log(e)
@@ -449,20 +450,20 @@ class Blog extends React.Component {
 
     handleFormField(e) {
         e.preventDefault()
-        this.setState({[e.target.name]: e.target.value})
+        this.setState({ [e.target.name]: e.target.value })
     }
 
     onLoginClick = () => {
-        this.setState({logingin: true})
+        this.setState({ logingin: true })
         if (!this.state.userName || !this.state.password) {
             this.setState({
                 error: true,
                 hideMessage: false,
                 logingin: false,
-                errorDetails: {field: 'Login', message: 'Invalid login details'}
+                errorDetails: { field: 'Login', message: 'Invalid login details' }
             })
             setTimeout(function () {
-                this.setState({error: false, hideMessage: true})
+                this.setState({ error: false, hideMessage: true })
             }.bind(this), 2000)
             return false
         }
@@ -479,29 +480,29 @@ class Blog extends React.Component {
                     this.setState({
                         error: true,
                         hideMessage: false,
-                        errorDetails: {field: 'Login', message: 'An error occurred, Check your Internet'}
+                        errorDetails: { field: 'Login', message: 'An error occurred, Check your Internet' }
                     })
                     setTimeout(function () {
-                        this.setState({error: false, hideMessage: true})
+                        this.setState({ error: false, hideMessage: true })
                     }.bind(this), 2000)
                     return false
                 }
                 if (success.data.id) {
                     let user = success.data
                     success.data.name = success.data.userName
-                    this.setState({logingin: false})
+                    this.setState({ logingin: false })
                     this.props.userActions.updateUser(user)
                     localStorage.setItem('user', JSON.stringify(success.data))
-                    this.setState({open:false})
+                    this.setState({ open: false })
                 } else {
                     this.setState({
                         error: true,
                         hideMessage: false,
                         logingin: false,
-                        errorDetails: {field: 'Login', message: success.data.error}
+                        errorDetails: { field: 'Login', message: success.data.error }
                     })
                     setTimeout(function () {
-                        this.setState({error: false, hideMessage: true})
+                        this.setState({ error: false, hideMessage: true })
                     }.bind(this), 2000)
                 }
             }.bind(this))
@@ -511,10 +512,10 @@ class Blog extends React.Component {
                     error: true,
                     hideMessage: false,
                     logingin: false,
-                    errorDetails: {field: 'Login', message: 'An erro occured, Check your Internet'}
+                    errorDetails: { field: 'Login', message: 'An erro occured, Check your Internet' }
                 })
                 setTimeout(function () {
-                    this.setState({error: false, hideMessage: true})
+                    this.setState({ error: false, hideMessage: true })
                 }.bind(this), 2000)
             }.bind(this))
     }
@@ -526,7 +527,7 @@ class Blog extends React.Component {
                 {arr.map(function (c) {
                     return (
                         <Comment key={c._id}>
-                            <Comment.Avatar as='a' src={env.httpURL + c.author.avatar}/>
+                            <Comment.Avatar as='a' src={env.httpURL + c.author.avatar} />
                             <Comment.Content>
                                 <Comment.Author as='a'>{c.author.name}</Comment.Author>
                                 <Comment.Metadata>
@@ -534,15 +535,15 @@ class Blog extends React.Component {
                                 </Comment.Metadata>
                                 <Comment.Text>{c.mess}</Comment.Text>
                                 <Comment.Actions>
-                                    <a onClick={() => this.setReplyComment(c._id)}>Reply</a>
+                                    <span href={''} onClick={() => this.setReplyComment(c._id)}>Reply</span>
                                     {
-                                        this.props.user && this.props.user._id && this.props.user._id===c.userID?
-                                            <a onClick={() => this.showDeleteComment(c._id)}>Delete</a>:null
+                                        this.props.user && this.props.user._id && this.props.user._id === c.userID ?
+                                            <span onClick={() => this.showDeleteComment(c._id)}>Delete</span> : null
                                     }
                                     {
                                         this.state.replyComment === c._id ?
                                             <Form reply>
-                                                <Form.TextArea onChange={this.onCommentChange}/>
+                                                <Form.TextArea onChange={this.onCommentChange} />
                                                 <Button
                                                     onClick={() => this.updateComments({
                                                         postID: this.props.blog._id,
@@ -560,7 +561,7 @@ class Blog extends React.Component {
                                                     primary
                                                 />
                                                 <Button onClick={() => this.setReplyComment('')} content='Cancel'
-                                                        labelPosition='left' icon='close' primary/>
+                                                    labelPosition='left' icon='close' primary />
                                             </Form> : null
                                     }
                                 </Comment.Actions>
@@ -584,9 +585,9 @@ class Blog extends React.Component {
                             BlogComments(this.state.comments)
                         }
                         <Form>
-                            <Form.TextArea onChange={this.onCommentChange}/>
+                            <Form.TextArea onChange={this.onCommentChange} />
                             <Button onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
-                                    icon='edit' primary/>
+                                icon='edit' primary />
                         </Form>
                     </div>
             },
@@ -594,7 +595,7 @@ class Blog extends React.Component {
                 menuItem: 'Facebook',
                 render: () =>
                     <FacebookProvider key={'1303236236454786'} appId="1303236236454786"><Comments
-                        href={`https://blogs.zemuldo.com/${this.state.blogUrl}`}/>
+                        href={`https://blogs.zemuldo.com/${this.state.blogUrl}`} />
                     </FacebookProvider>
             },
             {
@@ -615,14 +616,14 @@ class Blog extends React.Component {
                 inverted
                 key={s.name}
                 trigger=
-                    {<a><Button
-                        onClick={() => {
-                            this[s.shareCounter]()
-                        }}
-                        circular color={s.color} icon={s.icon}/>
-                        <sup>{this.props.blog[s.count]}</sup>
-                        {'   '}
-                    </a>}
+                {<span><Button
+                    onClick={() => {
+                        this[s.shareCounter]()
+                    }}
+                    circular color={s.color} icon={s.icon} />
+                    <sup>{this.props.blog[s.count]}</sup>
+                    {'   '}
+                </span>}
                 content={`Share this on ${s.name} `}
             />
         })
@@ -637,28 +638,28 @@ class Blog extends React.Component {
                     <Modal.Header>This Post will be deleted</Modal.Header>
                     <Modal.Content image>
                         <Modal.Description>
-                            <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.vars.color}
-                                    as='h1'>
+                            <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
+                                as='h1'>
                                 {
                                     this.props.blog.title
                                 }
                             </Header>
                             <span className='info'>
-                                   Published: {moment().to(this.props.blog.date)}
-                                <br/>
+                                Published: {moment().to(this.props.blog.date)}
+                                <br />
                                 {this.props.blog.date}
                             </span>
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             <span className='info'>
                                 {this.props.blog.author.name} {' '}
                             </span>
-                            <div style={{margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
-                                <br/>
+                            <div style={{ margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
+                                <br />
                                 <div>{
                                     this.state.editorState ?
                                         <PreviewEditor title={this.props.blog.title}
-                                                       editorState={this.state.editorState}/> :
+                                            editorState={this.state.editorState} /> :
                                         <div>Loading editor state</div>
                                 }</div>
                             </div>
@@ -669,7 +670,7 @@ class Blog extends React.Component {
                             Cancel
                         </Button>
                         <Button color='red' icon='checkmark' labelPosition='right' content='Delete'
-                                onClick={() => this.deletBlog(this.props.blog.id)}/>
+                            onClick={() => this.deletBlog(this.props.blog.id)} />
                     </Modal.Actions>
                 </Modal>
                 <Modal dimmer={dimmer} open={open} onClose={this.close}>
@@ -700,27 +701,27 @@ class Blog extends React.Component {
                         ? <div>
                             {
                                 !this.props.blog.editMode ?
-                                    <Header style={{textAlign: 'left', alignment: 'center'}} color={this.props.vars.color}
-                                            as='h1'>
+                                    <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
+                                        as='h1'>
                                         {
                                             this.props.blog.title
                                         }
                                     </Header> :
                                     <div>
-                                        <Header style={{textAlign: 'left', alignment: 'center'}}
-                                                color={this.props.vars.color} as='h3'>
+                                        <Header style={{ textAlign: 'left', alignment: 'center' }}
+                                            color={this.props.vars.color} as='h3'>
                                             <span>Title: </span> <Input name='title' onChange={this.handleInputChange}
-                                                                        value={this.state.title}/>
+                                                value={this.state.title} />
                                             {' '}
                                             <span>Words </span> <Input name='wordCount' onChange={this.handleInputChange}
-                                                                       value={this.props.blog.wordCount}/>
+                                                value={this.props.blog.wordCount} />
                                         </Header>
 
                                     </div>
 
                             }
                             <div className='shareIcon clearElem'
-                                 style={{display: 'block', fontSize: '16px', fontFamily: 'georgia'}}>
+                                style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
                                     this.state.userLoggedIn
                                         ? <span>
@@ -729,31 +730,31 @@ class Blog extends React.Component {
                                                     ?
                                                     <Popup
                                                         trigger=
-                                                            {<a>
-                                                                <Icon size='small' inverted circular color='blue'
-                                                                      name='like outline'/>
-                                                                <Icon size='small' inverted circular color='red'
-                                                                      name='like'/>
-                                                                <br/>
-                                                                {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
-                                                            </a>}
+                                                        {<span>
+                                                            <Icon size='small' inverted circular color='blue'
+                                                                name='like outline' />
+                                                            <Icon size='small' inverted circular color='red'
+                                                                name='like' />
+                                                            <br />
+                                                            {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
+                                                        </span>}
                                                         content={likeMesage}
                                                     />
 
                                                     :
                                                     <Popup
                                                         trigger=
-                                                            {<span>
+                                                        {<span>
                                                             <Button size='mini'
-                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                    circular color='blue' icon='thumbs up'/>
+                                                                onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                circular color='blue' icon='thumbs up' />
                                                             <Button size='mini'
-                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                    circular color='orange' icon='like'/>
-                                                            <a>
-                                                                <br/>
+                                                                onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                circular color='orange' icon='like' />
+                                                            <span>
+                                                                <br />
                                                                 {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
-                                                            </a>
+                                                            </span>
                                                         </span>}
                                                         content={likeMesage}
                                                     />
@@ -763,23 +764,23 @@ class Blog extends React.Component {
                                         :
                                         <Popup
                                             trigger=
-                                                {<a>
-                                                    <Icon size='small' inverted circular color='blue' name='like outline'/>
-                                                    <Icon size='small' inverted circular color='red' name='like'/>
-                                                    <br/>
-                                                    {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
-                                                </a>}
+                                            {<span>
+                                                <Icon size='small' inverted circular color='blue' name='like outline' />
+                                                <Icon size='small' inverted circular color='red' name='like' />
+                                                <br />
+                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                            </span>}
                                             content={likeMesage}
                                         />
 
                                 }
-                                <br/>
-                                <Icon size='large' color='green' name='external share'/>
+                                <br />
+                                <Icon size='large' color='green' name='external share' />
                                 Share this on: {}
                                 {'  '}
                                 {shares}
-                                <br/>
-                                <br/>
+                                <br />
+                                <br />
                                 <span>
                                     <Popup
                                         trigger={<Image
@@ -795,39 +796,39 @@ class Blog extends React.Component {
                                                 borderRadius: `${(Math.min(
                                                     this.props.blog.author.style.height,
                                                     this.props.blog.author.style.width
-                                                    ) +
+                                                ) +
                                                     10) *
-                                                this.props.blog.author.style.borderRadius / 2 / 100}px`
+                                                    this.props.blog.author.style.borderRadius / 2 / 100}px`
                                             }}
                                         />}
                                     >
-                                    <h3>
-                                    {this.props.blog.author.name}
-                                    </h3>
-                                    <p>
-                                    {`Joined ${moment().to(this.props.blog.author.created)}`}
-                                    </p>
+                                        <h3>
+                                            {this.props.blog.author.name}
+                                        </h3>
+                                        <p>
+                                            {`Joined ${moment().to(this.props.blog.author.created)}`}
+                                        </p>
                                     </Popup>
-                                    
+
                                 </span>
                                 <span className='info'>
                                     Published
                                     {' '}{moment().to(this.props.blog.date)}
                                 </span>
-                                <br/>
-                                <br/>
+                                <br />
+                                <br />
                                 <span className='info'>
                                     {this.props.blog.author.name} {' '}
                                 </span>
-                                <br/>
-                                <br/>
+                                <br />
+                                <br />
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
                                             <Dropdown text='Manage' pointing className='link item info'>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item color='red'
-                                                                   onClick={() => this.openDelete()}>Delete</Dropdown.Item>
+                                                        onClick={() => this.openDelete()}>Delete</Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >
@@ -845,35 +846,35 @@ class Blog extends React.Component {
                                         : null
                                 }
                             </div>
-                            <hr color='green'/>
-                            <div style={{margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia'}}>
-                                <br/>
+                            <hr color='green' />
+                            <div style={{ margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
+                                <br />
                                 {
                                     this.state.editorState ?
                                         <BlogEditor initEditorState={this.state.editorState} mode={'edit'}
-                                                    className='editor' editorState={this.props.blog.body}/> :
+                                            className='editor' editorState={this.props.blog.body} /> :
                                         <div>Loading state</div>
                                 }
                             </div>
                             <div>
                                 {
                                     this.props.blog.editMode ?
-                                        <Form style={{padding: '2em 2em 2em 2em'}}>
+                                        <Form style={{ padding: '2em 2em 2em 2em' }}>
                                             <Form.TextArea maxLength='140' onChange={this.handleAboutChange}
-                                                           label='About your blog'
-                                                           value={this.props.blog.about}/>
+                                                label='About your blog'
+                                                value={this.props.blog.about} />
                                         </Form>
                                         : null
                                 }
                             </div>
                             <Header as='h2' icon>
-                                <Icon name='comments' color={'green'}/>
+                                <Icon name='comments' color={'green'} />
                                 Have a comment?
                                 <Header.Subheader>
                                     Use facebook, Google + or Disqus to comment on this blog.
                                 </Header.Subheader>
                             </Header>
-                            <Tab menu={{attached: true}} panes={comments}/>
+                            <Tab menu={{ attached: true }} panes={comments} />
                         </div>
                         : <div>
                             Content not found!

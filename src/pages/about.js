@@ -43,7 +43,7 @@ class About extends React.Component {
                     <Grid.Column width={6}>
                         <Header color='green' as='h2'>Creator</Header>
                         <div>
-                            <Image alt={'zemuldo creator pic'} avatar size='small' src='/img/creator/dan.jpg' />
+                            <Image alt='zemuldo creator pic' avatar size='small' src='/img/creator/dan.jpg' />
                             <br />
                             <p>
                                 Danstan Otieno Onyango

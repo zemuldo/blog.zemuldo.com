@@ -110,7 +110,7 @@ class ComMenu extends React.Component {
                             >
                                 <Container>
                                     <Link to='/'>
-                                        <Image circular size={'tiny'} src={`${env.static}img/creator/dan.jpg`} />
+                                        <Image alt='zemuldo creator danstan' circular size={'tiny'} src={`${env.static}img/creator/dan.jpg`} />
                                     </Link>
                                     <Menu.Item
                                         style={{ fontSize: '24px' }}
