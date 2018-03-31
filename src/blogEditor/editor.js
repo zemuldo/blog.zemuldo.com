@@ -313,6 +313,7 @@ class RenderBlog extends React.Component {
                     title: title,
                     topics: blogData.topics,
                     about: blogData.about,
+                    headerImage:blogData.headerImage,
                     wordCount: this.state.wordCount,
                     images: ['blogs_pic.jpg'],
                     author: {

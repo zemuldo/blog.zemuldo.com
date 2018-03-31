@@ -13,6 +13,7 @@ import {
 import {
   decorator
 } from '../blogEditor/editorToolkit'
+import DropZone from '../blogEditor/imageUpload'
 
 const categories = [
    {key: 'dev', value: 'dev', text: 'Development', name: 'development'},
@@ -31,7 +32,8 @@ class EditorsForm extends React.Component {
       termsAccept: false,
       about: '',
       dialogInComplete: true,
-      editorState: null
+      editorState: null,
+      headerImage:{}
     }
   };
 
@@ -76,7 +78,8 @@ class EditorsForm extends React.Component {
     let blogDta = {
       type: this.state.category,
       topics: this.state.topics,
-      about: this.state.about
+      about: this.state.about,
+      headerImage:this.state.headerImage
     }
     window.localStorage.setItem('blogData', JSON.stringify(blogDta))
     this.setState({ filledForm: false })
@@ -109,6 +112,11 @@ class EditorsForm extends React.Component {
     }
   };
 
+  handleGetImage = (imageInfo)=>{
+    console.log(imageInfo)
+    this.setState({headerImage:imageInfo})
+  }
+
   render () {
     return (
       <div>
@@ -139,6 +147,10 @@ class EditorsForm extends React.Component {
                                onChange={this.handleTopicChange} multiple search selection
                                closeOnChange options={topics} placeholder='Select topics' />
                            </Form.Field>
+                         </Form.Group>
+                         <Header as='h3'>Header Picture</Header>
+                         <Form.Group inline>
+                           <DropZone handleGetImage={this.handleGetImage}/>
                          </Form.Group>
                          <Form.TextArea maxLength='140' onChange={this.handleAboutChange} label='About your blog'
                            placeholder='Small details about your article...upto 140 Characters' />
