@@ -99,7 +99,7 @@
     "test": "mocha",
     "lint": "eslint .",
     "standard": "standard --fix",
-    "watch": "PORT=8072 node app.js"
+    "watch": "PORT=8072  nodemon app.js"
   },
   "jest": {
     "collectCoverageFrom": [
