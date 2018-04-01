@@ -192,9 +192,24 @@ class Blog extends React.Component {
             })
     }
 
+    updateViews = () => {
+        axios.post(env.httpURL, {
+            'queryMethod': 'updateViews',
+            'queryData': {
+                _id: this.props.blog._id
+            }
+        })
+            .then((o) => {
+            })
+            .catch((err) => {
+                return false
+            })
+    }
+
     componentDidMount() {
         this.getComments()
         this.getShortURL()
+        this.updateViews()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({ editMode: false })
         if (this.props.blog) {
@@ -735,8 +750,8 @@ class Blog extends React.Component {
                                                                 name='like outline' />
                                                             <Icon size='small' inverted circular color='red'
                                                                 name='like' />
-                                                            <br />
-                                                            {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
+                                                                 {`Likes `}
+                                                            <sup>{this.props.blog.likes}</sup>
                                                         </span>}
                                                         content={likeMesage}
                                                     />
@@ -752,14 +767,22 @@ class Blog extends React.Component {
                                                                 onClick={() => this.updateLikes(this.props.blog.id)}
                                                                 circular color='orange' icon='like' />
                                                             <span>
-                                                                <br />
-                                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                                            {`Likes `}
+                                                            <sup>{this.props.blog.likes}</sup>
+                                                                
                                                             </span>
                                                         </span>}
                                                         content={likeMesage}
                                                     />
 
                                             }
+                                            <span>
+                                                {`,  `}
+                                                <Icon size='small' inverted circular color='blue'
+                                                    name='ils' />
+                                                {`Views `}<sup>{this.props.blog.views}</sup>
+                                            </span>
+                                            <br />
                                         </span>
                                         :
                                         <Popup
@@ -846,12 +869,12 @@ class Blog extends React.Component {
                                         : null
                                 }
                             </div>
-                            <br/>
+                            <br />
                             <div style={{ margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
                                     this.props.blog.headerImage ?
 
-                                        <Image fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.blog.headerImage.name}`}/> : null
+                                        <Image alt={this.props.blog.topics.join(',')} fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.blog.headerImage.name}`} /> : null
                                 }
                                 <br />
                                 {
