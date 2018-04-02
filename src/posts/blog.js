@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm } from 'semantic-ui-react'
+import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -209,7 +209,6 @@ class Blog extends React.Component {
     componentDidMount() {
         this.getComments()
         this.getShortURL()
-        this.updateViews()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({ editMode: false })
         if (this.props.blog) {
@@ -716,12 +715,16 @@ class Blog extends React.Component {
                         ? <div>
                             {
                                 !this.props.blog.editMode ?
-                                    <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
-                                        as='h1'>
-                                        {
-                                            this.props.blog.title
-                                        }
-                                    </Header> :
+                                    <Visibility once={false} onBottomPassed={this.updateViews}>
+                                        <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
+                                            as='h1'>
+                                            {
+                                                this.props.blog.title
+                                            }
+                                        </Header>
+
+                                    </Visibility>
+                                    :
                                     <div>
                                         <Header style={{ textAlign: 'left', alignment: 'center' }}
                                             color={this.props.vars.color} as='h3'>
@@ -743,49 +746,55 @@ class Blog extends React.Component {
                                             {
                                                 this.state.youLike
                                                     ?
-                                                    <Popup
-                                                        trigger=
-                                                        {<span>
-                                                            <Icon size='small' inverted circular color='blue'
-                                                                name='like outline' />
-                                                            <Icon size='small' inverted circular color='red'
-                                                                name='like' />
-                                                                 {`Likes `}
-                                                            <sup>{this.props.blog.likes}</sup>
-                                                        </span>}
-                                                        content={likeMesage}
-                                                    />
+                                                    <span>
+                                                        <Popup
+                                                            inverted
+                                                            trigger=
+                                                            {<span>
+                                                                <Icon size='small' inverted circular color='blue'
+                                                                    name='thumbs up' />
+
+                                                            </span>}
+                                                            content={likeMesage}
+                                                        />
+                                                        {`Likes `}
+                                                        <sup>{this.props.blog.likes}</sup>
+                                                    </span>
+
 
                                                     :
-                                                    <Popup
-                                                        trigger=
-                                                        {<span>
-                                                            <Button size='mini'
-                                                                onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                circular color='blue' icon='thumbs up' />
-                                                            <Button size='mini'
-                                                                onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                circular color='orange' icon='like' />
-                                                            <span>
+                                                    <span>
+                                                        <Popup
+                                                            inverted
+                                                            trigger=
+                                                            {<span>
+                                                                <Button size='mini'
+                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                    circular color='blue' icon='thumbs up' />
+
+                                                            </span>}
+                                                            content={likeMesage}
+                                                        />
+                                                        <span>
                                                             {`Likes `}
                                                             <sup>{this.props.blog.likes}</sup>
-                                                                
-                                                            </span>
-                                                        </span>}
-                                                        content={likeMesage}
-                                                    />
+
+                                                        </span>
+                                                    </span>
+
 
                                             }
                                             <span>
-                                                {`,  `}
+                                                {`  ,  `}
                                                 <Icon size='small' inverted circular color='blue'
-                                                    name='ils' />
+                                                    name='eye' />
                                                 {`Views `}<sup>{this.props.blog.views}</sup>
                                             </span>
                                             <br />
                                         </span>
                                         :
                                         <Popup
+                                            inverted
                                             trigger=
                                             {<span>
                                                 <Icon size='small' inverted circular color='blue' name='like outline' />
