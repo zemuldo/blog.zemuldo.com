@@ -398,11 +398,11 @@ class Blog extends React.Component {
             })
     }
 
-    onCommentChange(e) {
+    onCommentChange =(e)=> {
         this.setState({ mess: e.target.value })
     }
 
-    submitComment() {
+    submitComment =()=> {
         if (!this.props.user) {
             this.setState({ open: true })
             return false
@@ -442,7 +442,7 @@ class Blog extends React.Component {
 
     }
 
-    updateComments(c) {
+    updateComments =(c)=> {
         let o = this.state.comments;
         this.setReplyComment('')
         axios.post(env.httpURL, {
@@ -462,7 +462,7 @@ class Blog extends React.Component {
 
     }
 
-    handleFormField(e) {
+    handleFormField =(e) =>{
         e.preventDefault()
         this.setState({ [e.target.name]: e.target.value })
     }
@@ -738,6 +738,7 @@ class Blog extends React.Component {
                                     </div>
 
                             }
+                             <br/>
                             <div className='shareIcon clearElem'
                                 style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
@@ -790,7 +791,6 @@ class Blog extends React.Component {
                                                     name='eye' />
                                                 {`Views `}<sup>{this.props.blog.views}</sup>
                                             </span>
-                                            <br />
                                         </span>
                                         :
                                         <Popup
@@ -806,13 +806,11 @@ class Blog extends React.Component {
                                         />
 
                                 }
-                                <br />
+                                {` ,  `}
                                 <Icon size='large' color='green' name='external share' />
-                                Share this on: {}
-                                {'  '}
                                 {shares}
                                 <br />
-                                <br />
+                                <br/>
                                 <span>
                                     <Popup
                                         trigger={<Image
@@ -843,16 +841,15 @@ class Blog extends React.Component {
                                     </Popup>
 
                                 </span>
+                                <br />
                                 <span className='info'>
                                     Published
                                     {' '}{moment().to(this.props.blog.date)}
                                 </span>
                                 <br />
-                                <br />
                                 <span className='info'>
                                     {this.props.blog.author.name} {' '}
                                 </span>
-                                <br />
                                 <br />
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
