@@ -18,6 +18,7 @@ const env = require('./src/env')[NODE_ENV]
 let {
   getBlog
 } = require('./db/database')
+const {pub, sub} = require('./redisclient/app')
 const keyWords = ['Zemuldo Aticles', 'Zemuldo Blogs', 'Danstan Blogs']
 const pages = {
   dev: {
@@ -120,6 +121,7 @@ app.use(function (req, res, next) {
   next()
 })
 app.get('/*', async function (req, res) {
+  pub.publish("secure_channel", JSON.stringify( {ttl:3600, data:[], key:'testkey'}));
   let url = req.url.split('/').join('')
   let query = { id: null }
   let blog = null
