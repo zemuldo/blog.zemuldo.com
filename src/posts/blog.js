@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm } from 'semantic-ui-react'
+import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
@@ -189,6 +189,20 @@ class Blog extends React.Component {
             })
             .catch(e => {
 
+            })
+    }
+
+    updateViews = () => {
+        axios.post(env.httpURL, {
+            'queryMethod': 'updateViews',
+            'queryData': {
+                _id: this.props.blog._id
+            }
+        })
+            .then((o) => {
+            })
+            .catch((err) => {
+                return false
             })
     }
 
@@ -384,11 +398,11 @@ class Blog extends React.Component {
             })
     }
 
-    onCommentChange(e) {
+    onCommentChange =(e)=> {
         this.setState({ mess: e.target.value })
     }
 
-    submitComment() {
+    submitComment =()=> {
         if (!this.props.user) {
             this.setState({ open: true })
             return false
@@ -428,7 +442,7 @@ class Blog extends React.Component {
 
     }
 
-    updateComments(c) {
+    updateComments =(c)=> {
         let o = this.state.comments;
         this.setReplyComment('')
         axios.post(env.httpURL, {
@@ -448,7 +462,7 @@ class Blog extends React.Component {
 
     }
 
-    handleFormField(e) {
+    handleFormField =(e) =>{
         e.preventDefault()
         this.setState({ [e.target.name]: e.target.value })
     }
@@ -701,12 +715,16 @@ class Blog extends React.Component {
                         ? <div>
                             {
                                 !this.props.blog.editMode ?
-                                    <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
-                                        as='h1'>
-                                        {
-                                            this.props.blog.title
-                                        }
-                                    </Header> :
+                                    <Visibility once={false} onBottomPassed={this.updateViews}>
+                                        <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
+                                            as='h1'>
+                                            {
+                                                this.props.blog.title
+                                            }
+                                        </Header>
+
+                                    </Visibility>
+                                    :
                                     <div>
                                         <Header style={{ textAlign: 'left', alignment: 'center' }}
                                             color={this.props.vars.color} as='h3'>
@@ -720,6 +738,7 @@ class Blog extends React.Component {
                                     </div>
 
                             }
+                             <br/>
                             <div className='shareIcon clearElem'
                                 style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
@@ -728,41 +747,54 @@ class Blog extends React.Component {
                                             {
                                                 this.state.youLike
                                                     ?
-                                                    <Popup
-                                                        trigger=
-                                                        {<span>
-                                                            <Icon size='small' inverted circular color='blue'
-                                                                name='like outline' />
-                                                            <Icon size='small' inverted circular color='red'
-                                                                name='like' />
-                                                            <br />
-                                                            {this.props.blog.likes > 1 ? `You and ${peopleL(this.props.blog.likes - 1)}` : `You like this`}
-                                                        </span>}
-                                                        content={likeMesage}
-                                                    />
+                                                    <span>
+                                                        <Popup
+                                                            inverted
+                                                            trigger=
+                                                            {<span>
+                                                                <Icon size='small' inverted circular color='blue'
+                                                                    name='thumbs up' />
+
+                                                            </span>}
+                                                            content={likeMesage}
+                                                        />
+                                                        {`Likes `}
+                                                        <sup>{this.props.blog.likes}</sup>
+                                                    </span>
+
 
                                                     :
-                                                    <Popup
-                                                        trigger=
-                                                        {<span>
-                                                            <Button size='mini'
-                                                                onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                circular color='blue' icon='thumbs up' />
-                                                            <Button size='mini'
-                                                                onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                circular color='orange' icon='like' />
-                                                            <span>
-                                                                <br />
-                                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
-                                                            </span>
-                                                        </span>}
-                                                        content={likeMesage}
-                                                    />
+                                                    <span>
+                                                        <Popup
+                                                            inverted
+                                                            trigger=
+                                                            {<span>
+                                                                <Button size='mini'
+                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                    circular color='blue' icon='thumbs up' />
+
+                                                            </span>}
+                                                            content={likeMesage}
+                                                        />
+                                                        <span>
+                                                            {`Likes `}
+                                                            <sup>{this.props.blog.likes}</sup>
+
+                                                        </span>
+                                                    </span>
+
 
                                             }
+                                            <span>
+                                                {`  ,  `}
+                                                <Icon size='small' inverted circular color='blue'
+                                                    name='eye' />
+                                                {`Views `}<sup>{this.props.blog.views}</sup>
+                                            </span>
                                         </span>
                                         :
                                         <Popup
+                                            inverted
                                             trigger=
                                             {<span>
                                                 <Icon size='small' inverted circular color='blue' name='like outline' />
@@ -774,13 +806,11 @@ class Blog extends React.Component {
                                         />
 
                                 }
-                                <br />
+                                {` ,  `}
                                 <Icon size='large' color='green' name='external share' />
-                                Share this on: {}
-                                {'  '}
                                 {shares}
                                 <br />
-                                <br />
+                                <br/>
                                 <span>
                                     <Popup
                                         trigger={<Image
@@ -811,16 +841,15 @@ class Blog extends React.Component {
                                     </Popup>
 
                                 </span>
+                                <br />
                                 <span className='info'>
                                     Published
                                     {' '}{moment().to(this.props.blog.date)}
                                 </span>
                                 <br />
-                                <br />
                                 <span className='info'>
                                     {this.props.blog.author.name} {' '}
                                 </span>
-                                <br />
                                 <br />
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
@@ -846,12 +875,12 @@ class Blog extends React.Component {
                                         : null
                                 }
                             </div>
-                            <br/>
+                            <br />
                             <div style={{ margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
                                 {
                                     this.props.blog.headerImage ?
 
-                                        <Image fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.blog.headerImage.name}`}/> : null
+                                        <Image alt={this.props.blog.topics.join(',')} fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.blog.headerImage.name}`} /> : null
                                 }
                                 <br />
                                 {

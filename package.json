@@ -39,6 +39,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-twitter-widgets": "^1.7.1",
+    "redis": "^2.8.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "request-ip": "^2.0.2",
@@ -99,7 +100,7 @@
     "test": "mocha",
     "lint": "eslint .",
     "standard": "standard --fix",
-    "watch": "PORT=8072 node app.js"
+    "watch": "PORT=8072  nodemon app.js"
   },
   "jest": {
     "collectCoverageFrom": [

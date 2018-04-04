@@ -13,10 +13,13 @@ const options = {
 let {
   getBlogTemplate
 } = require('./tools/tools')
-const env = require('./src/env')[process.env.NODE_ENV]
+const NODE_ENV = process.env.NODE_ENV || 'dev'
+const env = require('./src/env')[NODE_ENV]
 let {
   getBlog
 } = require('./db/database')
+const {pub, sub} = require('./redisclient/app')
+const keyWords = ['Zemuldo Aticles', 'Zemuldo Blogs', 'Danstan Blogs']
 const pages = {
   dev: {
     title: 'ZemuldO.COM-Development',
@@ -118,8 +121,9 @@ app.use(function (req, res, next) {
   next()
 })
 app.get('/*', async function (req, res) {
+  pub.publish("secure_channel", JSON.stringify( {ttl:3600, data:[], key:'testkey'}));
   let url = req.url.split('/').join('')
-  let query = {id:null}
+  let query = { id: null }
   let blog = null
   let incomingPath = ''
   let page = url.split('/')[0]
@@ -136,6 +140,7 @@ app.get('/*', async function (req, res) {
     details = {
       title: pages[page].title,
       description: pages[page].description,
+      keyWords: keyWords.join(','),
       imgSRC: pages[page].imgSRC
     }
   } else {
@@ -144,12 +149,14 @@ app.get('/*', async function (req, res) {
       details = {
         title: blog.title,
         description: blog.about,
-        imgSRC: pages['home'].imgSRC
+        keyWords: keyWords.concat(blog.topics).join(','),
+        imgSRC: blog.headerImage ? `${env.httpURL}${blog.headerImage.name}` : pages['home'].imgSRC
       }
     } else {
       details = {
         title: pages['home'].title,
         description: pages['home'].description,
+        keyWords: keyWords.join(','),
         imgSRC: pages['home'].imgSRC
       }
     }
@@ -165,20 +172,20 @@ app.get('/*', async function (req, res) {
   }
 })
 
-if(process.env.NODE_ENV==='dev'){
-    app.listen(env.httpPort, () => {
-  console.log("**Server started at http://localhost:" + env.httpPort)
-});
+if (NODE_ENV === 'dev' || NODE_ENV === 'development') {
+  app.listen(env.httpPort, () => {
+    console.log("**Server started at http://localhost:" + env.httpPort)
+  });
 
-}else {
-    spdy
-        .createServer(options, app)
-        .listen(process.env.PORT, (error) => {
-            if (error) {
-                console.error(error)
-                return process.exit(1)
-            } else {
-                console.log('Listening on port: ' + process.env.PORT + '.')
-            }
-        })
+} else {
+  spdy
+    .createServer(options, app)
+    .listen(process.env.PORT, (error) => {
+      if (error) {
+        console.error(error)
+        return process.exit(1)
+      } else {
+        console.log('Listening on port: ' + process.env.PORT + '.')
+      }
+    })
 }

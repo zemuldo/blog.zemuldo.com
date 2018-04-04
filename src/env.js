@@ -517,7 +517,7 @@ module.exports = {
         }
     },
     live: {
-        httpPort: 8080,
+        httpPort: 8072,
         wsURL: 'wss://chat.zemuldo.com',
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
@@ -526,7 +526,7 @@ module.exports = {
         static:'/static/'
     },
     production: {
-        httpPort: 8080,
+        httpPort: 8072,
         wsURL: 'wss://chat.zemuldo.com',
         photosURL: 'https://photos.zemuldo.com/',
         httpURL: 'https://api.zemuldo.com',
@@ -535,7 +535,7 @@ module.exports = {
         static:'/static/'
     },
     dev: {
-        httpPort: 8080,
+        httpPort: 8072,
         wsURL: 'ws://localhost:8090',
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
@@ -544,7 +544,7 @@ module.exports = {
         static:'/'
     },
     development: {
-        httpPort: 8080,
+        httpPort: 8072,
         wsURL: 'ws://localhost:8090',
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',

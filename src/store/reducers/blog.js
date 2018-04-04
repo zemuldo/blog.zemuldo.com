@@ -6,7 +6,8 @@ const initialState = {
   gplsC: 0,
   twtC: 0,
   linkdCont: 0,
-  fbC: 0
+  fbC: 0,
+  views:0
 }
 
 const blogReducer = (state = initialState, action) => {
