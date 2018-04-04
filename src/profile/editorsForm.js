@@ -4,7 +4,7 @@ import { Label, Header, Form, Select, Dropdown } from 'semantic-ui-react'
 import Creator from '../blogEditor/editor'
 import * as VarsActions from '../store/actions/vars'
 import { bindActionCreators } from 'redux'
-import { topics } from '../env'
+import { topics, categories } from '../env'
 import PropTypes from 'prop-types'
 import {
   convertFromRaw,
@@ -14,14 +14,6 @@ import {
   decorator
 } from '../blogEditor/editorToolkit'
 import DropZone from '../blogEditor/imageUpload'
-
-const categories = [
-  { key: 'dev', value: 'dev', text: 'Development', name: 'development' },
-  { key: 'tech', value: 'tech', text: 'Technology', name: 'technology' },
-  { key: 'tutorials', value: 'tutorials', text: 'Tutorials', name: 'tutorials' },
-  { key: 'reviews', value: 'reviews', text: 'Reviews', name: 'reviews' },
-  { key: 'business', value: 'business', text: 'Business', name: 'business' }
-]
 
 class EditorsForm extends React.Component {
   constructor(props) {
