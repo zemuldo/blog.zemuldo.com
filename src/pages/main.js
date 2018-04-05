@@ -200,7 +200,7 @@ class App extends React.Component {
            /*
                Build variables from the window pathname
            */
-           let url = window.location.pathname.split('/')
+           let url = window.location.pathname.split('/').join('')
            let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
            let query = {}
            let page = window.location.pathname.split('/')[1]
@@ -225,6 +225,7 @@ class App extends React.Component {
            */
            if (this.state.location !== window.location.pathname) {
                this.navigateBlogs(query)
+               this.setCurrentBlog(url, page)
                this.setState({location: window.location.pathname})
            }
 
@@ -305,14 +306,6 @@ class App extends React.Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize)
         window.removeEventListener('scroll', this.scroll)
-    }
-
-    _goToEditor() {
-        this.setState({editingMode: true})
-    }
-
-    _exitEditMode() {
-        this.setState({editingMode: false, createNew: false})
     }
 
     handleContextRef = tag_contextRef => this.setState({tag_contextRef})

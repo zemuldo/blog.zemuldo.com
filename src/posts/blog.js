@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility } from 'semantic-ui-react'
+import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility, Segment, Label, Select, Menu } from 'semantic-ui-react'
 import { connect } from 'react-redux'
+import { topics, categories } from '../env'
 import BlogEditor from '../blogEditor/editor'
 import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
@@ -22,6 +23,44 @@ import { socialShares } from '../env'
 import FacebookProvider, { Comments } from 'react-facebook'
 import LoginForm from '../profile/lognForm'
 import DisqusThread from '../chat/disqus';
+import pick from 'lodash/pick'
+import times from 'lodash/times'
+
+const menuStyle = {
+    border: 'none',
+    borderRadius: 0,
+    boxShadow: 'none',
+    marginBottom: '1em',
+    marginTop: '4em',
+    transition: 'box-shadow 0.5s ease, padding 0.5s ease',
+}
+
+const fixedMenuStyle = {
+    backgroundColor: '#fff',
+    border: '1px solid #ddd',
+    boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
+}
+
+const overlayStyle = {
+    float: 'left',
+}
+
+const fixedOverlayStyle = {
+    ...overlayStyle,
+    position: 'fixed',
+    top: '10%',
+    zIndex: 10,
+}
+
+const overlayMenuStyle = {
+    position: 'relative',
+    transition: 'left 0.5s ease',
+}
+
+const fixedOverlayMenuStyle = {
+    ...overlayMenuStyle,
+    left: '1000px',
+}
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -44,20 +83,26 @@ class Blog extends React.Component {
             error: false,
             success: false,
             hideMessage: true,
-            logingin: false
+            logingin: false,
+            menuFixed: false,
+            overlayFixed: false,
         }
     }
     show = dimmer => () => this.setState({ dimmer, open: true });
+
     close = () => this.setState({ open: false })
+
     showDeleteComment = (_id) => this.setState({ cdelopen: true, commentToDelete: _id });
+
     handleConfirmDeleteComment = () => {
         this.deleteComments(this.state.commentToDelete);
         this.setState({ cdelopen: false })
     };
+
     handleCancelDeleteComment = () => this.setState({ cdelopen: false });
 
-    handleAboutChange(e, data) {
-        this.props.blogActions.updateBlog({ about: data.value })
+    handleFormFieldEdit = (e, data) => {
+        this.props.blogActions.updateBlog({ [data.name]: data.value })
     }
 
     handleEditorStateEdit = () => {
@@ -338,7 +383,9 @@ class Blog extends React.Component {
         let update = {
             title: this.state.title,
             wordCount: this.props.blog.wordCount,
-            about: this.props.blog.about
+            about: this.props.blog.about,
+            topics: this.props.blog.topics,
+            type: this.props.blog.type
         }
         let o = { editMode: false, title: this.state.title }
         update.body = this.props.blog.body
@@ -398,11 +445,11 @@ class Blog extends React.Component {
             })
     }
 
-    onCommentChange =(e)=> {
+    onCommentChange = (e) => {
         this.setState({ mess: e.target.value })
     }
 
-    submitComment =()=> {
+    submitComment = () => {
         if (!this.props.user) {
             this.setState({ open: true })
             return false
@@ -442,7 +489,7 @@ class Blog extends React.Component {
 
     }
 
-    updateComments =(c)=> {
+    updateComments = (c) => {
         let o = this.state.comments;
         this.setReplyComment('')
         axios.post(env.httpURL, {
@@ -462,7 +509,7 @@ class Blog extends React.Component {
 
     }
 
-    handleFormField =(e) =>{
+    handleFormField = (e) => {
         e.preventDefault()
         this.setState({ [e.target.name]: e.target.value })
     }
@@ -534,7 +581,16 @@ class Blog extends React.Component {
             }.bind(this))
     }
 
+    stickOverlay = () => this.setState({ overlayFixed: true })
+
+    stickTopMenu = () => this.setState({ menuFixed: true })
+
+    unStickOverlay = () => this.setState({ overlayFixed: false })
+
+    unStickTopMenu = () => this.setState({ menuFixed: false })
+
     render() {
+        const { menuFixed, overlayFixed, overlayRect } = this.state
         const { open, dimmer } = this.state
         const BlogComments = (arr) => {
             return (<Comment.Group threaded>
@@ -738,79 +794,105 @@ class Blog extends React.Component {
                                     </div>
 
                             }
-                             <br/>
+                            <br />
                             <div className='shareIcon clearElem'
                                 style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
-                                {
-                                    this.state.userLoggedIn
-                                        ? <span>
-                                            {
-                                                this.state.youLike
-                                                    ?
-                                                    <span>
-                                                        <Popup
-                                                            inverted
-                                                            trigger=
-                                                            {<span>
-                                                                <Icon size='small' inverted circular color='blue'
-                                                                    name='thumbs up' />
-
-                                                            </span>}
-                                                            content={likeMesage}
-                                                        />
-                                                        {`Likes `}
-                                                        <sup>{this.props.blog.likes}</sup>
-                                                    </span>
-
-
-                                                    :
-                                                    <span>
-                                                        <Popup
-                                                            inverted
-                                                            trigger=
-                                                            {<span>
-                                                                <Button size='mini'
-                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
-                                                                    circular color='blue' icon='thumbs up' />
-
-                                                            </span>}
-                                                            content={likeMesage}
-                                                        />
+                                <Header as='h2' color='blue'>
+                                    {
+                                        this.state.userLoggedIn
+                                            ? <span>
+                                                {
+                                                    this.state.youLike
+                                                        ?
                                                         <span>
+                                                            <Popup
+                                                                inverted
+                                                                trigger=
+                                                                {<span>
+                                                                    <Icon size='small' inverted circular color='blue'
+                                                                        name='thumbs up' />
+
+                                                                </span>}
+                                                                content={likeMesage}
+                                                            />
                                                             {`Likes `}
                                                             <sup>{this.props.blog.likes}</sup>
-
                                                         </span>
-                                                    </span>
 
 
-                                            }
-                                            <span>
-                                                {`  ,  `}
-                                                <Icon size='small' inverted circular color='blue'
-                                                    name='eye' />
-                                                {`Views `}<sup>{this.props.blog.views}</sup>
+                                                        :
+                                                        <span>
+                                                            <Popup
+                                                                inverted
+                                                                trigger=
+                                                                {<Button
+                                                                    onClick={() => this.updateLikes(this.props.blog.id)}
+                                                                    color='blue' circular icon='thumbs up' />}
+                                                                content={likeMesage}
+                                                            />
+                                                            <span>
+                                                                {`Likes `}
+                                                                <sup>{this.props.blog.likes}</sup>
+
+                                                            </span>
+                                                        </span>
+
+
+                                                }
+                                                <span>
+                                                    {`  ,  `}
+                                                    <Icon size='small' inverted circular color='blue'
+                                                        name='eye' />
+                                                    {`Views `}<sup>{this.props.blog.views}</sup>
+                                                </span>
                                             </span>
-                                        </span>
-                                        :
-                                        <Popup
-                                            inverted
-                                            trigger=
-                                            {<span>
-                                                <Icon size='small' inverted circular color='blue' name='like outline' />
-                                                <Icon size='small' inverted circular color='red' name='like' />
-                                                <br />
-                                                {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
-                                            </span>}
-                                            content={likeMesage}
-                                        />
+                                            :
+                                            <Popup
+                                                inverted
+                                                trigger=
+                                                {<span>
+                                                    <Icon size='small' inverted circular color='blue' name='like outline' />
+                                                    <Icon size='small' inverted circular color='red' name='like' />
+                                                    <br />
+                                                    {`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}
+                                                </span>}
+                                                content={likeMesage}
+                                            />
 
-                                }
-                                {` ,  `}
-                                <Icon size='large' color='green' name='external share' />
-                                {shares}
+                                    }
+                                    <span> {` ,  `}
+                                        <Icon size='large' color='green' name='external share' />
+                                        {shares}
+                                    </span>
+                                    <Visibility
+                                        once={false}
+                                        onTopPassed={this.stickOverlay}
+                                        onTopVisible={this.unStickOverlay}
+                                        style={overlayFixed ? { ...overlayStyle, ...overlayRect } : {}}
+                                    />
+                                    {
+                                        overlayFixed ?
+                                            <div
+                                                style={overlayFixed ? fixedOverlayStyle : overlayStyle}
+                                            >
+                                                <Menu
+                                                    secondary
+                                                    style={overlayFixed ? fixedOverlayMenuStyle : overlayMenuStyle}
+                                                    vertical={!!overlayFixed}
+                                                >
+                                                    {
+                                                        times(shares.length, (i) =>
+                                                            <Menu.Item key={i}>
+                                                                {shares[i]}
+                                                            </Menu.Item>
+                                                        )
+                                                    }
+                                                </Menu>
+                                            </div> : null
+                                    }
+                                </Header>
+
                                 <br />
-                                <br/>
                                 <span>
                                     <Popup
                                         trigger={<Image
@@ -894,9 +976,23 @@ class Blog extends React.Component {
                                 {
                                     this.props.blog.editMode ?
                                         <Form style={{ padding: '2em 2em 2em 2em' }}>
-                                            <Form.TextArea maxLength='140' onChange={this.handleAboutChange}
+                                            <Form.TextArea name='about' maxLength='140' onChange={this.handleFormFieldEdit}
                                                 label='About your blog'
-                                                value={this.props.blog.about} />
+                                                defaultValue={this.props.blog.about} />
+                                            <Form.Field>
+                                                <Label style={{ border: 'none' }} as='a' size='large' color='blue'>Select
+                                                    Tags</Label>{'   '}
+                                                <Dropdown defaultValue={this.props.blog.topics} name='topics' style={{ margin: '0em 0em 1em 0em', color: 'green' }}
+                                                    onChange={this.handleFormFieldEdit} multiple search selection
+                                                    closeOnChange options={topics} placeholder='Select topics' />
+                                            </Form.Field>
+                                            <Form.Field inline>
+                                                <Label style={{ border: 'none' }} as='a' size='large' color='blue'>Select
+                                                Category</Label>{'   '}
+                                                <Select defaultValue={this.props.blog.type} name='type' style={{ margin: '0em 0em 1em 0em', color: 'green' }}
+                                                    onChange={this.handleFormFieldEdit} placeholder='Select Category'
+                                                    options={categories} />
+                                            </Form.Field>
                                         </Form>
                                         : null
                                 }
@@ -909,6 +1005,7 @@ class Blog extends React.Component {
                                 </Header.Subheader>
                             </Header>
                             <Tab menu={{ attached: true }} panes={comments} />
+
                         </div>
                         : <div>
                             Content not found!
