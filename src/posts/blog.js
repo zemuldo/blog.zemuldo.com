@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility, Segment, Label, Select } from 'semantic-ui-react'
+import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility, Segment, Label, Select, Menu } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { topics, categories } from '../env'
 import BlogEditor from '../blogEditor/editor'
@@ -23,6 +23,44 @@ import { socialShares } from '../env'
 import FacebookProvider, { Comments } from 'react-facebook'
 import LoginForm from '../profile/lognForm'
 import DisqusThread from '../chat/disqus';
+import pick from 'lodash/pick'
+import times from 'lodash/times'
+
+const menuStyle = {
+    border: 'none',
+    borderRadius: 0,
+    boxShadow: 'none',
+    marginBottom: '1em',
+    marginTop: '4em',
+    transition: 'box-shadow 0.5s ease, padding 0.5s ease',
+}
+
+const fixedMenuStyle = {
+    backgroundColor: '#fff',
+    border: '1px solid #ddd',
+    boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
+}
+
+const overlayStyle = {
+    float: 'left',
+}
+
+const fixedOverlayStyle = {
+    ...overlayStyle,
+    position: 'fixed',
+    top: '10%',
+    zIndex: 10,
+}
+
+const overlayMenuStyle = {
+    position: 'relative',
+    transition: 'left 0.5s ease',
+}
+
+const fixedOverlayMenuStyle = {
+    ...overlayMenuStyle,
+    left: '1000px',
+}
 
 const env = config[process.env.NODE_ENV] || 'development'
 
@@ -45,7 +83,9 @@ class Blog extends React.Component {
             error: false,
             success: false,
             hideMessage: true,
-            logingin: false
+            logingin: false,
+            menuFixed: false,
+            overlayFixed: false,
         }
     }
     show = dimmer => () => this.setState({ dimmer, open: true });
@@ -541,7 +581,16 @@ class Blog extends React.Component {
             }.bind(this))
     }
 
+    stickOverlay = () => this.setState({ overlayFixed: true })
+
+    stickTopMenu = () => this.setState({ menuFixed: true })
+
+    unStickOverlay = () => this.setState({ overlayFixed: false })
+
+    unStickTopMenu = () => this.setState({ menuFixed: false })
+
     render() {
+        const { menuFixed, overlayFixed, overlayRect } = this.state
         const { open, dimmer } = this.state
         const BlogComments = (arr) => {
             return (<Comment.Group threaded>
@@ -815,9 +864,34 @@ class Blog extends React.Component {
                                         <Icon size='large' color='green' name='external share' />
                                         {shares}
                                     </span>
+                                    <Visibility
+                                        once={false}
+                                        onTopPassed={this.stickOverlay}
+                                        onTopVisible={this.unStickOverlay}
+                                        style={overlayFixed ? { ...overlayStyle, ...overlayRect } : {}}
+                                    />
+                                    {
+                                        overlayFixed ?
+                                            <div
+                                                style={overlayFixed ? fixedOverlayStyle : overlayStyle}
+                                            >
+                                                <Menu
+                                                    secondary
+                                                    style={overlayFixed ? fixedOverlayMenuStyle : overlayMenuStyle}
+                                                    vertical={!!overlayFixed}
+                                                >
+                                                    {
+                                                        times(shares.length, (i) =>
+                                                            <Menu.Item key={i}>
+                                                                {shares[i]}
+                                                            </Menu.Item>
+                                                        )
+                                                    }
+                                                </Menu>
+                                            </div> : null
+                                    }
                                 </Header>
 
-                                <br />
                                 <br />
                                 <span>
                                     <Popup
@@ -898,10 +972,6 @@ class Blog extends React.Component {
                                         <div>Loading state</div>
                                 }
                             </div>
-                            <Segment basic floated={'right'}>
-                                <Header as='h1' color='blue'>{`Share this post `}{shares}</Header>
-
-                            </Segment>
                             <div>
                                 {
                                     this.props.blog.editMode ?
@@ -935,6 +1005,7 @@ class Blog extends React.Component {
                                 </Header.Subheader>
                             </Header>
                             <Tab menu={{ attached: true }} panes={comments} />
+
                         </div>
                         : <div>
                             Content not found!

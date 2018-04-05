@@ -7,7 +7,6 @@ import Editor from 'draft-js-plugins-editor';
 import createHashtagPlugin from 'draft-js-hashtag-plugin';
 import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import createCounterPlugin from 'draft-js-counter-plugin';
-import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import {
     AtomicBlockUtils,
@@ -37,18 +36,15 @@ import {
 const hashtagPlugin = createHashtagPlugin();
 const linkifyPlugin = createLinkifyPlugin();
 const counterPlugin = createCounterPlugin();
-const sideToolbarPlugin = createSideToolbarPlugin();
 
 
 const { CharCounter, WordCounter, LineCounter } = counterPlugin;
-const { SideToolbar } = sideToolbarPlugin;
 
 
 const plugins = [
     hashtagPlugin,
     linkifyPlugin,
-    counterPlugin,
-    sideToolbarPlugin
+    counterPlugin
 ];
 
 const env = config[process.env.NODE_ENV] || 'development';
@@ -639,14 +635,6 @@ class RenderBlog extends React.Component {
                             spellCheck
                             plugins={plugins}
                         />
-                        <div className={editorStyles.options}>
-                            {
-                                (this.props.blog.editMode || this.props.mode === 'create') && this.state.firstBlock.text ?
-                                    <div className={editorStyles.options}>
-                                        <SideToolbar />
-                                    </div> : null
-                            }
-                        </div>
                     </div>
                 </div>
 
