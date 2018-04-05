@@ -429,6 +429,7 @@ class Blog extends React.Component {
             }
         })
             .then(oo => {
+                console.log(oo)
                 if (oo.data.nModified === 1) {
                     return deleteComments(_id, this.state.comments)
                 }
@@ -450,6 +451,9 @@ class Blog extends React.Component {
     }
 
     submitComment = () => {
+        if(!this.state.mess || this.state.mess.length<2){
+            return false
+        }
         if (!this.props.user) {
             this.setState({ open: true })
             return false
@@ -605,10 +609,10 @@ class Blog extends React.Component {
                                 </Comment.Metadata>
                                 <Comment.Text>{c.mess}</Comment.Text>
                                 <Comment.Actions>
-                                    <span href={''} onClick={() => this.setReplyComment(c._id)}>Reply</span>
+                                    <Button icon basic color='green' onClick={() => this.setReplyComment(c._id)} circular icon='reply' />
                                     {
                                         this.props.user && this.props.user._id && this.props.user._id === c.userID ?
-                                            <span onClick={() => this.showDeleteComment(c._id)}>Delete</span> : null
+                                            <Button icon basic color='red'  onClick={() => this.showDeleteComment(c._id)} circular icon='delete' /> : null
                                     }
                                     {
                                         this.state.replyComment === c._id ?
@@ -656,7 +660,7 @@ class Blog extends React.Component {
                         }
                         <Form>
                             <Form.TextArea onChange={this.onCommentChange} />
-                            <Button onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
+                            <Button disabled={!this.state.mess || this.state.mess.length<2} onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
                                 icon='edit' primary />
                         </Form>
                     </div>
@@ -706,7 +710,7 @@ class Blog extends React.Component {
                 />
                 <Modal dimmer open={this.state.showDelete}>
                     <Modal.Header>This Post will be deleted</Modal.Header>
-                    <Modal.Content image>
+                    <Modal.Content scrolling image>
                         <Modal.Description>
                             <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
                                 as='h1'>
@@ -893,10 +897,16 @@ class Blog extends React.Component {
                                 </Header>
 
                                 <br />
+                                <span className='info font-24'>
+                                    Published
+                                    {` ${moment().to(this.props.blog.date)} By `}
+                                </span>
                                 <span>
                                     <Popup
+                                        inverted
                                         trigger={<Image
-                                            floated='left'
+
+                                            spaced={true}
                                             avatar
                                             id='photo'
                                             size='tiny'
@@ -917,18 +927,13 @@ class Blog extends React.Component {
                                         <h3>
                                             {this.props.blog.author.name}
                                         </h3>
-                                        <p>
+                                        <span>
                                             {`Joined ${moment().to(this.props.blog.author.created)}`}
-                                        </p>
+                                        </span>
                                     </Popup>
 
                                 </span>
-                                <br />
-                                <span className='info'>
-                                    Published
-                                    {' '}{moment().to(this.props.blog.date)}
-                                </span>
-                                <br />
+
                                 <span className='info'>
                                     {this.props.blog.author.name} {' '}
                                 </span>
@@ -936,21 +941,34 @@ class Blog extends React.Component {
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
-                                            <Dropdown text='Manage' pointing className='link item info'>
+                                            <Dropdown text='Manage' pointing='left' className='link item info font-24 '>
                                                 <Dropdown.Menu>
-                                                    <Dropdown.Item color='red'
-                                                        onClick={() => this.openDelete()}>Delete</Dropdown.Item>
+                                                    <Dropdown.Item as='a' color='red'
+                                                        onClick={() => this.openDelete()}>
+                                                        <span className='font-24 '>
+                                                            Delete
+                                                        </span>
+                                                    </Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >
-                                                        Edit
+                                                        <span className='font-24 '>
+                                                            Edit
+                                                        </span>
+
                                                     </Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={this.handleSave}
                                                     >
-                                                        Save
+                                                        <span className='font-24 '>
+                                                            save
+                                                        </span>
                                                     </Dropdown.Item>
-                                                    <Dropdown.Item>Hide</Dropdown.Item>
+                                                    <Dropdown.Item>
+                                                    <span className='font-24 '>
+                                                            HIde
+                                                        </span>
+                                                    </Dropdown.Item>
                                                 </Dropdown.Menu>
                                             </Dropdown>
                                         </div>
