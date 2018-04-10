@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility, Segment, Label, Select, Menu } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { topics, categories } from '../env'
@@ -596,56 +597,57 @@ class Blog extends React.Component {
         const { menuFixed, overlayFixed, overlayRect } = this.state
         const { open, dimmer } = this.state
         const BlogComments = (arr) => {
-            return (<Comment.Group threaded>
-                {arr.map(function (c) {
-                    return (
-                        <Comment key={c._id}>
-                            <Comment.Avatar as='a' src={env.httpURL + c.author.avatar} />
-                            <Comment.Content>
-                                <Comment.Author as='a'>{c.author.name}</Comment.Author>
-                                <Comment.Metadata>
-                                    <span>{moment().to(c.date)}</span>
-                                </Comment.Metadata>
-                                <Comment.Text>{c.mess}</Comment.Text>
-                                <Comment.Actions>
-                                    <Button icon basic color='green' onClick={() => this.setReplyComment(c._id)} circular icon='reply' />
-                                    {
-                                        this.props.user && this.props.user._id && this.props.user._id === c.userID ?
-                                            <Button icon basic color='red' onClick={() => this.showDeleteComment(c._id)} circular icon='delete' /> : null
-                                    }
-                                    {
-                                        this.state.replyComment === c._id ?
-                                            <Form reply>
-                                                <Form.TextArea onChange={this.onCommentChange} />
-                                                <Button
-                                                    onClick={() => this.updateComments({
-                                                        postID: this.props.blog._id,
-                                                        parent_id: c._id,
-                                                        mess: this.state.mess,
-                                                        userID: this.props.user._id,
-                                                        author: {
-                                                            name: this.props.user.name,
-                                                            avatar: this.props.user.avatarURL
-                                                        }
-                                                    })}
-                                                    content='Add Reply'
-                                                    labelPosition='left'
-                                                    icon='edit'
-                                                    primary
-                                                />
-                                                <Button onClick={() => this.setReplyComment('')} content='Cancel'
-                                                    labelPosition='left' icon='close' primary />
-                                            </Form> : null
-                                    }
-                                </Comment.Actions>
-                            </Comment.Content>
-                            {
-                                c.chat ?
-                                    BlogComments(c.chat.comments) : null
-                            }
-                        </Comment>)
-                }.bind(this))}
-            </Comment.Group>)
+            return (
+                <Comment.Group threaded>
+                    {arr.map(function (c) {
+                        return (
+                            <Comment key={c._id}>
+                                <Comment.Avatar as='a' src={env.httpURL + c.author.avatar} />
+                                <Comment.Content>
+                                    <Comment.Author as='a'>{c.author.name}</Comment.Author>
+                                    <Comment.Metadata>
+                                        <span>{moment().to(c.date)}</span>
+                                    </Comment.Metadata>
+                                    <Comment.Text>{c.mess}</Comment.Text>
+                                    <Comment.Actions>
+                                        <Button icon basic color='green' onClick={() => this.setReplyComment(c._id)} circular icon='reply' />
+                                        {
+                                            this.props.user && this.props.user._id && this.props.user._id === c.userID ?
+                                                <Button icon basic color='red' onClick={() => this.showDeleteComment(c._id)} circular icon='delete' /> : null
+                                        }
+                                        {
+                                            this.state.replyComment === c._id ?
+                                                <Form reply>
+                                                    <Form.TextArea onChange={this.onCommentChange} />
+                                                    <Button
+                                                        onClick={() => this.updateComments({
+                                                            postID: this.props.blog._id,
+                                                            parent_id: c._id,
+                                                            mess: this.state.mess,
+                                                            userID: this.props.user._id,
+                                                            author: {
+                                                                name: this.props.user.name,
+                                                                avatar: this.props.user.avatarURL
+                                                            }
+                                                        })}
+                                                        content='Add Reply'
+                                                        labelPosition='left'
+                                                        icon='edit'
+                                                        primary
+                                                    />
+                                                    <Button onClick={() => this.setReplyComment('')} content='Cancel'
+                                                        labelPosition='left' icon='close' primary />
+                                                </Form> : null
+                                        }
+                                    </Comment.Actions>
+                                </Comment.Content>
+                                {
+                                    c.chat ?
+                                        BlogComments(c.chat.comments) : null
+                                }
+                            </Comment>)
+                    }.bind(this))}
+                </Comment.Group>)
 
         };
         let comments = [
@@ -658,7 +660,7 @@ class Blog extends React.Component {
                             BlogComments(this.state.comments)
                         }
                         <Form>
-                            <Form.TextArea onChange={this.onCommentChange} />
+                            <Form.TextArea style={{ maxWidth: '400px' }} onChange={this.onCommentChange} />
                             <Button disabled={!this.state.mess || this.state.mess.length < 2} onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
                                 icon='edit' primary />
                         </Form>
@@ -702,6 +704,11 @@ class Blog extends React.Component {
         })
         return (
             <div>
+                <Helmet>
+                    <title>{`Zemuldo Blogs- ${this.props.blog.title}`}</title>
+                    <meta name="description" content={this.props.blog.about} />
+                    < meta name="keywords" content={this.props.blog.topics.join(',')} />
+                </Helmet>
                 <Confirm
                     open={this.state.cdelopen}
                     onCancel={this.handleCancelDeleteComment}
@@ -785,7 +792,7 @@ class Blog extends React.Component {
                         ? <div>
                             {
                                 !this.props.blog.editMode ?
-                                    <Visibility once={false} onBottomPassed={this.updateViews}>
+                                    <Visibility once={true} onBottomPassed={this.updateViews}>
                                         <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
                                             as='h1'>
                                             {
@@ -879,7 +886,7 @@ class Blog extends React.Component {
                                         {shares}
                                     </span>
                                     <Visibility
-                                        once={true}
+                                        once={false}
                                         onTopPassed={this.stickOverlay}
                                         onTopVisible={this.unStickOverlay}
                                         style={overlayFixed ? { ...overlayStyle, ...overlayRect } : {}}
