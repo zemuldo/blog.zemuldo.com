@@ -3,7 +3,6 @@ import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, 
 import { connect } from 'react-redux'
 import { topics, categories } from '../env'
 import BlogEditor from '../blogEditor/editor'
-import PreviewEditor from '../blogEditor/prevEditor'
 import axios from 'axios'
 import config from '../env'
 import { bindActionCreators } from 'redux'
@@ -451,7 +450,7 @@ class Blog extends React.Component {
     }
 
     submitComment = () => {
-        if(!this.state.mess || this.state.mess.length<2){
+        if (!this.state.mess || this.state.mess.length < 2) {
             return false
         }
         if (!this.props.user) {
@@ -612,7 +611,7 @@ class Blog extends React.Component {
                                     <Button icon basic color='green' onClick={() => this.setReplyComment(c._id)} circular icon='reply' />
                                     {
                                         this.props.user && this.props.user._id && this.props.user._id === c.userID ?
-                                            <Button icon basic color='red'  onClick={() => this.showDeleteComment(c._id)} circular icon='delete' /> : null
+                                            <Button icon basic color='red' onClick={() => this.showDeleteComment(c._id)} circular icon='delete' /> : null
                                     }
                                     {
                                         this.state.replyComment === c._id ?
@@ -660,7 +659,7 @@ class Blog extends React.Component {
                         }
                         <Form>
                             <Form.TextArea onChange={this.onCommentChange} />
-                            <Button disabled={!this.state.mess || this.state.mess.length<2} onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
+                            <Button disabled={!this.state.mess || this.state.mess.length < 2} onClick={() => this.submitComment('')} content='Add Comment' labelPosition='left'
                                 icon='edit' primary />
                         </Form>
                     </div>
@@ -710,7 +709,7 @@ class Blog extends React.Component {
                 />
                 <Modal dimmer open={this.state.showDelete}>
                     <Modal.Header>This Post will be deleted</Modal.Header>
-                    <Modal.Content scrolling image>
+                    <Modal.Content>
                         <Modal.Description>
                             <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
                                 as='h1'>
@@ -721,22 +720,33 @@ class Blog extends React.Component {
                             <span className='info'>
                                 Published: {moment().to(this.props.blog.date)}
                                 <br />
-                                {this.props.blog.date}
                             </span>
-                            <br />
-                            <br />
-                            <span className='info'>
-                                {this.props.blog.author.name} {' '}
+                            <span>
+                                <Popup
+                                    inverted
+                                    trigger=
+                                    {<span>
+                                        <Icon size='small' inverted circular color='blue'
+                                            name='thumbs up' />
+
+                                    </span>}
+                                    content={likeMesage}
+                                />
+                                {`Likes `}
+                                <sup>{this.props.blog.likes}</sup>
                             </span>
-                            <div style={{ margin: '2em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
-                                <br />
-                                <div>{
-                                    this.state.editorState ?
-                                        <PreviewEditor title={this.props.blog.title}
-                                            editorState={this.state.editorState} /> :
-                                        <div>Loading editor state</div>
-                                }</div>
-                            </div>
+                            <span>
+                                {`  ,  `}
+                                <Icon size='small' inverted circular color='blue'
+                                    name='eye' />
+                                {`Views `}<sup>{this.props.blog.views}</sup>
+                            </span>
+                            {
+                                this.state.editorState ?
+                                    <BlogEditor initEditorState={this.state.editorState} mode={'edit'}
+                                        className='editor' editorState={this.props.blog.body} /> :
+                                    <div>Loading state</div>
+                            }
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
@@ -869,7 +879,7 @@ class Blog extends React.Component {
                                         {shares}
                                     </span>
                                     <Visibility
-                                        once={false}
+                                        once={true}
                                         onTopPassed={this.stickOverlay}
                                         onTopVisible={this.unStickOverlay}
                                         style={overlayFixed ? { ...overlayStyle, ...overlayRect } : {}}
@@ -941,7 +951,7 @@ class Blog extends React.Component {
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
-                                            <Dropdown text='Manage' pointing='left' className='link item info font-24 '>
+                                            <Dropdown color='blue' trigger={<Icon name='settings' color='blue' size='large' />} pointing='left' className='link item info font-24 '>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item as='a' color='red'
                                                         onClick={() => this.openDelete()}>
@@ -965,7 +975,7 @@ class Blog extends React.Component {
                                                         </span>
                                                     </Dropdown.Item>
                                                     <Dropdown.Item>
-                                                    <span className='font-24 '>
+                                                        <span className='font-24 '>
                                                             HIde
                                                         </span>
                                                     </Dropdown.Item>
