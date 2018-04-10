@@ -15,6 +15,7 @@ export default class App extends React.Component {
 
     componentDidMount () {
         let x = localStorage.getItem(`scrollTo_${window.location.pathname}`)
+        
         if(x){
             let position = JSON.parse(x)
             setTimeout(()=>{ window.scrollTo(position.x,position.y)},2000)
