@@ -785,7 +785,7 @@ class Blog extends React.Component {
                         ? <div>
                             {
                                 !this.props.blog.editMode ?
-                                    <Visibility once={false} onBottomPassed={this.updateViews}>
+                                    <Visibility once={true} onBottomPassed={this.updateViews}>
                                         <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
                                             as='h1'>
                                             {
@@ -879,7 +879,7 @@ class Blog extends React.Component {
                                         {shares}
                                     </span>
                                     <Visibility
-                                        once={true}
+                                        once={false}
                                         onTopPassed={this.stickOverlay}
                                         onTopVisible={this.unStickOverlay}
                                         style={overlayFixed ? { ...overlayStyle, ...overlayRect } : {}}
