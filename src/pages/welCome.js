@@ -19,7 +19,7 @@ class WelcomePage extends React.Component {
   render() {
     const t = 'Artiles on '
     return (
-      <div style={{ margin: '2em 1em 3em 1em' }}>
+      <div style={{ margin: '2em 0em 3em 0em' }}>
         {
           !this.props.blog.id
             ? <div>
@@ -60,7 +60,7 @@ class WelcomePage extends React.Component {
                             times(this.props.topics.length, (i) =>
                               <Card
                                 onClick={() => this.props.history.push('/topics/' + this.props.topics[i].key)}
-                                className='blogCard' style={{
+                                className='' style={{
                                   width: 'auto',
                                   maxWidth: '250px',
                                   minWidth: '100px'

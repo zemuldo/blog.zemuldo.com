@@ -20,17 +20,17 @@ class PagesComponent extends React.Component {
     }
   };
 
-  _handleChangeBodySize (size) {
-    this.setState({bodySize: size})
+  _handleChangeBodySize(size) {
+    this.setState({ bodySize: size })
   }
 
   resize = () => this.forceUpdate();
 
-  componentDidMount () {
+  componentDidMount() {
     window.addEventListener('resize', this.resize)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.removeEventListener('resize', this.resize)
   }
 
@@ -39,24 +39,24 @@ class PagesComponent extends React.Component {
     x = 0
   }
 
-  render () {
+  render() {
     return (
       <div>
-          {
+        {
 
-              !this.props.vars.blogLoaded
-                  ? <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                      <Loader active inline='centered' />
-                      <p>Loading Blog...</p>
-                  </div>
-                  : <WelcomePage
-                      navigateBlogs={this.props.navigateBlogs}
-                      history={this.props.history}
-                      x={x}
-                      next={this.state.next}
-                      color={this.props.vars.colors[1]}
-                  />
-          }
+          !this.props.vars.blogLoaded
+            ? <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+              <Loader active inline='centered' />
+              <p>Loading Blog...</p>
+            </div>
+            : <WelcomePage
+              navigateBlogs={this.props.navigateBlogs}
+              history={this.props.history}
+              x={x}
+              next={this.state.next}
+              color={this.props.vars.colors[1]}
+            />
+        }
       </div>)
   }
 }

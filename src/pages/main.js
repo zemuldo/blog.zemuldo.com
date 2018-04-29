@@ -317,7 +317,7 @@ class App extends React.Component {
 
 
         return (
-            <div className='main_body' ref={this.handleContextRef}>
+            <div ref={this.handleContextRef}>
                <Container>
                    <Helmet>
                        <meta name='theme-color' content='#4285f4'/>

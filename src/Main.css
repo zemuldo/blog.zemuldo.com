@@ -6,7 +6,7 @@
 
 /*Body*/
 .main_body{
-
+    
 }
 .blogs{
     margin-left: 10px;
@@ -266,7 +266,7 @@ a:hover {
 
 .topicsWrapper {
     color: blue;
-    margin: 2em 0em 0em 1em;
+    margin: 2em 0em 0em 0em;
 }
 
 .topicsWrapper h3 {
