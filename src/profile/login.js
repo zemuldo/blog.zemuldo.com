@@ -256,10 +256,7 @@ class Login extends React.Component {
             password: this.state.password,
             avatar: JSON.stringify(this.state.imagePreviewUrl)
         }
-        axios.post(env.httpURL, {
-            'queryMethod': 'registerUser',
-            'queryData': userData
-        })
+        axios.post(`${env.httpURL}/signup`, userData)
             .then(function (success) {
                 if (!success.data) {
                     this.setState({
@@ -302,7 +299,7 @@ class Login extends React.Component {
                     error: true,
                     hideMessage: false,
                     registering: false,
-                    errorDetails: {field: 'Failed', message: error.message}
+                    errorDetails: {field: 'Failed', message: error.response.data.error || error.message}
                 })
                 setTimeout(function () {
                     this.setState({hideMessage: true})
