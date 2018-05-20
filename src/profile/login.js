@@ -113,10 +113,7 @@ class Login extends React.Component {
             userName: this.state.userName,
             password: this.state.password
         }
-        axios.post(env.httpURL, {
-            'queryMethod': 'loginUser',
-            'queryData': userData
-        })
+        axios.post(`${env.httpURL}/login`, userData)
             .then(function (success) {
                 if (!success.data) {
                     this.setState({
@@ -154,12 +151,18 @@ class Login extends React.Component {
                     error: true,
                     hideMessage: false,
                     logingin: false,
-                    errorDetails: {field: 'Login', message: 'An erro occured, Check your Internet'}
+                    errorDetails: {field: 'Failed', message: error.response.data.error || 'An erro occured, Check your Internet'}
                 })
                 setTimeout(function () {
                     this.setState({error: false, hideMessage: true})
                 }.bind(this), 2000)
             }.bind(this))
+    }
+
+    setTimer = (stateItem)=>{
+        setTimeout( ()=> {
+            this.setState({[stateItem]: true, error: false})
+        }, 2000)
     }
 
     handleSignUp =() =>{
@@ -171,9 +174,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'Username', message: 'Username is required and must be more tha 5 characters'}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+           
             return
         }
         if (!this.state.firstName || this.state.firstName.length < 3) {
@@ -183,9 +184,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'First Name', message: 'First Name is required and must be more tha 3 characters'}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+            this.setTimer('hideMessage')
             return
         }
         if (!this.state.lastName || this.state.lastName.length < 3) {
@@ -195,9 +194,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'Last Name', message: 'Last Name is required and must be more tha 3 characters'}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+            this.setTimer('hideMessage')
             return
         }
         if (!this.state.email) {
@@ -207,9 +204,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'Email', message: 'Email Address is required'}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+            this.setTimer('hideMessage')
             return
         }
         if (typeof this.state.imagePreviewUrl !== 'object') {
@@ -219,9 +214,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'Avatar', message: 'You have not created profile picture'}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+            this.setTimer('hideMessage')
             return
         }
         if (!this.state.password || !this.state.confirmPass) {
@@ -231,9 +224,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'Password', message: 'Password is required'}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+            this.setTimer('hideMessage')
             return
         }
         if (this.state.password !== this.state.confirmPass) {
@@ -243,9 +234,7 @@ class Login extends React.Component {
                 registering: false,
                 errorDetails: {field: 'Password', message: "Passwords don't match"}
             })
-            setTimeout(function () {
-                this.setState({hideMessage: true, error: false})
-            }.bind(this), 2000)
+            this.setTimer('hideMessage')
             return
         }
         let userData = {
@@ -265,9 +254,7 @@ class Login extends React.Component {
                         registering: false,
                         errorDetails: {field: 'Failed', message: 'An error occured. Check your Internet'}
                     })
-                    setTimeout(function () {
-                        this.setState({hideMessage: true})
-                    }.bind(this), 4000)
+                    this.setTimer('hideMessage')
                     return false
                 }
                 if (success.data.code === 200) {
@@ -277,11 +264,7 @@ class Login extends React.Component {
                         registering: false,
                         errorDetails: {field: 'Success', message: 'Success'}
                     })
-                    setTimeout(function () {
-                        this.setState({success: false, hideMessage: true, imagePreviewUrl: ''})
-                        this.props.history.push('/login')
-                        this.props.varsActions.updateVars({signUp: false})
-                    }.bind(this), 2000)
+                    this.setTimer('hideMessage')
                 } else {
                     this.setState({
                         error: true,
@@ -289,9 +272,7 @@ class Login extends React.Component {
                         registering: false,
                         errorDetails: {field: 'Failed', message: success.data.error}
                     })
-                    setTimeout(function () {
-                        this.setState({hideMessage: true})
-                    }.bind(this), 4000)
+                    this.setTimer('hideMessage')
                 }
             }.bind(this))
             .catch(function (error) {
@@ -301,9 +282,7 @@ class Login extends React.Component {
                     registering: false,
                     errorDetails: {field: 'Failed', message: error.response.data.error || error.message}
                 })
-                setTimeout(function () {
-                    this.setState({hideMessage: true})
-                }.bind(this), 4000)
+                this.setTimer('hideMessage')
                 return false
             }.bind(this))
     }
