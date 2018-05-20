@@ -958,12 +958,12 @@ class Blog extends React.Component {
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
-                                            <Dropdown color='blue' icon={null} trigger={<span><Icon name='settings' color='blue' size='large' /> Manage</span>} pointing='left' className='link item info font-24 '>
+                                            <Dropdown color='blue' icon={null} trigger={<span className='colorBlue'><Icon name='settings' color='blue' size='large' /> Manage</span>} pointing='left' className='link item info font-24 '>
                                                 <Dropdown.Menu>
-                                                <Dropdown.Header icon='tasks' content='Manage this post' />
-                                                    <Dropdown.Item as='a' color='red'
+                                                    <Dropdown.Header icon='tasks' content='Manage this post' />
+                                                    <Dropdown.Item className='onHoverDanger' as='a' color='red'
                                                         onClick={() => this.openDelete()}>
-                                                        <Icon color='red' name='delete'/>
+                                                        <Icon color='red' name='delete' />
                                                         <span >
                                                             Delete
                                                         </span>
@@ -971,7 +971,7 @@ class Blog extends React.Component {
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >
-                                                    <Icon color='green' name='edit'/>
+                                                        <Icon color='green' name='edit' />
                                                         <span >
                                                             Edit
                                                         </span>
@@ -980,13 +980,13 @@ class Blog extends React.Component {
                                                     <Dropdown.Item
                                                         onClick={this.handleSave}
                                                     >
-                                                    <Icon color='blue' name='save'/>
+                                                        <Icon color='blue' name='save' />
                                                         <span >
                                                             save
                                                         </span>
                                                     </Dropdown.Item>
-                                                    <Dropdown.Item>
-                                                    <Icon color='orange' name='privacy'/>
+                                                    <Dropdown.Item className='onHoverWarn' >
+                                                        <Icon color='orange' name='privacy' />
                                                         <span >
                                                             Hide
                                                         </span>

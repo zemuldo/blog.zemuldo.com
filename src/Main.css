@@ -320,6 +320,12 @@ a:hover {
 /*
     Common
 */
+.onHoverDanger:hover{
+    background-color: red !important
+}
+.onHoverWarn:hover{
+    background-color: orange !important
+}
 .alignCenter {
     text-align: center;
 }
