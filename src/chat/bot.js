@@ -138,7 +138,7 @@ class LiveChat extends React.Component {
         }
     }
 
-    handleTextChange(event) {
+    handleTextChange =(event)=> {
         this.setState({message: event.target.value})
     }
 
