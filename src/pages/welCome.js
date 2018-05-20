@@ -13,10 +13,17 @@ import PropTypes from 'prop-types'
 class WelcomePage extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {imageBlurL:this.props.vars.imageBlurL,imageBlurR:this.props.vars.imageBlurR}
+  }
+
+  componentDidMount(){
+    setTimeout(()=>{
+      this.setState({imageBlurL:0,imageBlurR:0})
+    },2000)
   }
 
   render() {
+    let vars = this.props.vars
     const t = 'Artiles on '
     return (
       <div style={{ margin: '2em 0em 3em 0em' }}>
@@ -78,8 +85,8 @@ class WelcomePage extends React.Component {
                                     <p>
                                       <Image
                                         style={{ maxHeight: '130px' }}
-                                        alt={topicsOBJ[this.props.topics[i].key].name + 'blogs image'}
-                                        src={this.props.vars.env.static + 'img/blogs/topics/' + this.props.topics[i].key + '.png'}
+                                        alt={topicsOBJ[this.props.topics[i].key].name + 'blogs image'}                                       
+                                        src={`${this.props.vars.env.httpURL}/image-thumbnail/100/100/${this.state.imageBlurL}/${this.state.imageBlurR}/${`${this.props.vars.env.serverURL}${this.props.vars.env.static}img/blogs/topics/${this.props.topics[i].key}.png`}`}
                                       />
                                     </p>
                                   </Card.Header>

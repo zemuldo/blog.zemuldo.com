@@ -62,7 +62,7 @@ class ComMenu extends React.Component {
         this.props.varsActions.updateVars({ editingMode: false, createNew: false, currentLocation: 'profile' })
     };
 
-    handleFilterChange(e) {
+    handleFilterChange = (e)=> {
         let query = {}
         let queryMthod = 'getAllPosts'
         if (this.props.vars.currentLocation !== 'home') {
@@ -196,7 +196,7 @@ class ComMenu extends React.Component {
                                                                     color={this.props.vars.colors[1]}>Settings</Link>
                                                             </Dropdown.Item>
                                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
-                                                                <Icon color={this.props.vars.colors[0]} name='sign out' />
+                                                                <Icon color={this.props.vars.colors[0]} name='shutdown' />
                                                                 <span className='colorRed' color={this.props.vars.colors[0]}>Sign Out</span>
                                                             </Dropdown.Item>
                                                         </Dropdown.Menu>

@@ -39,7 +39,7 @@ export default class App extends React.Component {
         return (
             <div onMouseMove={this.handleMousePosition}>
                 <NavBar />
-                <Segment basic text style={{minHeight:`${window.innerHeight-200}px`}}>
+                <Segment basic text="true" style={{minHeight:`${window.innerHeight-200}px`}}>
                 <Main />
                 </Segment>
                 <Footer />
