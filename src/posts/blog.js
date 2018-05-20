@@ -958,7 +958,7 @@ class Blog extends React.Component {
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
-                                            <Dropdown color='blue' icon={null} trigger={<span className='colorBlue'><Icon name='settings' color='blue' size='large' /> Manage</span>} pointing='left' className='link item info font-24 '>
+                                            <Dropdown color='blue' icon={null} trigger={<span><Icon color='blue' name='settings' color='blue' size='large' /> Manage</span>} pointing='left' className='link item info font-24 '>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Header icon='tasks' content='Manage this post' />
                                                     <Dropdown.Item className='onHoverDanger' as='a' color='red'
