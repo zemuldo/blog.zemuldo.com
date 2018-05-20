@@ -309,7 +309,7 @@ class RenderBlog extends React.Component {
                     title: title,
                     topics: blogData.topics,
                     about: blogData.about,
-                    headerImage:blogData.headerImage,
+                    headerImage: blogData.headerImage,
                     wordCount: this.state.wordCount,
                     images: ['blogs_pic.jpg'],
                     author: {
@@ -490,7 +490,7 @@ class RenderBlog extends React.Component {
         const { editorState } = this.state;
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
-        let className = `RichEditor-editor ${editorStyles.editor} ${ this.props.blog.editMode || this.props.mode === 'create'?'RichEditor-editor-editMode':''}`;
+        let className = `RichEditor-editor ${editorStyles.editor} ${this.props.blog.editMode || this.props.mode === 'create' ? 'RichEditor-editor-editMode' : ''}`;
         let contentState = editorState.getCurrentContent();
         if (!contentState.hasText()) {
             if (contentState.getBlockMap().first().getType() !== 'unstyled') {
@@ -630,7 +630,11 @@ class RenderBlog extends React.Component {
                             handleKeyCommand={this.handleKeyCommand}
                             onChange={this.onChange}
                             onTab={this.onTab}
-                            placeholder='Start putting it down...'
+                            placeholder={
+                                <div style ={{padding:'20px'}} >
+                                    <p>Start putting it down...</p>
+                                </div>
+                            }
                             ref={'editor'}
                             spellCheck
                             plugins={plugins}
