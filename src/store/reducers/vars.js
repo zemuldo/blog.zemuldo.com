@@ -4,6 +4,10 @@ import config from '../../env'
 const env = config[process.env.NODE_ENV] || 'development'
 
 const vars = {
+  imageHeight:100,
+  imageWidth:100,
+  imageBlurL:7,
+  imageBlurR:7,
   user: null,
   iKnowYou: false,
   visitorInfo: null,

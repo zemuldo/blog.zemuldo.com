@@ -539,7 +539,7 @@ module.exports = {
         wsURL: 'ws://localhost:8090',
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
-        serverURL: 'https://localhost:8080',
+        serverURL: 'http://localhost:8070',
         fupisha: 'http://localhost:8099/api/shorten',
         static: '/'
     },
@@ -548,7 +548,7 @@ module.exports = {
         wsURL: 'ws://localhost:8090',
         photosURL: 'http://localhost:8091/',
         httpURL: 'http://localhost:8090',
-        serverURL: 'https://localhost:8080',
+        serverURL: 'http://localhost:8070',
         fupisha: 'http://localhost:8099/api/shorten',
         static: '/'
     },
