@@ -958,18 +958,21 @@ class Blog extends React.Component {
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
                                         ? <div>
-                                            <Dropdown color='blue' trigger={<Icon name='settings' color='blue' size='large' />} pointing='left' className='link item info font-24 '>
+                                            <Dropdown color='blue' icon={null} trigger={<span><Icon name='settings' color='blue' size='large' /> Manage</span>} pointing='left' className='link item info font-24 '>
                                                 <Dropdown.Menu>
+                                                <Dropdown.Header icon='tasks' content='Manage this post' />
                                                     <Dropdown.Item as='a' color='red'
                                                         onClick={() => this.openDelete()}>
-                                                        <span className='font-24 '>
+                                                        <Icon color='red' name='delete'/>
+                                                        <span >
                                                             Delete
                                                         </span>
                                                     </Dropdown.Item>
                                                     <Dropdown.Item
                                                         onClick={() => this.saveEdit()}
                                                     >
-                                                        <span className='font-24 '>
+                                                    <Icon color='green' name='edit'/>
+                                                        <span >
                                                             Edit
                                                         </span>
 
@@ -977,13 +980,15 @@ class Blog extends React.Component {
                                                     <Dropdown.Item
                                                         onClick={this.handleSave}
                                                     >
-                                                        <span className='font-24 '>
+                                                    <Icon color='blue' name='save'/>
+                                                        <span >
                                                             save
                                                         </span>
                                                     </Dropdown.Item>
                                                     <Dropdown.Item>
-                                                        <span className='font-24 '>
-                                                            HIde
+                                                    <Icon color='orange' name='privacy'/>
+                                                        <span >
+                                                            Hide
                                                         </span>
                                                     </Dropdown.Item>
                                                 </Dropdown.Menu>
