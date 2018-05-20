@@ -62,7 +62,7 @@ class ComMenu extends React.Component {
         this.props.varsActions.updateVars({ editingMode: false, createNew: false, currentLocation: 'profile' })
     };
 
-    handleFilterChange(e) {
+    handleFilterChange = (e)=> {
         let query = {}
         let queryMthod = 'getAllPosts'
         if (this.props.vars.currentLocation !== 'home') {
