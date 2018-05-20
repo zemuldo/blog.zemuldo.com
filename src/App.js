@@ -4,6 +4,7 @@ import NavBar from './menu/compMenu'
 import Footer from './partials/footer'
 import ReviewPortal from './partials/portal'
 import LiveChat from './chat/bot'
+import {Segment} from 'semantic-ui-react'
 
 export default class App extends React.Component {
     constructor (props) {
@@ -38,7 +39,9 @@ export default class App extends React.Component {
         return (
             <div onMouseMove={this.handleMousePosition}>
                 <NavBar />
+                <Segment basic text style={{minHeight:`${window.innerHeight-200}px`}}>
                 <Main />
+                </Segment>
                 <Footer />
                 <ReviewPortal />
                 <LiveChat />
