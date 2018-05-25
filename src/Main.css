@@ -5,6 +5,7 @@
 */
 
 /*Body*/
+
 .blogs{
     margin-left: 10px;
 }
@@ -23,7 +24,7 @@
 */
 .footerContainer{
     font-size: 20px;
-    background-color: ghostwhite;
+    background-color: #252629;
 }
 
 .footer {
@@ -85,6 +86,7 @@ button:hover {
 
 a:hover {
     cursor: pointer;
+    color: black !important;
 }
 
 /*
@@ -336,6 +338,9 @@ a:hover {
 
 .marginTop2 {
     margin-top: 2%;
+}
+.colorWhite{
+    color: white;
 }
 .colorBlue{
     color: blue;

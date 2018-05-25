@@ -66,7 +66,7 @@ class Footer extends React.Component {
                       <a href='https://github.com/zemuldo' rel='noreferrer noopener'
                         target='_blank'>
                         <Icon color='black' name='github' />
-                        <span style={{color: 'black'}}
+                        <span style={{color: 'white'}}
                           color={this.props.vars.color}>GitHub</span>
                       </a>
                     </List.Item>
@@ -90,7 +90,7 @@ class Footer extends React.Component {
                 </Grid.Column>
                 <Grid.Column width={3}>
                   <Header color='green' as='h4' content='Quote of the day' />
-                  <p>Every complex System no matter how Complex is a combination of many smaller and
+                  <p className = 'colorWhite'>Every complex System no matter how Complex is a combination of many smaller and
                                         simpler Systems and Units that operate together.</p>
                 </Grid.Column>
                 <Grid.Column width={3}>
