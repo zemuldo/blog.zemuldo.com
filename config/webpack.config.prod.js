@@ -1,4 +1,4 @@
-const buildID = '2018-05-19'
+const buildID = '2018-05-25'
 const autoprefixer = require('autoprefixer')
 const path = require('path')
 const webpack = require('webpack')
