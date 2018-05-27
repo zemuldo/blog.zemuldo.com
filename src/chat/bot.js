@@ -149,6 +149,7 @@ class LiveChat extends React.Component {
     };
 
     render() {
+        if(!this.props.bot) return null
         return (
             <div>
                 {
