@@ -25,7 +25,7 @@ class GridBlog extends React.Component {
 
   handleUserProfle =(user)=>{
     this.props.varsActions.updateVars({view_user:user})
-    this.props.history.push(`/user/${user.userName}`)
+    this.props.history.push(`/profile/${user.userName}`)
   }
 
   render() {

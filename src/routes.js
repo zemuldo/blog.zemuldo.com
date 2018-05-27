@@ -24,9 +24,10 @@ class Routes extends React.Component {
           <Route path='/tutorials/:loadedDetails' component={Page} />
           <Route path='/topics/:topic' component={Page} />
           <Route path='/about' component={About} />
-          <Route path='/:user/:details' component={UserProfile} />
           <Route path='/login' component={Login} />
           <Route path='/signup' component={Login} />
+          <Route path='/profile/:details' component={UserProfile} />
+          <Route path='/:user/:details' component={Login} />
           <Route exact path='/*' component={Page} />
         </Switch>
       </main>
