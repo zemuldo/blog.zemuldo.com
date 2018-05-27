@@ -112,7 +112,7 @@ class EditorsForm extends React.Component {
                   <Form.Field>
                     <Label style={{ border: 'none' }} as='a' size='large' color='blue'>Select
                                    Tags</Label>{'   '}
-                    <Dropdown name='topics' style={{ margin: '0em 0em 1em 0em', color: 'green' }}
+                    <Dropdown className='pointer' name='topics' style={{ margin: '0em 0em 1em 0em', color: 'green' }}
                       onChange={this.handleFormField} multiple search selection
                       closeOnChange options={topics} placeholder='Select topics' />
                   </Form.Field>
