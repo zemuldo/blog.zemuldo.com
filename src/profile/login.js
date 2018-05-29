@@ -165,75 +165,50 @@ class Login extends React.Component {
         }, 2000)
     }
 
+    errorStateHandler = (success, error,hideMessage,registering,field,message)=>{
+        this.setState({
+            success:success,
+            error: error,
+            hideMessage: hideMessage,
+            registering: registering,
+            errorDetails: {field: field, message: message}
+        })
+    }
+
     handleSignUp =() =>{
         this.setState({registering: true})
         if (!this.state.userName || this.state.userName.length < 4) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Username', message: 'Username is required and must be more tha 5 characters'}
-            })
-           
-            return
+            this.errorStateHandler(false, true,false,false,'Username','Username is required and must be more tha 5 characters')
+            this.setTimer('hideMessage')
+            return 
         }
         if (!this.state.firstName || this.state.firstName.length < 3) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'First Name', message: 'First Name is required and must be more tha 3 characters'}
-            })
+            this.errorStateHandler(false, true,false,false,'First Name','First Name is required and must be more tha 3 characters')
             this.setTimer('hideMessage')
             return
         }
         if (!this.state.lastName || this.state.lastName.length < 3) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Last Name', message: 'Last Name is required and must be more tha 3 characters'}
-            })
+            this.errorStateHandler(false, true,false,false,'Last Name','Last Name is required and must be more tha 5 characters')
             this.setTimer('hideMessage')
             return
         }
         if (!this.state.email) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Email', message: 'Email Address is required'}
-            })
+            this.errorStateHandler(false, true,false,false,'Email','Email Address is required')
             this.setTimer('hideMessage')
             return
         }
         if (typeof this.state.imagePreviewUrl !== 'object') {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Avatar', message: 'You have not created profile picture'}
-            })
+            this.errorStateHandler(false, true,false,false,'Avatar','You have not created profile picture')
             this.setTimer('hideMessage')
             return
         }
         if (!this.state.password || !this.state.confirmPass) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Password', message: 'Password is required'}
-            })
+            this.errorStateHandler(false, true,false,false,'Password','Password is required')
             this.setTimer('hideMessage')
             return
         }
         if (this.state.password !== this.state.confirmPass) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Password', message: "Passwords don't match"}
-            })
+            this.errorStateHandler(false, true,false,false,'Password','Passwords dont match')
             this.setTimer('hideMessage')
             return
         }
@@ -246,45 +221,29 @@ class Login extends React.Component {
             avatar: JSON.stringify(this.state.imagePreviewUrl)
         }
         axios.post(`${env.httpURL}/signup`, userData)
-            .then(function (success) {
+            .then( (success)=> {
                 if (!success.data) {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        registering: false,
-                        errorDetails: {field: 'Failed', message: 'An error occured. Check your Internet'}
-                    })
+                    this.errorStateHandler(false, true,false,false,'Failed','An error occured. Check your Internet')
                     this.setTimer('hideMessage')
-                    return false
+                    return
                 }
                 if (success.data.code === 200) {
-                    this.setState({
-                        success: true,
-                        hideMessage: false,
-                        registering: false,
-                        errorDetails: {field: 'Success', message: 'Success'}
-                    })
+                    setTimeout(()=>this.props.history.push('/login'),2100)
+                    this.errorStateHandler(true, true,false,false,'Success','Success, account created')
                     this.setTimer('hideMessage')
+                    return
                 } else {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        registering: false,
-                        errorDetails: {field: 'Failed', message: success.data.error}
-                    })
+                    this.errorStateHandler(false, true,false,false,'Failed',success.data.error)
                     this.setTimer('hideMessage')
+                    return
                 }
-            }.bind(this))
-            .catch(function (error) {
-                this.setState({
-                    error: true,
-                    hideMessage: false,
-                    registering: false,
-                    errorDetails: {field: 'Failed', message: error.response.data.error || error.message}
-                })
+            })
+            .catch( (error)=> {
+                let mess = error.response.data.error || error.message
+                this.errorStateHandler(false, true,false,false,'Failed',mess)
                 this.setTimer('hideMessage')
-                return false
-            }.bind(this))
+                return
+            })
     }
 
     handleFormField = (e)=> {
