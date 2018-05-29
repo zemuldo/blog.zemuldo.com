@@ -114,17 +114,12 @@ class Login extends React.Component {
             password: this.state.password
         }
         axios.post(`${env.httpURL}/login`, userData)
-            .then( (success)=> {
+            .then((success) => {
                 if (!success.data) {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        errorDetails: { field: 'Login', message: 'An error occurred, Check your Internet' }
-                    })
-                    setTimeout(function () {
-                        this.setState({ error: false, hideMessage: true })
-                    }.bind(this), 2000)
-                    return false
+                    this.setState({ logingin: false })
+                    this.errorStateHandler(false, true, false, false, 'Login', 'An error occurred, Check your Internet')
+                    this.setTimer('hideMessage')
+                    return
                 }
                 if (success.data.id) {
                     let user = success.data
@@ -134,20 +129,16 @@ class Login extends React.Component {
                     this.props.userActions.updateUser(user)
                     localStorage.setItem('user', JSON.stringify(success.data))
                     this.props.history.push('/user/' + success.data.userName)
+                    return
                 } else {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        logingin: false,
-                        errorDetails: { field: 'Login', message: success.data.error }
-                    })
-                    setTimeout(function () {
-                        this.setState({ error: false, hideMessage: true })
-                    }.bind(this), 2000)
+                    this.setState({ logingin: false })
+                    this.errorStateHandler(false, true, false, false, 'Login', success.data.error)
+                    this.setTimer('hideMessage')
+                    return
                 }
             })
-            .catch( (error)=> {
-                this.setState({logingin: false})
+            .catch((error) => {
+                this.setState({ logingin: false })
                 this.errorStateHandler(false, true, false, false, 'Failed', error.response.data.error || 'An erro occured, Check your Internet')
                 this.setTimer('hideMessage')
             })
