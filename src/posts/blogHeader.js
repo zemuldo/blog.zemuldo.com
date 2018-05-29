@@ -685,45 +685,309 @@ class Blog extends React.Component {
                     />
             }
         ]
-        
+        let likes = inWords(this.props.blog.likes)
+        let likeMesage = this.state.youLike ? 'You already liked this post' : 'Like this post'
+        let shares = socialShares.map(s => {
+            return <Popup
+                inverted
+                key={s.name}
+                trigger=
+                {<span><Button
+                    onClick={() => {
+                        this[s.shareCounter]()
+                    }}
+                    circular color={s.color} icon={s.icon} />
+                    <sup>{this.props.blog[s.count]}</sup>
+                    {'   '}
+                </span>}
+                content={`Share this on ${s.name} `}
+            />
+        })
         return (
             <div>
+                <Helmet>
+                    <title>{`Zemuldo Blogs- ${this.props.blog.title}`}</title>
+                    <meta name="description" content={this.props.blog.about} />
+                    < meta name="keywords" content={this.props.blog.topics.join(',')} />
+                </Helmet>
+                <Confirm
+                    open={this.state.cdelopen}
+                    onCancel={this.handleCancelDeleteComment}
+                    onConfirm={this.handleConfirmDeleteComment}
+                />
+                <Modal dimmer open={this.state.showDelete}>
+                    <Modal.Header>This Post will be deleted</Modal.Header>
+                    <Modal.Content>
+                        <Modal.Description>
+                            <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
+                                as='h1'>
+                                {
+                                    this.props.blog.title
+                                }
+                            </Header>
+                            <span className='info'>
+                                Published: {moment().to(this.props.blog.date)}
+                                <br />
+                            </span>
+                            <span>
+                                <ZPopup
+                                    trigger={<span><Icon size='small' inverted circular color='blue' name='thumbs up' /></span>}
+                                    content={likeMesage}
+                                    name=''
+                                />
+                                {`Likes `}
+                                <sup>{this.props.blog.likes}</sup>
+                            </span>
+                            <span>
+                                {`  ,  `}
+                                <Icon size='small' inverted circular color='blue'
+                                    name='eye' />
+                                {`Views `}<sup>{this.props.blog.views}</sup>
+                            </span>
+                            {
+                                this.state.editorState ?
+                                    <BlogEditor initEditorState={this.state.editorState} mode={'edit'}
+                                        className='editor' editorState={this.props.blog.body} /> :
+                                    <div>Loading state</div>
+                            }
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button color='green' onClick={() => this.closeDelete()}>
+                            Cancel
+                        </Button>
+                        <Button color='red' icon='checkmark' labelPosition='right' content='Delete'
+                            onClick={() => this.deletBlog(this.props.blog.id)} />
+                    </Modal.Actions>
+                </Modal>
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Select a Photo</Modal.Header>
+                    <Modal.Content image>
+                        <Modal.Description>
+                            <LoginForm
+                                color={this.props.vars.colors[0]}
+                                logingin={this.state.logingin}
+                                handleFormField={this.handleFormField}
+                                onLoginClick={this.onLoginClick}
+                                errorDetails={this.state.errorDetails}
+                                error={this.state.error}
+                                success={this.state.success}
+                                hideMessage={this.state.hideMessage}
+                            />
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button color='black' onClick={this.close}>
+                            Nope
+                        </Button>
+                        <Button positive icon='checkmark' labelPosition='right' content="Take me to Login" onClick={this.close} />
+                    </Modal.Actions>
+                </Modal>
                 {
                     this.props.blog
                         ? <div>
-                            <div style={{ margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
+                            {
+                                !this.props.blog.editMode ?
+                                    <Visibility once={true} onBottomPassed={this.updateViews}>
+                                        <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
+                                            as='h1'>
+                                            {
+                                                this.props.blog.title
+                                            }
+                                        </Header>
+
+                                    </Visibility>
+                                    :
+                                    <div>
+                                        <Header style={{ textAlign: 'left', alignment: 'center' }}
+                                            color={this.props.vars.color} as='h3'>
+                                            <span>Title: </span> <Input name='title' onChange={this.handleInputChange}
+                                                value={this.state.title} />
+                                            {' '}
+                                            <span>Words </span> <Input name='wordCount' onChange={this.handleInputChange}
+                                                value={this.props.blog.wordCount} />
+                                        </Header>
+
+                                    </div>
+
+                            }
+                            <br />
+                            <div className='shareIcon clearElem'
+                                style={{ display: 'block', fontSize: '16px', fontFamily: 'georgia' }}>
+                                <Header as='h2' color='blue'>
+                                    {
+                                        this.state.userLoggedIn
+                                            ? <span>
+                                                {
+                                                    this.state.youLike
+                                                        ?
+                                                        <span>
+                                                            <Popup
+                                                                inverted
+                                                                trigger=
+                                                                {<span>
+                                                                    <Icon size='small' inverted circular color='blue'
+                                                                        name='thumbs up' />
+
+                                                                </span>}
+                                                                content={likeMesage}
+                                                            />
+                                                            {`Likes `}
+                                                            <sup>{this.props.blog.likes}</sup>
+                                                        </span>
+
+
+                                                        :
+                                                        <span>
+                                                            <ZPopup
+                                                                trigger={<Button onClick={() => this.updateLikes(this.props.blog.id)} color='blue' circular icon='thumbs up' />}
+                                                                content={likeMesage}
+                                                            />
+                                                            <span>
+                                                                {`Likes `}
+                                                                <sup>{this.props.blog.likes}</sup>
+
+                                                            </span>
+                                                        </span>
+                                                }
+                                                <span>
+                                                    {`  ,  `}
+                                                    <Icon size='small' inverted circular color='blue'
+                                                        name='eye' />
+                                                    {`Views `}<sup>{this.props.blog.views}</sup>
+                                                </span>
+                                            </span>
+                                            :
+                                            <ZPopup
+                                                trigger={<span><Icon size='small' inverted circular color='blue' name='like outline' /> <br />{`${toTitleCase(likes)} ${peopleU(this.props.blog.likes)}`}</span>}
+                                                content={likeMesage}
+                                            />
+
+                                    }
+                                    <span> {` ,  `}
+                                        <Icon size='large' color='green' name='external share' />
+                                        {shares}
+                                    </span>
+                                    <Visibility
+                                        once={false}
+                                        onTopPassed={this.stickOverlay}
+                                        onTopVisible={this.unStickOverlay}
+                                        style={overlayFixed ? { ...overlayStyle, ...overlayRect } : {}}
+                                    />
+                                    {
+                                        overlayFixed ?
+                                            <div
+                                                style={overlayFixed ? fixedOverlayStyle : overlayStyle}
+                                            >
+                                                <Menu
+                                                    secondary
+                                                    style={overlayFixed ? fixedOverlayMenuStyle : overlayMenuStyle}
+                                                    vertical={!!overlayFixed}
+                                                >
+                                                    {
+                                                        times(shares.length, (i) =>
+                                                            <Menu.Item key={i}>
+                                                                {shares[i]}
+                                                            </Menu.Item>
+                                                        )
+                                                    }
+                                                </Menu>
+                                            </div> : null
+                                    }
+                                </Header>
+
+                                <br />
+                                <span className='info font-24'>
+                                    Published
+                                    {` ${moment().to(this.props.blog.date)} By `}
+                                </span>
+                                <span>
+                                    <Popup
+                                        inverted
+                                        trigger={<Image
+
+                                            spaced={true}
+                                            avatar
+                                            id='photo'
+                                            size='tiny'
+                                            src={env.httpURL + this.props.blog.author.url}
+                                            style={{
+                                                borderStyle: 'solid',
+                                                borderWidth: '3px',
+                                                borderColor: 'green',
+                                                borderRadius: `${(Math.min(
+                                                    this.props.blog.author.style.height,
+                                                    this.props.blog.author.style.width
+                                                ) +
+                                                    10) *
+                                                    this.props.blog.author.style.borderRadius / 2 / 100}px`
+                                            }}
+                                        />}
+                                    >
+                                        <h3>
+                                            {this.props.blog.author.name}
+                                        </h3>
+                                        <span>
+                                            {`Joined ${moment().to(this.props.blog.author.created)}`}
+                                        </span>
+                                    </Popup>
+
+                                </span>
+
+                                <span className='info'>
+                                    {this.props.blog.author.name} {' '}
+                                </span>
+                                <br />
                                 {
-                                    this.state.editorState ?
-                                        <BlogEditor initEditorState={this.state.editorState} mode={'edit'}
-                                            className='editor' editorState={this.props.blog.body} /> :
-                                        <div>Loading state</div>
-                                }
-                            </div>
-                            <div>
-                                {
-                                    this.props.blog.editMode ?
-                                        <Form style={{ padding: '2em 2em 2em 2em' }}>
-                                            <Form.TextArea name='about' maxLength='140' onChange={this.handleFormFieldEdit}
-                                                label='About your blog'
-                                                defaultValue={this.props.blog.about} />
-                                            <Form.Field>
-                                                <Label style={{ border: 'none' }} as='a' size='large' color='blue'>Select
-                                                    Tags</Label>{'   '}
-                                                <Dropdown defaultValue={this.props.blog.topics} name='topics' style={{ margin: '0em 0em 1em 0em', color: 'green' }}
-                                                    onChange={this.handleFormFieldEdit} multiple search selection
-                                                    closeOnChange options={topics} placeholder='Select topics' />
-                                            </Form.Field>
-                                            <Form.Field inline>
-                                                <Label style={{ border: 'none' }} as='a' size='large' color='blue'>Select
-                                                Category</Label>{'   '}
-                                                <Select defaultValue={this.props.blog.type} name='type' style={{ margin: '0em 0em 1em 0em', color: 'green' }}
-                                                    onChange={this.handleFormFieldEdit} placeholder='Select Category'
-                                                    options={categories} />
-                                            </Form.Field>
-                                        </Form>
+                                    this.props.user && this.props.user.id && this.props.user.userName === this.props.blog.author.userName
+                                        ? <div>
+                                            <Dropdown color='blue' icon={null} trigger={<span><Icon color='blue' name='settings' color='blue' size='large' /> Manage</span>} pointing='left' className='link item info font-24 '>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Header icon='tasks' content='Manage this post' />
+                                                    <Dropdown.Item className='onHoverDanger' as='a' color='red'
+                                                        onClick={() => this.openDelete()}>
+                                                        <Icon color='red' name='delete' />
+                                                        <span >
+                                                            Delete
+                                                        </span>
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item
+                                                        onClick={() => this.saveEdit()}
+                                                    >
+                                                        <Icon color='green' name='edit' />
+                                                        <span >
+                                                            Edit
+                                                        </span>
+
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item
+                                                        onClick={this.handleSave}
+                                                    >
+                                                        <Icon color='blue' name='save' />
+                                                        <span >
+                                                            save
+                                                        </span>
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className='onHoverWarn' >
+                                                        <Icon color='orange' name='privacy' />
+                                                        <span >
+                                                            Hide
+                                                        </span>
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </div>
                                         : null
                                 }
                             </div>
+                            <br />
+                            <div style={{ margin: '0em 0em 3em 0em', fontSize: '16px', fontFamily: 'georgia' }}>
+                                {
+                                    this.props.blog.headerImage ?
+
+                                        <Image alt={this.props.blog.topics.join(',')} fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.blog.headerImage.name}`} /> : null
+                                }
+                            </div>                          
                         </div>
                         : <div>
                             Content not found!
