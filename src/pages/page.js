@@ -7,6 +7,7 @@ import { pages } from '../env'
 import { topicsOBJ } from '../env'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import BlogHeader from '../posts/blogHeader'
 
 const env = config[process.env.NODE_ENV] || 'development'
 let x = 0
@@ -45,9 +46,17 @@ class PagesComponent extends React.Component {
         {
 
           !this.props.vars.blogLoaded
-            ? <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-              <Loader active inline='centered' />
-              <p>Loading Blog...</p>
+            ? <div >
+              <div>
+                {
+                  this.props.vars.currentBlog?
+                  <BlogHeader  navigateBlogs={this.props.navigateBlogs}/>:<p>Loading content..</p>
+                }
+            </div>
+              <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                <Loader active inline='centered' />
+                <p>Loading Blog...</p>
+              </div>
             </div>
             : <WelcomePage
               navigateBlogs={this.props.navigateBlogs}

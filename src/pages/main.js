@@ -1,18 +1,18 @@
 import React from 'react'
-import {Helmet} from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import Topics from '../partials/topics'
-import {Container} from 'semantic-ui-react'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
+import { Container } from 'semantic-ui-react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import * as BlogsActions from '../store/actions/blogs'
 import * as BlogActions from '../store/actions/blog'
 import * as UserActions from '../store/actions/user'
 import * as VarsActions from '../store/actions/vars'
 import axios from 'axios'
-import {toTitleCase} from '../util'
+import { toTitleCase } from '../util'
 import PagesComponent from './page'
-import config, {topics} from '../env'
-import {pages, topicsOBJ} from '../env'
+import config, { topics } from '../env'
+import { pages, topicsOBJ } from '../env'
 import PropTypes from 'prop-types'
 
 const env = config[process.env.NODE_ENV] || 'development'
@@ -32,52 +32,57 @@ class App extends React.Component {
     };
 
     blogsAreLoading(state) {
-        this.setState({blogsLoaded: !state})
+        this.setState({ blogsLoaded: !state })
     }
 
     setBlogHere(id, page) {
-        this.props.varsActions.updateVars({blogLoaded: false})
-        if(this.props.vars[`blog_${id}`]){
+        let blog
+        this.props.varsActions.updateVars({ blogLoaded: false })
+        if (this.props.vars[`blog_${id}`]) {
             this.props.blogActions.updateBlog(this.props.vars[`blog_${id}`])
-            this.props.varsActions.updateVars({blogLoaded: true})
+            this.props.varsActions.updateVars({ blogLoaded: true })
             return true
         }
         if (!pages[page]) {
             window.location = '/'
         }
-        return Promise.all([
-            axios.post(env.httpURL, {
-                'queryMethod': 'getPost',
-                'queryData': {
-                    id: id
-                }
-            }), axios.post(env.httpURL, {
-                'queryMethod': 'getPostDetails',
-                'queryData': {
-                    'id': id
-                }
-            })])
-            .then(function (response) {
-                if (!response[0] || !response[1] || response[0].data.error) {
+        axios.post(env.httpURL, {
+            'queryMethod': 'getPostDetails',
+            'queryData': {
+                id: id
+            }
+        })
+            .then(o => {
+                blog = o.data
+                this.props.varsActions.updateVars({currentBlog:o.data})
+                return axios.post(env.httpURL, {
+                    'queryMethod': 'getPost',
+                    'queryData': {
+                        'id': id
+                    }
+                })
+            })
+            .then((o) => {
+                if (!o|| !o || o.data.error) {
                     this.props.history.push('/')
-                    this.props.blogActions.updateBlog({id: null})
-                    this.props.varsActions.updateVars({blogLoaded: true})
+                    this.props.blogActions.updateBlog({ id: null })
+                    this.props.varsActions.updateVars({ blogLoaded: true })
                     return false
                 }
-                let blog = response[0].data
-                Object.assign(blog, response[1].data)
-                this.props.blogActions.updateBlog(blog)
-                this.props.varsActions.updateVars({blogLoaded: true})
-                return blog
-            }.bind(this))
-            .then(o=>{
-                if(o) this.props.varsActions.updateVars({[`blog_${id}`]:o})
+                let _blog = Object.assign({},o.data,blog)
+                this.props.blogActions.updateBlog(_blog)
+                this.props.varsActions.updateVars({ blogLoaded: true })
+                return _blog
             })
-            .catch(function (err) {
+            .then(o => {
+                if (o) this.props.varsActions.updateVars({ [`blog_${id}`]: o })
+            })
+            .catch((err) => {
+                console.log(err)
                 this.props.history.push('/')
                 this.props.blogActions.updateBlog({})
-                this.props.varsActions.updateVars({blogLoaded: true})
-            }.bind(this))
+                this.props.varsActions.updateVars({ blogLoaded: true })
+            })
     }
 
     setCurrentBlog(url, page) {
@@ -89,7 +94,7 @@ class App extends React.Component {
             this.setBlogHere(id, page)
         } else {
             this.props.blogActions.updateBlog({})
-            this.props.varsActions.updateVars({blogLoaded: true})
+            this.props.varsActions.updateVars({ blogLoaded: true })
         }
     }
 
@@ -106,7 +111,7 @@ class App extends React.Component {
 
         let run = () => {
 
-            this.setState({blogsAreLoading: true})
+            this.setState({ blogsAreLoading: true })
             e.preventDefault()
             axios.post(env.httpURL, {
                 'queryMethod': queryMthod,
@@ -114,11 +119,11 @@ class App extends React.Component {
             })
                 .then(response => {
                     this.props.blogsActions.updateBlogs(response.data)
-                    this.setState({blogsAreLoading: false})
+                    this.setState({ blogsAreLoading: false })
                 })
                 .catch(err => {
-                    this.setState({blogs: []})
-                    this.setState({blogsAreLoading: false})
+                    this.setState({ blogs: [] })
+                    this.setState({ blogsAreLoading: false })
                 })
         }
         clearTimeout(run)
@@ -126,29 +131,29 @@ class App extends React.Component {
     }
 
     navigateBlogs(query) {
-        this.props.varsActions.updateVars({blogsLoaded: false})
+        this.props.varsActions.updateVars({ blogsLoaded: false })
         let q = {
             'queryMethod': 'getPosts',
             'queryData': query
         }
-        if(this.props.vars[window.location.pathname]){
+        if (this.props.vars[window.location.pathname]) {
             this.props.blogsActions.updateBlogs(this.props.vars[window.location.pathname])
-            this.props.varsActions.updateVars({blogsLoaded: true})
-           return true
+            this.props.varsActions.updateVars({ blogsLoaded: true })
+            return true
         }
         return axios.post(env.httpURL, q)
-            .then( (response)=> {
+            .then((response) => {
                 if (!response.data) {
                     this.props.blogsActions.updateBlogs([])
-                    this.props.varsActions.updateVars({blogsLoaded: true})
+                    this.props.varsActions.updateVars({ blogsLoaded: true })
                     return false
                 } else {
                     this.props.blogsActions.updateBlogs(response.data)
-                    this.props.varsActions.updateVars({blogsLoaded: true})
+                    this.props.varsActions.updateVars({ blogsLoaded: true })
                 }
                 if (response.data.length < 1) {
                     if (!this.props.vars.wsFetchBlogDeatils) {
-                        this.props.varsActions.updateVars({wsFetchBlogDeatils: true})
+                        this.props.varsActions.updateVars({ wsFetchBlogDeatils: true })
                         this.props.vars.ws.send(JSON.stringify({
                             type: 'topicDetails',
                             pups: 'topicDetails',
@@ -157,27 +162,27 @@ class App extends React.Component {
                     }
                 }
             })
-            .then(o=>{
-                this.props.varsActions.updateVars({[window.location.pathname]:this.props.blogs})
+            .then(o => {
+                this.props.varsActions.updateVars({ [window.location.pathname]: this.props.blogs })
             })
-            .catch( (err)=> {
+            .catch((err) => {
                 this.props.blogsActions.updateBlogs([])
                 if (!this.props.vars.wsFetchBlogDeatils) {
-                    this.props.varsActions.updateVars({wsFetchBlogDeatils: true})
+                    this.props.varsActions.updateVars({ wsFetchBlogDeatils: true })
                     this.props.vars.ws.send(JSON.stringify({
                         type: 'topicDetails',
                         pups: 'topicDetails',
                         sessionId: sessionStorage.getItem('sessionId')
                     }))
                 }
-                this.props.varsActions.updateVars({blogsLoaded: true})
+                this.props.varsActions.updateVars({ blogsLoaded: true })
             })
     }
 
     resize = () => this.forceUpdate();
-    
-    scroll = (e)=>{
-        localStorage.setItem(`scrollTo_${window.location.pathname}`,JSON.stringify({x:window.scrollX,y:window.scrollY}))
+
+    scroll = (e) => {
+        localStorage.setItem(`scrollTo_${window.location.pathname}`, JSON.stringify({ x: window.scrollX, y: window.scrollY }))
     }
 
     componentWillUpdate() {
@@ -192,53 +197,53 @@ class App extends React.Component {
     }
 
     componentWillReceiveProps() {
-       if(this.state.location !== window.location.pathname){
-           /*
-      This method is used to detect navigation/actions from the user then update the UI.
-      ie. Page navigation, Page crops etc
-   */
-           /*
-               Build variables from the window pathname
-           */
-           let url = window.location.pathname.split('/').join('')
-           let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
-           let query = {}
-           let page = window.location.pathname.split('/')[1]
-           let topic = window.location.pathname.split('/')[2]
+        if (this.state.location !== window.location.pathname) {
+            /*
+       This method is used to detect navigation/actions from the user then update the UI.
+       ie. Page navigation, Page crops etc
+    */
+            /*
+                Build variables from the window pathname
+            */
+            let url = window.location.pathname.split('/').join('')
+            let id = Number(window.location.pathname.split('-')[window.location.pathname.split('-').length - 1])
+            let query = {}
+            let page = window.location.pathname.split('/')[1]
+            let topic = window.location.pathname.split('/')[2]
 
-           if (url.length < 4) {
-               this.setState({blog: null})
-           }
-           if (topicsOBJ[topic]) {
-               query.topics = topic
-           }
-           if (pages[page] && page !== 'home' && page !== 'topics') {
-               if (page !== 'topics') {
-                   query.type = page
-               }
-           }
-           /*
-               Navigate to Page.
-               User navigated to page from one URL TO ANOTHER.
-               Set current location to page and update blogs
-               Set current state location to this location
-           */
-           if (this.state.location !== window.location.pathname) {
-               this.navigateBlogs(query)
-               this.setCurrentBlog(url, page)
-               this.setState({location: window.location.pathname})
-           }
+            if (url.length < 4) {
+                this.setState({ blog: null })
+            }
+            if (topicsOBJ[topic]) {
+                query.topics = topic
+            }
+            if (pages[page] && page !== 'home' && page !== 'topics') {
+                if (page !== 'topics') {
+                    query.type = page
+                }
+            }
+            /*
+                Navigate to Page.
+                User navigated to page from one URL TO ANOTHER.
+                Set current location to page and update blogs
+                Set current state location to this location
+            */
+            if (this.state.location !== window.location.pathname) {
+                this.navigateBlogs(query)
+                this.setCurrentBlog(url, page)
+                this.setState({ location: window.location.pathname })
+            }
 
-           if (this.props.blog.id && this.props.vars.blogLoaded && (id.toString() === 'NaN' || !id)) {
-               this.props.blogActions.resetBlog({id: null})
-           }
-           if (this.state.location !== window.location.pathname && page!==this.props.vars.currentLocation) {
-               if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded === true) {
-                   this.props.varsActions.updateVars({blogLoaded: false})
-                   this.setBlogHere(id, page)
-               }
-           }
-       }
+            if (this.props.blog.id && this.props.vars.blogLoaded && (id.toString() === 'NaN' || !id)) {
+                this.props.blogActions.resetBlog({ id: null })
+            }
+            if (this.state.location !== window.location.pathname && page !== this.props.vars.currentLocation) {
+                if (id.toString() !== 'NaN' && this.props.blog.id !== id && this.props.vars.blogLoaded === true) {
+                    this.props.varsActions.updateVars({ blogLoaded: false })
+                    this.setBlogHere(id, page)
+                }
+            }
+        }
 
     }
 
@@ -266,7 +271,7 @@ class App extends React.Component {
             if (page !== 'topics') {
                 query.type = page
             }
-            this.props.varsActions.updateVars({currentLocation: page})
+            this.props.varsActions.updateVars({ currentLocation: page })
         }
         /*
              update blogs and blog
@@ -298,7 +303,7 @@ class App extends React.Component {
             }
         }
         if (pages[page] && page !== 'login' && page !== 'signup') {
-            this.props.varsActions.updateVars({currentLocation: page})
+            this.props.varsActions.updateVars({ currentLocation: page })
         }
         this.forceUpdate()
     }
@@ -308,43 +313,43 @@ class App extends React.Component {
         window.removeEventListener('scroll', this.scroll)
     }
 
-    handleContextRef = tag_contextRef => this.setState({tag_contextRef})
+    handleContextRef = tag_contextRef => this.setState({ tag_contextRef })
 
     render() {
         let o = topics.slice(this.state.x, this.state.y)
-        const {tag_contextRef} = this.state
+        const { tag_contextRef } = this.state
 
 
 
         return (
             <div ref={this.handleContextRef}>
-               <Container>
-                   <Helmet>
-                       <meta name='theme-color' content='#4285f4'/>
-                       <meta name='msapplication-navbutton-color' content='#4285f4'/>
-                       <meta name='apple-mobile-web-app-status-bar-style' content='#4285f4'/>
-                       <title>{'ZemuldO-' + toTitleCase(this.props.vars.currentLocation)}</title>
-                       <meta name='Danstan Otieno Onyango' content='ZemuldO-Home'/>
-                   </Helmet>
+                <Container>
+                    <Helmet>
+                        <meta name='theme-color' content='#4285f4' />
+                        <meta name='msapplication-navbutton-color' content='#4285f4' />
+                        <meta name='apple-mobile-web-app-status-bar-style' content='#4285f4' />
+                        <title>{'ZemuldO-' + toTitleCase(this.props.vars.currentLocation)}</title>
+                        <meta name='Danstan Otieno Onyango' content='ZemuldO-Home' />
+                    </Helmet>
 
-                   <Topics
-                       currentLocation={this.props.vars.currentLocation}
-                       topic={this.state.topic}
-                       onTopicClick={this.onTopicClick}
-                       onAllcClick={this.onAllcClick}
-                       blog={this.props.blog}
-                       color={this.props.vars.color}
-                       blogs={this.props.blogs}
-                       resetNav={this.resetNav}
-                   />
-                   <br/>
-                   <PagesComponent
-                       tag_contextRef={tag_contextRef}
-                       history={this.props.history}
-                       navigateBlogs={this.navigateBlogs}
-                       blogsAreLoading={this.blogsAreLoading}
-                   />
-               </Container>
+                    <Topics
+                        currentLocation={this.props.vars.currentLocation}
+                        topic={this.state.topic}
+                        onTopicClick={this.onTopicClick}
+                        onAllcClick={this.onAllcClick}
+                        blog={this.props.blog}
+                        color={this.props.vars.color}
+                        blogs={this.props.blogs}
+                        resetNav={this.resetNav}
+                    />
+                    <br />
+                    <PagesComponent
+                        tag_contextRef={tag_contextRef}
+                        history={this.props.history}
+                        navigateBlogs={this.navigateBlogs}
+                        blogsAreLoading={this.blogsAreLoading}
+                    />
+                </Container>
             </div>
         )
     }

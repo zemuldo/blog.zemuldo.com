@@ -28,6 +28,11 @@ class GridBlog extends React.Component {
     this.props.history.push(`/profile/${user.userName}`)
   }
 
+  handleClickBlog = (path,blog)=>{
+    this.props.varsActions.updateVars({currentBlog:blog})
+    this.props.history.push(path)
+  }
+
   render() {
     let o = this.props.blog
     let w = Math.round((o.wordCount / 130))
@@ -44,7 +49,7 @@ class GridBlog extends React.Component {
       >
         <Card.Content>
           <Card.Header>
-            <a onClick={() => this.props.history.push(p)}>
+            <a onClick={()=>this.handleClickBlog(p,o)}>
               <Header color='green' as='h3'>
                 {o.title.split(' ').join(' ')}
               </Header>
@@ -61,7 +66,7 @@ class GridBlog extends React.Component {
             </span>
           </Card.Meta>
           <Divider horizontal>{o.type}</Divider>
-          <Card.Description onClick={()=> this.props.history.push(p)} >
+          <Card.Description onClick={()=>this.handleClickBlog(p,o)} >
             <a style={{ color: 'black' }}>
               <p>{o.about}</p>
               <p>
