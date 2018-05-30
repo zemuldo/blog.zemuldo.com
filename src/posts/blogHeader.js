@@ -106,7 +106,7 @@ class BlogHeader extends React.Component {
         this.props.blogActions.updateBlog({ [data.name]: data.value })
     }
 
- 
+
 
     closeDelete = () => {
         this.setState({ showDelete: false })
@@ -140,6 +140,7 @@ class BlogHeader extends React.Component {
     getTWTCount(shareUrl) {
         return axios.get('https://public.newsharecounts.com/count.json?url=' + shareUrl, {})
             .then((res) => {
+               
                 this.props.blogActions.updateBlog({
                     twtC: this.props.vars.currentBlog.twtC + (res.data.count) ? res.data.count : 0
                 })
@@ -230,7 +231,7 @@ class BlogHeader extends React.Component {
                 this.setBlogCounts(`https://blog.zemuldo.com/${this.state.blogUrlT}`)
             })
             .catch(e => {
-
+                console.log(e)
             })
     }
 
@@ -293,7 +294,7 @@ class BlogHeader extends React.Component {
                     return false
                 }.bind(this))
         }
-        
+
     }
 
     fbShare() {
@@ -605,7 +606,7 @@ class BlogHeader extends React.Component {
                         this[s.shareCounter]()
                     }}
                     circular color={s.color} icon={s.icon} />
-                    <sup>{this.props.vars.currentBlog[s.count]}</sup>
+                    <sup>{this.props.blog[s.count] || 0}</sup>
                     {'   '}
                 </span>}
                 content={`Share this on ${s.name} `}
@@ -650,14 +651,9 @@ class BlogHeader extends React.Component {
                                 {`  ,  `}
                                 <Icon size='small' inverted circular color='blue'
                                     name='eye' />
-                                {`Views `}<sup>{this.props.vars.currentBlog.views}</sup>
+                                {`Views `}
+                                <sup>{this.props.vars.currentBlog.views}</sup>
                             </span>
-                            {
-                                this.state.editorState ?
-                                    <BlogEditor initEditorState={this.state.editorState} mode={'edit'}
-                                        className='editor' editorState={this.props.vars.currentBlog.body} /> :
-                                    <div>Loading state</div>
-                            }
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
@@ -894,7 +890,7 @@ class BlogHeader extends React.Component {
 
                                         <Image alt={this.props.vars.currentBlog.topics.join(',')} fluid style={{ maxHeight: '500px' }} src={`${this.props.vars.env.httpURL}${this.props.vars.currentBlog.headerImage.name}`} /> : null
                                 }
-                            </div>                          
+                            </div>
                         </div>
                         : <div>
                             Content not found!
