@@ -653,7 +653,7 @@ class BlogHeader extends React.Component {
                     this.props.vars.currentBlog
                         ? <div>
                             {
-                                !this.props.vars.currentBlog.editMode ?
+                                !this.props.blog.editMode ?
                                     <Visibility once={true} onBottomPassed={this.updateViews}>
                                         <Header style={{ textAlign: 'left', alignment: 'center' }} color={this.props.vars.color}
                                             as='h1'>
