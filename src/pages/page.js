@@ -49,14 +49,11 @@ class PagesComponent extends React.Component {
             ? <div >
               <div>
                 {
-                  this.props.vars.currentBlog?
-                  <BlogHeader  navigateBlogs={this.props.navigateBlogs}/>:<p>Loading content..</p>
+                  this.props.vars.currentBlog ?
+                    <BlogHeader navigateBlogs={this.props.navigateBlogs} /> : <p>Loading content..</p>
                 }
-            </div>
-              <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
-                <Loader active inline='centered' />
-                <p>Loading Blog...</p>
               </div>
+              <Loader active inline='centered' />
             </div>
             : <WelcomePage
               navigateBlogs={this.props.navigateBlogs}

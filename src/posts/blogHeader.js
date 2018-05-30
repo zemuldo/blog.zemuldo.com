@@ -103,7 +103,7 @@ class BlogHeader extends React.Component {
     handleCancelDeleteComment = () => this.setState({ cdelopen: false });
 
     handleFormFieldEdit = (e, data) => {
-        this.props.vars.blogActions.updateBlog({ [data.name]: data.value })
+        this.props.blogActions.updateBlog({ [data.name]: data.value })
     }
 
  
@@ -125,13 +125,13 @@ class BlogHeader extends React.Component {
     getFBCount = (shareUrl) => {
         return axios.get('https://graph.facebook.com/?id=' + shareUrl, {})
             .then((res) => {
-                this.props.vars.blogActions.updateBlog({
+                this.props.blogActions.updateBlog({
                     fbC: this.props.vars.currentBlog.fbC + (res.data.share.share_count) ? res.data.share.share_count : 0
                 })
                 return true
             })
             .catch((err) => {
-                this.props.vars.blogActions.updateBlog({
+                this.props.blogActions.updateBlog({
                     fbC: this.props.vars.currentBlog.fbC
                 })
             })
@@ -140,12 +140,12 @@ class BlogHeader extends React.Component {
     getTWTCount(shareUrl) {
         return axios.get('https://public.newsharecounts.com/count.json?url=' + shareUrl, {})
             .then((res) => {
-                this.props.vars.blogActions.updateBlog({
+                this.props.blogActions.updateBlog({
                     twtC: this.props.vars.currentBlog.twtC + (res.data.count) ? res.data.count : 0
                 })
             })
             .catch((err) => {
-                this.props.vars.blogActions.updateBlog({
+                this.props.blogActions.updateBlog({
                     twtC: this.props.vars.currentBlog.twtC
                 })
             })
@@ -168,13 +168,13 @@ class BlogHeader extends React.Component {
         }
         return axios.post(' https://clients6.google.com/rpc', gplusPost)
             .then((res) => {
-                this.props.vars.blogActions.updateBlog({
+                this.props.blogActions.updateBlog({
                     gplsC: (res.data.result.metadata.globalCounts.count) ? res.data.result.metadata.globalCounts.count : 0
                 })
                 return true
             })
             .catch((err) => {
-                this.props.vars.blogActions.updateBlog({
+                this.props.blogActions.updateBlog({
                     gplsC: this.props.vars.currentBlog.gplsC + 0
                 })
             })
@@ -251,6 +251,48 @@ class BlogHeader extends React.Component {
     componentDidMount() {
         this.getComments()
         this.getShortURL()
+        this.props.blogActions.updateBlog({ editMode: false })
+        if (this.props.blog) {
+            this.getAauthorAvatar()
+        }
+        this.setState({ youLike: true })
+        if (localStorage.getItem('user')) {
+            this.setState({ userLoggedIn: true })
+            axios.post(env.httpURL, {
+                'queryMethod': 'getLike',
+                'queryData': {
+                    postID: this.props.blog.id,
+                    title: this.props.blog.title,
+                    userID: JSON.parse(localStorage.getItem('user')).id
+                }
+            })
+                .then(function (response) {
+                    if (!response.data) {
+                        this.setState({ youLike: false })
+                        return false
+                    }
+                    if (!response.data.state) {
+                        this.setState({ youLike: false })
+                        return false
+                    }
+                    if (response.data.state === false) {
+                        this.setState({ youLike: false })
+                        return false
+                    }
+                    if (response.data.state === true) {
+                        if (response.data.n) {
+                            this.setState({ youLike: true })
+                            return true
+                        } else {
+                            return false
+                        }
+                    }
+                }.bind(this))
+                .catch(function (err) {
+                    this.setState({ youLike: false })
+                    return false
+                }.bind(this))
+        }
         
     }
 
@@ -302,7 +344,7 @@ class BlogHeader extends React.Component {
                     }
                     if (response.data.n) {
                         if (response.data.n) {
-                            this.props.vars.blogActions.updateBlog({ likes: 1 + this.props.vars.currentBlog.likes })
+                            this.props.blogActions.updateBlog({ likes: 1 + this.props.vars.currentBlog.likes })
                             this.setState({ youLike: true })
                         }
                     }
@@ -330,7 +372,7 @@ class BlogHeader extends React.Component {
 
     handleInputChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
-        this.props.vars.blogActions.updateBlog({ [e.target.name]: e.target.value })
+        this.props.blogActions.updateBlog({ [e.target.name]: e.target.value })
     }
 
     handleSave = () => {
@@ -349,7 +391,7 @@ class BlogHeader extends React.Component {
             update.body = body
         }
 
-        this.props.vars.blogActions.updateBlog(o);
+        this.props.blogActions.updateBlog(o);
         axios.post(env.httpURL, {
             queryMethod: 'updateBlog',
             'queryData': {
@@ -711,8 +753,7 @@ class BlogHeader extends React.Component {
                                                             />
                                                             <span>
                                                                 {`Likes `}
-                                                                <sup>{this.props.vars.currentBlog.likes}</sup>
-
+                                                                <sup>{'hello'}</sup>
                                                             </span>
                                                         </span>
                                                 }
@@ -725,7 +766,7 @@ class BlogHeader extends React.Component {
                                             </span>
                                             :
                                             <ZPopup
-                                                trigger={<span><Icon size='small' inverted circular color='blue' name='like outline' /> <br />{`${toTitleCase(likes)} ${peopleU(this.props.vars.currentBlog.likes)}`}</span>}
+                                                trigger={<span><Icon size='small' inverted circular color='blue' name='like outline' /> {likes}</span>}
                                                 content={likeMesage}
                                             />
 
