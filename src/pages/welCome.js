@@ -9,6 +9,8 @@ import { pages, topicsOBJ } from '../env'
 import { bindActionCreators } from 'redux'
 import * as VarsActions from '../store/actions/vars'
 import PropTypes from 'prop-types'
+import BlogHeader from '../posts/blogHeader'
+import BlogComments from '../posts/blogComments'
 
 class WelcomePage extends React.Component {
   constructor(props) {
@@ -112,10 +114,18 @@ class WelcomePage extends React.Component {
             : <div>
               {
                 this.props.vars.blogsLoaded
-                  ? <Blog
+                  ?
+                  <div>
+                     <BlogHeader
                     navigateBlogs={this.props.navigateBlogs}
                     color={this.props.vars.color}
                   />
+                     <Blog
+                    navigateBlogs={this.props.navigateBlogs}
+                    color={this.props.vars.color}
+                  />
+                  <BlogComments/>
+                  </div>
                   : <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
                     <Loader active inline='centered' />
                     <p>Loading Blogs...</p>

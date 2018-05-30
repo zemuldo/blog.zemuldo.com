@@ -1,6 +1,5 @@
 import React from 'react'
-import 'semantic-ui-css/semantic.min.css'
-import { Menu, Icon, Dropdown, Image, Input, Visibility, Segment, Responsive, Container , Divider} from 'semantic-ui-react'
+import { Menu, Icon, Dropdown, Image, Input, Visibility, Segment, Responsive, Container, Divider } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as VarsActions from '../store/actions/vars'
@@ -62,7 +61,7 @@ class ComMenu extends React.Component {
         this.props.varsActions.updateVars({ editingMode: false, createNew: false, currentLocation: 'profile' })
     };
 
-    handleFilterChange = (e)=> {
+    handleFilterChange = (e) => {
         let query = {}
         let queryMthod = 'getAllPosts'
         if (this.props.vars.currentLocation !== 'home') {
@@ -98,9 +97,10 @@ class ComMenu extends React.Component {
             <div>
                 <Responsive >
                     <Visibility once={false} onBottomPassed={this.showFixedMenu} onBottomPassedReverse={this.hideFixedMenu}>
-                        <Segment style={{ backgroundColor:'#4286f4',maxHeight: '40px'}} textAlign='center' vertical>
+                        <Segment style={{ backgroundColor: '#252629', maxHeight: '40px' }} textAlign='center' vertical>
                             <Menu
-                                style={{ padding: '0px 10px 0px 10px', fontSize: '18px', maxHeight: '50px', backgroundColor:'#4286f4'}}
+                            
+                                style={{ padding: '0px 10px 0px 10px', fontSize: '18px', maxHeight: '50px', backgroundColor: '#252629' }}
                                 text={!fixed}
                                 fixed={fixed ? 'top' : null}
                                 secondary={!fixed}
@@ -110,7 +110,11 @@ class ComMenu extends React.Component {
                             >
                                 <Container>
                                     <Link to='/'>
-                                        <Image alt='zemuldo creator danstan' circular size={'tiny'} src={`${env.static}img/creator/dan.jpg`} />
+                                        <Image  style={{
+                                                                borderStyle: 'solid',
+                                                                borderWidth: '3px',
+                                                                borderRadius:'50%'
+                                                            }} alt='zemuldo creator danstan' circular size={'tiny'} src={`${env.static}img/creator/dan.jpg`} />
                                     </Link>
                                     <Menu.Item
                                         style={{ fontSize: '24px' }}
@@ -118,7 +122,7 @@ class ComMenu extends React.Component {
                                         className=''
                                         name='home'
                                         onClick={this.handleHomeClick}>
-                                        <span className = 'colorWhite' color={'white'}><Link className = 'colorWhite' to='/'>Zemuldo Blogs</Link></span>
+                                        <span className='colorWhite' color={'white'}><Link className='colorWhite' to='/'>Zemuldo Blogs</Link></span>
                                     </Menu.Item>
                                     <Menu.Menu position='right'>
                                         {
@@ -147,7 +151,7 @@ class ComMenu extends React.Component {
                                                 </Menu.Item>
                                                 : <Menu.Item>
                                                     <Dropdown
-                                                    icon={null}
+                                                        icon={null}
                                                         className='dropDown'
                                                         trigger={<Image
                                                             alt={'blogd.zemuldo.com_' + this.props.user.userName + '+_profile_pic'}
@@ -167,44 +171,44 @@ class ComMenu extends React.Component {
                                                                     (this.props.user.avatar.borderRadius / 2 / 100)}px`
                                                             }}
                                                         />}
-                                                        style={{ color: 'black' }}
+                                                        style={{ color: 'blue' }}
                                                         pointing='top right'
                                                     >
-                                                        
+
                                                         <Dropdown.Menu>
-                                                        <Dropdown.Header>
-                                                            <Icon size='huge' color = 'blue' name ='user circle' />
-                                                            {`Hi ${this.props.user.firstName} ${this.props.user.lastName}`}
-                                                        </Dropdown.Header>
-                                                        <Dropdown.Divider />
+                                                            <Dropdown.Header>
+                                                                <Icon size='huge' color='blue' name='user circle' />
+                                                                {`Hi ${this.props.user.firstName} ${this.props.user.lastName}`}
+                                                            </Dropdown.Header>
+                                                            <Dropdown.Divider />
                                                             <Dropdown.Item as='span' onClick={this.handleProfile}>
                                                                 <Icon color={this.props.vars.colors[0]} name='user circle' />
                                                                 <Link to={'/user/' + this.props.user.userName}
                                                                     color={this.props.vars.colors[1]}>Your Profile</Link>
                                                             </Dropdown.Item>
                                                             <Dropdown.Item as='span'>
-                                                                <Icon color={this.props.vars.colors[0]} name='users' />
+                                                                <Icon color={this.props.vars.colors[1]} name='users' />
                                                                 <Link to={'/user/' + this.props.user.userName + '/followers'}
                                                                     color={this.props.vars.colors[2]}>Followers</Link>
                                                             </Dropdown.Item>
                                                             <Dropdown.Item as='span'>
-                                                                <Icon color={this.props.vars.colors[0]} name='help' />
+                                                                <Icon color={this.props.vars.colors[2]} name='help' />
                                                                 <Link to={'/user/' + this.props.user.userName + '/help'}
                                                                     color={this.props.vars.colors[0]}>Help</Link>
                                                             </Dropdown.Item>
                                                             <Dropdown.Item as='span' onClick={this.handleCreateNew}>
-                                                                <Icon color={this.props.vars.colors[0]} name='plus' />
+                                                                <Icon color={this.props.vars.colors[3]} name='plus' />
                                                                 <Link to={'/user/' + this.props.user.userName + '/editor'}
                                                                     color={this.props.vars.colors[0]}>New Article</Link>
                                                             </Dropdown.Item>
                                                             <Dropdown.Item as='span'>
-                                                                <Icon color={this.props.vars.colors[0]} name='setting' />
+                                                                <Icon color={this.props.vars.colors[1]} name='setting' />
                                                                 <Link to={'/user/' + this.props.user.userName + '/settings'}
                                                                     color={this.props.vars.colors[1]}>Settings</Link>
                                                             </Dropdown.Item>
                                                             <Dropdown.Item as='span' onClick={this.handleLogoutinButton}>
-                                                                <Icon color={this.props.vars.colors[0]} name='shutdown' />
-                                                                <span className='colorRed' color={this.props.vars.colors[0]}>Sign Out</span>
+                                                                <Icon color={'red'} name='shutdown' />
+                                                                <span className='colorBlue' color={this.props.vars.colors[0]}>Sign Out</span>
                                                             </Dropdown.Item>
                                                         </Dropdown.Menu>
                                                     </Dropdown>
@@ -216,8 +220,8 @@ class ComMenu extends React.Component {
                         </Segment>
                     </Visibility>
                 </Responsive>
-                <br/>
-                <br/>
+                <br />
+                <br />
             </div>
         )
     }

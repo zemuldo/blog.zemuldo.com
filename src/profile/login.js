@@ -1,15 +1,15 @@
 import React from 'react'
-import {Button, Modal, Loader, Header} from 'semantic-ui-react'
-import {connect} from 'react-redux'
+import { Button, Modal, Loader, Header } from 'semantic-ui-react'
+import { connect } from 'react-redux'
 import AvatarEditor from '../avatarEditor/creatAvatar'
 import Pofile from './profile'
 import axios from 'axios'
 import config from '../env'
-import {bindActionCreators} from 'redux'
+import { bindActionCreators } from 'redux'
 import * as UserActions from '../store/actions/user'
 import * as VarsActions from '../store/actions/vars'
 import SignUpForm from './signUpForm'
-import {toTitleCase} from '../util'
+import { toTitleCase } from '../util'
 import LoginForm from './lognForm'
 import * as BlogsActions from '../store/actions/blogs'
 import * as BlogActions from '../store/actions/blog'
@@ -44,8 +44,8 @@ class Login extends React.Component {
         }
     };
 
-    validateUser =()=> {
-        this.setState({hideMessage: true})
+    validateUser = () => {
+        this.setState({ hideMessage: true })
         let known = localStorage.getItem('user')
         if (known) {
             let user = JSON.parse(localStorage.getItem('user'))
@@ -60,29 +60,29 @@ class Login extends React.Component {
                 .then((success) => {
                     if (success.data.state) {
                         if (success.data.state === true) {
-                            this.props.varsActions.updateVars({currentLocation: 'profile'})
+                            this.props.varsActions.updateVars({ currentLocation: 'profile' })
                             this.setBlogs(user.userName)
                             this.props.userActions.updateUser(user)
                             this.props.history.push('/user/' + user.userName)
-                            this.setState({validatingKnounUser: false})
+                            this.setState({ validatingKnounUser: false })
                             return true
                         } else {
                             this.props.userActions.updateUser(null)
                             localStorage.removeItem('user')
-                            this.setState({validatingKnounUser: false})
+                            this.setState({ validatingKnounUser: false })
                             return false
                         }
                     } else {
                         this.props.userActions.updateUser(null)
                         localStorage.removeItem('user')
-                        this.setState({validatingKnounUser: false})
+                        this.setState({ validatingKnounUser: false })
                         return false
                     }
                 })
                 .catch((err) => {
                     console.log(err)
                     localStorage.removeItem('user')
-                    this.setState({validatingKnounUser: false})
+                    this.setState({ validatingKnounUser: false })
                     return err
                 })
         } else {
@@ -91,21 +91,21 @@ class Login extends React.Component {
             } else if (window.location.pathname !== '/login') {
                 this.props.history.push('/login')
             }
-            this.setState({validatingKnounUser: false})
+            this.setState({ validatingKnounUser: false })
         }
     }
 
     onLoginClick = () => {
-        this.setState({logingin: true})
+        this.setState({ logingin: true })
         if (!this.state.userName || !this.state.password) {
             this.setState({
                 error: true,
                 hideMessage: false,
                 logingin: false,
-                errorDetails: {field: 'Login', message: 'Invalid login details'}
+                errorDetails: { field: 'Login', message: 'Invalid login details' }
             })
             setTimeout(function () {
-                this.setState({error: false, hideMessage: true})
+                this.setState({ error: false, hideMessage: true })
             }.bind(this), 2000)
             return false
         }
@@ -114,126 +114,86 @@ class Login extends React.Component {
             password: this.state.password
         }
         axios.post(`${env.httpURL}/login`, userData)
-            .then(function (success) {
+            .then((success) => {
                 if (!success.data) {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        errorDetails: {field: 'Login', message: 'An error occurred, Check your Internet'}
-                    })
-                    setTimeout(function () {
-                        this.setState({error: false, hideMessage: true})
-                    }.bind(this), 2000)
-                    return false
+                    this.setState({ logingin: false })
+                    this.errorStateHandler(false, true, false, false, 'Login', 'An error occurred, Check your Internet')
+                    this.setTimer('hideMessage')
+                    return
                 }
                 if (success.data.id) {
                     let user = success.data
                     this.setBlogs(user.userName)
                     success.data.name = success.data.userName
-                    this.setState({logingin: false})
+                    this.setState({ logingin: false })
                     this.props.userActions.updateUser(user)
                     localStorage.setItem('user', JSON.stringify(success.data))
                     this.props.history.push('/user/' + success.data.userName)
+                    return
                 } else {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        logingin: false,
-                        errorDetails: {field: 'Login', message: success.data.error}
-                    })
-                    setTimeout(function () {
-                        this.setState({error: false, hideMessage: true})
-                    }.bind(this), 2000)
+                    this.setState({ logingin: false })
+                    this.errorStateHandler(false, true, false, false, 'Login', success.data.error)
+                    this.setTimer('hideMessage')
+                    return
                 }
-            }.bind(this))
-            .catch(function (error) {
-                this.setState({
-                    error: true,
-                    hideMessage: false,
-                    logingin: false,
-                    errorDetails: {field: 'Failed', message: error.response.data.error || 'An erro occured, Check your Internet'}
-                })
-                setTimeout(function () {
-                    this.setState({error: false, hideMessage: true})
-                }.bind(this), 2000)
-            }.bind(this))
+            })
+            .catch((error) => {
+                this.setState({ logingin: false })
+                this.errorStateHandler(false, true, false, false, 'Failed', error.response.data.error || 'An erro occured, Check your Internet')
+                this.setTimer('hideMessage')
+            })
     }
 
-    setTimer = (stateItem)=>{
-        setTimeout( ()=> {
-            this.setState({[stateItem]: true, error: false})
+    setTimer = (stateItem) => {
+        setTimeout(() => {
+            this.setState({ [stateItem]: true, error: false })
         }, 2000)
     }
 
-    handleSignUp =() =>{
-        this.setState({registering: true})
+    errorStateHandler = (success, error, hideMessage, registering, field, message) => {
+        this.setState({
+            success: success,
+            error: error,
+            hideMessage: hideMessage,
+            registering: registering,
+            errorDetails: { field: field, message: message }
+        })
+    }
+
+    handleSignUp = () => {
+        this.setState({ registering: true })
         if (!this.state.userName || this.state.userName.length < 4) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Username', message: 'Username is required and must be more tha 5 characters'}
-            })
-           
+            this.errorStateHandler(false, true, false, false, 'Username', 'Username is required and must be more tha 5 characters')
+            this.setTimer('hideMessage')
             return
         }
         if (!this.state.firstName || this.state.firstName.length < 3) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'First Name', message: 'First Name is required and must be more tha 3 characters'}
-            })
+            this.errorStateHandler(false, true, false, false, 'First Name', 'First Name is required and must be more tha 3 characters')
             this.setTimer('hideMessage')
             return
         }
         if (!this.state.lastName || this.state.lastName.length < 3) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Last Name', message: 'Last Name is required and must be more tha 3 characters'}
-            })
+            this.errorStateHandler(false, true, false, false, 'Last Name', 'Last Name is required and must be more tha 5 characters')
             this.setTimer('hideMessage')
             return
         }
         if (!this.state.email) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Email', message: 'Email Address is required'}
-            })
+            this.errorStateHandler(false, true, false, false, 'Email', 'Email Address is required')
             this.setTimer('hideMessage')
             return
         }
         if (typeof this.state.imagePreviewUrl !== 'object') {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Avatar', message: 'You have not created profile picture'}
-            })
+            this.errorStateHandler(false, true, false, false, 'Avatar', 'You have not created profile picture')
             this.setTimer('hideMessage')
             return
         }
         if (!this.state.password || !this.state.confirmPass) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Password', message: 'Password is required'}
-            })
+            this.errorStateHandler(false, true, false, false, 'Password', 'Password is required')
             this.setTimer('hideMessage')
             return
         }
         if (this.state.password !== this.state.confirmPass) {
-            this.setState({
-                error: true,
-                hideMessage: false,
-                registering: false,
-                errorDetails: {field: 'Password', message: "Passwords don't match"}
-            })
+            this.errorStateHandler(false, true, false, false, 'Password', 'Passwords dont match')
             this.setTimer('hideMessage')
             return
         }
@@ -246,65 +206,49 @@ class Login extends React.Component {
             avatar: JSON.stringify(this.state.imagePreviewUrl)
         }
         axios.post(`${env.httpURL}/signup`, userData)
-            .then(function (success) {
+            .then((success) => {
                 if (!success.data) {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        registering: false,
-                        errorDetails: {field: 'Failed', message: 'An error occured. Check your Internet'}
-                    })
+                    this.errorStateHandler(false, true, false, false, 'Failed', 'An error occured. Check your Internet')
                     this.setTimer('hideMessage')
-                    return false
+                    return
                 }
                 if (success.data.code === 200) {
-                    this.setState({
-                        success: true,
-                        hideMessage: false,
-                        registering: false,
-                        errorDetails: {field: 'Success', message: 'Success'}
-                    })
+                    setTimeout(() => this.props.history.push('/login'), 2100)
+                    this.errorStateHandler(true, true, false, false, 'Success', 'Success, account created')
                     this.setTimer('hideMessage')
+                    return
                 } else {
-                    this.setState({
-                        error: true,
-                        hideMessage: false,
-                        registering: false,
-                        errorDetails: {field: 'Failed', message: success.data.error}
-                    })
+                    this.errorStateHandler(false, true, false, false, 'Failed', success.data.error)
                     this.setTimer('hideMessage')
+                    return
                 }
-            }.bind(this))
-            .catch(function (error) {
-                this.setState({
-                    error: true,
-                    hideMessage: false,
-                    registering: false,
-                    errorDetails: {field: 'Failed', message: error.response.data.error || error.message}
-                })
+            })
+            .catch((error) => {
+                let mess = error.response.data.error || error.message
+                this.errorStateHandler(false, true, false, false, 'Failed', mess)
                 this.setTimer('hideMessage')
-                return false
-            }.bind(this))
+                return
+            })
     }
 
-    handleFormField = (e)=> {
+    handleFormField = (e) => {
         e.preventDefault()
-        this.setState({[e.target.name]: e.target.value})
+        this.setState({ [e.target.name]: e.target.value })
     }
 
-    setAvatar=(img)=> {
-        this.setState({imagePreviewUrl: img})
+    setAvatar = (img) => {
+        this.setState({ imagePreviewUrl: img })
     }
 
     showCreateAvatar = (state) => {
-        this.setState({creatAvatarOpen: state})
+        this.setState({ creatAvatarOpen: state })
     };
     closeCreateAvatar = () => {
-        this.setState({creatAvatarOpen: false})
+        this.setState({ creatAvatarOpen: false })
     };
 
     async componentDidMount() {
-        this.props.varsActions.updateVars({blogLoaded: true, currentLocation: 'login'})
+        this.props.varsActions.updateVars({ blogLoaded: true, currentLocation: 'login' })
         this.props.blogActions.resetBlog()
         await this.validateUser()
     }
@@ -312,14 +256,14 @@ class Login extends React.Component {
     componentWillReceiveProps() {
         let page = window.location.pathname.split('/')[1]
         if (page === 'signup' && !this.props.vars.signUp) {
-            this.props.varsActions.updateVars({signUp: true})
+            this.props.varsActions.updateVars({ signUp: true })
         }
         if (page === 'login' && this.props.vars.signUp) {
-            this.props.varsActions.updateVars({signUp: false})
+            this.props.varsActions.updateVars({ signUp: false })
         }
     }
 
-    setBlogs =(userName)=> {
+    setBlogs = (userName) => {
         axios.post(env.httpURL, {
             'queryMethod': 'getPosts',
             'queryData': {
@@ -339,10 +283,10 @@ class Login extends React.Component {
     }
 
     handSwichReg = (state) => {
-        this.props.varsActions.updateVars({signUp: state})
+        this.props.varsActions.updateVars({ signUp: state })
     }
 
-    _handleFileChange =(e)=> {
+    _handleFileChange = (e) => {
         e.preventDefault()
         if (window.FileReader) {
             let reader = new FileReader()
@@ -360,8 +304,8 @@ class Login extends React.Component {
         }
     }
 
-    loadHandler =(event)=> {
-        this.setState({avatar: event.target.result})
+    loadHandler = (event) => {
+        this.setState({ avatar: event.target.result })
     }
 
     render() {
@@ -369,8 +313,8 @@ class Login extends React.Component {
             <div className='main_body'>
                 {
                     this.state.validatingKnounUser
-                        ? <div style={{left: '50%', position: 'fixed', bottom: '50%', zIndex: -1}}>
-                            <Loader active inline='centered'/>
+                        ? <div style={{ left: '50%', position: 'fixed', bottom: '50%', zIndex: -1 }}>
+                            <Loader active inline='centered' />
                         </div>
                         : <div>
                             {
@@ -386,7 +330,7 @@ class Login extends React.Component {
                                     : <div>
                                         <Modal open={this.state.creatAvatarOpen}>
                                             <Modal.Header><Header
-                                                style={{margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center'}}
+                                                style={{ margin: '1em 0em 0em 0em', textAlign: 'left', alignment: 'center' }}
                                                 color='green' as='h1'>
                                                 Create your Profile Picture.
                                             </Header></Modal.Header>
@@ -396,15 +340,15 @@ class Login extends React.Component {
                                                         Click preview to see your picture as it will appear.
                                                     </p>
                                                 </div>
-                                                <hr/>
+                                                <hr />
                                                 <Modal.Description>
-                                                    <AvatarEditor setAvatar={this.setAvatar}/>
+                                                    <AvatarEditor setAvatar={this.setAvatar} />
                                                 </Modal.Description>
                                             </Modal.Content>
                                             <Modal.Actions>
                                                 <Button.Group>
                                                     <Button color='blue' onClick={this.closeCreateAvatar}>Cancel</Button>
-                                                    <Button.Or/>
+                                                    <Button.Or />
                                                     <Button color='green' onClick={this.closeCreateAvatar}>Save</Button>
                                                 </Button.Group>
                                             </Modal.Actions>

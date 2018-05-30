@@ -3,7 +3,10 @@ import { Card, Button, Header, Image, Icon, Segment, Divider, Popup } from 'sema
 import { topicsOBJ } from '../env'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import * as VarsActions from '../store/actions/vars'
 import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux'
+
 const getTopiINfo = (topics) => {
   let info = []
   topics.forEach(function (topic) {
@@ -18,6 +21,16 @@ class GridBlog extends React.Component {
     this.state = {
       showInfo: false
     }
+  }
+
+  handleUserProfle =(user)=>{
+    this.props.varsActions.updateVars({view_user:user})
+    this.props.history.push(`/profile/${user.userName}`)
+  }
+
+  handleClickBlog = (path,blog)=>{
+    this.props.varsActions.updateVars({currentBlog:blog})
+    this.props.history.push(path)
   }
 
   render() {
@@ -36,7 +49,7 @@ class GridBlog extends React.Component {
       >
         <Card.Content>
           <Card.Header>
-            <a onClick={() => this.props.history.push(p)}>
+            <a onClick={()=>this.handleClickBlog(p,o)}>
               <Header color='green' as='h3'>
                 {o.title.split(' ').join(' ')}
               </Header>
@@ -53,7 +66,7 @@ class GridBlog extends React.Component {
             </span>
           </Card.Meta>
           <Divider horizontal>{o.type}</Divider>
-          <Card.Description >
+          <Card.Description onClick={()=>this.handleClickBlog(p,o)} >
             <a style={{ color: 'black' }}>
               <p>{o.about}</p>
               <p>
@@ -75,7 +88,7 @@ class GridBlog extends React.Component {
             </a>
           </Card.Description>
           <br />
-          <a onClick={() => this.props.history.push(p)}>
+          <a onClick={()=>this.handleUserProfle(o.author)}>
             <Popup
               trigger={<Image
                 size='big'
@@ -100,7 +113,7 @@ class GridBlog extends React.Component {
             {w > 60 ? Math.round((w / 60)) + 'Hours,' + w % 60 + ' ' : w + ' '} Minutes read
             </span>
           <br />
-          <a onClick={() => this.props.history.push(p)}>
+          <a onClick={() => alert('Bookmarking is coming soon, sit tight')}>
             <Popup
               trigger={<Image
                 floated='right'
@@ -111,8 +124,6 @@ class GridBlog extends React.Component {
               content='Bookmark, Read later'
             />
           </a>
-
-
         </Card.Content>
       </Card>
     )
@@ -125,10 +136,16 @@ const mapStateToProps = (state) => {
   }
 }
 
-GridBlog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  color: PropTypes.string.isRequired,
-  vars: PropTypes.object.isRequired
+const mapDispatchToProps = (dispatch) => {
+  return {
+      varsActions: bindActionCreators(VarsActions, dispatch),
+  }
 }
 
-export default connect(mapStateToProps)(GridBlog)
+GridBlog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  vars: PropTypes.object.isRequired,
+  varsActions: PropTypes.object.isRequired
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(GridBlog)
