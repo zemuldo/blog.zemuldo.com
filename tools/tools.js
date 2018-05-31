@@ -13,7 +13,7 @@ module.exports = {
       `<meta name="twitter:site" content="@zemuldo">\n` +
       `<meta name="twitter:title" content="Top 10 Things Ever">\n` +
       `<meta name="twitter:description" content="Up than 200 characters.">\n` +
-      `<meta name="twitter:creator" content="@zemuldo">\n`
+      `<meta name="twitter:creator" content="@zemuldo">\n` +
     `<meta name="twitter:image" content="${details.imgSRC}">\n` +
     `<meta name="twitter:domain" content="blog.zemuldo.com">\n` +
     `<meta name="keywords" content=" ${details.keyWords} ">\n` +
