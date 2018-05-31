@@ -141,49 +141,6 @@ class Blog extends React.Component {
             })
     };
 
-    getTWTCount(shareUrl) {
-        return axios.get('https://public.newsharecounts.com/count.json?url=' + shareUrl, {})
-            .then((res) => {
-                this.props.blogActions.updateBlog({
-                    twtC: this.props.blog.twtC + (res.data.count) ? res.data.count : 0
-                })
-            })
-            .catch((err) => {
-                this.props.blogActions.updateBlog({
-                    twtC: this.props.blog.twtC
-                })
-            })
-    };
-
-    getGCCount(shareUrl) {
-        let gplusPost = {
-            'method': 'pos.plusones.get',
-            'id': 'p',
-            'params': {
-                'nolog': true,
-                'id': shareUrl,
-                'source': 'widget',
-                'userId': '@viewer',
-                'groupId': '@self'
-            },
-            'jsonrpc': '2.0',
-            'key': 'p',
-            'apiVersion': 'v1'
-        }
-        return axios.post(' https://clients6.google.com/rpc', gplusPost)
-            .then((res) => {
-                this.props.blogActions.updateBlog({
-                    gplsC: (res.data.result.metadata.globalCounts.count) ? res.data.result.metadata.globalCounts.count : 0
-                })
-                return true
-            })
-            .catch((err) => {
-                this.props.blogActions.updateBlog({
-                    gplsC: this.props.blog.gplsC + 0
-                })
-            })
-    };
-
     getAauthorAvatar() {
         axios.post(env.httpURL, {
             'queryMethod': 'getAvatar',
@@ -226,17 +183,7 @@ class Blog extends React.Component {
             })
     }
 
-    getShortURL() {
-        axios.post(env.fupisha, { url: `https://blog.zemuldo.com/${this.props.blog._id}`, custom_longUrl: `${window.location.href}` })
-            .then(o => {
-                this.setState({ blogUrl: o.data })
-                this.setBlogCounts(this.state.blogUrl.shortUrl)
-                this.setBlogCounts(`https://blog.zemuldo.com/${this.state.blogUrlT}`)
-            })
-            .catch(e => {
-
-            })
-    }
+   
 
     updateViews = () => {
         axios.post(env.httpURL, {
@@ -254,7 +201,6 @@ class Blog extends React.Component {
 
     componentDidMount() {
         this.getComments()
-        this.getShortURL()
         this.handleEditorStateEdit()
         this.props.blogActions.updateBlog({ editMode: false })
         if (this.props.blog) {
