@@ -9,9 +9,9 @@ module.exports = {
       `<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">\n` +
       `<link rel="shortcut icon" href="/static/img/icons/icon-256x256.png">\n` +
       `<meta name="description" content= ${details.description} >\n` +
-      `<meta name="twitter:card" content="${details.imgSRC}">\n` +
+      `<meta name="twitter:card" content="https://blog.zemuldo.com${details.imgSRC}">\n` +
       `<meta name="twitter:site" content="@zemuldo">\n` +
-      `<meta name="twitter:title" content="Top 10 Things Ever">\n` +
+      `<meta name="twitter:title" content="${details.title} ">\n` +
       `<meta name="twitter:description" content="Up than 200 characters.">\n` +
       `<meta name="twitter:creator" content="@zemuldo">\n` +
     `<meta name="twitter:image" content="${details.imgSRC}">\n` +
