@@ -77,52 +77,8 @@ class BlogCommnts extends React.Component {
             })
     }
 
-    getShortURL() {
-        axios.post(env.fupisha, { url: `https://blog.zemuldo.com/${this.props.blog._id}`, custom_longUrl: `${window.location.href}` })
-            .then(o => {
-                this.setState({ blogUrl: o.data })
-                this.setBlogCounts(this.state.blogUrl.shortUrl)
-                this.setBlogCounts(`https://blog.zemuldo.com/${this.state.blogUrlT}`)
-            })
-            .catch(e => {
-
-            })
-    }
-
     componentDidMount() {
         this.getComments()
-    }
-
-    fbShare() {
-        let fbShareURL = 'https://www.facebook.com/sharer/sharer.php?u=' + this.state.blogUrl.shortUrl
-        if (this.props.blog) {
-            let postURL = this.state.blogUrl.pathname
-            let shareURL = fbShareURL + "&amp;src=sdkpreparse'"
-            window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
-        }
-    }
-
-    tweetShare() {
-        if (this.props.blog) {
-            let hashTgs = '%2F&hashtags=' + this.props.blog.topics.join(',')
-            let via = '&via=zemuldo'
-            let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
-            let url = `&url=https%3A%2F%2F${this.state.blogUrl.shortUrl_Bare}`
-            let fullURL = `${url}${related}${via}`
-            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.blog.title + fullURL
-            window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
-        }
-    }
-
-    gplusShare() {
-        if (this.props.blog) {
-            window.open(`https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2F${this.state.blogUrl.shortUrl_Bare}`)
-        }
-    }
-
-    linkdnShare() {
-        let url = `https://plus.google.com/share?url=https://blog.zemuldo.com/&url=https%3A%2F%2Fblog.zemuldo.com/${this.state.blogUrl}`
-        window.open('https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.zemuldo.com  /' + url, '', 'height=550,width=525,left=100,top=100,menubar=0')
     }
 
     setReplyComment(_id) {

@@ -20,9 +20,6 @@ class Blogs extends React.Component {
     this.state = {}
   };
 
-  componentDidMount () {
-  }
-
   render () {
     let o = this.props.blogs
     return (

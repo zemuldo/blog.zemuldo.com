@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility, Segment, Label, Select, Menu } from 'semantic-ui-react'
+import { Button, Modal, Header, Icon, Image, Dropdown, Input, Form, Popup, Tab, Comment, Confirm, Visibility, Segment, Label, Select, Menu, Divider } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { topics, categories } from '../env'
 import BlogEditor from '../blogEditor/editor'
@@ -310,10 +310,9 @@ class BlogHeader extends React.Component {
         if (this.props.vars.currentBlog) {
             let hashTgs = '%2F&hashtags=' + this.props.vars.currentBlog.topics.join(',')
             let via = '&via=zemuldo'
-            let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
             let url = `&url=https%3A%2F%2F${this.state.blogUrl.shortUrl_Bare}`
-            let fullURL = `${url}${related}${via}`
-            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.vars.currentBlog.title + fullURL
+            let fullURL = `${url}${via}`
+            let shareURL = 'https://twitter.com/intent/tweet?text=' + this.props.vars.currentBlog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
     }
@@ -749,7 +748,7 @@ class BlogHeader extends React.Component {
                                                             />
                                                             <span>
                                                                 {`Likes `}
-                                                                <sup>{'hello'}</sup>
+                                                                <sup>{this.props.vars.currentBlog.likes}</sup>
                                                             </span>
                                                         </span>
                                                 }
@@ -767,10 +766,7 @@ class BlogHeader extends React.Component {
                                             />
 
                                     }
-                                    <span> {` ,  `}
-                                        <Icon size='large' color='green' name='external share' />
-                                        {shares}
-                                    </span>
+                                    
                                     <Visibility
                                         once={false}
                                         onTopPassed={this.stickOverlay}
@@ -840,7 +836,10 @@ class BlogHeader extends React.Component {
                                 <span className='info'>
                                     {this.props.vars.currentBlog.author.name} {' '}
                                 </span>
-                                <br />
+                                <span> {` ,  `}
+                                        <Divider horizontal>{shares}</Divider>
+                                        
+                                    </span>
                                 {
                                     this.props.user && this.props.user.id && this.props.user.userName === this.props.vars.currentBlog.author.userName
                                         ? <div>
