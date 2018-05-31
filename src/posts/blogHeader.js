@@ -310,10 +310,9 @@ class BlogHeader extends React.Component {
         if (this.props.vars.currentBlog) {
             let hashTgs = '%2F&hashtags=' + this.props.vars.currentBlog.topics.join(',')
             let via = '&via=zemuldo'
-            let related = '&related=https%3A%2F%2Fpic.twitter.com/Ew9ZJJDPAR%2F'
             let url = `&url=https%3A%2F%2F${this.state.blogUrl.shortUrl_Bare}`
-            let fullURL = `${url}${related}${via}`
-            let shareURL = 'https://twitter.com/intent/tweet?text=pic.twitter.com/Ew9ZJJDPAR ' + this.props.vars.currentBlog.title + fullURL
+            let fullURL = `${url}${via}`
+            let shareURL = 'https://twitter.com/intent/tweet?' + this.props.vars.currentBlog.title + fullURL
             window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=548,height=325')
         }
     }
@@ -749,7 +748,7 @@ class BlogHeader extends React.Component {
                                                             />
                                                             <span>
                                                                 {`Likes `}
-                                                                <sup>{'hello'}</sup>
+                                                                <sup>{this.props.vars.currentBlog.likes}</sup>
                                                             </span>
                                                         </span>
                                                 }
