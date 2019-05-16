@@ -173,19 +173,19 @@ app.get('/*', async function (req, res) {
 })
 
 if (NODE_ENV === 'dev' || NODE_ENV === 'development') {
-  app.listen(env.httpPort, () => {
-    console.log("**Server started at http://localhost:" + env.httpPort)
+  app.listen(8070, () => {
+    console.log("**Server started at http://localhost:" + 8070)
   });
 
 } else {
   spdy
     .createServer(options, app)
-    .listen(process.env.PORT, (error) => {
+    .listen(8070, (error) => {
       if (error) {
         console.error(error)
         return process.exit(1)
       } else {
-        console.log('Listening on port: ' + process.env.PORT + '.')
+        console.log('Listening on port: ' + 8070 + '.')
       }
     })
 }
